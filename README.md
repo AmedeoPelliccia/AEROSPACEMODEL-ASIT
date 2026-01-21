@@ -231,7 +231,7 @@ Apache License 2.0
 
 
 <p align="center">
-  <strong>AEROSPACEMODEL-ASIT</strong><br/>
+  <strong>AEROSPACEMODEL</strong><br/>
   Transform governed engineering knowledge into certified technical publications and auditable evidence.
 </p>
 ```
