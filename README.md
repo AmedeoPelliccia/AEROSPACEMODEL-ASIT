@@ -1,5 +1,5 @@
-# AEROSPACEMODEL-ASIT
-## Aircraft Systems Information Transponder (ASIT)
+# AEROSPACEMODEL
+## ASIT Aircraft Systems Information Transponder + ASIGT — Aircraft Systems Information Generative Transponder
 
 <p align="center">
   <img src="https://img.shields.io/badge/Version-2.0.0-blue.svg" alt="Version">
