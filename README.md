@@ -284,7 +284,7 @@ asit doctor
 
 ## License
 
-Apache License 2.0 — See `LICENSE`.
+Creative Commons Zero v1.0 Universal — See `LICENSE`.
 
 ---
 
