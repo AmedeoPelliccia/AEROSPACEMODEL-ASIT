@@ -1,0 +1,830 @@
+# =============================================================================
+# AMM (Aircraft Maintenance Manual) Pipeline
+# ASIT-Controlled Execution Pipeline
+# Version: 2.0.0
+# =============================================================================
+#
+# This pipeline defines the complete transformation workflow for generating
+# S1000D-compliant Aircraft Maintenance Manual content from KDB sources.
+#
+# Publication scope:
+#   - System descriptions (ATA chapters)
+#   - Maintenance procedures (removal, installation, servicing)
+#   - Operational checks and tests
+#   - Troubleshooting procedures
+#   - Schematic and wiring diagrams
+#
+# Operates under ASIT contract authority.
+#
+# =============================================================================
+
+pipeline:
+  # ---------------------------------------------------------------------------
+  # PIPELINE METADATA
+  # ---------------------------------------------------------------------------
+  metadata:
+    pipeline_id: "PIPELINE-AMM-001"
+    name: "Aircraft Maintenance Manual Pipeline"
+    description: |
+      End-to-end transformation pipeline for generating S1000D Aircraft
+      Maintenance Manual (AMM) content from validated engineering knowledge.
+    version: "2.0.0"
+    publication_type: "AMM"
+    s1000d_issue: "5.0"
+    
+    # Pipeline ownership
+    owner: "STK_CM"
+    maintainer: "Publication Engineering"
+    
+    # Timestamps
+    created: "2026-01-01"
+    last_modified: "2026-01-22"
+    
+    # Classification
+    tags:
+      - "amm"
+      - "maintenance"
+      - "s1000d"
+      - "production"
+
+  # ---------------------------------------------------------------------------
+  # CONTRACT BINDING
+  # ---------------------------------------------------------------------------
+  contract:
+    # Contract template reference
+    template: "ASIT/CONTRACTS/templates/KITDM-CTR-LM-CSDB.template.yaml"
+    
+    # Required contract fields
+    required_fields:
+      - "contract_id"
+      - "baseline_ref"
+      - "scope.ata_chapters"
+      - "scope.effectivity"
+      - "authority.approved_by"
+    
+    # Contract validation
+    validation:
+      check_baseline_exists: true
+      check_authority_valid: true
+      check_scope_coverage: true
+
+  # ---------------------------------------------------------------------------
+  # PIPELINE STAGES
+  # ---------------------------------------------------------------------------
+  stages:
+    # -------------------------------------------------------------------------
+    # STAGE 1: INITIALIZATION
+    # -------------------------------------------------------------------------
+    - stage: "initialization"
+      name: "Pipeline Initialization"
+      description: "Initialize pipeline environment and validate prerequisites"
+      order: 1
+      
+      steps:
+        - step: "load_config"
+          name: "Load Configuration"
+          action: "config.load"
+          inputs:
+            config_path: "ASIT/config/asit_config.yaml"
+          outputs:
+            - "config"
+          on_failure: "abort"
+          
+        - step: "validate_contract"
+          name: "Validate ASIT Contract"
+          action: "contract.validate"
+          inputs:
+            contract_id: "${contract_id}"
+          outputs:
+            - "contract"
+            - "baseline_ref"
+            - "scope"
+          on_failure: "abort"
+          
+        - step: "check_baseline"
+          name: "Verify Baseline Availability"
+          action: "baseline.verify"
+          inputs:
+            baseline_ref: "${baseline_ref}"
+          outputs:
+            - "baseline"
+            - "baseline_status"
+          on_failure: "abort"
+          
+        - step: "create_run_directory"
+          name: "Create Run Directory"
+          action: "run.create_directory"
+          inputs:
+            contract_id: "${contract_id}"
+            timestamp: "${execution_timestamp}"
+          outputs:
+            - "run_directory"
+            - "run_id"
+          on_failure: "abort"
+          
+        - step: "initialize_manifests"
+          name: "Initialize Manifests"
+          action: "manifest.initialize"
+          inputs:
+            run_directory: "${run_directory}"
+            contract: "${contract}"
+            baseline: "${baseline}"
+          outputs:
+            - "input_manifest"
+            - "output_manifest"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 2: SOURCE LOADING
+    # -------------------------------------------------------------------------
+    - stage: "source_loading"
+      name: "Source Loading"
+      description: "Load source artifacts from KDB baseline"
+      order: 2
+      depends_on: ["initialization"]
+      
+      steps:
+        - step: "load_requirements"
+          name: "Load Requirements"
+          action: "source.load"
+          inputs:
+            source_type: "requirement"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/requirements"
+          outputs:
+            - "requirements"
+          filters:
+            - field: "type"
+              values: ["functional", "performance", "safety", "interface"]
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "load_tasks"
+          name: "Load Maintenance Tasks"
+          action: "source.load"
+          inputs:
+            source_type: "task"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/tasks"
+          outputs:
+            - "tasks"
+          filters:
+            - field: "task_type"
+              values: ["removal", "installation", "servicing", "inspection", "operational_check", "cleaning"]
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+            - field: "publication"
+              values: ["AMM", "ALL"]
+          on_failure: "warn"
+          
+        - step: "load_fault_isolation"
+          name: "Load Fault Isolation Data"
+          action: "source.load"
+          inputs:
+            source_type: "fault_isolation"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/troubleshooting"
+          outputs:
+            - "fault_data"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "load_schematics"
+          name: "Load Schematics and Diagrams"
+          action: "source.load"
+          inputs:
+            source_type: "schematic"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/schematics"
+              - "KDB/SSOT/wiring"
+          outputs:
+            - "schematics"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "load_graphics"
+          name: "Load Graphics (ICN Sources)"
+          action: "source.load"
+          inputs:
+            source_type: "graphic"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/graphics"
+          outputs:
+            - "graphics"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+            - field: "format"
+              values: ["CGM", "PNG", "SVG", "JPEG"]
+          on_failure: "warn"
+          
+        - step: "compute_input_hashes"
+          name: "Compute Input Hashes"
+          action: "hash.compute"
+          inputs:
+            artifacts:
+              - "${requirements}"
+              - "${tasks}"
+              - "${fault_data}"
+              - "${schematics}"
+              - "${graphics}"
+            algorithm: "sha256"
+          outputs:
+            - "input_hashes"
+            - "combined_input_hash"
+          on_failure: "abort"
+          
+        - step: "update_input_manifest"
+          name: "Update Input Manifest"
+          action: "manifest.update"
+          inputs:
+            manifest: "${input_manifest}"
+            artifacts:
+              requirements: "${requirements}"
+              tasks: "${tasks}"
+              fault_data: "${fault_data}"
+              schematics: "${schematics}"
+              graphics: "${graphics}"
+            hashes: "${input_hashes}"
+          outputs:
+            - "input_manifest"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 3: TRANSFORMATION
+    # -------------------------------------------------------------------------
+    - stage: "transformation"
+      name: "Content Transformation"
+      description: "Transform KDB sources to S1000D data modules"
+      order: 3
+      depends_on: ["source_loading"]
+      
+      steps:
+        - step: "generate_description_dms"
+          name: "Generate Description Data Modules"
+          action: "generator.dm_descriptive"
+          inputs:
+            sources: "${requirements}"
+            mapping: "ASIGT/mapping/requirement_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_descriptive.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              system_diff_code: "${config.system_diff_code}"
+              language: "${config.language}"
+              issue_number: "${config.issue_number}"
+          outputs:
+            - "dm_descriptive"
+          parallel: true
+          batch_size: 10
+          on_failure: "continue"
+          
+        - step: "generate_procedural_dms"
+          name: "Generate Procedural Data Modules"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${tasks}"
+            mapping: "ASIGT/mapping/task_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_procedural.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              system_diff_code: "${config.system_diff_code}"
+              language: "${config.language}"
+              issue_number: "${config.issue_number}"
+              include_wcnp: true
+          outputs:
+            - "dm_procedural"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_fault_isolation_dms"
+          name: "Generate Fault Isolation Data Modules"
+          action: "generator.dm_fault_isolation"
+          inputs:
+            sources: "${fault_data}"
+            mapping: "ASIGT/mapping/fault_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_fault_isolation.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              include_isolation_trees: true
+          outputs:
+            - "dm_fault_isolation"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_schematic_dms"
+          name: "Generate Schematic Data Modules"
+          action: "generator.dm_schematic"
+          inputs:
+            sources: "${schematics}"
+            template: "ASIGT/s1000d_templates/dm_schematic.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+          outputs:
+            - "dm_schematic"
+          parallel: true
+          on_failure: "continue"
+          
+        - step: "process_graphics"
+          name: "Process Graphics to ICN"
+          action: "generator.icn"
+          inputs:
+            sources: "${graphics}"
+            config:
+              output_format: "CGM"
+              resolution: 300
+              color_mode: "RGB"
+              include_hotspots: true
+          outputs:
+            - "icn_files"
+          parallel: true
+          batch_size: 20
+          on_failure: "continue"
+          
+        - step: "link_icn_references"
+          name: "Link ICN References in DMs"
+          action: "generator.link_icn"
+          inputs:
+            data_modules:
+              - "${dm_descriptive}"
+              - "${dm_procedural}"
+              - "${dm_fault_isolation}"
+              - "${dm_schematic}"
+            icn_files: "${icn_files}"
+          outputs:
+            - "dm_with_icn"
+          on_failure: "warn"
+          
+        - step: "apply_applicability"
+          name: "Apply Applicability Filtering"
+          action: "applicability.apply"
+          inputs:
+            data_modules: "${dm_with_icn}"
+            act_file: "${config.act_file}"
+            pct_file: "${config.pct_file}"
+            cct_file: "${config.cct_file}"
+            effectivity: "${scope.effectivity}"
+          outputs:
+            - "dm_filtered"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 4: VALIDATION
+    # -------------------------------------------------------------------------
+    - stage: "validation"
+      name: "Content Validation"
+      description: "Validate generated content against BREX and schema"
+      order: 4
+      depends_on: ["transformation"]
+      
+      steps:
+        - step: "brex_validation"
+          name: "BREX Rule Validation"
+          action: "validator.brex"
+          inputs:
+            data_modules: "${dm_filtered}"
+            brex_file: "ASIGT/brex/S1000D_5.0_DEFAULT.yaml"
+            project_brex: "ASIGT/brex/project_brex.yaml"
+            profile: "${config.brex_profile}"
+          outputs:
+            - "brex_results"
+          config:
+            fail_on_error: true
+            fail_on_warning: false
+            generate_report: true
+          on_failure: "abort"
+          
+        - step: "schema_validation"
+          name: "XML Schema Validation"
+          action: "validator.schema"
+          inputs:
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            schema_path: "schemas/s1000d/${config.s1000d_issue}/"
+          outputs:
+            - "schema_results"
+          config:
+            validate_all: true
+            generate_report: true
+          on_failure: "abort"
+          
+        - step: "reference_validation"
+          name: "Cross-Reference Validation"
+          action: "validator.references"
+          inputs:
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+          outputs:
+            - "reference_results"
+          config:
+            check_dm_refs: true
+            check_icn_refs: true
+            check_external_refs: true
+          on_failure: "warn"
+          
+        - step: "completeness_check"
+          name: "Content Completeness Check"
+          action: "validator.completeness"
+          inputs:
+            data_modules: "${dm_filtered}"
+            scope: "${scope}"
+            expected_coverage:
+              - type: "description"
+                min_count_per_chapter: 1
+              - type: "procedural"
+                min_count_per_chapter: 1
+          outputs:
+            - "completeness_results"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 5: TRACEABILITY
+    # -------------------------------------------------------------------------
+    - stage: "traceability"
+      name: "Traceability Generation"
+      description: "Build source-to-output traceability matrix"
+      order: 5
+      depends_on: ["validation"]
+      
+      steps:
+        - step: "build_trace_matrix"
+          name: "Build Trace Matrix"
+          action: "trace.build_matrix"
+          inputs:
+            sources:
+              requirements: "${requirements}"
+              tasks: "${tasks}"
+              fault_data: "${fault_data}"
+              schematics: "${schematics}"
+              graphics: "${graphics}"
+            outputs:
+              dm_descriptive: "${dm_descriptive}"
+              dm_procedural: "${dm_procedural}"
+              dm_fault_isolation: "${dm_fault_isolation}"
+              dm_schematic: "${dm_schematic}"
+              icn_files: "${icn_files}"
+            input_hashes: "${input_hashes}"
+          outputs:
+            - "trace_matrix"
+          on_failure: "abort"
+          
+        - step: "validate_traceability"
+          name: "Validate Traceability Completeness"
+          action: "validator.trace"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            requirements:
+              input_coverage: 1.0
+              output_coverage: 1.0
+              bidirectional: true
+          outputs:
+            - "trace_validation_results"
+          on_failure: "warn"
+          
+        - step: "export_trace_matrix"
+          name: "Export Trace Matrix"
+          action: "trace.export"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            output_path: "${run_directory}/TRACE_MATRIX.csv"
+            format: "csv"
+          outputs:
+            - "trace_matrix_file"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 6: PUBLICATION ASSEMBLY
+    # -------------------------------------------------------------------------
+    - stage: "publication_assembly"
+      name: "Publication Assembly"
+      description: "Assemble data modules into publication structure"
+      order: 6
+      depends_on: ["traceability"]
+      
+      steps:
+        - step: "generate_pm"
+          name: "Generate Publication Module"
+          action: "generator.pm"
+          inputs:
+            data_modules: "${dm_filtered}"
+            template: "ASIGT/s1000d_templates/pm_structure.xml"
+            config:
+              publication_type: "AMM"
+              model_ident_code: "${config.model_ident_code}"
+              pm_title: "${config.program_name} Aircraft Maintenance Manual"
+              ata_structure: true
+          outputs:
+            - "pm_amm"
+          on_failure: "abort"
+          
+        - step: "generate_dml"
+          name: "Generate Data Module List"
+          action: "generator.dml"
+          inputs:
+            data_modules: "${dm_filtered}"
+            publication_module: "${pm_amm}"
+            icn_files: "${icn_files}"
+            template: "ASIGT/s1000d_templates/dml_structure.xml"
+            config:
+              dml_type: "CSDB"
+          outputs:
+            - "dml"
+          on_failure: "abort"
+          
+        - step: "assemble_csdb"
+          name: "Assemble CSDB Package"
+          action: "package.csdb"
+          inputs:
+            data_modules: "${dm_filtered}"
+            publication_module: "${pm_amm}"
+            dml: "${dml}"
+            icn_files: "${icn_files}"
+            output_path: "IDB/CSDB/AMM"
+          outputs:
+            - "csdb_package"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 7: OUTPUT RENDERING (OPTIONAL)
+    # -------------------------------------------------------------------------
+    - stage: "rendering"
+      name: "Output Rendering"
+      description: "Render publication to delivery formats"
+      order: 7
+      depends_on: ["publication_assembly"]
+      condition: "${config.render_outputs}"
+      
+      steps:
+        - step: "render_pdf"
+          name: "Render PDF Output"
+          action: "renderer.pdf"
+          inputs:
+            publication_module: "${pm_amm}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            config:
+              page_size: "A4"
+              include_toc: true
+              include_lep: true
+              include_highlights: true
+          outputs:
+            - "pdf_output"
+          condition: "${config.render_pdf}"
+          on_failure: "warn"
+          
+        - step: "render_html"
+          name: "Render HTML Output"
+          action: "renderer.html"
+          inputs:
+            publication_module: "${pm_amm}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            config:
+              responsive: true
+              dark_mode: true
+              include_search: true
+              include_navigation: true
+          outputs:
+            - "html_output"
+          condition: "${config.render_html}"
+          on_failure: "warn"
+          
+        - step: "package_ietp"
+          name: "Package IETP"
+          action: "renderer.ietp"
+          inputs:
+            publication_module: "${pm_amm}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            config:
+              format: "scorm"
+              include_viewer: true
+          outputs:
+            - "ietp_package"
+          condition: "${config.package_ietp}"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 8: FINALIZATION
+    # -------------------------------------------------------------------------
+    - stage: "finalization"
+      name: "Pipeline Finalization"
+      description: "Finalize run artifacts and generate reports"
+      order: 8
+      depends_on: ["rendering"]
+      always_run: true
+      
+      steps:
+        - step: "compute_output_hashes"
+          name: "Compute Output Hashes"
+          action: "hash.compute"
+          inputs:
+            artifacts:
+              - "${dm_filtered}"
+              - "${pm_amm}"
+              - "${dml}"
+              - "${icn_files}"
+            algorithm: "sha256"
+          outputs:
+            - "output_hashes"
+            - "combined_output_hash"
+          on_failure: "warn"
+          
+        - step: "finalize_output_manifest"
+          name: "Finalize Output Manifest"
+          action: "manifest.finalize"
+          inputs:
+            manifest: "${output_manifest}"
+            outputs:
+              dm_descriptive: "${dm_descriptive}"
+              dm_procedural: "${dm_procedural}"
+              dm_fault_isolation: "${dm_fault_isolation}"
+              dm_schematic: "${dm_schematic}"
+              pm: "${pm_amm}"
+              dml: "${dml}"
+              icn: "${icn_files}"
+            hashes: "${output_hashes}"
+            validation_results:
+              brex: "${brex_results}"
+              schema: "${schema_results}"
+          outputs:
+            - "output_manifest"
+          on_failure: "warn"
+          
+        - step: "generate_validation_report"
+          name: "Generate Validation Report"
+          action: "report.validation"
+          inputs:
+            brex_results: "${brex_results}"
+            schema_results: "${schema_results}"
+            reference_results: "${reference_results}"
+            trace_results: "${trace_validation_results}"
+            output_path: "${run_directory}/VALIDATION_REPORT.json"
+          outputs:
+            - "validation_report"
+          on_failure: "warn"
+          
+        - step: "generate_metrics"
+          name: "Generate Metrics Report"
+          action: "report.metrics"
+          inputs:
+            run_id: "${run_id}"
+            stages: "${pipeline_stages}"
+            input_manifest: "${input_manifest}"
+            output_manifest: "${output_manifest}"
+            output_path: "${run_directory}/METRICS.json"
+          outputs:
+            - "metrics_report"
+          on_failure: "warn"
+          
+        - step: "finalize_log"
+          name: "Finalize Execution Log"
+          action: "log.finalize"
+          inputs:
+            run_directory: "${run_directory}"
+            status: "${pipeline_status}"
+          outputs:
+            - "log_file"
+          on_failure: "warn"
+          
+        - step: "archive_run"
+          name: "Archive Run Artifacts"
+          action: "run.archive"
+          inputs:
+            run_directory: "${run_directory}"
+            immutable: true
+          outputs:
+            - "archive_status"
+          on_failure: "warn"
+
+  # ---------------------------------------------------------------------------
+  # PIPELINE CONFIGURATION
+  # ---------------------------------------------------------------------------
+  config:
+    # Execution settings
+    execution:
+      parallel_enabled: true
+      max_parallel_steps: 4
+      timeout_minutes: 60
+      retry_failed_steps: false
+      max_retries: 2
+      
+    # Logging settings
+    logging:
+      level: "INFO"
+      format: "[{timestamp}] {level} {step}: {message}"
+      output_to_file: true
+      output_to_console: true
+      
+    # Notification settings
+    notifications:
+      on_success: true
+      on_failure: true
+      on_warning: true
+      channels:
+        - type: "email"
+          recipients: ["pub-engineering@example.com"]
+        - type: "slack"
+          channel: "#asigt-runs"
+          
+    # Cleanup settings
+    cleanup:
+      remove_temp_files: true
+      compress_outputs: false
+      retention_days: 90
+
+  # ---------------------------------------------------------------------------
+  # ERROR HANDLING
+  # ---------------------------------------------------------------------------
+  error_handling:
+    strategies:
+      abort:
+        description: "Stop pipeline execution immediately"
+        action: "pipeline.abort"
+        cleanup: true
+        notify: true
+        
+      continue:
+        description: "Log error and continue to next step"
+        action: "log.error"
+        continue: true
+        
+      warn:
+        description: "Log warning and continue"
+        action: "log.warning"
+        continue: true
+        
+      retry:
+        description: "Retry failed step"
+        action: "step.retry"
+        max_attempts: 3
+        delay_seconds: 30
+        
+    fallback:
+      strategy: "abort"
+      
+  # ---------------------------------------------------------------------------
+  # OUTPUTS
+  # ---------------------------------------------------------------------------
+  outputs:
+    primary:
+      - name: "CSDB Package"
+        path: "IDB/CSDB/AMM"
+        type: "csdb"
+        
+      - name: "Publication Module"
+        path: "IDB/CSDB/AMM/PM"
+        type: "pm"
+        
+      - name: "Data Module List"
+        path: "IDB/CSDB/AMM/DML"
+        type: "dml"
+        
+    secondary:
+      - name: "PDF Output"
+        path: "IDB/EXPORTS/AMM/PDF"
+        type: "pdf"
+        condition: "${config.render_pdf}"
+        
+      - name: "HTML Output"
+        path: "IDB/EXPORTS/AMM/HTML"
+        type: "html"
+        condition: "${config.render_html}"
+        
+      - name: "IETP Package"
+        path: "IDB/EXPORTS/AMM/IETP"
+        type: "ietp"
+        condition: "${config.package_ietp}"
+        
+    artifacts:
+      - name: "Run Directory"
+        path: "ASIGT/runs/${run_id}"
+        type: "run_artifacts"
+        contents:
+          - "INPUT_MANIFEST.json"
+          - "OUTPUT_MANIFEST.json"
+          - "TRACE_MATRIX.csv"
+          - "VALIDATION_REPORT.json"
+          - "METRICS.json"
+          - "LOG.txt"

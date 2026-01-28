@@ -1,0 +1,5 @@
+baseline_id,type,name,description,status,created_date,approved_date,approved_by,scope,content_hash,notes
+DBL-HJ1-2025-Q3,DBL,Concept Design Baseline,Hydrogen propulsion concept selection,frozen,2025-07-15,2025-07-20,CCB-2025-018,All systems,sha256:h2a1...,Fuel cell selected over H2 turbine
+DBL-HJ1-2025-Q4,DBL,Preliminary Design Baseline,PDR freeze - LH2 tank design locked,frozen,2025-10-15,2025-10-20,CCB-2025-032,All systems,sha256:h2a2...,Cryogenic tank design approved
+FBL-HJ1-2026-Q1,FBL,Development Baseline,Active development baseline,active,2026-01-10,2026-01-15,CCB-2026-008,All systems,sha256:h2a3...,CDR in progress
+CBL-HJ1-2026-Q1,CBL,Component Baseline - Fuel Cell,Fuel cell stack qualification,active,2026-01-18,2026-01-20,CCB-2026-010,Fuel cell stack,sha256:fc1...,Stack qual testing underway

@@ -1,0 +1,821 @@
+# =============================================================================
+# S1000D Issue 5.0 Default Business Rules Exchange (BREX)
+# ASIGT BREX Configuration
+# Version: 2.0.0
+# =============================================================================
+#
+# This file defines the default S1000D Issue 5.0 business rules that govern
+# content generation, validation, and compliance within the ASIGT framework.
+#
+# BREX rules ensure:
+#   - Structural compliance with S1000D schema
+#   - Content consistency across publications
+#   - Controlled vocabulary usage
+#   - Cross-reference integrity
+#   - Metadata completeness
+#
+# Rules are organized by category and severity level.
+# Projects may extend or restrict these rules via project_brex.template.yaml
+#
+# =============================================================================
+
+brex:
+  # -------------------------------------------------------------------------
+  # BREX Metadata
+  # -------------------------------------------------------------------------
+  metadata:
+    brex_id: "BREX-S1000D-5.0-DEFAULT"
+    issue: "5.0"
+    revision: "001"
+    inwork: "00"
+    title: "S1000D Issue 5.0 Default Business Rules"
+    description: |
+      Default BREX rule set for S1000D Issue 5.0 compliant content.
+      Provides baseline validation rules for all S1000D data modules.
+    authority: "ASIGT Framework"
+    effective_date: "2026-01-01"
+    
+    # Applicable S1000D versions
+    applicable_issues:
+      - "5.0"
+      - "4.2"  # Backward compatible rules marked
+      - "4.1"  # Limited backward compatibility
+    
+    # BREX classification
+    classification:
+      security: "UNCLASSIFIED"
+      distribution: "PUBLIC"
+
+  # -------------------------------------------------------------------------
+  # Rule Severity Levels
+  # -------------------------------------------------------------------------
+  severity_definitions:
+    ERROR:
+      code: "E"
+      description: "Critical violation - content is non-compliant"
+      action: "Must be corrected before publication"
+      blocks_publication: true
+      
+    WARNING:
+      code: "W"
+      description: "Significant issue - should be corrected"
+      action: "Should be corrected, may require waiver"
+      blocks_publication: false
+      
+    CAUTION:
+      code: "C"
+      description: "Potential issue - review recommended"
+      action: "Review and correct if applicable"
+      blocks_publication: false
+      
+    INFO:
+      code: "I"
+      description: "Informational - best practice recommendation"
+      action: "Consider for quality improvement"
+      blocks_publication: false
+
+  # -------------------------------------------------------------------------
+  # IDENTIFICATION RULES (BREX-IDENT-xxx)
+  # -------------------------------------------------------------------------
+  rules:
+    identification:
+      - id: "BREX-IDENT-001"
+        name: "DM Code Completeness"
+        description: "Data Module Code must contain all required elements"
+        severity: "ERROR"
+        category: "identification"
+        xpath: "//dmCode"
+        validation:
+          type: "attribute_required"
+          attributes:
+            - "modelIdentCode"
+            - "systemDiffCode"
+            - "systemCode"
+            - "subSystemCode"
+            - "subSubSystemCode"
+            - "assyCode"
+            - "disassyCode"
+            - "disassyCodeVariant"
+            - "infoCode"
+            - "infoCodeVariant"
+            - "itemLocationCode"
+        message: "dmCode element must have all required attributes"
+        
+      - id: "BREX-IDENT-002"
+        name: "Model Identification Code Format"
+        description: "modelIdentCode must be 2-14 uppercase alphanumeric characters"
+        severity: "ERROR"
+        category: "identification"
+        xpath: "//dmCode/@modelIdentCode"
+        validation:
+          type: "pattern"
+          pattern: "^[A-Z0-9]{2,14}$"
+        message: "modelIdentCode must be 2-14 uppercase alphanumeric characters"
+        
+      - id: "BREX-IDENT-003"
+        name: "System Code Format"
+        description: "systemCode must be 2-3 alphanumeric characters (ATA chapter)"
+        severity: "ERROR"
+        category: "identification"
+        xpath: "//dmCode/@systemCode"
+        validation:
+          type: "pattern"
+          pattern: "^[A-Z0-9]{2,3}$"
+        message: "systemCode must be 2-3 alphanumeric characters"
+        
+      - id: "BREX-IDENT-004"
+        name: "Info Code Valid Range"
+        description: "infoCode must be a valid S1000D information code"
+        severity: "ERROR"
+        category: "identification"
+        xpath: "//dmCode/@infoCode"
+        validation:
+          type: "enumeration"
+          values:
+            # Descriptive codes
+            - "000"  # General
+            - "001"  # Identification/description
+            - "010"  # Title page
+            - "018"  # Change record
+            - "020"  # Functionality
+            - "040"  # Description
+            - "041"  # Theory of operation
+            - "042"  # System overview
+            # Procedural codes
+            - "100"  # Operations
+            - "200"  # Servicing
+            - "300"  # Examine/inspect
+            - "400"  # Fault reports
+            - "500"  # Disconnect/connect
+            - "510"  # Remove
+            - "520"  # Install
+            - "600"  # Repair
+            - "700"  # Setting/test/check
+            - "720"  # Functional test
+            - "800"  # Storage
+            - "900"  # Cleaning/painting
+            # Parts data codes
+            - "941"  # Illustrated parts data
+            - "942"  # Parts list
+            # Wiring codes
+            - "C10"  # Wiring data
+            - "C51"  # Wiring diagrams
+            # Crew/operator codes
+            - "A00"  # Flight crew information
+        message: "infoCode must be a valid S1000D information code"
+        
+      - id: "BREX-IDENT-005"
+        name: "Issue Info Required"
+        description: "issueInfo element must be present with issueNumber and inWork"
+        severity: "ERROR"
+        category: "identification"
+        xpath: "//dmIdent/issueInfo"
+        validation:
+          type: "element_required"
+          required_attributes:
+            - "issueNumber"
+            - "inWork"
+        message: "issueInfo must be present with issueNumber and inWork attributes"
+        
+      - id: "BREX-IDENT-006"
+        name: "Language Code Format"
+        description: "language must be valid ISO 639-1 with optional country code"
+        severity: "ERROR"
+        category: "identification"
+        xpath: "//language"
+        validation:
+          type: "attribute_pattern"
+          attribute: "languageIsoCode"
+          pattern: "^[a-z]{2}(-[A-Z]{2})?$"
+        message: "languageIsoCode must be ISO 639-1 format (e.g., 'en', 'en-US')"
+
+    # -------------------------------------------------------------------------
+    # STRUCTURE RULES (BREX-STRUCT-xxx)
+    # -------------------------------------------------------------------------
+    structure:
+      - id: "BREX-STRUCT-001"
+        name: "DM Address Required"
+        description: "Every Data Module must have dmAddress section"
+        severity: "ERROR"
+        category: "structure"
+        xpath: "/dmodule"
+        validation:
+          type: "child_required"
+          children:
+            - "identAndStatusSection"
+            - "content"
+        message: "dmodule must contain identAndStatusSection and content"
+        
+      - id: "BREX-STRUCT-002"
+        name: "Ident and Status Section Structure"
+        description: "identAndStatusSection must have dmIdent and dmStatus"
+        severity: "ERROR"
+        category: "structure"
+        xpath: "//identAndStatusSection"
+        validation:
+          type: "child_required"
+          children:
+            - "dmIdent"
+            - "dmStatus"
+        message: "identAndStatusSection must contain dmIdent and dmStatus"
+        
+      - id: "BREX-STRUCT-003"
+        name: "Nested Para Depth Limit"
+        description: "Paragraphs should not be nested more than 4 levels deep"
+        severity: "WARNING"
+        category: "structure"
+        xpath: "//para//para//para//para//para"
+        validation:
+          type: "element_forbidden"
+        message: "Paragraphs should not exceed 4 levels of nesting"
+        
+      - id: "BREX-STRUCT-004"
+        name: "Procedural Step Structure"
+        description: "Procedural steps must follow required element order"
+        severity: "ERROR"
+        category: "structure"
+        xpath: "//proceduralStep"
+        validation:
+          type: "child_order"
+          order:
+            - "warning"       # Optional, first if present
+            - "caution"       # Optional, after warnings
+            - "note"          # Optional, after cautions
+            - "para"          # Required, at least one
+            - "proceduralStep"  # Optional nested steps
+        message: "Procedural step elements must follow W-C-N-P sequence"
+        
+      - id: "BREX-STRUCT-005"
+        name: "Warning Before Caution"
+        description: "Warnings must appear before cautions in procedural steps"
+        severity: "ERROR"
+        category: "structure"
+        xpath: "//proceduralStep[caution][warning]"
+        validation:
+          type: "sibling_order"
+          first: "warning"
+          second: "caution"
+        message: "Warnings must appear before cautions"
+        
+      - id: "BREX-STRUCT-006"
+        name: "Table Structure"
+        description: "Tables must have proper structure"
+        severity: "ERROR"
+        category: "structure"
+        xpath: "//table"
+        validation:
+          type: "child_required"
+          children:
+            - "tgroup"
+        message: "Tables must contain tgroup element"
+        
+      - id: "BREX-STRUCT-007"
+        name: "Figure Structure"
+        description: "Figures must have title and at least one graphic"
+        severity: "ERROR"
+        category: "structure"
+        xpath: "//figure"
+        validation:
+          type: "child_required"
+          children:
+            - "title"
+            - "graphic"
+        message: "Figures must have title and graphic elements"
+
+    # -------------------------------------------------------------------------
+    # CONTENT RULES (BREX-CONT-xxx)
+    # -------------------------------------------------------------------------
+    content:
+      - id: "BREX-CONT-001"
+        name: "Technical Name Required"
+        description: "Every DM must have a techName element"
+        severity: "ERROR"
+        category: "content"
+        xpath: "//dmAddressItems"
+        validation:
+          type: "child_required"
+          children:
+            - "techName"
+        message: "dmAddressItems must contain techName element"
+        
+      - id: "BREX-CONT-002"
+        name: "Warning Text Not Empty"
+        description: "Warning elements must contain text content"
+        severity: "ERROR"
+        category: "content"
+        xpath: "//warning"
+        validation:
+          type: "not_empty"
+          min_length: 10
+        message: "Warning elements must contain meaningful text"
+        
+      - id: "BREX-CONT-003"
+        name: "Caution Text Not Empty"
+        description: "Caution elements must contain text content"
+        severity: "ERROR"
+        category: "content"
+        xpath: "//caution"
+        validation:
+          type: "not_empty"
+          min_length: 10
+        message: "Caution elements must contain meaningful text"
+        
+      - id: "BREX-CONT-004"
+        name: "Para Minimum Content"
+        description: "Paragraphs must contain meaningful content"
+        severity: "WARNING"
+        category: "content"
+        xpath: "//para[not(ancestor::warning or ancestor::caution or ancestor::note)]"
+        validation:
+          type: "not_empty"
+          min_length: 3
+        message: "Paragraphs should contain meaningful content"
+        
+      - id: "BREX-CONT-005"
+        name: "Title Case Consistency"
+        description: "Titles should follow consistent capitalization"
+        severity: "INFO"
+        category: "content"
+        xpath: "//title"
+        validation:
+          type: "pattern"
+          pattern: "^[A-Z]"
+        message: "Titles should start with capital letter"
+        
+      - id: "BREX-CONT-006"
+        name: "No Trailing Whitespace"
+        description: "Text content should not have excessive trailing whitespace"
+        severity: "INFO"
+        category: "content"
+        xpath: "//*[text()]"
+        validation:
+          type: "pattern_forbidden"
+          pattern: "\\s{2,}$"
+        message: "Text should not have excessive trailing whitespace"
+        
+      - id: "BREX-CONT-007"
+        name: "Responsible Partner Company Required"
+        description: "DM status must have responsible partner company"
+        severity: "ERROR"
+        category: "content"
+        xpath: "//dmStatus"
+        validation:
+          type: "child_required"
+          children:
+            - "responsiblePartnerCompany"
+        message: "dmStatus must contain responsiblePartnerCompany"
+
+    # -------------------------------------------------------------------------
+    # REFERENCE RULES (BREX-REF-xxx)
+    # -------------------------------------------------------------------------
+    references:
+      - id: "BREX-REF-001"
+        name: "Internal Reference Target Exists"
+        description: "internalRef targets must exist in the document"
+        severity: "ERROR"
+        category: "references"
+        xpath: "//internalRef"
+        validation:
+          type: "idref_valid"
+          attribute: "internalRefId"
+        message: "internalRef must point to existing element ID"
+        
+      - id: "BREX-REF-002"
+        name: "DM Reference Format"
+        description: "dmRef must contain properly structured dmRefIdent"
+        severity: "ERROR"
+        category: "references"
+        xpath: "//dmRef"
+        validation:
+          type: "child_required"
+          children:
+            - "dmRefIdent"
+        message: "dmRef must contain dmRefIdent element"
+        
+      - id: "BREX-REF-003"
+        name: "External Publication Reference"
+        description: "externalPubRef must have required identification"
+        severity: "WARNING"
+        category: "references"
+        xpath: "//externalPubRef"
+        validation:
+          type: "child_required"
+          children:
+            - "externalPubRefIdent"
+        message: "externalPubRef should contain externalPubRefIdent"
+        
+      - id: "BREX-REF-004"
+        name: "Graphic Reference Valid"
+        description: "Graphic infoEntityIdent must reference valid ICN"
+        severity: "ERROR"
+        category: "references"
+        xpath: "//graphic"
+        validation:
+          type: "attribute_required"
+          attributes:
+            - "infoEntityIdent"
+        message: "graphic must have infoEntityIdent attribute"
+        
+      - id: "BREX-REF-005"
+        name: "ICN Format Valid"
+        description: "ICN references must follow S1000D naming convention"
+        severity: "ERROR"
+        category: "references"
+        xpath: "//graphic/@infoEntityIdent"
+        validation:
+          type: "pattern"
+          pattern: "^ICN-[A-Z0-9]{2,14}-[A-Z0-9]{2,6}-[A-Z0-9]{3,10}-[A-Z0-9]{3,6}-[0-9]{5}-[A-Z0-9]{2}-[0-9]{2}$"
+        message: "ICN must follow S1000D naming convention"
+        
+      - id: "BREX-REF-006"
+        name: "Hotspot Target Exists"
+        description: "Hotspots must reference valid targets"
+        severity: "ERROR"
+        category: "references"
+        xpath: "//hotspot"
+        validation:
+          type: "attribute_required"
+          attributes:
+            - "applicationStructIdent"
+          optional_attributes:
+            - "hotspotType"
+        message: "hotspot must have applicationStructIdent"
+
+    # -------------------------------------------------------------------------
+    # APPLICABILITY RULES (BREX-APP-xxx)
+    # -------------------------------------------------------------------------
+    applicability:
+      - id: "BREX-APP-001"
+        name: "Applicability Annotation Present"
+        description: "Content with applicability must have applic annotation"
+        severity: "WARNING"
+        category: "applicability"
+        xpath: "//*[@applicRefId]"
+        validation:
+          type: "idref_valid"
+          attribute: "applicRefId"
+        message: "applicRefId must reference valid applicability definition"
+        
+      - id: "BREX-APP-002"
+        name: "ACT Reference Valid"
+        description: "Applicability Cross-reference Table references must be valid"
+        severity: "ERROR"
+        category: "applicability"
+        xpath: "//applicCrossRefTableRef"
+        validation:
+          type: "child_required"
+          children:
+            - "dmRef"
+        message: "applicCrossRefTableRef must contain dmRef"
+        
+      - id: "BREX-APP-003"
+        name: "PCT Reference Valid"
+        description: "Product Cross-reference Table references must be valid"
+        severity: "ERROR"
+        category: "applicability"
+        xpath: "//productCrossRefTableRef"
+        validation:
+          type: "child_required"
+          children:
+            - "dmRef"
+        message: "productCrossRefTableRef must contain dmRef"
+        
+      - id: "BREX-APP-004"
+        name: "CCT Reference Valid"
+        description: "Conditions Cross-reference Table references must be valid"
+        severity: "ERROR"
+        category: "applicability"
+        xpath: "//condCrossRefTableRef"
+        validation:
+          type: "child_required"
+          children:
+            - "dmRef"
+        message: "condCrossRefTableRef must contain dmRef"
+        
+      - id: "BREX-APP-005"
+        name: "Effectivity Date Format"
+        description: "Effectivity dates must follow ISO format"
+        severity: "ERROR"
+        category: "applicability"
+        xpath: "//*[contains(@*, 'Date')]"
+        validation:
+          type: "date_format"
+          format: "YYYY-MM-DD"
+        message: "Dates must be in YYYY-MM-DD format"
+
+    # -------------------------------------------------------------------------
+    # METADATA RULES (BREX-META-xxx)
+    # -------------------------------------------------------------------------
+    metadata:
+      - id: "BREX-META-001"
+        name: "Issue Date Required"
+        description: "DM must have issueDate in dmStatus"
+        severity: "ERROR"
+        category: "metadata"
+        xpath: "//dmStatus"
+        validation:
+          type: "child_required"
+          children:
+            - "issueDate"
+        message: "dmStatus must contain issueDate"
+        
+      - id: "BREX-META-002"
+        name: "Issue Date Format"
+        description: "issueDate must follow ISO 8601 format"
+        severity: "ERROR"
+        category: "metadata"
+        xpath: "//issueDate"
+        validation:
+          type: "attribute_pattern"
+          attribute: "year"
+          pattern: "^[0-9]{4}$"
+        message: "issueDate year must be 4-digit number"
+        
+      - id: "BREX-META-003"
+        name: "Security Classification Required"
+        description: "DM must have security classification"
+        severity: "ERROR"
+        category: "metadata"
+        xpath: "//dmStatus"
+        validation:
+          type: "child_required"
+          children:
+            - "security"
+        message: "dmStatus must contain security element"
+        
+      - id: "BREX-META-004"
+        name: "Security Classification Values"
+        description: "Security classification must be valid value"
+        severity: "ERROR"
+        category: "metadata"
+        xpath: "//security/@securityClassification"
+        validation:
+          type: "enumeration"
+          values:
+            - "01"  # Unclassified
+            - "02"  # Restricted
+            - "03"  # Confidential
+            - "04"  # Secret
+            - "05"  # Top Secret
+        message: "securityClassification must be valid code (01-05)"
+        
+      - id: "BREX-META-005"
+        name: "Quality Assurance Status"
+        description: "DM should have QA status indicator"
+        severity: "WARNING"
+        category: "metadata"
+        xpath: "//dmStatus"
+        validation:
+          type: "child_recommended"
+          children:
+            - "qualityAssurance"
+        message: "dmStatus should contain qualityAssurance element"
+        
+      - id: "BREX-META-006"
+        name: "Originator Required"
+        description: "DM must identify originator"
+        severity: "ERROR"
+        category: "metadata"
+        xpath: "//dmStatus"
+        validation:
+          type: "child_required"
+          children:
+            - "originator"
+        message: "dmStatus must contain originator element"
+        
+      - id: "BREX-META-007"
+        name: "Data Restrictions"
+        description: "DM should specify data restrictions"
+        severity: "WARNING"
+        category: "metadata"
+        xpath: "//dmStatus"
+        validation:
+          type: "child_recommended"
+          children:
+            - "dataRestrictions"
+        message: "dmStatus should contain dataRestrictions element"
+
+    # -------------------------------------------------------------------------
+    # CONTROLLED VOCABULARY (BREX-VOCAB-xxx)
+    # -------------------------------------------------------------------------
+    vocabulary:
+      - id: "BREX-VOCAB-001"
+        name: "Warning Type Values"
+        description: "warningAndCautionPara warningType must use controlled values"
+        severity: "ERROR"
+        category: "vocabulary"
+        xpath: "//warningAndCautionPara/@warningType"
+        validation:
+          type: "enumeration"
+          values:
+            - "wg01"  # Personal injury
+            - "wg02"  # Equipment damage
+            - "wg03"  # Environmental
+            - "wg04"  # Regulatory
+            - "wg05"  # Mission critical
+        message: "warningType must be controlled value (wg01-wg05)"
+        
+      - id: "BREX-VOCAB-002"
+        name: "Change Type Values"
+        description: "reasonForUpdate changeType must use controlled values"
+        severity: "ERROR"
+        category: "vocabulary"
+        xpath: "//reasonForUpdate/@changeType"
+        validation:
+          type: "enumeration"
+          values:
+            - "add"     # New content added
+            - "modify"  # Existing content modified
+            - "delete"  # Content deleted
+        message: "changeType must be 'add', 'modify', or 'delete'"
+        
+      - id: "BREX-VOCAB-003"
+        name: "Skill Level Values"
+        description: "skillLevel must use controlled values"
+        severity: "WARNING"
+        category: "vocabulary"
+        xpath: "//skillLevel/@skillLevelCode"
+        validation:
+          type: "enumeration"
+          values:
+            - "sk01"  # Basic
+            - "sk02"  # Intermediate
+            - "sk03"  # Advanced
+            - "sk04"  # Specialist
+            - "sk05"  # Master
+        message: "skillLevelCode must be controlled value (sk01-sk05)"
+        
+      - id: "BREX-VOCAB-004"
+        name: "Maintenance Level Values"
+        description: "maintLevel must use controlled values"
+        severity: "ERROR"
+        category: "vocabulary"
+        xpath: "//reqCondGroup//maintLevel"
+        validation:
+          type: "enumeration"
+          values:
+            - "O"   # Organizational/Operator
+            - "I"   # Intermediate
+            - "D"   # Depot
+            - "H"   # Heavy maintenance
+        message: "maintLevel must be O, I, D, or H"
+
+    # -------------------------------------------------------------------------
+    # ILLUSTRATION RULES (BREX-ILLUS-xxx)
+    # -------------------------------------------------------------------------
+    illustrations:
+      - id: "BREX-ILLUS-001"
+        name: "Graphic Reproduction Width"
+        description: "Graphics should specify reproduction dimensions"
+        severity: "WARNING"
+        category: "illustrations"
+        xpath: "//graphic"
+        validation:
+          type: "attribute_recommended"
+          attributes:
+            - "reproductionWidth"
+        message: "graphic should have reproductionWidth attribute"
+        
+      - id: "BREX-ILLUS-002"
+        name: "Figure Number Sequence"
+        description: "Figures should be numbered sequentially"
+        severity: "INFO"
+        category: "illustrations"
+        xpath: "//figure"
+        validation:
+          type: "sequential_numbering"
+          attribute: "id"
+        message: "Figures should be numbered in sequence"
+        
+      - id: "BREX-ILLUS-003"
+        name: "Sheet Specification"
+        description: "Multi-sheet graphics must specify sheet count"
+        severity: "WARNING"
+        category: "illustrations"
+        xpath: "//graphic[graphic]"
+        validation:
+          type: "child_count"
+          min: 1
+        message: "Multi-sheet graphics should specify all sheets"
+        
+      - id: "BREX-ILLUS-004"
+        name: "Legend Present"
+        description: "Complex figures should have legends"
+        severity: "INFO"
+        category: "illustrations"
+        xpath: "//figure[.//hotspot]"
+        validation:
+          type: "child_recommended"
+          children:
+            - "legend"
+        message: "Figures with hotspots should have legends"
+
+  # -------------------------------------------------------------------------
+  # RULE PROFILES
+  # -------------------------------------------------------------------------
+  profiles:
+    default:
+      name: "S1000D 5.0 Default Profile"
+      description: "Standard compliance profile for S1000D 5.0"
+      enabled_categories:
+        - "identification"
+        - "structure"
+        - "content"
+        - "references"
+        - "applicability"
+        - "metadata"
+        - "vocabulary"
+        - "illustrations"
+      disabled_rules: []
+      
+    minimal:
+      name: "Minimal Compliance Profile"
+      description: "Minimum required rules for basic compliance"
+      enabled_categories:
+        - "identification"
+        - "structure"
+        - "references"
+      severity_filter:
+        - "ERROR"
+      
+    strict:
+      name: "Strict Compliance Profile"
+      description: "All rules enabled at maximum strictness"
+      enabled_categories:
+        - "identification"
+        - "structure"
+        - "content"
+        - "references"
+        - "applicability"
+        - "metadata"
+        - "vocabulary"
+        - "illustrations"
+      promote_warnings: true  # Warnings treated as errors
+      disabled_rules: []
+      
+    publication:
+      name: "Publication Profile"
+      description: "Rules for final publication validation"
+      enabled_categories:
+        - "identification"
+        - "structure"
+        - "content"
+        - "references"
+        - "metadata"
+      severity_filter:
+        - "ERROR"
+        - "WARNING"
+      additional_checks:
+        - "all_refs_resolved"
+        - "no_inwork_content"
+        - "all_icns_present"
+
+  # -------------------------------------------------------------------------
+  # CUSTOM VALIDATION FUNCTIONS
+  # -------------------------------------------------------------------------
+  custom_validators:
+    cross_reference_integrity:
+      name: "Cross-Reference Integrity Check"
+      description: "Validates all internal cross-references resolve to targets"
+      function: "validate_cross_references"
+      parameters:
+        scope: "document"
+        check_external: false
+        
+    applicability_consistency:
+      name: "Applicability Consistency Check"
+      description: "Validates applicability annotations are consistent"
+      function: "validate_applicability"
+      parameters:
+        require_act_ref: true
+        allow_inline: true
+        
+    illustration_coverage:
+      name: "Illustration Coverage Check"
+      description: "Validates all referenced graphics exist"
+      function: "validate_illustrations"
+      parameters:
+        check_file_exists: true
+        supported_formats:
+          - "CGM"
+          - "PNG"
+          - "SVG"
+          - "JPEG"
+          - "TIFF"
+
+  # -------------------------------------------------------------------------
+  # EXCEPTION HANDLING
+  # -------------------------------------------------------------------------
+  exceptions:
+    allow_waivers: true
+    waiver_authority: "STK_CM"
+    waiver_documentation_required: true
+    
+    waiver_template:
+      rule_id: ""
+      justification: ""
+      scope: ""  # DM code or pattern
+      approved_by: ""
+      approval_date: ""
+      expiration_date: ""
+      conditions: ""

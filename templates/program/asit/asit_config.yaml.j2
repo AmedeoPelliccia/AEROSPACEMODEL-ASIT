@@ -1,0 +1,306 @@
+# =============================================================================
+# {{ program_name }} — ASIT Layer Configuration
+# =============================================================================
+# Configuration for the Aircraft Systems Information Transponder layer.
+# Defines governance, structure, and authorization settings.
+#
+# Program: {{ program_name }} ({{ model_code }})
+# Generated: {{ created_date }}
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# ASIT Identity
+# -----------------------------------------------------------------------------
+asit:
+  version: "2.0.0"
+  program:
+    name: "{{ program_name }}"
+    model_code: "{{ model_code }}"
+    organization: "{{ organization }}"
+
+# -----------------------------------------------------------------------------
+# Governance Configuration
+# -----------------------------------------------------------------------------
+governance:
+  # Baseline Management
+  baselines:
+    types:
+      - code: "DBL"
+        name: "Design Baseline"
+        description: "Engineering design freeze point"
+        approval_required: true
+        
+      - code: "FBL"
+        name: "Functional Baseline"
+        description: "Requirements allocation freeze"
+        approval_required: true
+        
+      - code: "PBL"
+        name: "Product Baseline"
+        description: "Production configuration freeze"
+        approval_required: true
+        
+      - code: "OBL"
+        name: "Operational Baseline"
+        description: "In-service configuration"
+        approval_required: true
+        
+    naming:
+      pattern: "{type}-{year}-Q{quarter}-{sequence}"
+      example: "FBL-2026-Q1-001"
+      
+    retention:
+      minimum_years: 10
+      archive_policy: "immutable"
+      
+  # Change Control
+  change_control:
+    enabled: true
+    
+    ecr:  # Engineering Change Request
+      required_fields:
+        - title
+        - description
+        - impact_assessment
+        - originator
+        - priority
+      workflow:
+        - status: "Draft"
+          next: ["Submitted"]
+        - status: "Submitted"
+          next: ["Under Review", "Rejected"]
+        - status: "Under Review"
+          next: ["Approved", "Rejected", "More Info Required"]
+        - status: "Approved"
+          next: ["ECO Created"]
+        - status: "Rejected"
+          terminal: true
+          
+    eco:  # Engineering Change Order
+      required_fields:
+        - ecr_reference
+        - implementation_plan
+        - effectivity
+        - verification_method
+      workflow:
+        - status: "Draft"
+          next: ["Released"]
+        - status: "Released"
+          next: ["In Progress"]
+        - status: "In Progress"
+          next: ["Implemented", "Cancelled"]
+        - status: "Implemented"
+          next: ["Verified"]
+        - status: "Verified"
+          terminal: true
+          
+    ccb:  # Configuration Control Board
+      enabled: true
+      quorum_required: 3
+      roles:
+        - "Engineering Lead"
+        - "Quality Assurance"
+        - "Configuration Management"
+        - "Program Management"
+        
+  # Approval Authority
+  approvals:
+    matrix_file: "GOVERNANCE/APPROVALS/APPROVAL_MATRIX.csv"
+    
+    roles:
+      STK_ENG:
+        name: "Engineering"
+        scope: ["technical_content", "design_data"]
+        
+      STK_QA:
+        name: "Quality Assurance"
+        scope: ["validation", "compliance"]
+        
+      STK_CM:
+        name: "Configuration Management"
+        scope: ["baselines", "releases"]
+        
+      STK_PM:
+        name: "Program Management"
+        scope: ["schedule", "resources"]
+        
+      STK_CERT:
+        name: "Certification"
+        scope: ["regulatory", "compliance"]
+        
+    gates:
+      - name: "PDR"
+        full_name: "Preliminary Design Review"
+        required_approvers: ["STK_ENG", "STK_QA", "STK_PM"]
+        
+      - name: "CDR"
+        full_name: "Critical Design Review"
+        required_approvers: ["STK_ENG", "STK_QA", "STK_PM", "STK_CERT"]
+        
+      - name: "TRR"
+        full_name: "Test Readiness Review"
+        required_approvers: ["STK_ENG", "STK_QA"]
+        
+      - name: "PRR"
+        full_name: "Production Readiness Review"
+        required_approvers: ["STK_ENG", "STK_QA", "STK_PM"]
+
+# -----------------------------------------------------------------------------
+# Structure Configuration
+# -----------------------------------------------------------------------------
+structure:
+  # ATA iSpec 2200 Mapping
+  ata:
+    specification: "iSpec 2200"
+    chapters_enabled:
+      # General
+      - "05"  # Time Limits
+      - "06"  # Dimensions
+      - "07"  # Lifting/Shoring
+      - "08"  # Leveling/Weighing
+      - "09"  # Towing/Taxiing
+      - "10"  # Parking/Storage
+      - "11"  # Placards
+      - "12"  # Servicing
+      # Systems (enable as needed)
+      - "21"  # Air Conditioning
+      - "22"  # Auto Flight
+      - "23"  # Communications
+      - "24"  # Electrical Power
+      - "25"  # Equipment/Furnishings
+      - "26"  # Fire Protection
+      - "27"  # Flight Controls
+      - "28"  # Fuel
+      - "29"  # Hydraulic Power
+      - "30"  # Ice/Rain Protection
+      - "31"  # Indicating/Recording
+      - "32"  # Landing Gear
+      - "33"  # Lights
+      - "34"  # Navigation
+      - "35"  # Oxygen
+      - "36"  # Pneumatic
+      - "38"  # Water/Waste
+      - "49"  # APU
+      # Structures
+      - "51"  # Standard Practices
+      - "52"  # Doors
+      - "53"  # Fuselage
+      - "54"  # Nacelles/Pylons
+      - "55"  # Stabilizers
+      - "56"  # Windows
+      - "57"  # Wings
+      # Powerplant
+      - "71"  # Powerplant General
+      - "72"  # Engine
+      - "73"  # Engine Fuel Control
+      - "74"  # Ignition
+      - "75"  # Air (Bleed)
+      - "76"  # Engine Controls
+      - "77"  # Engine Indicating
+      - "78"  # Exhaust
+      - "79"  # Oil
+      - "80"  # Starting
+      
+  # Knowledge/Information Database Partition
+  kdb_idb:
+    kdb:
+      description: "Knowledge Database — Engineering truth"
+      content_types:
+        - "Requirements"
+        - "Design Data"
+        - "Analysis Results"
+        - "Test Data"
+        - "Certification Evidence"
+      source_of_truth: true
+      
+    idb:
+      description: "Information Database — Operational publications"
+      content_types:
+        - "Data Modules"
+        - "Publication Modules"
+        - "Graphics (ICN)"
+        - "Rendered Publications"
+      derived_from: "KDB"
+      
+  # Lifecycle Phases
+  lifecycle:
+    phases:
+      - code: "LC01"
+        name: "Concept"
+        allowed_baselines: ["DBL"]
+        
+      - code: "LC02"
+        name: "Preliminary Design"
+        allowed_baselines: ["DBL"]
+        
+      - code: "LC03"
+        name: "Detailed Design"
+        allowed_baselines: ["DBL", "FBL"]
+        
+      - code: "LC04"
+        name: "Development"
+        allowed_baselines: ["FBL"]
+        
+      - code: "LC05"
+        name: "Qualification"
+        allowed_baselines: ["FBL", "PBL"]
+        
+      - code: "LC06"
+        name: "Production"
+        allowed_baselines: ["PBL"]
+        
+      - code: "LC07"
+        name: "In-Service"
+        allowed_baselines: ["OBL"]
+        
+      - code: "LC08"
+        name: "Disposal"
+        allowed_baselines: ["OBL"]
+
+# -----------------------------------------------------------------------------
+# Contract Configuration
+# -----------------------------------------------------------------------------
+contracts:
+  templates_directory: "CONTRACTS/templates"
+  active_directory: "CONTRACTS/active"
+  
+  schema_file: "CONTRACTS/CONTRACT_SCHEMA.yaml"
+  
+  defaults:
+    validation:
+      brex_required: true
+      schema_required: true
+      trace_required: true
+      
+    outputs:
+      format: "S1000D"
+      archive: true
+      
+  naming:
+    pattern: "{{ model_code }}-CTR-{type}-{sequence}"
+    types:
+      - "AMM"   # Aircraft Maintenance Manual
+      - "CMM"   # Component Maintenance Manual
+      - "IPC"   # Illustrated Parts Catalog
+      - "SRM"   # Structural Repair Manual
+      - "SB"    # Service Bulletin
+
+# -----------------------------------------------------------------------------
+# Index Configuration
+# -----------------------------------------------------------------------------
+index:
+  ssot:
+    file: "INDEX/SSOT_INDEX.yaml"
+    auto_update: true
+    
+  traceability:
+    master_file: "INDEX/TRACE_MASTER.csv"
+    link_types:
+      - "satisfies"      # DM satisfies requirement
+      - "derives_from"   # DM derives from source
+      - "references"     # DM references another DM
+      - "supersedes"     # DM supersedes previous version
+      
+  registry:
+    id_file: "INDEX/ID_REGISTRY.csv"
+    artifact_catalog: "INDEX/ARTIFACT_CATALOG.yaml"

@@ -1,0 +1,119 @@
+# =============================================================================
+# SkyLift-200 — Battery System Detailed Requirements
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "requirements"
+  ata_chapter: "24"
+  title: "Battery System Details"
+  baseline: "FBL-SL2-2026-Q1"
+
+requirements:
+  - id: "REQ-SL2-BATT-001"
+    type: "descriptive"
+    title: "Battery Pack Assembly"
+    ata_code: "24-20-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        Each battery pack is a self-contained assembly with cells,
+        thermal management, and local BMS.
+        
+      details: |
+        Pack specifications:
+        - Part Number: SL2-24-0001
+        - Capacity: 40 kWh
+        - Nominal voltage: 800 V
+        - Weight: 180 kg
+        - Dimensions: 600 x 400 x 300 mm
+        
+        Contents:
+        - Cell modules (8 per pack)
+        - Local BMS controller
+        - Thermal management plate
+        - Isolation contactors (2)
+        - Current sensors
+        - Enclosure with venting
+        
+    traceability:
+      parent: "SYS-REQ-024-001"
+    special_conditions:
+      - "SC-VTOL-03"
+      
+  - id: "REQ-SL2-BATT-002"
+    type: "descriptive"
+    title: "Cell Module"
+    ata_code: "24-20-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    
+    content:
+      summary: |
+        Cell modules contain individual cells in series/parallel arrangement.
+        
+      details: |
+        Module specifications:
+        - Cells per module: 96 (12S8P)
+        - Module voltage: 100 V nominal
+        - Module capacity: 5 kWh
+        - Chemistry: NMC (Nickel Manganese Cobalt)
+        
+  - id: "REQ-SL2-BATT-003"
+    type: "descriptive"
+    title: "Thermal Management"
+    ata_code: "24-20-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        Active liquid cooling maintains cells within operating temperature.
+        
+      details: |
+        Thermal limits:
+        - Operating range: 15°C to 45°C
+        - Charging range: 10°C to 40°C
+        - Storage range: -20°C to 60°C
+        
+        Cooling system:
+        - Type: Liquid (glycol/water)
+        - Flow rate: 10 L/min per pack
+        - Heat rejection: 5 kW per pack max
+        
+    special_conditions:
+      - "SC-VTOL-03"
+      
+  - id: "REQ-SL2-BATT-004"
+    type: "procedural"
+    title: "Thermal Runaway Response"
+    ata_code: "24-20-00"
+    info_code: "340"
+    applicability: "APP-SL2-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        Emergency procedure for battery thermal event.
+        
+    warnings:
+      - type: "fire"
+        text: "FIRE HAZARD - Do not attempt to extinguish lithium battery fire with water."
+      - type: "chemical"
+        text: "TOXIC FUMES - Evacuate area and use SCBA if entry required."
+        
+  - id: "REQ-SL2-BATT-010"
+    type: "procedural"
+    title: "Battery State of Health Check"
+    ata_code: "24-20-00"
+    info_code: "300"
+    applicability: "APP-SL2-ALL"
+    task_type: "scheduled"
+    interval: "100 flight hours"
+    
+    content:
+      summary: "Procedure to verify battery state of health via BMS"

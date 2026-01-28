@@ -1,0 +1,153 @@
+# =============================================================================
+# HydrogenJet-100 — Hydrogen Ground Handling
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "ground_ops"
+  title: "Hydrogen Ground Handling"
+  baseline: "FBL-HJ1-2026-Q1"
+
+requirements:
+  - id: "REQ-HJ1-GSE-001"
+    type: "descriptive"
+    title: "Hydrogen Refueling Overview"
+    ata_code: "12-20-00"
+    info_code: "040"
+    applicability: "APP-HJ1-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        Liquid hydrogen refueling of the HJ1 aircraft requires
+        specialized equipment and procedures.
+        
+      details: |
+        REFUELING SYSTEM:
+        - Fuel type: Liquid Hydrogen (LH2)
+        - Connection: Cryogenic quick-disconnect
+        - Fill rate: 100 kg/min maximum
+        - Ground interface: Rear fuselage panel
+        
+        REQUIRED GSE:
+        - LH2 tanker or direct supply
+        - Transfer pump/vaporizer unit
+        - Bonding/grounding cables
+        - Nitrogen purge system
+        - Portable H2 detector
+        - Fire extinguisher (dry powder for surroundings)
+        
+    special_conditions:
+      - "SC-H2-05"
+      
+  - id: "REQ-HJ1-GSE-002"
+    type: "procedural"
+    title: "Pre-Refueling Safety Check"
+    ata_code: "12-20-00"
+    info_code: "200"
+    applicability: "APP-HJ1-ALL"
+    
+    content:
+      summary: "Safety checks before hydrogen refueling"
+      
+      procedure: |
+        1. Establish 15m exclusion zone
+        2. Position fire extinguisher
+        3. Verify no ignition sources in zone
+        4. Connect bonding cable (aircraft to GSE)
+        5. Connect grounding cable (GSE to ground point)
+        6. Verify H2 detection system operational
+        7. Brief all personnel on emergency procedures
+        8. Verify communication with operations
+        
+    warnings:
+      - type: "hydrogen"
+        text: |
+          DO NOT commence refueling if any H2 is detected in area.
+          Investigate and resolve any leak before proceeding.
+          
+  - id: "REQ-HJ1-GSE-003"
+    type: "procedural"
+    title: "LH2 Refueling Procedure"
+    ata_code: "12-20-00"
+    info_code: "200"
+    applicability: "APP-HJ1-ALL"
+    
+    content:
+      summary: "Liquid hydrogen refueling procedure"
+      
+      procedure: |
+        1. Complete pre-refueling safety check
+        2. Open aircraft refueling panel
+        3. Connect nitrogen purge line
+        4. Purge transfer line with N2
+        5. Connect LH2 fill coupling
+        6. Verify seal integrity
+        7. Begin slow fill (20% rate)
+        8. Monitor for leaks continuously
+        9. Increase to normal fill rate
+        10. Monitor tank level and pressure
+        11. Stop fill at target level
+        12. Close tank isolation valve
+        13. Purge fill line with N2
+        14. Disconnect LH2 coupling (cap immediately)
+        15. Disconnect N2 purge
+        16. Close refueling panel
+        17. Disconnect grounding/bonding
+        18. Clear exclusion zone
+        
+    warnings:
+      - type: "cold-injury"
+        text: "Wear cryogenic PPE during all connection/disconnection."
+        
+  - id: "REQ-HJ1-GSE-004"
+    type: "procedural"
+    title: "Emergency Refueling Shutoff"
+    ata_code: "12-20-00"
+    info_code: "340"
+    applicability: "APP-HJ1-ALL"
+    safety_critical: true
+    
+    content:
+      summary: "Emergency shutoff during refueling"
+      
+      procedure: |
+        1. STOP refueling immediately (any personnel)
+        2. CLOSE GSE emergency shutoff valve
+        3. CLOSE aircraft fill valve (if accessible)
+        4. EVACUATE area upwind
+        5. DO NOT disconnect if leak is at coupling
+        6. ALERT emergency services
+        7. MONITOR H2 concentration
+        8. DO NOT re-approach until safe
+        
+  - id: "REQ-HJ1-GSE-005"
+    type: "descriptive"
+    title: "Ground Support Equipment Requirements"
+    ata_code: "12-20-00"
+    info_code: "040"
+    applicability: "APP-HJ1-ALL"
+    
+    content:
+      summary: |
+        Required GSE for hydrogen aircraft operations.
+        
+      details: |
+        REFUELING GSE:
+        - LH2 supply (tanker or fixed)
+        - Transfer couplings (H2 rated)
+        - Bonding/grounding kit
+        - Nitrogen supply (purge)
+        
+        SAFETY GSE:
+        - Portable H2 detectors (min. 2)
+        - Fire extinguishers (dry chemical)
+        - Cryogenic PPE set
+        - Emergency shutoff controls
+        - Area lighting (intrinsically safe)
+        
+        MAINTENANCE GSE:
+        - Inert gas supply (N2)
+        - Leak test equipment
+        - Vacuum test equipment
+        - Calibration gases

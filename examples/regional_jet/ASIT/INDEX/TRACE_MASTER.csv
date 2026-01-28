@@ -1,0 +1,6 @@
+trace_id,source_type,source_id,source_version,target_type,target_id,target_version,relationship,status,verified_date,notes
+TRC-001,requirement,REQ-RJ7-FUEL-001,1.0,dm,DMC-RJ7-A-28-00-00-00A-040A-A,001-00,satisfies,verified,2026-01-20,Fuel system description
+TRC-002,requirement,REQ-RJ7-FLT-001,1.0,dm,DMC-RJ7-A-27-00-00-00A-040A-A,001-00,satisfies,verified,2026-01-20,Flight controls description
+TRC-003,requirement,REQ-RJ7-LG-001,1.0,dm,DMC-RJ7-A-32-00-00-00A-040A-A,001-00,satisfies,verified,2026-01-20,Landing gear description
+TRC-004,part,RJ7-28-0001,1.0,dm,DMC-RJ7-A-28-20-00-00A-941A-A,001-00,describes,verified,2026-01-22,Fuel pump IPD
+TRC-005,repair,REP-RJ7-53-001,1.0,dm,DMC-RJ7-A-53-30-00-00A-600A-A,001-00,documents,verified,2026-01-22,Fuselage repair procedure

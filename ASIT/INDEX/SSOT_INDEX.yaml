@@ -1,0 +1,426 @@
+# SSOT Index
+# Single Source of Truth Navigation
+# Version: 2.0.0
+# Last Updated: 2026-01-22
+
+metadata:
+  version: "2.0.0"
+  program: "<PROGRAM_NAME>"
+  model_code: "<MODEL_CODE>"
+  last_updated: "2026-01-22"
+  description: "Master index of all SSOT artifacts in the program"
+
+# =============================================================================
+# KNOWLEDGE DATABASE (KDB) INDEX
+# =============================================================================
+
+kdb:
+  description: "Engineering knowledge - Single Source of Truth"
+  base_path: "KDB/"
+  
+  # ---------------------------------------------------------------------------
+  # REQUIREMENTS
+  # ---------------------------------------------------------------------------
+  requirements:
+    description: "System and component requirements"
+    path: "KDB/REQUIREMENTS/"
+    categories:
+      system:
+        path: "KDB/REQUIREMENTS/system/"
+        description: "Top-level system requirements"
+        artifact_type: "REQUIREMENT"
+        naming_pattern: "KDB-REQ-SYS-NNNN"
+        
+      interface:
+        path: "KDB/REQUIREMENTS/interface/"
+        description: "Interface control requirements"
+        artifact_type: "REQUIREMENT"
+        naming_pattern: "KDB-REQ-ICD-NNNN"
+        
+      safety:
+        path: "KDB/REQUIREMENTS/safety/"
+        description: "Safety requirements (ARP4761)"
+        artifact_type: "REQUIREMENT"
+        naming_pattern: "KDB-REQ-SAF-NNNN"
+        
+      performance:
+        path: "KDB/REQUIREMENTS/performance/"
+        description: "Performance requirements"
+        artifact_type: "REQUIREMENT"
+        naming_pattern: "KDB-REQ-PER-NNNN"
+
+  # ---------------------------------------------------------------------------
+  # DESIGN
+  # ---------------------------------------------------------------------------
+  design:
+    description: "Design artifacts and specifications"
+    path: "KDB/DESIGN/"
+    categories:
+      models:
+        path: "KDB/DESIGN/models/"
+        description: "CAD models and drawings"
+        artifact_type: "DESIGN"
+        naming_pattern: "KDB-DSN-MDL-NNNN"
+        
+      schematics:
+        path: "KDB/DESIGN/schematics/"
+        description: "System schematics"
+        artifact_type: "DESIGN"
+        naming_pattern: "KDB-DSN-SCH-NNNN"
+        
+      calculations:
+        path: "KDB/DESIGN/calculations/"
+        description: "Design calculations"
+        artifact_type: "DESIGN"
+        naming_pattern: "KDB-DSN-CAL-NNNN"
+        
+      specifications:
+        path: "KDB/DESIGN/specifications/"
+        description: "Design specifications"
+        artifact_type: "DESIGN"
+        naming_pattern: "KDB-DSN-SPC-NNNN"
+
+  # ---------------------------------------------------------------------------
+  # ANALYSIS
+  # ---------------------------------------------------------------------------
+  analysis:
+    description: "Engineering analysis artifacts"
+    path: "KDB/ANALYSIS/"
+    categories:
+      stress:
+        path: "KDB/ANALYSIS/stress/"
+        description: "Structural stress analysis"
+        artifact_type: "ANALYSIS"
+        naming_pattern: "KDB-ANA-STR-NNNN"
+        
+      thermal:
+        path: "KDB/ANALYSIS/thermal/"
+        description: "Thermal analysis"
+        artifact_type: "ANALYSIS"
+        naming_pattern: "KDB-ANA-THM-NNNN"
+        
+      fmea:
+        path: "KDB/ANALYSIS/fmea/"
+        description: "Failure mode and effects analysis"
+        artifact_type: "ANALYSIS"
+        naming_pattern: "KDB-ANA-FME-NNNN"
+        
+      fatigue:
+        path: "KDB/ANALYSIS/fatigue/"
+        description: "Fatigue and damage tolerance"
+        artifact_type: "ANALYSIS"
+        naming_pattern: "KDB-ANA-FAT-NNNN"
+
+  # ---------------------------------------------------------------------------
+  # TEST
+  # ---------------------------------------------------------------------------
+  test:
+    description: "Test artifacts"
+    path: "KDB/TEST/"
+    categories:
+      procedures:
+        path: "KDB/TEST/procedures/"
+        description: "Test procedures"
+        artifact_type: "TEST"
+        naming_pattern: "KDB-TST-PRC-NNNN"
+        
+      results:
+        path: "KDB/TEST/results/"
+        description: "Test results and reports"
+        artifact_type: "TEST"
+        naming_pattern: "KDB-TST-RST-NNNN"
+        
+      qualification:
+        path: "KDB/TEST/qualification/"
+        description: "Qualification test data"
+        artifact_type: "TEST"
+        naming_pattern: "KDB-TST-QUA-NNNN"
+
+  # ---------------------------------------------------------------------------
+  # CERTIFICATION
+  # ---------------------------------------------------------------------------
+  certification:
+    description: "Certification artifacts"
+    path: "KDB/CERTIFICATION/"
+    categories:
+      compliance:
+        path: "KDB/CERTIFICATION/compliance/"
+        description: "Compliance matrices"
+        artifact_type: "CERTIFICATION"
+        naming_pattern: "KDB-CRT-CMP-NNNN"
+        
+      moc:
+        path: "KDB/CERTIFICATION/moc/"
+        description: "Means of compliance"
+        artifact_type: "CERTIFICATION"
+        naming_pattern: "KDB-CRT-MOC-NNNN"
+        
+      tc_data:
+        path: "KDB/CERTIFICATION/tc_data/"
+        description: "Type certificate data"
+        artifact_type: "CERTIFICATION"
+        naming_pattern: "KDB-CRT-TCD-NNNN"
+
+  # ---------------------------------------------------------------------------
+  # TASKS
+  # ---------------------------------------------------------------------------
+  tasks:
+    description: "Maintenance task definitions"
+    path: "KDB/TASKS/"
+    categories:
+      maintenance:
+        path: "KDB/TASKS/maintenance/"
+        description: "Maintenance task cards"
+        artifact_type: "TASK"
+        naming_pattern: "KDB-TSK-MNT-NNNN"
+        by_ata: true
+        
+      inspection:
+        path: "KDB/TASKS/inspection/"
+        description: "Inspection task cards"
+        artifact_type: "TASK"
+        naming_pattern: "KDB-TSK-INS-NNNN"
+        by_ata: true
+        
+      servicing:
+        path: "KDB/TASKS/servicing/"
+        description: "Servicing procedures"
+        artifact_type: "TASK"
+        naming_pattern: "KDB-TSK-SRV-NNNN"
+        by_ata: true
+
+  # ---------------------------------------------------------------------------
+  # PARTS
+  # ---------------------------------------------------------------------------
+  parts:
+    description: "Parts data"
+    path: "KDB/PARTS/"
+    categories:
+      catalog:
+        path: "KDB/PARTS/catalog/"
+        description: "Parts catalog data"
+        artifact_type: "PART"
+        naming_pattern: "KDB-PRT-CAT-NNNN"
+        by_ata: true
+        
+      vendor:
+        path: "KDB/PARTS/vendor/"
+        description: "Vendor part data"
+        artifact_type: "PART"
+        naming_pattern: "KDB-PRT-VND-NNNN"
+
+  # ---------------------------------------------------------------------------
+  # REPAIRS
+  # ---------------------------------------------------------------------------
+  repairs:
+    description: "Structural repair data"
+    path: "KDB/REPAIRS/"
+    categories:
+      structural:
+        path: "KDB/REPAIRS/structural/"
+        description: "Structural repair procedures"
+        artifact_type: "REPAIR"
+        naming_pattern: "KDB-RPR-STR-NNNN"
+        by_ata: true
+        
+      damage_limits:
+        path: "KDB/REPAIRS/damage_limits/"
+        description: "Damage limit data"
+        artifact_type: "REPAIR"
+        naming_pattern: "KDB-RPR-DML-NNNN"
+        by_ata: true
+
+  # ---------------------------------------------------------------------------
+  # FAULTS
+  # ---------------------------------------------------------------------------
+  faults:
+    description: "Fault isolation data"
+    path: "KDB/FAULTS/"
+    categories:
+      isolation:
+        path: "KDB/FAULTS/isolation/"
+        description: "Fault isolation trees"
+        artifact_type: "FAULT"
+        naming_pattern: "KDB-FLT-ISO-NNNN"
+        by_ata: true
+        
+      troubleshooting:
+        path: "KDB/FAULTS/troubleshooting/"
+        description: "Troubleshooting procedures"
+        artifact_type: "FAULT"
+        naming_pattern: "KDB-FLT-TSH-NNNN"
+        by_ata: true
+
+# =============================================================================
+# INFORMATION DATABASE (IDB) INDEX
+# =============================================================================
+
+idb:
+  description: "Operational publications - derived from KDB"
+  base_path: "IDB/"
+  
+  # ---------------------------------------------------------------------------
+  # CSDB
+  # ---------------------------------------------------------------------------
+  csdb:
+    description: "Common Source Database - S1000D content"
+    path: "IDB/CSDB/"
+    categories:
+      data_modules:
+        path: "IDB/CSDB/DMC/"
+        description: "Data Modules by code"
+        artifact_type: "DM"
+        naming_pattern: "S1000D DMC"
+        
+      publication_modules:
+        path: "IDB/CSDB/PMC/"
+        description: "Publication Modules"
+        artifact_type: "PM"
+        naming_pattern: "S1000D PMC"
+        
+      graphics:
+        path: "IDB/CSDB/ICN/"
+        description: "Information Control Numbers (graphics)"
+        artifact_type: "ICN"
+        naming_pattern: "ICN-<MODEL>-XX-NNNNN"
+
+  # ---------------------------------------------------------------------------
+  # PUBLICATIONS
+  # ---------------------------------------------------------------------------
+  publications:
+    description: "Structured publications"
+    path: "IDB/PUBLICATIONS/"
+    categories:
+      amm:
+        path: "IDB/PUBLICATIONS/AMM/"
+        description: "Aircraft Maintenance Manual"
+        publication_type: "AMM"
+        
+      srm:
+        path: "IDB/PUBLICATIONS/SRM/"
+        description: "Structural Repair Manual"
+        publication_type: "SRM"
+        
+      ipc:
+        path: "IDB/PUBLICATIONS/IPC/"
+        description: "Illustrated Parts Catalog"
+        publication_type: "IPC"
+        
+      cmm:
+        path: "IDB/PUBLICATIONS/CMM/"
+        description: "Component Maintenance Manual"
+        publication_type: "CMM"
+        
+      fcom:
+        path: "IDB/PUBLICATIONS/FCOM/"
+        description: "Flight Crew Operating Manual"
+        publication_type: "FCOM"
+        
+      tsm:
+        path: "IDB/PUBLICATIONS/TSM/"
+        description: "Troubleshooting Manual"
+        publication_type: "TSM"
+        
+      wdm:
+        path: "IDB/PUBLICATIONS/WDM/"
+        description: "Wiring Diagram Manual"
+        publication_type: "WDM"
+        
+      sb:
+        path: "IDB/PUBLICATIONS/SB/"
+        description: "Service Bulletins"
+        publication_type: "SB"
+
+  # ---------------------------------------------------------------------------
+  # EXPORTS
+  # ---------------------------------------------------------------------------
+  exports:
+    description: "Rendered deliverables"
+    path: "IDB/EXPORTS/"
+    categories:
+      pdf:
+        path: "IDB/EXPORTS/PDF/"
+        description: "PDF exports"
+        format: "PDF"
+        
+      html:
+        path: "IDB/EXPORTS/HTML/"
+        description: "HTML exports"
+        format: "HTML"
+        
+      ietp:
+        path: "IDB/EXPORTS/IETP/"
+        description: "IETP packages"
+        format: "IETP"
+
+# =============================================================================
+# ASIT INDEX
+# =============================================================================
+
+asit:
+  description: "ASIT governance and control artifacts"
+  base_path: "ASIT/"
+  
+  governance:
+    path: "ASIT/GOVERNANCE/"
+    artifacts:
+      - type: "BASELINE"
+        register: "ASIT/GOVERNANCE/BASELINE_REGISTER.csv"
+      - type: "ECR"
+        location: "ASIT/GOVERNANCE/CHANGE_CONTROL/ECR/"
+      - type: "ECO"
+        location: "ASIT/GOVERNANCE/CHANGE_CONTROL/ECO/"
+      - type: "RELEASE"
+        register: "ASIT/GOVERNANCE/RELEASES/RELEASE_REGISTER.csv"
+  
+  contracts:
+    path: "ASIT/CONTRACTS/"
+    templates: "ASIT/CONTRACTS/templates/"
+    active: "ASIT/CONTRACTS/active/"
+  
+  index:
+    path: "ASIT/INDEX/"
+    artifacts:
+      - "SSOT_INDEX.yaml"
+      - "TRACE_MASTER.csv"
+      - "ID_REGISTRY.csv"
+      - "ARTIFACT_CATALOG.yaml"
+
+# =============================================================================
+# ASIGT INDEX
+# =============================================================================
+
+asigt:
+  description: "ASIGT generation artifacts"
+  base_path: "ASIGT/"
+  
+  runs:
+    path: "ASIGT/runs/"
+    description: "Immutable execution history"
+    artifacts_per_run:
+      - "INPUT_MANIFEST.json"
+      - "OUTPUT_MANIFEST.json"
+      - "TRACE_MATRIX.csv"
+      - "VALIDATION_REPORT.json"
+      - "METRICS.json"
+      - "LOG.txt"
+
+# =============================================================================
+# CROSS-REFERENCES
+# =============================================================================
+
+cross_references:
+  # Baseline to artifacts
+  baseline_artifacts:
+    description: "See TRACE_MASTER.csv for baseline→artifact mapping"
+    location: "ASIT/INDEX/TRACE_MASTER.csv"
+  
+  # ID registry
+  id_registry:
+    description: "All assigned IDs"
+    location: "ASIT/INDEX/ID_REGISTRY.csv"
+  
+  # Artifact catalog
+  artifact_catalog:
+    description: "Complete artifact inventory"
+    location: "ASIT/INDEX/ARTIFACT_CATALOG.yaml"

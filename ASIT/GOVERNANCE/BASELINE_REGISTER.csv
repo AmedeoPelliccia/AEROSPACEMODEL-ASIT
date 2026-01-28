@@ -1,0 +1,4 @@
+baseline_id,type,version,state,created_date,released_date,authority,eco_ref,description
+# Example entries - replace with actual program baselines
+# FBL-2026-Q1-001,FBL,1.0.0,RELEASED,2026-01-15,2026-01-20,STK_CM,ECO-2026-0001,Initial functional baseline
+# ABL-2026-Q1-001,ABL,1.0.0,DRAFT,2026-01-21,,,,Preliminary design allocation

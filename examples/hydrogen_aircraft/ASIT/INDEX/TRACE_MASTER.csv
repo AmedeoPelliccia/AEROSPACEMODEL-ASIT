@@ -1,0 +1,7 @@
+trace_id,source_type,source_id,source_version,target_type,target_id,target_version,relationship,status,verified_date,notes
+TRC-001,requirement,REQ-HJ1-H2-001,1.0,dm,DMC-HJ1-A-28-00-00-00A-040A-A,001-00,satisfies,verified,2026-01-20,H2 fuel system description
+TRC-002,requirement,REQ-HJ1-H2-002,1.0,dm,DMC-HJ1-A-28-10-00-00A-040A-A,001-00,satisfies,verified,2026-01-20,LH2 tank description
+TRC-003,requirement,REQ-HJ1-FC-001,1.0,dm,DMC-HJ1-A-71-10-00-00A-040A-A,001-00,satisfies,verified,2026-01-20,Fuel cell stack description
+TRC-004,requirement,REQ-HJ1-LEAK-001,1.0,dm,DMC-HJ1-A-28-60-00-00A-040A-A,001-00,satisfies,verified,2026-01-20,Leak detection description
+TRC-005,requirement,REQ-HJ1-SAFE-001,1.0,dm,DMC-HJ1-A-28-00-00-00A-018A-A,001-00,satisfies,verified,2026-01-22,H2 safety warnings
+TRC-006,requirement,REQ-HJ1-GSE-001,1.0,dm,DMC-HJ1-A-12-20-00-00A-040A-A,001-00,satisfies,pending,,H2 refueling description

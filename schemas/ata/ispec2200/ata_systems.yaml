@@ -1,0 +1,392 @@
+# =============================================================================
+# ATA iSpec 2200 System/Subsystem Breakdown
+# Reference Data for AEROSPACEMODEL
+# =============================================================================
+#
+# This file defines the system/subsystem breakdown per ATA iSpec 2200.
+# Each chapter is broken down into sections (XX-YY-ZZ format).
+#
+# Format: Chapter-Section-Subsection (e.g., 21-30-00)
+#
+# Source: ATA iSpec 2200 (Reference structure - obtain full spec from A4A)
+# =============================================================================
+
+metadata:
+  specification: "ATA iSpec 2200"
+  version: "2023"
+  description: "System/Subsystem Breakdown Structure"
+  format: "Chapter-Section-Subsection"
+  note: "Representative breakdown - actual structure varies by aircraft type"
+
+systems:
+  # ---------------------------------------------------------------------------
+  # ATA 21 - Air Conditioning
+  # ---------------------------------------------------------------------------
+  "21":
+    title: "Air Conditioning"
+    subsystems:
+      "21-00":
+        title: "General"
+        description: "General air conditioning information"
+      "21-10":
+        title: "Compression"
+        description: "Air compression and supply"
+      "21-20":
+        title: "Distribution"
+        description: "Air distribution and ducting"
+      "21-30":
+        title: "Pressurization Control"
+        description: "Cabin pressurization control"
+      "21-40":
+        title: "Heating"
+        description: "Cabin and compartment heating"
+      "21-50":
+        title: "Cooling"
+        description: "Cabin and compartment cooling"
+      "21-60":
+        title: "Temperature Control"
+        description: "Temperature regulation"
+      "21-70":
+        title: "Moisture/Air Contaminant Control"
+        description: "Humidity and air quality"
+
+  # ---------------------------------------------------------------------------
+  # ATA 22 - Auto Flight
+  # ---------------------------------------------------------------------------
+  "22":
+    title: "Auto Flight"
+    subsystems:
+      "22-00":
+        title: "General"
+        description: "General auto flight information"
+      "22-10":
+        title: "Autopilot"
+        description: "Autopilot system"
+      "22-20":
+        title: "Speed-Attitude Correction"
+        description: "Speed and attitude control"
+      "22-30":
+        title: "Auto Throttle"
+        description: "Automatic throttle control"
+      "22-40":
+        title: "System Monitor"
+        description: "Auto flight monitoring"
+      "22-50":
+        title: "Aerodynamic Load Alleviating"
+        description: "Load alleviation systems"
+
+  # ---------------------------------------------------------------------------
+  # ATA 24 - Electrical Power
+  # ---------------------------------------------------------------------------
+  "24":
+    title: "Electrical Power"
+    subsystems:
+      "24-00":
+        title: "General"
+        description: "General electrical power information"
+      "24-10":
+        title: "Generator Drive"
+        description: "Generator drive systems"
+      "24-20":
+        title: "AC Generation"
+        description: "AC electrical generation"
+      "24-30":
+        title: "DC Generation"
+        description: "DC electrical generation"
+      "24-40":
+        title: "External Power"
+        description: "External power connection"
+      "24-50":
+        title: "AC Electrical Load Distribution"
+        description: "AC power distribution"
+      "24-60":
+        title: "DC Electrical Load Distribution"
+        description: "DC power distribution"
+
+  # ---------------------------------------------------------------------------
+  # ATA 27 - Flight Controls
+  # ---------------------------------------------------------------------------
+  "27":
+    title: "Flight Controls"
+    subsystems:
+      "27-00":
+        title: "General"
+        description: "General flight controls information"
+      "27-10":
+        title: "Aileron"
+        description: "Aileron control system"
+      "27-20":
+        title: "Rudder"
+        description: "Rudder control system"
+      "27-30":
+        title: "Elevator"
+        description: "Elevator control system"
+      "27-40":
+        title: "Horizontal Stabilizer"
+        description: "Stabilizer trim system"
+      "27-50":
+        title: "Flaps"
+        description: "Flap control system"
+      "27-60":
+        title: "Spoiler, Drag Devices, and Variable Aerodynamic Fairings"
+        description: "Spoilers and speed brakes"
+      "27-70":
+        title: "Gust Lock and Damper"
+        description: "Gust lock and yaw damper"
+      "27-80":
+        title: "Lift Augmenting"
+        description: "Slats and leading edge devices"
+
+  # ---------------------------------------------------------------------------
+  # ATA 28 - Fuel
+  # ---------------------------------------------------------------------------
+  "28":
+    title: "Fuel"
+    subsystems:
+      "28-00":
+        title: "General"
+        description: "General fuel system information"
+      "28-10":
+        title: "Storage"
+        description: "Fuel tanks and storage"
+      "28-20":
+        title: "Distribution"
+        description: "Fuel distribution and transfer"
+      "28-30":
+        title: "Dump"
+        description: "Fuel jettison system"
+      "28-40":
+        title: "Indicating"
+        description: "Fuel quantity indication"
+
+  # ---------------------------------------------------------------------------
+  # ATA 29 - Hydraulic Power
+  # ---------------------------------------------------------------------------
+  "29":
+    title: "Hydraulic Power"
+    subsystems:
+      "29-00":
+        title: "General"
+        description: "General hydraulic power information"
+      "29-10":
+        title: "Main"
+        description: "Main hydraulic system"
+      "29-20":
+        title: "Auxiliary"
+        description: "Auxiliary hydraulic system"
+      "29-30":
+        title: "Indicating"
+        description: "Hydraulic system indication"
+
+  # ---------------------------------------------------------------------------
+  # ATA 32 - Landing Gear
+  # ---------------------------------------------------------------------------
+  "32":
+    title: "Landing Gear"
+    subsystems:
+      "32-00":
+        title: "General"
+        description: "General landing gear information"
+      "32-10":
+        title: "Main Gear and Doors"
+        description: "Main landing gear"
+      "32-20":
+        title: "Nose Gear and Doors"
+        description: "Nose landing gear"
+      "32-30":
+        title: "Extension and Retraction"
+        description: "Gear actuation system"
+      "32-40":
+        title: "Wheels and Brakes"
+        description: "Wheels, tires, and brakes"
+      "32-50":
+        title: "Steering"
+        description: "Nose wheel steering"
+      "32-60":
+        title: "Position and Warning"
+        description: "Gear position indication"
+      "32-70":
+        title: "Supplementary Gear"
+        description: "Tail skid, outriggers"
+
+  # ---------------------------------------------------------------------------
+  # ATA 34 - Navigation
+  # ---------------------------------------------------------------------------
+  "34":
+    title: "Navigation"
+    subsystems:
+      "34-00":
+        title: "General"
+        description: "General navigation information"
+      "34-10":
+        title: "Flight Environment Data"
+        description: "Air data systems"
+      "34-20":
+        title: "Attitude and Direction"
+        description: "AHRS and compass systems"
+      "34-30":
+        title: "Landing and Taxiing Aids"
+        description: "ILS, MLS, GLS"
+      "34-40":
+        title: "Independent Position Determining"
+        description: "INS, GPS, GNSS"
+      "34-50":
+        title: "Dependent Position Determining"
+        description: "VOR, DME, ADF"
+      "34-60":
+        title: "Flight Management Computing"
+        description: "FMS and navigation computing"
+
+  # ---------------------------------------------------------------------------
+  # ATA 52 - Doors
+  # ---------------------------------------------------------------------------
+  "52":
+    title: "Doors"
+    subsystems:
+      "52-00":
+        title: "General"
+        description: "General doors information"
+      "52-10":
+        title: "Passenger/Crew"
+        description: "Passenger and crew doors"
+      "52-20":
+        title: "Emergency Exit"
+        description: "Emergency exit doors"
+      "52-30":
+        title: "Cargo"
+        description: "Cargo doors"
+      "52-40":
+        title: "Service"
+        description: "Service doors and panels"
+      "52-50":
+        title: "Fixed Interior"
+        description: "Fixed interior partitions"
+      "52-60":
+        title: "Entrance Stairs"
+        description: "Integral stairs"
+      "52-70":
+        title: "Monitoring and Operation"
+        description: "Door warning systems"
+      "52-80":
+        title: "Landing Gear"
+        description: "Landing gear doors"
+
+  # ---------------------------------------------------------------------------
+  # ATA 53 - Fuselage
+  # ---------------------------------------------------------------------------
+  "53":
+    title: "Fuselage"
+    subsystems:
+      "53-00":
+        title: "General"
+        description: "General fuselage information"
+      "53-10":
+        title: "Section 41"
+        description: "Nose section"
+      "53-20":
+        title: "Section 42"
+        description: "Forward fuselage"
+      "53-30":
+        title: "Section 43"
+        description: "Center fuselage"
+      "53-40":
+        title: "Section 44"
+        description: "Center wing stub"
+      "53-50":
+        title: "Section 46"
+        description: "Aft fuselage"
+      "53-60":
+        title: "Section 47"
+        description: "Aft pressure dome"
+      "53-70":
+        title: "Section 48"
+        description: "Tail cone"
+      "53-80":
+        title: "Special Structure"
+        description: "Bulkheads, frames, floors"
+
+  # ---------------------------------------------------------------------------
+  # ATA 57 - Wings
+  # ---------------------------------------------------------------------------
+  "57":
+    title: "Wings"
+    subsystems:
+      "57-00":
+        title: "General"
+        description: "General wing information"
+      "57-10":
+        title: "Center Wing"
+        description: "Center wing box"
+      "57-20":
+        title: "Outer Wing"
+        description: "Outer wing panels"
+      "57-30":
+        title: "Wing Tip"
+        description: "Wing tips and winglets"
+      "57-40":
+        title: "Leading Edge and Leading Edge Devices"
+        description: "Leading edge structure"
+      "57-50":
+        title: "Trailing Edge and Trailing Edge Devices"
+        description: "Trailing edge structure"
+      "57-60":
+        title: "Ailerons and Elevons"
+        description: "Aileron structure"
+      "57-70":
+        title: "Spoilers"
+        description: "Spoiler structure"
+      "57-80":
+        title: "Wing Folding System"
+        description: "Wing fold mechanism"
+      "57-90":
+        title: "Wing Attachments"
+        description: "Wing-to-fuselage attachments"
+
+  # ---------------------------------------------------------------------------
+  # ATA 72 - Engine
+  # ---------------------------------------------------------------------------
+  "72":
+    title: "Engine - Turbine/Turboprop"
+    subsystems:
+      "72-00":
+        title: "General"
+        description: "General engine information"
+      "72-10":
+        title: "Reduction Gear, Shaft Section (Turboprop/Turbofan)"
+        description: "Reduction gearbox"
+      "72-20":
+        title: "Air Inlet Section"
+        description: "Engine inlet"
+      "72-30":
+        title: "Compressor Section"
+        description: "Engine compressor"
+      "72-40":
+        title: "Combustion Section"
+        description: "Combustor"
+      "72-50":
+        title: "Turbine Section"
+        description: "Engine turbine"
+      "72-60":
+        title: "Accessory Drives"
+        description: "Engine accessory drives"
+      "72-70":
+        title: "Bypass Section"
+        description: "Fan/bypass duct"
+      "72-80":
+        title: "Propulsor Section (Unducted)"
+        description: "Open rotor section"
+
+# -----------------------------------------------------------------------------
+# Section Number Format
+# -----------------------------------------------------------------------------
+format:
+  structure: "XX-YY-ZZ"
+  explanation:
+    XX: "ATA Chapter (01-99)"
+    YY: "Section within chapter (00-99)"
+    ZZ: "Subsection or subject (00-99)"
+  examples:
+    - "21-30-00": "Air Conditioning - Pressurization Control - General"
+    - "27-50-11": "Flight Controls - Flaps - Inboard Flap"
+    - "32-40-01": "Landing Gear - Wheels and Brakes - Main Wheel"
+    - "53-30-00": "Fuselage - Section 43 - General"

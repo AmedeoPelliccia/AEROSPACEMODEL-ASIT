@@ -1,0 +1,129 @@
+# =============================================================================
+# {{ program_name }} — Single Source of Truth Index
+# =============================================================================
+# Master index of all authoritative source data in the program.
+#
+# Program: {{ program_name }} ({{ model_code }})
+# Generated: {{ created_date }}
+# =============================================================================
+
+metadata:
+  program: "{{ program_name }}"
+  model_code: "{{ model_code }}"
+  organization: "{{ organization }}"
+  index_version: "1.0.0"
+  last_updated: "{{ created_date }}"
+
+# -----------------------------------------------------------------------------
+# Source Categories
+# -----------------------------------------------------------------------------
+sources:
+  # Requirements
+  requirements:
+    description: "Engineering requirements"
+    location: "KDB/requirements/"
+    format: "DOORS XML Export"
+    authority: "Systems Engineering"
+    baseline_type: "FBL"
+    entries: []
+    
+  # Design Data
+  design:
+    description: "Design and analysis data"
+    location: "KDB/design/"
+    format: "Various"
+    authority: "Engineering"
+    baseline_type: "DBL"
+    categories:
+      - name: "3D Models"
+        location: "KDB/design/models/"
+        format: "STEP, CATIA"
+        
+      - name: "Drawings"
+        location: "KDB/design/drawings/"
+        format: "PDF"
+        
+      - name: "Analysis"
+        location: "KDB/design/analysis/"
+        format: "Reports"
+    entries: []
+    
+  # Parts Data
+  parts:
+    description: "Parts and BOM data"
+    location: "KDB/parts/"
+    format: "PLM Export"
+    authority: "Configuration Management"
+    baseline_type: "PBL"
+    entries: []
+    
+  # Maintenance Tasks
+  tasks:
+    description: "Scheduled and unscheduled maintenance tasks"
+    location: "KDB/tasks/"
+    format: "YAML/XML"
+    authority: "Maintenance Engineering"
+    baseline_type: "FBL"
+    entries: []
+    
+  # Repair Data
+  repairs:
+    description: "Structural repair data"
+    location: "KDB/repairs/"
+    format: "XML"
+    authority: "Structures Engineering"
+    baseline_type: "FBL"
+    entries: []
+    
+  # Fault Data
+  faults:
+    description: "Fault isolation and troubleshooting"
+    location: "KDB/faults/"
+    format: "XML"
+    authority: "Systems Engineering"
+    baseline_type: "FBL"
+    entries: []
+
+# -----------------------------------------------------------------------------
+# Publication Outputs
+# -----------------------------------------------------------------------------
+outputs:
+  # Data Modules
+  data_modules:
+    description: "S1000D Data Modules"
+    location: "IDB/csdb/dms/"
+    format: "S1000D XML"
+    standard: "S1000D Issue {{ s1000d_issue }}"
+    entries: []
+    
+  # Publication Modules
+  publication_modules:
+    description: "S1000D Publication Modules"
+    location: "IDB/csdb/pms/"
+    format: "S1000D XML"
+    entries: []
+    
+  # Graphics
+  graphics:
+    description: "Information Control Numbers (ICN)"
+    location: "IDB/csdb/icn/"
+    format: "CGM, PNG, SVG"
+    entries: []
+    
+  # Rendered Publications
+  rendered:
+    description: "Rendered publication outputs"
+    location: "output/"
+    formats:
+      - "PDF"
+      - "HTML"
+      - "IETP"
+    entries: []
+
+# -----------------------------------------------------------------------------
+# Cross-Reference
+# -----------------------------------------------------------------------------
+cross_reference:
+  trace_matrix: "INDEX/TRACE_MASTER.csv"
+  id_registry: "INDEX/ID_REGISTRY.csv"
+  artifact_catalog: "INDEX/ARTIFACT_CATALOG.yaml"

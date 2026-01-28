@@ -1,0 +1,93 @@
+# =============================================================================
+# RegionalJet-700 — Source Requirements: ATA 27 Flight Controls
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "requirements"
+  ata_chapter: "27"
+  title: "Flight Control System Requirements"
+  baseline: "FBL-RJ7-2026-Q1"
+
+requirements:
+  - id: "REQ-RJ7-FLT-001"
+    type: "descriptive"
+    title: "Flight Control System Description"
+    ata_code: "27-00-00"
+    info_code: "040"
+    applicability: "APP-RJ7-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        The RJ7 flight control system provides primary and secondary
+        flight control surfaces for aircraft maneuverability.
+        
+      details: |
+        Primary flight controls:
+        - Ailerons (roll control)
+        - Elevators (pitch control)
+        - Rudder (yaw control)
+        
+        Secondary flight controls:
+        - Flaps (lift augmentation)
+        - Spoilers (lift dump, speed brake)
+        - Horizontal stabilizer trim
+        
+    traceability:
+      parent: "SYS-REQ-027"
+      
+  - id: "REQ-RJ7-FLT-002"
+    type: "descriptive"
+    title: "Aileron System"
+    ata_code: "27-10-00"
+    info_code: "040"
+    applicability: "APP-RJ7-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        Two ailerons provide roll control through differential deflection.
+        
+      details: |
+        Aileron specifications:
+        - Type: Conventional trailing edge
+        - Actuation: Dual hydraulic (System A and B)
+        - Control: Fly-by-wire with mechanical backup
+        - Deflection: +25° / -15°
+        
+  - id: "REQ-RJ7-FLT-003"
+    type: "descriptive"
+    title: "Elevator System"
+    ata_code: "27-30-00"
+    info_code: "040"
+    applicability: "APP-RJ7-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        The elevator provides pitch control for the aircraft.
+        
+      details: |
+        Elevator specifications:
+        - Type: Conventional T-tail mounted
+        - Actuation: Dual hydraulic (System A and B)
+        - Control: Fly-by-wire with mechanical backup
+        - Deflection: +30° (UP) / -20° (DOWN)
+        
+  - id: "REQ-RJ7-FLT-004"
+    type: "descriptive"
+    title: "Flap System"
+    ata_code: "27-50-00"
+    info_code: "040"
+    applicability: "APP-RJ7-ALL"
+    
+    content:
+      summary: |
+        Trailing edge flaps provide lift augmentation for takeoff and landing.
+        
+      details: |
+        Flap specifications:
+        - Type: Double-slotted Fowler
+        - Positions: 0°, 10°, 25°, 40°
+        - Actuation: Electric motor with mechanical transmission

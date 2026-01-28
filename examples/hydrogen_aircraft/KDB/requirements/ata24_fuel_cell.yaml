@@ -1,0 +1,86 @@
+# =============================================================================
+# HydrogenJet-100 — ATA 24 Electrical Power (Fuel Cell)
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "requirements"
+  ata_chapter: "24"
+  title: "Fuel Cell Electrical Power System"
+  baseline: "FBL-HJ1-2026-Q1"
+
+requirements:
+  - id: "REQ-HJ1-ELEC-001"
+    type: "descriptive"
+    title: "Electrical Power System Description"
+    ata_code: "24-00-00"
+    info_code: "040"
+    applicability: "APP-HJ1-FC"
+    safety_critical: true
+    
+    content:
+      summary: |
+        The HJ1 electrical power system uses fuel cells as the primary
+        power source for both propulsion and aircraft systems.
+        
+      details: |
+        Power architecture:
+        - Primary: 4x PEM fuel cell stacks (2.5 MW total)
+        - Emergency: Li-ion battery backup (200 kWh)
+        - Output: 540 VDC (propulsion), 270 VDC (systems)
+        - AC conversion: Inverters for 115/200 VAC loads
+        
+    traceability:
+      parent: "SYS-REQ-024"
+      
+  - id: "REQ-HJ1-ELEC-002"
+    type: "descriptive"
+    title: "DC Power Distribution"
+    ata_code: "24-20-00"
+    info_code: "040"
+    applicability: "APP-HJ1-FC"
+    
+    content:
+      summary: |
+        DC power from fuel cells is distributed to propulsion motors
+        and converted for aircraft systems.
+        
+      details: |
+        DC buses:
+        - HVDC Bus 1: 540 VDC (Port motor)
+        - HVDC Bus 2: 540 VDC (Stbd motor)
+        - MVDC Bus: 270 VDC (Systems)
+        - LVDC Bus: 28 VDC (Legacy systems)
+        
+  - id: "REQ-HJ1-ELEC-003"
+    type: "descriptive"
+    title: "Emergency Battery System"
+    ata_code: "24-40-00"
+    info_code: "040"
+    applicability: "APP-HJ1-FC"
+    safety_critical: true
+    
+    content:
+      summary: |
+        Lithium-ion battery provides emergency power for essential
+        systems if fuel cell system fails.
+        
+      details: |
+        Battery specifications:
+        - Type: Lithium-ion
+        - Capacity: 200 kWh
+        - Voltage: 540 VDC nominal
+        - Duration: 30 minutes at essential load
+        - Auto-engage on fuel cell failure
+        
+  - id: "REQ-HJ1-ELEC-010"
+    type: "procedural"
+    title: "Fuel Cell Power System BITE"
+    ata_code: "24-10-00"
+    info_code: "300"
+    applicability: "APP-HJ1-FC"
+    task_type: "scheduled"
+    interval: "Daily"
+    
+    content:
+      summary: "Built-in test of fuel cell power system"

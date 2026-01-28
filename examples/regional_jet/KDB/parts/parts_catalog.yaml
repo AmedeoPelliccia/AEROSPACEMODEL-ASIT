@@ -1,0 +1,113 @@
+# =============================================================================
+# RegionalJet-700 — Parts Catalog Data
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "parts"
+  baseline: "PBL-RJ7-2026-Q1"
+  title: "RJ7 Parts Catalog"
+
+parts:
+  # ATA 28 - Fuel System Parts
+  - part_number: "RJ7-28-0001"
+    description: "Fuel Pump Assembly, Boost"
+    ata_chapter: "28"
+    ata_section: "28-20"
+    cage_code: "RAC01"
+    applicability: "APP-RJ7-ALL"
+    quantity_per_aircraft: 4
+    unit_of_measure: "EA"
+    interchangeability:
+      - "RJ7-28-0001-A"
+      - "RJ7-28-0001-B"
+    
+  - part_number: "RJ7-28-0002"
+    description: "Fuel Quantity Probe"
+    ata_chapter: "28"
+    ata_section: "28-40"
+    cage_code: "RAC01"
+    applicability: "APP-RJ7-ALL"
+    quantity_per_aircraft: 8
+    unit_of_measure: "EA"
+    
+  - part_number: "RJ7-28-0010"
+    description: "Center Tank Transfer Pump"
+    ata_chapter: "28"
+    ata_section: "28-20"
+    cage_code: "RAC01"
+    applicability: "APP-RJ7-ER"
+    quantity_per_aircraft: 2
+    unit_of_measure: "EA"
+
+  # ATA 27 - Flight Control Parts
+  - part_number: "RJ7-27-0001"
+    description: "Aileron Actuator Assembly"
+    ata_chapter: "27"
+    ata_section: "27-10"
+    cage_code: "RAC01"
+    applicability: "APP-RJ7-ALL"
+    quantity_per_aircraft: 2
+    unit_of_measure: "EA"
+    safety_critical: true
+    
+  - part_number: "RJ7-27-0002"
+    description: "Elevator Actuator Assembly"
+    ata_chapter: "27"
+    ata_section: "27-30"
+    cage_code: "RAC01"
+    applicability: "APP-RJ7-ALL"
+    quantity_per_aircraft: 2
+    unit_of_measure: "EA"
+    safety_critical: true
+
+  # ATA 32 - Landing Gear Parts
+  - part_number: "RJ7-32-0001"
+    description: "Main Landing Gear Strut Assembly"
+    ata_chapter: "32"
+    ata_section: "32-10"
+    cage_code: "RAC01"
+    applicability: "APP-RJ7-ALL"
+    quantity_per_aircraft: 2
+    unit_of_measure: "EA"
+    safety_critical: true
+    
+  - part_number: "RJ7-32-0002"
+    description: "Nose Landing Gear Strut Assembly"
+    ata_chapter: "32"
+    ata_section: "32-20"
+    cage_code: "RAC01"
+    applicability: "APP-RJ7-ALL"
+    quantity_per_aircraft: 1
+    unit_of_measure: "EA"
+    safety_critical: true
+    
+  - part_number: "RJ7-32-0010"
+    description: "Main Wheel Assembly"
+    ata_chapter: "32"
+    ata_section: "32-40"
+    cage_code: "RAC01"
+    applicability: "APP-RJ7-ALL"
+    quantity_per_aircraft: 4
+    unit_of_measure: "EA"
+    
+  - part_number: "RJ7-32-0011"
+    description: "Main Tire, 40x14"
+    ata_chapter: "32"
+    ata_section: "32-40"
+    cage_code: "TIRE1"
+    vendor: "Aircraft Tire Corp"
+    applicability: "APP-RJ7-ALL"
+    quantity_per_aircraft: 4
+    unit_of_measure: "EA"
+    
+  - part_number: "RJ7-32-0020"
+    description: "Brake Assembly, Carbon"
+    ata_chapter: "32"
+    ata_section: "32-40"
+    cage_code: "BRAK1"
+    vendor: "Aerospace Brakes Inc"
+    applicability: "APP-RJ7-ALL"
+    quantity_per_aircraft: 4
+    unit_of_measure: "EA"
+    safety_critical: true

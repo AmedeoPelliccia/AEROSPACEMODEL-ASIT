@@ -1,0 +1,132 @@
+# =============================================================================
+# AeroParts International — LGA-5000 Overhaul Requirements
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "maintenance"
+  product_family: "LGA-5000"
+  baseline: "CBL-LGA5000-2026-Q1"
+
+requirements:
+  - id: "REQ-LGA-OH-001"
+    type: "procedural"
+    title: "Overhaul Procedure"
+    ata_code: "32-31-01"
+    info_code: "600"
+    applicability: "APP-ALL"
+    task_type: "scheduled"
+    interval: "10000 cycles or 10 years"
+    
+    content:
+      summary: |
+        Complete overhaul procedure for LGA-5000 series actuators.
+        
+      procedure: |
+        DISASSEMBLY:
+        1. Clean actuator exterior
+        2. Drain residual hydraulic fluid
+        3. Remove position sensor
+        4. Remove rod end bearings
+        5. Disassemble piston/rod from cylinder
+        6. Remove all seals and backup rings
+        
+        INSPECTION:
+        7. Inspect cylinder bore (see inspection criteria)
+        8. Inspect piston rod (see inspection criteria)
+        9. Inspect rod end bearing bores
+        10. Check all threads
+        
+        REASSEMBLY:
+        11. Install new seal kit (mandatory)
+        12. Reassemble piston/rod into cylinder
+        13. Install rod end bearings
+        14. Install position sensor
+        15. Perform functional test
+        
+    warnings:
+      - type: "hydraulic"
+        text: "Ensure all hydraulic pressure is relieved before disassembly."
+        
+  - id: "REQ-LGA-OH-002"
+    type: "procedural"
+    title: "Seal Kit Replacement"
+    ata_code: "32-31-01"
+    info_code: "520"
+    applicability: "APP-ALL"
+    task_type: "scheduled"
+    interval: "5000 cycles or 5 years"
+    
+    content:
+      summary: |
+        Seal kit replacement without full overhaul.
+        
+      procedure: |
+        1. Remove actuator from aircraft
+        2. Clean exterior thoroughly
+        3. Drain hydraulic fluid
+        4. Disassemble to access seals
+        5. Remove and discard all seals
+        6. Inspect mating surfaces
+        7. Install new seal kit (LGA-5000-SEAL-001)
+        8. Lubricate seals per specification
+        9. Reassemble actuator
+        10. Perform leak test
+        
+    cautions:
+      - text: "Do not reuse seals. Install complete new seal kit."
+      
+  - id: "REQ-LGA-OH-003"
+    type: "procedural"
+    title: "Functional Test After Overhaul"
+    ata_code: "32-31-01"
+    info_code: "700"
+    applicability: "APP-ALL"
+    
+    content:
+      summary: |
+        Functional test requirements after overhaul or seal replacement.
+        
+      procedure: |
+        TEST SETUP:
+        1. Install actuator in test stand
+        2. Connect hydraulic supply (210 bar)
+        3. Connect position sensor readout
+        
+        TESTS:
+        4. Extend/retract 5 cycles minimum
+        5. Verify full stroke
+        6. Check extension force
+        7. Check retraction force
+        8. Leak test at proof pressure (315 bar)
+        9. Verify position sensor output
+        
+        ACCEPTANCE CRITERIA:
+        - No external leakage
+        - Internal leakage < 2 ml/min
+        - Force within specification
+        - Position sensor accuracy ±1%
+        
+  - id: "REQ-LGA-OH-004"
+    type: "procedural"
+    title: "Preservation for Storage"
+    ata_code: "32-31-01"
+    info_code: "530"
+    applicability: "APP-ALL"
+    
+    content:
+      summary: |
+        Preservation requirements for overhauled units.
+        
+      procedure: |
+        1. Fill actuator with MIL-PRF-3150 preservative oil
+        2. Cycle actuator 3 times
+        3. Drain excess preservative
+        4. Install protective caps on all ports
+        5. Apply corrosion preventive compound to exposed metal
+        6. Bag in moisture barrier bag with desiccant
+        7. Label with date and next inspection due date
+        
+      notes: |
+        Storage life when properly preserved: 2 years
+        Reinspection required at 2-year intervals

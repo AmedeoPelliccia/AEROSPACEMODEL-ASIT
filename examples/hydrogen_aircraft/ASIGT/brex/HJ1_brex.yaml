@@ -1,0 +1,134 @@
+# =============================================================================
+# HydrogenJet-100 — Project BREX Rules (Hydrogen)
+# =============================================================================
+
+metadata:
+  brex_id: "HJ1-BREX-001"
+  title: "HydrogenJet-100 Hydrogen Aircraft Business Rules"
+  issue_date: "2026-01-15"
+  status: "active"
+  
+  extends:
+    - "S1000D_5.0_DEFAULT"
+    
+  organization:
+    name: "Green Aviation Inc."
+    cage_code: "GAI01"
+
+dm_code_rules:
+  - rule_id: "HJ1-BR-DMC-001"
+    element: "modelIdentCode"
+    description: "Model identification code must be 'HJ1'"
+    severity: "error"
+    pattern: "^HJ1$"
+    message: "Invalid model identification code. Expected 'HJ1'."
+    
+  - rule_id: "HJ1-BR-DMC-002"
+    element: "systemCode"
+    description: "System code must be valid for HJ1 hydrogen aircraft"
+    severity: "error"
+    allowed_values:
+      - "05"
+      - "06"
+      - "12"
+      - "21"
+      - "24"
+      - "26"
+      - "27"
+      - "28"
+      - "32"
+      - "53"
+      - "57"
+      - "70"
+      - "71"
+      - "73"
+    message: "System code not in approved list for HJ1."
+
+hydrogen_safety_rules:
+  - rule_id: "HJ1-BR-H2-001"
+    element: "//dmAddress[contains(dmIdent/dmCode/@systemCode, '28')]"
+    description: "ATA 28 (Hydrogen) DMs must include H2 warning"
+    severity: "error"
+    required_element: "//warning[@warningType='hydrogen']"
+    message: "Hydrogen system DM must include hydrogen warning."
+    
+  - rule_id: "HJ1-BR-H2-002"
+    element: "//proceduralStep[contains(., 'hydrogen') or contains(., 'Hydrogen') or contains(., 'H2')]"
+    description: "Hydrogen procedures must include LEL check"
+    severity: "warning"
+    xpath_check: ".//warningAndCautionPara"
+    message: "Hydrogen procedures should include atmosphere verification step."
+    
+  - rule_id: "HJ1-BR-H2-003"
+    element: "//dmAddress[contains(dmIdent/dmCode/@systemCode, '28')]//proceduralStep[1]"
+    description: "First step of H2 procedures should verify safe atmosphere"
+    severity: "warning"
+    message: "Consider adding atmosphere verification as first step."
+
+cryogenic_rules:
+  - rule_id: "HJ1-BR-CRYO-001"
+    element: "//dmAddress[contains(dmIdent/dmCode/@systemCode, '28-10')]"
+    description: "Cryogenic tank DMs must include cold injury warning"
+    severity: "error"
+    required_element: "//warning[@warningType='cold-injury']"
+    message: "Cryogenic system DM must include cold injury warning."
+    
+  - rule_id: "HJ1-BR-CRYO-002"
+    element: "//proceduralStep[contains(., 'LH2') or contains(., 'cryogenic')]"
+    description: "Cryogenic procedures must specify PPE"
+    severity: "warning"
+    xpath_check: ".//supportEquipDescr"
+    message: "Cryogenic procedures should specify required PPE."
+
+fuel_cell_rules:
+  - rule_id: "HJ1-BR-FC-001"
+    element: "//dmAddress[contains(dmIdent/dmCode/@systemCode, '71') or contains(dmIdent/dmCode/@systemCode, '24-10')]"
+    description: "Fuel cell DMs must address membrane handling"
+    severity: "warning"
+    message: "Fuel cell procedures should address membrane contamination prevention."
+    
+  - rule_id: "HJ1-BR-FC-002"
+    element: "//dmAddress[contains(dmIdent/dmCode/@systemCode, '71-10')]//proceduralStep"
+    description: "Fuel cell stack procedures must include purge requirements"
+    severity: "warning"
+    xpath_check: ".//warningAndCautionPara or .//note"
+    message: "Consider adding hydrogen purge requirements."
+
+ground_ops_rules:
+  - rule_id: "HJ1-BR-GND-001"
+    element: "//dmAddress[contains(dmIdent/dmCode/@systemCode, '12')]"
+    description: "Servicing (refueling) DMs must include exclusion zone"
+    severity: "error"
+    xpath_check: ".//warningAndCautionPara[contains(., 'zone') or contains(., 'Zone')]"
+    message: "Hydrogen refueling procedures must specify exclusion zone."
+    
+  - rule_id: "HJ1-BR-GND-002"
+    element: "//dmAddress[contains(dmIdent/dmCode/@infoCode, '040') and contains(dmIdent/dmCode/@systemCode, '12')]"
+    description: "Refueling descriptions must reference GSE interface"
+    severity: "warning"
+    message: "Refueling descriptions should reference GSE requirements."
+
+content_rules:
+  - rule_id: "HJ1-BR-CNT-001"
+    element: "//warning"
+    description: "Warnings must have type classification"
+    severity: "error"
+    xpath_check: "@warningType"
+    message: "Warning must specify warningType attribute."
+    
+  - rule_id: "HJ1-BR-CNT-002"
+    element: "//figure"
+    description: "Figures must have title"
+    severity: "error"
+    required_child: "title"
+    message: "Figure must include a title element."
+
+applicability_rules:
+  - rule_id: "HJ1-BR-APP-001"
+    element: "//applic"
+    description: "Applicability must reference valid HJ1 variant"
+    severity: "error"
+    allowed_products:
+      - "HJ1-FC"
+      - "HJ1-HT"
+    message: "Unknown aircraft variant in applicability."

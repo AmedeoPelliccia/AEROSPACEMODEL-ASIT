@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+=============================================================================
+S1000D Publication Module Template
+ASIGT S1000D Templates
+Version: 2.0.0
+Issue: 5.0
+
+Purpose: Template for publication modules that organize data modules into
+         coherent publications such as AMM, SRM, CMM, IPC, FCOM, etc.
+
+Usage: This template is populated by ASIGT generators under ASIT contract
+       authority. Placeholder tokens (${...}) are replaced during generation.
+
+Publication Types:
+  - AMM: Aircraft Maintenance Manual
+  - SRM: Structural Repair Manual
+  - CMM: Component Maintenance Manual
+  - IPC: Illustrated Parts Catalog
+  - FCOM: Flight Crew Operating Manual
+  - TSM: Troubleshooting Manual
+  - WDM: Wiring Diagram Manual
+  - SB: Service Bulletin
+=============================================================================
+-->
+<pm xmlns="http://www.s1000d.org/S1000D_5-0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.s1000d.org/S1000D_5-0 S1000D_5-0/xml_schema_flat/pm.xsd">
+  
+  <!-- ===================================================================== -->
+  <!-- IDENTIFICATION AND STATUS SECTION                                     -->
+  <!-- ===================================================================== -->
+  <identAndStatusSection>
+    
+    <!-- Publication Module Address -->
+    <pmAddress>
+      <pmIdent>
+        <!-- Publication Module Code -->
+        <pmCode 
+          modelIdentCode="${MODEL_IDENT_CODE}"
+          pmIssuer="${PM_ISSUER}"
+          pmNumber="${PM_NUMBER}"
+          pmVolume="${PM_VOLUME}"/>
+        
+        <!-- Language -->
+        <language languageIsoCode="${LANGUAGE_CODE}" countryIsoCode="${COUNTRY_CODE}"/>
+        
+        <!-- Issue Information -->
+        <issueInfo issueNumber="${ISSUE_NUMBER}" inWork="${IN_WORK}"/>
+      </pmIdent>
+      
+      <!-- Publication Module Address Items -->
+      <pmAddressItems>
+        <issueDate year="${ISSUE_YEAR}" month="${ISSUE_MONTH}" day="${ISSUE_DAY}"/>
+        <pmTitle>${PM_TITLE}</pmTitle>
+        <shortPmTitle>${PM_SHORT_TITLE}</shortPmTitle>
+      </pmAddressItems>
+    </pmAddress>
+    
+    <!-- Publication Module Status -->
+    <pmStatus issueType="${ISSUE_TYPE}">
+      <security securityClassification="${SECURITY_CLASSIFICATION}"/>
+      
+      <!-- Data Restrictions -->
+      <dataRestrictions>
+        <restrictionInstructions>
+          <dataDistribution>${DATA_DISTRIBUTION}</dataDistribution>
+        </restrictionInstructions>
+      </dataRestrictions>
+      
+      <!-- Responsible Partner Company -->
+      <responsiblePartnerCompany>
+        <enterpriseName>${RESPONSIBLE_COMPANY}</enterpriseName>
+      </responsiblePartnerCompany>
+      
+      <!-- Originator -->
+      <originator>
+        <enterpriseName>${ORIGINATOR_NAME}</enterpriseName>
+        <enterpriseIdent>${ORIGINATOR_CAGE}</enterpriseIdent>
+      </originator>
+      
+      <!-- Applicability -->
+      <applic>
+        <displayText>
+          <simplePara>${APPLICABILITY_TEXT}</simplePara>
+        </displayText>
+      </applic>
+      
+      <!-- BREX Reference -->
+      <brexDmRef>
+        <dmRef>
+          <dmRefIdent>
+            <dmCode 
+              modelIdentCode="${BREX_MODEL_IDENT}"
+              systemDiffCode="A"
+              systemCode="00"
+              subSystemCode="0"
+              subSubSystemCode="0"
+              assyCode="00"
+              disassyCode="00"
+              disassyCodeVariant="A"
+              infoCode="022"
+              infoCodeVariant="A"
+              itemLocationCode="D"/>
+          </dmRefIdent>
+        </dmRef>
+      </brexDmRef>
+      
+      <!-- Quality Assurance -->
+      <qualityAssurance>
+        <unverified/>
+      </qualityAssurance>
+    </pmStatus>
+  </identAndStatusSection>
+  
+  <!-- ===================================================================== -->
+  <!-- CONTENT SECTION - PUBLICATION STRUCTURE                               -->
+  <!-- ===================================================================== -->
+  <content>
+    <pmEntry>
+      
+      <!-- ================================================================= -->
+      <!-- FRONT MATTER                                                      -->
+      <!-- ================================================================= -->
+      <pmEntry pmEntryType="pmt51">
+        <pmEntryTitle>Front Matter</pmEntryTitle>
+        
+        <!-- Title Page -->
+        <dmRef>
+          <dmRefIdent>
+            <dmCode 
+              modelIdentCode="${MODEL_IDENT_CODE}"
+              systemDiffCode="${SYSTEM_DIFF_CODE}"
+              systemCode="00"
+              subSystemCode="0"
+              subSubSystemCode="0"
+              assyCode="00"
+              disassyCode="00"
+              disassyCodeVariant="A"
+              infoCode="010"
+              infoCodeVariant="A"
+              itemLocationCode="D"/>
+          </dmRefIdent>
+          <dmRefAddressItems>
+            <dmTitle>
+              <techName>${MODEL_NAME}</techName>
+              <infoName>Title Page</infoName>
+            </dmTitle>
+          </dmRefAddressItems>
+        </dmRef>
+        
+        <!-- Record of Revisions -->
+        <dmRef>
+          <dmRefIdent>
+            <dmCode 
+              modelIdentCode="${MODEL_IDENT_CODE}"
+              systemDiffCode="${SYSTEM_DIFF_CODE}"
+              systemCode="00"
+              subSystemCode="0"
+              subSubSystemCode="0"
+              assyCode="00"
+              disassyCode="00"
+              disassyCodeVariant="A"
+              infoCode="018"
+              infoCodeVariant="A"
+              itemLocationCode="D"/>
+          </dmRefIdent>
+          <dmRefAddressItems>
+            <dmTitle>
+              <techName>${MODEL_NAME}</techName>
+              <infoName>Record of Revisions</infoName>
+            </dmTitle>
+          </dmRefAddressItems>
+        </dmRef>
+        
+        <!-- Table of Contents (generated) -->
+        <!-- List of Effective Pages (generated) -->
+        
+      </pmEntry>
+      
+      <!-- ================================================================= -->
+      <!-- GENERAL INFORMATION (ATA 00)                                      -->
+      <!-- ================================================================= -->
+      <pmEntry pmEntryType="pmt52">
+        <pmEntryTitle>General</pmEntryTitle>
+        
+        <!-- Introduction -->
+        <dmRef>
+          <dmRefIdent>
+            <dmCode 
+              modelIdentCode="${MODEL_IDENT_CODE}"
+              systemDiffCode="${SYSTEM_DIFF_CODE}"
+              systemCode="00"
+              subSystemCode="0"
+              subSubSystemCode="0"
+              assyCode="00"
+              disassyCode="00"
+              disassyCodeVariant="A"
+              infoCode="001"
+              infoCodeVariant="A"
+              itemLocationCode="D"/>
+          </dmRefIdent>
+          <dmRefAddressItems>
+            <dmTitle>
+              <techName>${MODEL_NAME}</techName>
+              <infoName>Introduction</infoName>
+            </dmTitle>
+          </dmRefAddressItems>
+        </dmRef>
+        
+      </pmEntry>
+      
+      <!-- ================================================================= -->
+      <!-- SYSTEM CHAPTERS (ATA XX)                                          -->
+      <!-- ================================================================= -->
+      
+      <!-- Example: ATA 28 - Fuel System Chapter -->
+      <pmEntry pmEntryType="pmt52">
+        <pmEntryTitle>ATA ${ATA_CHAPTER} - ${CHAPTER_TITLE}</pmEntryTitle>
+        
+        <!-- Sub-entry for system section -->
+        <pmEntry>
+          <pmEntryTitle>${SECTION_TITLE}</pmEntryTitle>
+          
+          <!-- Description -->
+          <dmRef>
+            <dmRefIdent>
+              <dmCode 
+                modelIdentCode="${MODEL_IDENT_CODE}"
+                systemDiffCode="${SYSTEM_DIFF_CODE}"
+                systemCode="${SYSTEM_CODE}"
+                subSystemCode="${SUBSYSTEM_CODE}"
+                subSubSystemCode="${SUB_SUBSYSTEM_CODE}"
+                assyCode="00"
+                disassyCode="00"
+                disassyCodeVariant="A"
+                infoCode="040"
+                infoCodeVariant="A"
+                itemLocationCode="D"/>
+            </dmRefIdent>
+            <dmRefAddressItems>
+              <dmTitle>
+                <techName>${TECH_NAME}</techName>
+                <infoName>Description</infoName>
+              </dmTitle>
+            </dmRefAddressItems>
+          </dmRef>
+          
+          <!-- Maintenance Procedures -->
+          <dmRef>
+            <dmRefIdent>
+              <dmCode 
+                modelIdentCode="${MODEL_IDENT_CODE}"
+                systemDiffCode="${SYSTEM_DIFF_CODE}"
+                systemCode="${SYSTEM_CODE}"
+                subSystemCode="${SUBSYSTEM_CODE}"
+                subSubSystemCode="${SUB_SUBSYSTEM_CODE}"
+                assyCode="${ASSY_CODE}"
+                disassyCode="${DISASSY_CODE}"
+                disassyCodeVariant="A"
+                infoCode="520"
+                infoCodeVariant="A"
+                itemLocationCode="D"/>
+            </dmRefIdent>
+            <dmRefAddressItems>
+              <dmTitle>
+                <techName>${TECH_NAME}</techName>
+                <infoName>Installation</infoName>
+              </dmTitle>
+            </dmRefAddressItems>
+          </dmRef>
+          
+          <!-- Troubleshooting -->
+          <dmRef>
+            <dmRefIdent>
+              <dmCode 
+                modelIdentCode="${MODEL_IDENT_CODE}"
+                systemDiffCode="${SYSTEM_DIFF_CODE}"
+                systemCode="${SYSTEM_CODE}"
+                subSystemCode="${SUBSYSTEM_CODE}"
+                subSubSystemCode="${SUB_SUBSYSTEM_CODE}"
+                assyCode="00"
+                disassyCode="00"
+                disassyCodeVariant="A"
+                infoCode="400"
+                infoCodeVariant="A"
+                itemLocationCode="D"/>
+            </dmRefIdent>
+            <dmRefAddressItems>
+              <dmTitle>
+                <techName>${TECH_NAME}</techName>
+                <infoName>Fault Isolation</infoName>
+              </dmTitle>
+            </dmRefAddressItems>
+          </dmRef>
+          
+          <!-- Illustrated Parts Data -->
+          <dmRef>
+            <dmRefIdent>
+              <dmCode 
+                modelIdentCode="${MODEL_IDENT_CODE}"
+                systemDiffCode="${SYSTEM_DIFF_CODE}"
+                systemCode="${SYSTEM_CODE}"
+                subSystemCode="${SUBSYSTEM_CODE}"
+                subSubSystemCode="${SUB_SUBSYSTEM_CODE}"
+                assyCode="${ASSY_CODE}"
+                disassyCode="00"
+                disassyCodeVariant="A"
+                infoCode="941"
+                infoCodeVariant="A"
+                itemLocationCode="D"/>
+            </dmRefIdent>
+            <dmRefAddressItems>
+              <dmTitle>
+                <techName>${TECH_NAME}</techName>
+                <infoName>Illustrated Parts Data</infoName>
+              </dmTitle>
+            </dmRefAddressItems>
+          </dmRef>
+          
+        </pmEntry>
+        
+      </pmEntry>
+      
+      <!-- ================================================================= -->
+      <!-- ADDITIONAL CHAPTERS PLACEHOLDER                                   -->
+      <!-- ================================================================= -->
+      <!--
+      <pmEntry pmEntryType="pmt52">
+        <pmEntryTitle>ATA ${NEXT_CHAPTER} - ${NEXT_CHAPTER_TITLE}</pmEntryTitle>
+        
+        <pmEntry>
+          <pmEntryTitle>${NEXT_SECTION_TITLE}</pmEntryTitle>
+          <dmRef>
+            <dmRefIdent>
+              <dmCode ... />
+            </dmRefIdent>
+          </dmRef>
+        </pmEntry>
+        
+      </pmEntry>
+      -->
+      
+      <!-- ================================================================= -->
+      <!-- APPENDICES                                                        -->
+      <!-- ================================================================= -->
+      <!--
+      <pmEntry pmEntryType="pmt53">
+        <pmEntryTitle>Appendices</pmEntryTitle>
+        
+        <pmEntry>
+          <pmEntryTitle>Appendix A - ${APPENDIX_A_TITLE}</pmEntryTitle>
+          <dmRef>
+            <dmRefIdent>
+              <dmCode ... />
+            </dmRefIdent>
+          </dmRef>
+        </pmEntry>
+        
+      </pmEntry>
+      -->
+      
+    </pmEntry>
+  </content>
+  
+</pm>

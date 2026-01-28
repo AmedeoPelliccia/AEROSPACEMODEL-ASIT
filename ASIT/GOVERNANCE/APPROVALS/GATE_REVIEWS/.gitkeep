@@ -1,0 +1,12 @@
+# Gate Reviews Directory
+# Place gate review records in this directory.
+# 
+# Gate review types:
+# - SRR  - System Requirements Review
+# - PDR  - Preliminary Design Review
+# - CDR  - Critical Design Review
+# - TRR  - Test Readiness Review
+# - PRR  - Production Readiness Review
+# - ORR  - Operational Readiness Review
+#
+# Naming convention: <GATE>-YYYY-MM-DD.md

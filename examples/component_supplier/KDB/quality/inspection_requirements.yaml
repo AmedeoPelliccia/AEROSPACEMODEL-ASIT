@@ -1,0 +1,178 @@
+# =============================================================================
+# AeroParts International — LGA-5000 Inspection Requirements
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "quality"
+  product_family: "LGA-5000"
+  baseline: "CBL-LGA5000-2026-Q1"
+
+requirements:
+  - id: "REQ-LGA-INSP-001"
+    type: "procedural"
+    title: "Receiving Inspection"
+    ata_code: "32-31-01"
+    info_code: "300"
+    applicability: "APP-ALL"
+    inspection_type: "receiving"
+    
+    content:
+      summary: |
+        Incoming inspection requirements for units received for overhaul.
+        
+      procedure: |
+        DOCUMENTATION CHECK:
+        1. Verify serviceable tag or removal documentation
+        2. Check serial number against records
+        3. Review service history if available
+        4. Verify customer authorization
+        
+        VISUAL INSPECTION:
+        5. Check for obvious external damage
+        6. Check for evidence of leakage
+        7. Check for corrosion
+        8. Photograph condition as received
+        
+        INITIAL MEASUREMENTS:
+        9. Measure and record overall length
+        10. Check for obvious out-of-rig condition
+        
+  - id: "REQ-LGA-INSP-002"
+    type: "procedural"
+    title: "Dimensional Inspection"
+    ata_code: "32-31-01"
+    info_code: "300"
+    applicability: "APP-ALL"
+    inspection_type: "dimensional"
+    
+    content:
+      summary: |
+        Detailed dimensional inspection during overhaul.
+        
+      procedure: |
+        CYLINDER BORE:
+        1. Measure bore diameter at 3 locations
+        2. Check for taper (max 0.02 mm)
+        3. Check for out-of-round (max 0.02 mm)
+        4. Measure surface finish
+        
+        PISTON ROD:
+        5. Measure rod diameter at 3 locations
+        6. Check runout (max 0.05 mm TIR)
+        7. Measure surface finish
+        8. Check chrome thickness (if applicable)
+        
+        BEARINGS:
+        9. Measure bearing bore diameters
+        10. Check for wear
+        
+      acceptance_criteria:
+        cylinder_bore:
+          diameter_tolerance_mm: "+0.000 / +0.05"
+          taper_max_mm: 0.02
+          out_of_round_max_mm: 0.02
+          surface_finish_ra: 0.4
+        piston_rod:
+          diameter_tolerance_mm: "-0.000 / -0.03"
+          runout_max_mm: 0.05
+          surface_finish_ra: 0.2
+          
+  - id: "REQ-LGA-INSP-003"
+    type: "procedural"
+    title: "NDT Inspection"
+    ata_code: "32-31-01"
+    info_code: "300"
+    applicability: "APP-ALL"
+    inspection_type: "ndt"
+    
+    content:
+      summary: |
+        Non-destructive testing requirements.
+        
+      procedure: |
+        MAGNETIC PARTICLE INSPECTION (MPI):
+        Required for: Piston rod, mounting lugs
+        Method: Wet fluorescent per ASTM E1444
+        
+        1. Demagnetize part
+        2. Apply wet fluorescent particles
+        3. Magnetize (circular and longitudinal)
+        4. Inspect under UV light
+        5. Demagnetize after inspection
+        
+        LIQUID PENETRANT INSPECTION (LPI):
+        Required for: Aluminum components
+        Method: Type I, Method A per ASTM E1417
+        
+        6. Clean surface thoroughly
+        7. Apply penetrant (10 min dwell)
+        8. Remove excess penetrant
+        9. Apply developer
+        10. Inspect under white light
+        
+      acceptance:
+        cracks: "None allowed"
+        linear_indications: "None > 1.5 mm"
+        rounded_indications: "None > 3 mm"
+        
+  - id: "REQ-LGA-INSP-004"
+    type: "procedural"
+    title: "Final Inspection"
+    ata_code: "32-31-01"
+    info_code: "300"
+    applicability: "APP-ALL"
+    inspection_type: "final"
+    
+    content:
+      summary: |
+        Final inspection before return to service.
+        
+      procedure: |
+        DOCUMENTATION REVIEW:
+        1. Verify all inspection records complete
+        2. Verify all repairs documented
+        3. Verify parts traceability
+        4. Verify test records acceptable
+        
+        PHYSICAL VERIFICATION:
+        5. Verify correct serial number marking
+        6. Verify identification plate installed
+        7. Verify preservation applied
+        8. Verify protective caps installed
+        
+        CERTIFICATION:
+        9. Complete FAA 8130-3 (or equivalent)
+        10. Attach serviceable tag
+        11. Package per customer requirements
+        
+  - id: "REQ-LGA-INSP-005"
+    type: "descriptive"
+    title: "Inspection Equipment Requirements"
+    ata_code: "32-00-00"
+    info_code: "040"
+    applicability: "APP-ALL"
+    
+    content:
+      summary: |
+        Required inspection equipment for LGA-5000 overhaul.
+        
+      details: |
+        MEASUREMENT EQUIPMENT:
+        - Inside micrometer (50-150 mm range)
+        - Outside micrometer (0-100 mm range)
+        - Dial bore gauge
+        - Surface roughness tester
+        - Dial indicator with stand
+        
+        NDT EQUIPMENT:
+        - MPI machine (AC/DC capability)
+        - UV light (365 nm, min 1000 µW/cm²)
+        - Penetrant materials (qualified per spec)
+        
+        TEST EQUIPMENT:
+        - Hydraulic test stand (350 bar capability)
+        - Flow meter (0-20 L/min)
+        - Pressure transducers (calibrated)
+        
+        All equipment must be calibrated per AS9100 requirements.

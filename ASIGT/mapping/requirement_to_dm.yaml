@@ -1,0 +1,459 @@
+# =============================================================================
+# Requirement to Data Module Mapping
+# ASIGT Transformation Rules
+# Version: 2.0.0
+# =============================================================================
+#
+# This mapping defines how engineering requirements from the Knowledge Database
+# (KDB) are transformed into S1000D Data Modules. Used for generating:
+#   - System descriptions from functional requirements
+#   - Operating limitations from safety requirements
+#   - Performance data from design requirements
+#
+# Operates under ASIT contract authority.
+#
+# =============================================================================
+
+mapping:
+  # ---------------------------------------------------------------------------
+  # MAPPING METADATA
+  # ---------------------------------------------------------------------------
+  metadata:
+    mapping_id: "MAP-REQ-DM-001"
+    version: "1.0.0"
+    title: "Requirement to Data Module Mapping"
+    description: |
+      Transforms validated engineering requirements into S1000D descriptive
+      and procedural data modules with full traceability.
+    effective_date: "2026-01-01"
+    author: "ASIGT Framework"
+    
+    # Source specification
+    source:
+      type: "requirement"
+      schema: "KDB/SSOT/requirements"
+      formats:
+        - "yaml"
+        - "json"
+        - "csv"
+        - "doors_xml"  # IBM DOORS export
+        - "reqif"      # ReqIF standard
+    
+    # Target specification
+    target:
+      type: "s1000d_dm"
+      schema: "S1000D Issue 5.0"
+      templates:
+        - "dm_descriptive.xml"
+        - "dm_procedural.xml"
+
+  # ---------------------------------------------------------------------------
+  # REQUIREMENT TYPE MAPPINGS
+  # ---------------------------------------------------------------------------
+  type_mappings:
+    
+    # Functional Requirements → Description DMs
+    functional:
+      source_types:
+        - "FUNC"
+        - "functional"
+        - "FR"
+      target_info_codes:
+        primary: "040"      # Description
+        secondary: "041"    # Theory of operation
+        tertiary: "042"     # System overview
+      dm_type: "descriptive"
+      content_mapping:
+        - source_field: "title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "description"
+          target_element: "levelledPara/para"
+          transform: "paragraph_split"
+        - source_field: "rationale"
+          target_element: "levelledPara[title='Rationale']/para"
+          transform: "none"
+      
+    # Performance Requirements → Description DMs
+    performance:
+      source_types:
+        - "PERF"
+        - "performance"
+        - "PR"
+      target_info_codes:
+        primary: "040"      # Description
+        secondary: "020"    # Functionality
+      dm_type: "descriptive"
+      content_mapping:
+        - source_field: "title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "performance_value"
+          target_element: "levelledPara/para/quantity"
+          transform: "quantity_format"
+        - source_field: "tolerance"
+          target_element: "levelledPara/para/quantity/@quantityTolerance"
+          transform: "none"
+        - source_field: "unit"
+          target_element: "levelledPara/para/quantity/@quantityUnitOfMeasure"
+          transform: "unit_code"
+    
+    # Interface Requirements → Description DMs
+    interface:
+      source_types:
+        - "INT"
+        - "interface"
+        - "IR"
+      target_info_codes:
+        primary: "040"      # Description
+        secondary: "C51"    # Wiring diagrams (if electrical)
+      dm_type: "descriptive"
+      content_mapping:
+        - source_field: "title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "interface_type"
+          target_element: "levelledPara[title='Interface Type']/para"
+          transform: "none"
+        - source_field: "connected_systems"
+          target_element: "table/tgroup/tbody/row"
+          transform: "table_row"
+    
+    # Safety Requirements → Description + Procedural DMs
+    safety:
+      source_types:
+        - "SAFE"
+        - "safety"
+        - "SR"
+        - "FMEA"
+      target_info_codes:
+        primary: "040"      # Description
+        secondary: "100"    # Operations (limitations)
+      dm_type: "descriptive"
+      content_mapping:
+        - source_field: "title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "hazard_description"
+          target_element: "warning/warningAndCautionPara"
+          transform: "warning_format"
+        - source_field: "mitigation"
+          target_element: "levelledPara[title='Mitigation']/para"
+          transform: "paragraph_split"
+        - source_field: "dal_level"
+          target_element: "dmStatus/qualityAssurance"
+          transform: "dal_to_qa"
+    
+    # Design Requirements → Description DMs
+    design:
+      source_types:
+        - "DES"
+        - "design"
+        - "DR"
+      target_info_codes:
+        primary: "040"      # Description
+        secondary: "001"    # Identification/description
+      dm_type: "descriptive"
+      content_mapping:
+        - source_field: "title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "design_solution"
+          target_element: "levelledPara/para"
+          transform: "paragraph_split"
+        - source_field: "constraints"
+          target_element: "levelledPara[title='Design Constraints']/para"
+          transform: "list_format"
+    
+    # Verification Requirements → Procedural DMs
+    verification:
+      source_types:
+        - "VER"
+        - "verification"
+        - "VR"
+        - "TEST"
+      target_info_codes:
+        primary: "700"      # Setting/test/check
+        secondary: "720"    # Functional test
+      dm_type: "procedural"
+      content_mapping:
+        - source_field: "title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "test_procedure"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "procedure_steps"
+        - source_field: "acceptance_criteria"
+          target_element: "closeRqmts/reqCondGroup/reqCondDm/reqCond"
+          transform: "none"
+        - source_field: "equipment_required"
+          target_element: "preliminaryRqmts/reqSupportEquips"
+          transform: "equipment_list"
+
+  # ---------------------------------------------------------------------------
+  # FIELD MAPPINGS (COMMON)
+  # ---------------------------------------------------------------------------
+  field_mappings:
+    # Identification fields
+    identification:
+      - source: "req_id"
+        target: "dmIdent/dmCode"
+        transform: "req_id_to_dmc"
+        traceable: true
+        
+      - source: "system"
+        target: "dmCode/@systemCode"
+        transform: "ata_chapter_lookup"
+        
+      - source: "subsystem"
+        target: "dmCode/@subSystemCode"
+        transform: "ata_section_lookup"
+        
+      - source: "version"
+        target: "issueInfo/@issueNumber"
+        transform: "version_to_issue"
+    
+    # Metadata fields
+    metadata:
+      - source: "author"
+        target: "originator/enterpriseName"
+        transform: "none"
+        
+      - source: "date_created"
+        target: "issueDate"
+        transform: "date_format"
+        
+      - source: "classification"
+        target: "security/@securityClassification"
+        transform: "classification_code"
+        
+      - source: "export_control"
+        target: "dataRestrictions/restrictionInstructions"
+        transform: "restriction_text"
+    
+    # Applicability fields
+    applicability:
+      - source: "effectivity"
+        target: "applic/displayText/simplePara"
+        transform: "effectivity_text"
+        
+      - source: "aircraft_model"
+        target: "applic/assert/@applicPropertyIdent"
+        transform: "model_code"
+        
+      - source: "serial_range"
+        target: "applic/assert/@applicPropertyValues"
+        transform: "serial_range_format"
+
+  # ---------------------------------------------------------------------------
+  # TRANSFORMATION FUNCTIONS
+  # ---------------------------------------------------------------------------
+  transforms:
+    title_case:
+      description: "Convert text to title case"
+      function: "text_title_case"
+      parameters:
+        preserve_acronyms: true
+        
+    paragraph_split:
+      description: "Split long text into paragraphs"
+      function: "split_paragraphs"
+      parameters:
+        max_length: 500
+        delimiter: "\n\n"
+        
+    quantity_format:
+      description: "Format numeric values with units"
+      function: "format_quantity"
+      parameters:
+        decimal_places: 2
+        
+    unit_code:
+      description: "Convert unit names to S1000D codes"
+      function: "lookup_unit_code"
+      lookup_table: "s1000d_units"
+      
+    warning_format:
+      description: "Format text as warning paragraph"
+      function: "format_warning"
+      parameters:
+        prefix: "WARNING: "
+        uppercase: true
+        
+    list_format:
+      description: "Convert list items to para elements"
+      function: "list_to_paras"
+      parameters:
+        bullet_style: "randomList"
+        
+    procedure_steps:
+      description: "Convert text to procedural steps"
+      function: "text_to_steps"
+      parameters:
+        step_delimiter: "\n"
+        numbered: true
+        
+    table_row:
+      description: "Convert data to table rows"
+      function: "data_to_table_row"
+      parameters:
+        columns: ["name", "type", "description"]
+        
+    req_id_to_dmc:
+      description: "Convert requirement ID to DMC structure"
+      function: "map_req_to_dmc"
+      parameters:
+        default_info_code: "040"
+        default_location: "D"
+        
+    ata_chapter_lookup:
+      description: "Map system name to ATA chapter code"
+      function: "lookup_ata_chapter"
+      lookup_table: "ata_mapping"
+      
+    ata_section_lookup:
+      description: "Map subsystem to ATA section code"
+      function: "lookup_ata_section"
+      lookup_table: "ata_mapping"
+      
+    version_to_issue:
+      description: "Convert version number to issue number"
+      function: "version_to_issue_number"
+      parameters:
+        format: "NNN"
+        
+    date_format:
+      description: "Format date to S1000D issueDate"
+      function: "format_issue_date"
+      parameters:
+        input_format: "ISO8601"
+        output_format: "year,month,day"
+        
+    classification_code:
+      description: "Map classification to security code"
+      function: "lookup_classification"
+      lookup_table:
+        "UNCLASSIFIED": "01"
+        "RESTRICTED": "02"
+        "CONFIDENTIAL": "03"
+        "SECRET": "04"
+        "TOP SECRET": "05"
+        
+    effectivity_text:
+      description: "Format effectivity as display text"
+      function: "format_effectivity"
+      parameters:
+        include_serial: true
+        include_model: true
+        
+    dal_to_qa:
+      description: "Map DAL level to QA status"
+      function: "dal_to_quality_assurance"
+      lookup_table:
+        "A": "firstVerification"
+        "B": "firstVerification"
+        "C": "secondVerification"
+        "D": "unverified"
+        "E": "unverified"
+
+  # ---------------------------------------------------------------------------
+  # TRACEABILITY CONFIGURATION
+  # ---------------------------------------------------------------------------
+  traceability:
+    enabled: true
+    
+    # Source tracking
+    source_tracking:
+      capture_hash: true
+      hash_algorithm: "sha256"
+      include_fields:
+        - "req_id"
+        - "version"
+        - "content_hash"
+    
+    # Target tracking
+    target_tracking:
+      generate_id: true
+      id_format: "TRACE-REQ-DM-{seq:06d}"
+      include_dmc: true
+    
+    # Link types
+    link_types:
+      - type: "derives_from"
+        source: "requirement"
+        target: "dm"
+        bidirectional: true
+      - type: "satisfies"
+        source: "dm"
+        target: "requirement"
+        bidirectional: true
+      - type: "references"
+        source: "dm"
+        target: "requirement"
+        bidirectional: false
+    
+    # Output format
+    output:
+      format: "csv"
+      columns:
+        - "trace_id"
+        - "source_id"
+        - "source_type"
+        - "source_hash"
+        - "target_dmc"
+        - "target_type"
+        - "target_hash"
+        - "link_type"
+        - "timestamp"
+
+  # ---------------------------------------------------------------------------
+  # VALIDATION RULES
+  # ---------------------------------------------------------------------------
+  validation:
+    pre_transform:
+      - rule: "source_not_empty"
+        message: "Source requirement must not be empty"
+      - rule: "required_fields_present"
+        fields: ["req_id", "title", "description"]
+        message: "Required fields missing"
+      - rule: "ata_chapter_valid"
+        message: "System must map to valid ATA chapter"
+    
+    post_transform:
+      - rule: "dmc_valid"
+        message: "Generated DMC must be valid"
+      - rule: "content_not_empty"
+        message: "Generated content must not be empty"
+      - rule: "traceability_complete"
+        message: "Traceability link must be established"
+
+  # ---------------------------------------------------------------------------
+  # EXAMPLES
+  # ---------------------------------------------------------------------------
+  examples:
+    - name: "Functional Requirement to Description DM"
+      source:
+        req_id: "FR-28-001"
+        type: "functional"
+        title: "Fuel System Pressurization"
+        description: |
+          The fuel system shall maintain positive pressure in all fuel tanks
+          during normal flight operations to prevent fuel boiling at altitude.
+        system: "Fuel"
+        subsystem: "Tank Pressurization"
+        rationale: "Prevents fuel vaporization at high altitude"
+      target:
+        dmc: "HJONE-A-28-10-00-00A-040A-D"
+        tech_name: "Fuel System Pressurization"
+        info_name: "Description"
+        content: |
+          <levelledPara>
+            <title>General</title>
+            <para>The fuel system shall maintain positive pressure in all fuel
+            tanks during normal flight operations to prevent fuel boiling at
+            altitude.</para>
+          </levelledPara>
+          <levelledPara>
+            <title>Rationale</title>
+            <para>Prevents fuel vaporization at high altitude.</para>
+          </levelledPara>

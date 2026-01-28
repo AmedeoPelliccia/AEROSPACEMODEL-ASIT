@@ -1,0 +1,7 @@
+trace_id,source_type,source_id,source_version,target_type,target_id,target_version,relationship,status,verified_date,notes
+TRC-001,requirement,REQ-SL2-BATT-001,1.0,dm,DMC-SL2-A-24-00-00-00A-040A-A,001-00,satisfies,verified,2026-01-20,Battery system description
+TRC-002,requirement,REQ-SL2-BATT-002,1.0,dm,DMC-SL2-A-24-20-00-00A-040A-A,001-00,satisfies,verified,2026-01-20,HV DC generation
+TRC-003,requirement,REQ-SL2-FCC-001,1.0,dm,DMC-SL2-A-27-40-00-00A-040A-A,001-00,satisfies,verified,2026-01-20,FCC description
+TRC-004,software,SRS-FCC-001,1.0,requirement,REQ-SL2-FCC-001,1.0,implements,verified,2026-01-18,DO-178C trace
+TRC-005,software,SRS-BMS-001,1.0,requirement,REQ-SL2-BATT-002,1.0,implements,verified,2026-01-18,DO-178C trace
+TRC-006,requirement,REQ-SL2-PROP-001,1.0,dm,DMC-SL2-A-72-00-00-00A-040A-A,001-00,satisfies,pending,,Motor unit description

@@ -1,0 +1,282 @@
+# =============================================================================
+# ASIT Contract Template: Repair Procedure Generation
+# Template ID: KITDM-CTR-OPS-REPAIR
+# =============================================================================
+# 
+# PURPOSE: Generate structural repair procedures for SRM
+# 
+# USAGE:
+#   1. Copy this template to active/ directory
+#   2. Replace placeholder values (marked with <...>)
+#   3. Submit for approval
+#   4. Execute with: aerospacemodel run --contract <contract_id>
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# HEADER
+# -----------------------------------------------------------------------------
+header:
+  contract_id: "KITDM-CTR-OPS-REPAIR_<SCOPE>"        # e.g., KITDM-CTR-OPS-REPAIR_ATA53
+  version: "v1.0.0"
+  title: "Structural Repair Procedures - <Scope>"
+  description: |
+    Generate structural repair procedures for <scope description>.
+    
+    This contract transforms validated repair engineering data into
+    S1000D Data Modules for the Structural Repair Manual (SRM).
+  
+  category: "OPS"
+  status: "DRAFT"
+  
+  created_date: "<YYYY-MM-DD>"
+  effective_date: "<YYYY-MM-DD>"
+  
+  supersedes: ""
+
+# -----------------------------------------------------------------------------
+# AUTHORITY
+# -----------------------------------------------------------------------------
+authority:
+  owner: "STK_ENG"
+  approver: "STK_CERT"                               # Repairs require DER/cert approval
+  approval_date: ""
+  approval_reference: ""
+
+# -----------------------------------------------------------------------------
+# SOURCE SPECIFICATION
+# -----------------------------------------------------------------------------
+source:
+  baseline:
+    type: "PBL"                                      # Product baseline for repairs
+    id: "<BASELINE-ID>"
+    locked: true
+  
+  scope:
+    # ATA structure chapters
+    ata_chapters:
+      - "<ATA>"                                      # e.g., "53" for Fuselage
+    
+    artifact_types:
+      - "REPAIR"                                     # Repair procedures
+      - "DAMAGE_LIMIT"                               # Damage limit data
+      - "MATERIAL"                                   # Material specifications
+      - "PROCESS"                                    # Process specifications
+    
+    filters:
+      repair_class:                                  # Repair classification
+        - "TEMPORARY"
+        - "PERMANENT"
+      damage_type:                                   # Damage types covered
+        - "DENT"
+        - "SCRATCH"
+        - "CRACK"
+        - "CORROSION"
+        - "HOLE"
+  
+  paths:
+    - "KDB/REPAIRS/<ATA>/"
+    - "KDB/STRUCTURES/<ATA>/"
+    - "KDB/MATERIALS/"
+
+# -----------------------------------------------------------------------------
+# TARGET SPECIFICATION
+# -----------------------------------------------------------------------------
+target:
+  publication: "SRM"
+  
+  format:
+    standard: "S1000D_5.0"
+    output_types:
+      - "DM"
+      - "ICN"                                        # Repair illustrations
+  
+  destination: "IDB/CSDB/SRM/<ATA>/"
+  
+  naming:
+    model_ident_code: "<MODEL>"
+    system_diff_code: "A"
+
+# -----------------------------------------------------------------------------
+# TRANSFORMATION RULES
+# -----------------------------------------------------------------------------
+transformation:
+  mapping_rules:
+    - source_type: "REPAIR"
+      target_type: "DM_PROCEDURAL"
+      mapping_file: "ASIGT/mapping/repair_to_dm.yaml"
+    
+    - source_type: "DAMAGE_LIMIT"
+      target_type: "DM_DESCRIPTIVE"
+      mapping_file: "ASIGT/mapping/damage_limit_to_dm.yaml"
+    
+    - source_type: "MATERIAL"
+      target_type: "DM_DESCRIPTIVE"
+      mapping_file: "ASIGT/mapping/material_to_dm.yaml"
+    
+    - source_type: "PROCESS"
+      target_type: "DM_PROCEDURAL"
+      mapping_file: "ASIGT/mapping/process_to_dm.yaml"
+  
+  generators:
+    - "dm_generator"
+    - "icn_handler"
+    - "dml_generator"
+  
+  options:
+    include_graphics: true
+    generate_toc: true
+    
+    # Repair-specific options
+    repair_options:
+      include_damage_assessment: true
+      include_damage_limits: true
+      include_repair_zones: true
+      include_material_specs: true
+      include_process_refs: true
+      include_inspection_criteria: true
+      
+      # Structural considerations
+      structural:
+        include_load_paths: true
+        include_stress_analysis_ref: true
+        include_fatigue_considerations: true
+      
+      # Quality requirements
+      quality:
+        include_ndt_requirements: true
+        include_inspection_points: true
+        include_acceptance_criteria: true
+
+# -----------------------------------------------------------------------------
+# VALIDATION REQUIREMENTS
+# -----------------------------------------------------------------------------
+validation:
+  brex:
+    enabled: true
+    rules_file: "ASIGT/brex/project_brex.yaml"
+    severity_threshold: "ERROR"
+  
+  schema:
+    enabled: true
+    schema_version: "5.0"
+  
+  trace:
+    enabled: true
+    require_complete: true
+  
+  custom_rules:
+    - rule_id: "REPAIR-001"
+      description: "Verify structural substantiation exists"
+      validator: "validators/structural_sub.py"
+    
+    - rule_id: "REPAIR-002"
+      description: "Verify damage limits are defined"
+      validator: "validators/damage_limits.py"
+    
+    - rule_id: "REPAIR-003"
+      description: "Verify material callouts are valid"
+      validator: "validators/material_check.py"
+    
+    - rule_id: "REPAIR-004"
+      description: "Verify process specifications exist"
+      validator: "validators/process_check.py"
+
+# -----------------------------------------------------------------------------
+# EXECUTION CONFIGURATION
+# -----------------------------------------------------------------------------
+execution:
+  mode: "FULL"
+  parallel: true
+  max_workers: 4
+  timeout_minutes: 90
+  
+  on_error: "STOP"
+  
+  pre_checks:
+    - "baseline_exists"
+    - "structural_data_available"
+    - "materials_defined"
+    - "processes_approved"
+  
+  post_actions:
+    - "generate_metrics"
+    - "archive_run"
+    - "notify_stakeholders"
+  
+  notifications:
+    on_success:
+      - "STK_ENG"
+      - "STK_CM"
+    on_failure:
+      - "STK_ENG"
+      - "STK_CM"
+
+# -----------------------------------------------------------------------------
+# OUTPUT SPECIFICATION
+# -----------------------------------------------------------------------------
+outputs:
+  artifacts:
+    - "DATA_MODULES"
+    - "GRAPHICS"
+    - "DATA_MODULE_LIST"
+    - "TRACE_MATRIX"
+    - "VALIDATION_REPORT"
+    - "METRICS"
+    - "LOG"
+  
+  archive:
+    enabled: true
+    retention_days: -1                               # Permanent for structural data
+    location: "ASIGT/runs/"
+  
+  metadata:
+    include_provenance: true
+    include_hashes: true
+    include_metrics: true
+    include_contract_copy: true
+
+# -----------------------------------------------------------------------------
+# SRM-SPECIFIC CONFIGURATION
+# -----------------------------------------------------------------------------
+srm_config:
+  # Damage classification
+  damage_classification:
+    negligible: "Damage within allowable limits, no repair required"
+    repairable: "Damage exceeds limits but is repairable"
+    replacement: "Damage requires component replacement"
+  
+  # Repair classification
+  repair_classification:
+    temporary:
+      description: "Limited life repair"
+      max_cycles: "<as defined>"
+      max_hours: "<as defined>"
+    permanent:
+      description: "Unlimited life repair"
+      certification: "DER approval required"
+  
+  # Zone reference
+  zone_system:
+    enabled: true
+    zone_diagram_ref: "<ICN reference>"
+
+# -----------------------------------------------------------------------------
+# NOTES
+# -----------------------------------------------------------------------------
+notes: |
+  Repair procedure generation notes:
+  
+  - All repairs require structural substantiation
+  - DER approval required for permanent repairs
+  - Material and process specifications must be current
+  - NDT requirements per applicable standards
+
+# -----------------------------------------------------------------------------
+# REVISION HISTORY
+# -----------------------------------------------------------------------------
+revision_history:
+  - version: "v1.0.0"
+    date: "<YYYY-MM-DD>"
+    author: "<Author>"
+    description: "Initial contract"

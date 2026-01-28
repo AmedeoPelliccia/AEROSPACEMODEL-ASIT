@@ -1,0 +1,144 @@
+# {{ program_name }} — Naming Conventions
+
+## Overview
+
+This document defines the identifier naming conventions for all artifacts in the **{{ program_name }}** ({{ model_code }}) program.
+
+## S1000D Data Module Code
+
+### Format
+
+```
+DMC-{MIC}-{SDC}-{SC}-{SSC}-{SSSC}-{AC}-{DC}-{DCV}-{IC}-{ICV}-{ILC}
+```
+
+### Components
+
+| Field | Name | {{ model_code }} Default | Description |
+|-------|------|--------------------------|-------------|
+| MIC | Model Ident Code | `{{ model_code }}` | Aircraft model identifier |
+| SDC | System Diff Code | `A` | Differentiation within model |
+| SC | System Code | `00-99` | ATA chapter |
+| SSC | SubSystem Code | `0-9` | Subsystem within chapter |
+| SSSC | SubSubSystem Code | `0-9` | Sub-subsystem |
+| AC | Assembly Code | `00-99` | Assembly identifier |
+| DC | Disassembly Code | `00-99` | Disassembly sequence |
+| DCV | Disassembly Code Variant | `A-Z` | Disassembly variant |
+| IC | Info Code | `000-999` | Information type |
+| ICV | Info Code Variant | `A-Z` | Information variant |
+| ILC | Item Location Code | `A-Z` | Installation location |
+
+### Examples
+
+| DM Code | Description |
+|---------|-------------|
+| `DMC-{{ model_code }}-A-28-00-00-00A-040A-A` | Fuel System Description |
+| `DMC-{{ model_code }}-A-28-20-00-00A-520A-A` | Fuel Distribution Inspection |
+| `DMC-{{ model_code }}-A-32-40-01-00A-941A-A` | Main Wheel IPD |
+
+## Publication Module Code
+
+### Format
+
+```
+PMC-{MIC}-{ISSUER}-{NUMBER}-{VOLUME}
+```
+
+### Components
+
+| Field | Name | {{ model_code }} Default |
+|-------|------|--------------------------|
+| MIC | Model Ident Code | `{{ model_code }}` |
+| ISSUER | PM Issuer | `{{ cage_code }}` |
+| NUMBER | PM Number | `00001-99999` |
+| VOLUME | PM Volume | `00-99` |
+
+### Examples
+
+| PM Code | Description |
+|---------|-------------|
+| `PMC-{{ model_code }}-{{ cage_code }}-00001-00` | AMM Volume 1 |
+| `PMC-{{ model_code }}-{{ cage_code }}-00002-00` | IPC |
+
+## Information Control Number (ICN)
+
+### Format
+
+```
+ICN-{MIC}-{SEQUENCE}-{VARIANT}-{ISSUE}.{EXT}
+```
+
+### Examples
+
+| ICN | Description |
+|-----|-------------|
+| `ICN-{{ model_code }}-00001-001-001.CGM` | Graphic 1, variant 1, issue 1 |
+| `ICN-{{ model_code }}-28001-001-001.PNG` | Fuel system graphic |
+
+## Baseline Identifiers
+
+### Format
+
+```
+{TYPE}-{YEAR}-Q{QUARTER}-{SEQUENCE}
+```
+
+### Examples
+
+| Baseline ID | Description |
+|-------------|-------------|
+| `DBL-2026-Q1-001` | First design baseline of Q1 2026 |
+| `FBL-2026-Q2-003` | Third functional baseline of Q2 2026 |
+
+## Contract Identifiers
+
+### Format
+
+```
+{MIC}-CTR-{TYPE}-{SEQUENCE}
+```
+
+### Examples
+
+| Contract ID | Description |
+|-------------|-------------|
+| `{{ model_code }}-CTR-AMM-001` | First AMM contract |
+| `{{ model_code }}-CTR-IPC-001` | First IPC contract |
+
+## Change Control Identifiers
+
+### Engineering Change Request (ECR)
+
+```
+ECR-{YEAR}-{SEQUENCE}
+```
+
+Example: `ECR-2026-0042`
+
+### Engineering Change Order (ECO)
+
+```
+ECO-{YEAR}-{SEQUENCE}
+```
+
+Example: `ECO-2026-0035`
+
+## Run Identifiers
+
+### Format
+
+```
+{YYYYMMDD}-{HHMM}__{CONTRACT-ID}
+```
+
+### Example
+
+```
+20260122-1430__{{ model_code }}-CTR-AMM-001
+```
+
+---
+
+**Program:** {{ program_name }} ({{ model_code }})  
+**Organization:** {{ organization }}  
+**Created:** {{ created_date }}

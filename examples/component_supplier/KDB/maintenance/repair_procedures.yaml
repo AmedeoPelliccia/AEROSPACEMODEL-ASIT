@@ -1,0 +1,143 @@
+# =============================================================================
+# AeroParts International — LGA-5000 Repair Procedures
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "maintenance"
+  product_family: "LGA-5000"
+  baseline: "CBL-LGA5000-2026-Q1"
+
+requirements:
+  - id: "REQ-LGA-REP-001"
+    type: "procedural"
+    title: "Cylinder Bore Repair"
+    ata_code: "32-31-01"
+    info_code: "640"
+    applicability: "APP-ALL"
+    repair_type: "authorized"
+    
+    content:
+      summary: |
+        Repair procedure for cylinder bore damage.
+        
+      damage_limits:
+        max_scratch_depth_mm: 0.05
+        max_score_depth_mm: 0.08
+        max_corrosion_depth_mm: 0.10
+        
+      procedure: |
+        EVALUATION:
+        1. Measure damage depth with profilometer
+        2. Determine if within repairable limits
+        
+        REPAIR (if within limits):
+        3. Hone cylinder bore to remove damage
+        4. Maximum honing removal: 0.10 mm diameter
+        5. Verify surface finish: 0.4 Ra max
+        6. Verify bore diameter within tolerance
+        7. Install oversize piston seal if required
+        
+      acceptance:
+        bore_diameter_tolerance_mm: "+0.000 / +0.15"
+        surface_finish_ra: 0.4
+        
+    notes: |
+      Cylinder bores exceeding repair limits must be replaced.
+      Document all repairs in component logbook.
+      
+  - id: "REQ-LGA-REP-002"
+    type: "procedural"
+    title: "Piston Rod Repair"
+    ata_code: "32-31-01"
+    info_code: "640"
+    applicability: "APP-ALL"
+    repair_type: "authorized"
+    
+    content:
+      summary: |
+        Repair procedure for piston rod damage.
+        
+      damage_limits:
+        max_scratch_depth_mm: 0.03
+        max_score_depth_mm: 0.05
+        max_corrosion_pits: 3
+        
+      procedure: |
+        EVALUATION:
+        1. Inspect rod surface for damage
+        2. Measure damage depth
+        3. Check runout (max 0.05 mm TIR)
+        
+        REPAIR (if within limits):
+        4. Polish rod surface to remove minor damage
+        5. Re-chrome rod if chrome is damaged
+        6. Grind to restore diameter
+        7. Verify surface finish: 0.2 Ra max
+        
+      acceptance:
+        rod_diameter_tolerance_mm: "-0.000 / -0.05"
+        surface_finish_ra: 0.2
+        chrome_thickness_mm: "0.05 minimum"
+        
+  - id: "REQ-LGA-REP-003"
+    type: "procedural"
+    title: "Thread Repair"
+    ata_code: "32-31-01"
+    info_code: "640"
+    applicability: "APP-ALL"
+    repair_type: "authorized"
+    
+    content:
+      summary: |
+        Repair procedure for damaged threads.
+        
+      procedure: |
+        EVALUATION:
+        1. Inspect threads with thread gauge
+        2. Identify damaged threads
+        
+        REPAIR OPTIONS:
+        Option A - Helicoil:
+        3a. Drill out damaged threads
+        4a. Tap for Helicoil insert
+        5a. Install Helicoil insert
+        6a. Verify thread gauge acceptance
+        
+        Option B - Weld Repair (if approved):
+        3b. Machine out damaged threads
+        4b. Weld fill (per approved process)
+        5b. Re-machine threads
+        6b. NDT inspect weld
+        7b. Verify thread gauge acceptance
+        
+  - id: "REQ-LGA-REP-004"
+    type: "descriptive"
+    title: "Non-Repairable Conditions"
+    ata_code: "32-31-01"
+    info_code: "640"
+    applicability: "APP-ALL"
+    
+    content:
+      summary: |
+        Conditions that require component replacement (no repair).
+        
+      details: |
+        The following conditions are NOT repairable:
+        
+        CYLINDER HOUSING:
+        - Cracks (any size)
+        - Bore wear exceeding 0.15 mm over nominal
+        - Corrosion exceeding 0.10 mm depth
+        - Mounting lug damage
+        
+        PISTON ROD:
+        - Cracks (any size)
+        - Bend exceeding 0.10 mm TIR
+        - Chrome loss exceeding 20% of surface
+        - Thread damage not repairable by Helicoil
+        
+        GENERAL:
+        - Evidence of overheating
+        - Foreign object damage to internal components
+        - Unknown service history

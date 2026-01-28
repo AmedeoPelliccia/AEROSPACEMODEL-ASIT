@@ -1,0 +1,294 @@
+# =============================================================================
+# {{ program_name }} — ATA Chapter Mapping
+# =============================================================================
+# Maps ATA iSpec 2200 chapters to program systems and publications.
+#
+# Program: {{ program_name }} ({{ model_code }})
+# Generated: {{ created_date }}
+# =============================================================================
+
+metadata:
+  program: "{{ program_name }}"
+  model_code: "{{ model_code }}"
+  specification: "ATA iSpec 2200"
+  version: "2023"
+
+# -----------------------------------------------------------------------------
+# System Mapping
+# -----------------------------------------------------------------------------
+systems:
+  # -------------------------------------------------------------------------
+  # General (ATA 00-19)
+  # -------------------------------------------------------------------------
+  - ata_chapter: "00"
+    title: "General"
+    enabled: true
+    publications: ["AMM"]
+    notes: "General aircraft information"
+    
+  - ata_chapter: "05"
+    title: "Time Limits/Maintenance Checks"
+    enabled: true
+    publications: ["AMM", "MPD"]
+    priority: "high"
+    
+  - ata_chapter: "06"
+    title: "Dimensions and Areas"
+    enabled: true
+    publications: ["AMM"]
+    
+  - ata_chapter: "07"
+    title: "Lifting and Shoring"
+    enabled: true
+    publications: ["AMM"]
+    
+  - ata_chapter: "08"
+    title: "Leveling and Weighing"
+    enabled: true
+    publications: ["AMM"]
+    
+  - ata_chapter: "09"
+    title: "Towing and Taxiing"
+    enabled: true
+    publications: ["AMM"]
+    
+  - ata_chapter: "10"
+    title: "Parking, Mooring, Storage and Return to Service"
+    enabled: true
+    publications: ["AMM"]
+    
+  - ata_chapter: "11"
+    title: "Placards and Markings"
+    enabled: true
+    publications: ["AMM"]
+    
+  - ata_chapter: "12"
+    title: "Servicing"
+    enabled: true
+    publications: ["AMM"]
+    priority: "high"
+
+  # -------------------------------------------------------------------------
+  # Airframe Systems (ATA 20-49)
+  # -------------------------------------------------------------------------
+  - ata_chapter: "21"
+    title: "Air Conditioning"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    subsystems:
+      - "21-00"  # General
+      - "21-20"  # Distribution
+      - "21-30"  # Pressurization
+      - "21-50"  # Temperature Control
+      
+  - ata_chapter: "22"
+    title: "Auto Flight"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    
+  - ata_chapter: "23"
+    title: "Communications"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    
+  - ata_chapter: "24"
+    title: "Electrical Power"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC", "WDM"]
+    priority: "high"
+    
+  - ata_chapter: "25"
+    title: "Equipment/Furnishings"
+    enabled: true
+    publications: ["AMM", "IPC"]
+    
+  - ata_chapter: "26"
+    title: "Fire Protection"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    priority: "high"
+    safety_critical: true
+    
+  - ata_chapter: "27"
+    title: "Flight Controls"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    priority: "high"
+    safety_critical: true
+    
+  - ata_chapter: "28"
+    title: "Fuel"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    priority: "high"
+    safety_critical: true
+    
+  - ata_chapter: "29"
+    title: "Hydraulic Power"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    priority: "high"
+    
+  - ata_chapter: "30"
+    title: "Ice and Rain Protection"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    
+  - ata_chapter: "31"
+    title: "Indicating/Recording Systems"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    
+  - ata_chapter: "32"
+    title: "Landing Gear"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    priority: "high"
+    safety_critical: true
+    
+  - ata_chapter: "33"
+    title: "Lights"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    
+  - ata_chapter: "34"
+    title: "Navigation"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    priority: "high"
+    
+  - ata_chapter: "35"
+    title: "Oxygen"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    safety_critical: true
+    
+  - ata_chapter: "36"
+    title: "Pneumatic"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    
+  - ata_chapter: "38"
+    title: "Water/Waste"
+    enabled: true
+    publications: ["AMM", "IPC"]
+    
+  - ata_chapter: "49"
+    title: "Airborne Auxiliary Power"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+
+  # -------------------------------------------------------------------------
+  # Structures (ATA 50-59)
+  # -------------------------------------------------------------------------
+  - ata_chapter: "51"
+    title: "Standard Practices - Structures"
+    enabled: true
+    publications: ["SRM"]
+    
+  - ata_chapter: "52"
+    title: "Doors"
+    enabled: true
+    publications: ["AMM", "SRM", "IPC"]
+    
+  - ata_chapter: "53"
+    title: "Fuselage"
+    enabled: true
+    publications: ["AMM", "SRM", "IPC"]
+    priority: "high"
+    
+  - ata_chapter: "54"
+    title: "Nacelles/Pylons"
+    enabled: true
+    publications: ["AMM", "SRM", "IPC"]
+    
+  - ata_chapter: "55"
+    title: "Stabilizers"
+    enabled: true
+    publications: ["AMM", "SRM", "IPC"]
+    safety_critical: true
+    
+  - ata_chapter: "56"
+    title: "Windows"
+    enabled: true
+    publications: ["AMM", "SRM", "IPC"]
+    
+  - ata_chapter: "57"
+    title: "Wings"
+    enabled: true
+    publications: ["AMM", "SRM", "IPC"]
+    priority: "high"
+    safety_critical: true
+
+  # -------------------------------------------------------------------------
+  # Power Plant (ATA 70-89)
+  # -------------------------------------------------------------------------
+  - ata_chapter: "71"
+    title: "Power Plant - General"
+    enabled: true
+    publications: ["AMM", "EMM"]
+    
+  - ata_chapter: "72"
+    title: "Engine"
+    enabled: true
+    publications: ["AMM", "EMM", "IPC"]
+    priority: "high"
+    safety_critical: true
+    
+  - ata_chapter: "73"
+    title: "Engine Fuel and Control"
+    enabled: true
+    publications: ["AMM", "EMM", "IPC"]
+    safety_critical: true
+    
+  - ata_chapter: "74"
+    title: "Ignition"
+    enabled: true
+    publications: ["AMM", "EMM", "IPC"]
+    
+  - ata_chapter: "75"
+    title: "Air (Bleed)"
+    enabled: true
+    publications: ["AMM", "EMM", "IPC"]
+    
+  - ata_chapter: "76"
+    title: "Engine Controls"
+    enabled: true
+    publications: ["AMM", "EMM", "IPC"]
+    safety_critical: true
+    
+  - ata_chapter: "77"
+    title: "Engine Indicating"
+    enabled: true
+    publications: ["AMM", "EMM", "IPC"]
+    
+  - ata_chapter: "78"
+    title: "Exhaust"
+    enabled: true
+    publications: ["AMM", "EMM", "IPC"]
+    
+  - ata_chapter: "79"
+    title: "Oil"
+    enabled: true
+    publications: ["AMM", "EMM", "IPC"]
+    
+  - ata_chapter: "80"
+    title: "Starting"
+    enabled: true
+    publications: ["AMM", "EMM", "IPC"]
+
+# -----------------------------------------------------------------------------
+# Disabled Chapters
+# -----------------------------------------------------------------------------
+# Chapters not applicable to this program can be listed here
+disabled_chapters:
+  - chapter: "48"
+    reason: "No aerial refueling capability"
+  - chapter: "62"
+    reason: "Fixed-wing aircraft - no main rotor"
+  - chapter: "63"
+    reason: "Fixed-wing aircraft - no rotor drive"
+  - chapter: "64"
+    reason: "Fixed-wing aircraft - no tail rotor"
+  - chapter: "65"
+    reason: "Fixed-wing aircraft - no tail rotor drive"

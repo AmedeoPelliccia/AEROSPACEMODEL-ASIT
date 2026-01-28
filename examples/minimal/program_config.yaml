@@ -1,0 +1,83 @@
+# =============================================================================
+# Minimal Example — Program Configuration
+# =============================================================================
+# Bare minimum configuration for learning AEROSPACEMODEL.
+# =============================================================================
+
+program:
+  name: "Demo Aircraft"
+  model_code: "DEMO"
+  description: "Minimal example for learning AEROSPACEMODEL"
+  
+  organization:
+    name: "AEROSPACEMODEL Examples"
+    cage_code: "DEMO1"
+    country_code: "US"
+    
+  version:
+    current: "1.0.0"
+    aerospacemodel: "2.0.0"
+
+standards:
+  s1000d:
+    issue: "5.0"
+    brex:
+      base: "S1000D_5.0_DEFAULT"
+      project: "DEMO_brex"
+      
+  language:
+    primary: "en"
+    
+  country:
+    primary: "US"
+
+asit:
+  governance:
+    baseline_policy: "relaxed"  # Simplified for demo
+    change_control: false       # Disabled for demo
+    approval_required: false    # Disabled for demo
+    
+  contracts:
+    active_dir: "ASIT/CONTRACTS/active"
+
+asigt:
+  generators:
+    dm_generator:
+      enabled: true
+      
+  validators:
+    brex:
+      enabled: true
+      strict_mode: false  # Warnings only for demo
+    schema:
+      enabled: false      # Disabled for demo (requires schema files)
+    trace:
+      enabled: true
+      
+  renderers:
+    html:
+      enabled: true
+    pdf:
+      enabled: false      # Disabled for demo
+
+directories:
+  kdb:
+    path: "KDB"
+  idb:
+    path: "IDB"
+  output:
+    path: "output"
+
+publications:
+  enabled:
+    - AMM
+    
+  defaults:
+    issue_info:
+      issue_number: "001"
+      in_work: "00"
+
+environment:
+  mode: "development"
+  logging:
+    level: "DEBUG"

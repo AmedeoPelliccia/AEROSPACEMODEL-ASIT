@@ -1,0 +1,557 @@
+# =============================================================================
+# Repair to Data Module Mapping
+# ASIGT Transformation Rules
+# Version: 2.0.0
+# =============================================================================
+#
+# This mapping defines how repair instructions from engineering data are
+# transformed into S1000D Procedural Data Modules for SRM (Structural Repair
+# Manual) and CMM (Component Maintenance Manual) content.
+#
+# Repair types covered:
+#   - Structural repairs (SRM)
+#   - Component repairs (CMM)
+#   - Allowable damage limits
+#   - Repair schemes
+#
+# Operates under ASIT contract authority.
+#
+# =============================================================================
+
+mapping:
+  # ---------------------------------------------------------------------------
+  # MAPPING METADATA
+  # ---------------------------------------------------------------------------
+  metadata:
+    mapping_id: "MAP-REPAIR-DM-001"
+    version: "1.0.0"
+    title: "Repair to Data Module Mapping"
+    description: |
+      Transforms repair instructions and damage assessment data into S1000D
+      procedural data modules for structural and component repairs.
+    effective_date: "2026-01-01"
+    author: "ASIGT Framework"
+    
+    # Source specification
+    source:
+      type: "repair_instruction"
+      schema: "KDB/SSOT/repairs"
+      formats:
+        - "yaml"
+        - "json"
+        - "srm_xml"     # Legacy SRM format
+        - "cmm_xml"     # Legacy CMM format
+        - "dta_export"  # Damage Tolerance Analysis export
+    
+    # Target specification
+    target:
+      type: "s1000d_dm"
+      schema: "S1000D Issue 5.0"
+      templates:
+        - "dm_procedural.xml"
+        - "dm_descriptive.xml"
+
+  # ---------------------------------------------------------------------------
+  # REPAIR TYPE MAPPINGS
+  # ---------------------------------------------------------------------------
+  type_mappings:
+    
+    # Allowable Damage Assessment
+    allowable_damage:
+      source_types:
+        - "ADL"
+        - "allowable_damage"
+        - "damage_limits"
+        - "negligible_damage"
+      target_info_codes:
+        primary: "040"      # Description (damage limits)
+        secondary: "300"    # Examine/inspect
+      dm_type: "descriptive"
+      content_mapping:
+        - source_field: "component_name"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "info_name"
+          target_element: "infoName"
+          transform: "none"
+          default: "Allowable Damage"
+        - source_field: "damage_description"
+          target_element: "levelledPara[title='Damage Description']/para"
+          transform: "paragraph_format"
+        - source_field: "damage_zones"
+          target_element: "levelledPara[title='Damage Zones']/para"
+          transform: "zone_list"
+        - source_field: "limits"
+          target_element: "table"
+          transform: "limits_table"
+        - source_field: "disposition"
+          target_element: "levelledPara[title='Disposition']/para"
+          transform: "disposition_list"
+        - source_field: "figure_reference"
+          target_element: "figure"
+          transform: "figure_element"
+    
+    # Structural Repair - Standard
+    structural_standard:
+      source_types:
+        - "STD_REPAIR"
+        - "standard_repair"
+        - "srm_standard"
+        - "typical_repair"
+      target_info_codes:
+        primary: "600"      # Repair
+        secondary: "610"    # Detailed repair
+      dm_type: "procedural"
+      content_mapping:
+        - source_field: "repair_title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "info_name"
+          target_element: "infoName"
+          transform: "none"
+          default: "Standard Repair"
+        - source_field: "damage_classification"
+          target_element: "preliminaryRqmts/reqCondGroup/reqCondDm/reqCond"
+          transform: "damage_class_text"
+        - source_field: "material_spec"
+          target_element: "preliminaryRqmts/reqSupplies"
+          transform: "material_list"
+        - source_field: "fastener_spec"
+          target_element: "preliminaryRqmts/reqSupplies"
+          transform: "fastener_list"
+        - source_field: "tools_required"
+          target_element: "preliminaryRqmts/reqSupportEquips"
+          transform: "tool_list"
+        - source_field: "safety_warnings"
+          target_element: "preliminaryRqmts/reqSafety/safetyRqmts/warning"
+          transform: "warning_list"
+        - source_field: "damage_removal"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "damage_removal_steps"
+        - source_field: "surface_preparation"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "surface_prep_steps"
+        - source_field: "repair_installation"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "installation_steps"
+        - source_field: "finishing"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "finishing_steps"
+        - source_field: "inspection_criteria"
+          target_element: "closeRqmts/reqCondGroup/reqCondDm"
+          transform: "inspection_ref"
+    
+    # Structural Repair - Bonded
+    structural_bonded:
+      source_types:
+        - "BONDED_REPAIR"
+        - "bonded_repair"
+        - "composite_repair"
+        - "adhesive_repair"
+      target_info_codes:
+        primary: "600"      # Repair
+        secondary: "620"    # Bonded repair
+      dm_type: "procedural"
+      content_mapping:
+        - source_field: "repair_title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "info_name"
+          target_element: "infoName"
+          transform: "none"
+          default: "Bonded Repair"
+        - source_field: "adhesive_spec"
+          target_element: "preliminaryRqmts/reqSupplies"
+          transform: "adhesive_supply"
+        - source_field: "patch_material"
+          target_element: "preliminaryRqmts/reqSupplies"
+          transform: "patch_material_supply"
+        - source_field: "cure_requirements"
+          target_element: "mainProcedure/proceduralStep/note"
+          transform: "cure_note"
+        - source_field: "surface_preparation"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "surface_prep_steps"
+        - source_field: "adhesive_application"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "adhesive_steps"
+        - source_field: "patch_installation"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "patch_steps"
+        - source_field: "cure_process"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "cure_steps"
+        - source_field: "ndt_inspection"
+          target_element: "closeRqmts/reqCondGroup/reqCondDm"
+          transform: "ndt_ref"
+    
+    # Component Repair
+    component_repair:
+      source_types:
+        - "CMM_REPAIR"
+        - "component_repair"
+        - "overhaul"
+        - "bench_repair"
+      target_info_codes:
+        primary: "600"      # Repair
+        secondary: "640"    # Component repair
+      dm_type: "procedural"
+      content_mapping:
+        - source_field: "component_name"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "info_name"
+          target_element: "infoName"
+          transform: "none"
+          default: "Repair"
+        - source_field: "disassembly"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "disassembly_steps"
+        - source_field: "cleaning"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "cleaning_steps"
+        - source_field: "inspection"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "inspection_steps"
+        - source_field: "repair_operations"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "repair_steps"
+        - source_field: "reassembly"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "reassembly_steps"
+        - source_field: "functional_test"
+          target_element: "closeRqmts/reqCondGroup/reqCondDm"
+          transform: "test_ref"
+    
+    # Temporary/Deferred Repair
+    temporary_repair:
+      source_types:
+        - "TEMP_REPAIR"
+        - "temporary_repair"
+        - "deferred_repair"
+        - "ferry_repair"
+      target_info_codes:
+        primary: "600"      # Repair
+        secondary: "650"    # Temporary repair
+      dm_type: "procedural"
+      content_mapping:
+        - source_field: "repair_title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "info_name"
+          target_element: "infoName"
+          transform: "none"
+          default: "Temporary Repair"
+        - source_field: "time_limit"
+          target_element: "warning/warningAndCautionPara"
+          transform: "time_limit_warning"
+        - source_field: "flight_restrictions"
+          target_element: "caution/warningAndCautionPara"
+          transform: "restriction_caution"
+        - source_field: "procedure_steps"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "procedure_steps"
+        - source_field: "permanent_repair_ref"
+          target_element: "closeRqmts/reqCondGroup/reqCondDm"
+          transform: "permanent_repair_dmref"
+
+  # ---------------------------------------------------------------------------
+  # DAMAGE ZONE STRUCTURE
+  # ---------------------------------------------------------------------------
+  damage_zones:
+    zone_types:
+      - id: "zone_a"
+        name: "Zone A - Critical"
+        description: "Primary load-carrying structure"
+        disposition_options:
+          - "repair_mandatory"
+          - "replace"
+          - "engineering_approval_required"
+      - id: "zone_b"
+        name: "Zone B - Semi-Critical"
+        description: "Secondary load-carrying structure"
+        disposition_options:
+          - "repair_recommended"
+          - "blend_out"
+          - "patch"
+      - id: "zone_c"
+        name: "Zone C - Non-Critical"
+        description: "Fairing, non-structural"
+        disposition_options:
+          - "cosmetic_repair"
+          - "defer"
+          - "no_action"
+    
+    damage_types:
+      - type: "scratch"
+        depth_limit_field: "max_scratch_depth"
+        length_limit_field: "max_scratch_length"
+      - type: "dent"
+        depth_limit_field: "max_dent_depth"
+        diameter_limit_field: "max_dent_diameter"
+      - type: "corrosion"
+        depth_limit_field: "max_corrosion_depth"
+        area_limit_field: "max_corrosion_area"
+      - type: "crack"
+        length_limit_field: "max_crack_length"
+        orientation_field: "crack_orientation"
+      - type: "delamination"
+        area_limit_field: "max_delam_area"
+        depth_limit_field: "max_delam_plies"
+      - type: "disbond"
+        area_limit_field: "max_disbond_area"
+      - type: "puncture"
+        diameter_limit_field: "max_puncture_diameter"
+
+  # ---------------------------------------------------------------------------
+  # MATERIAL SPECIFICATIONS
+  # ---------------------------------------------------------------------------
+  material_mapping:
+    aluminum_alloys:
+      - material: "2024-T3"
+        spec: "QQ-A-250/4"
+        forms: ["sheet", "plate"]
+      - material: "7075-T6"
+        spec: "QQ-A-250/12"
+        forms: ["sheet", "plate", "extrusion"]
+      - material: "2024-T42"
+        spec: "QQ-A-250/5"
+        forms: ["clad sheet"]
+    
+    composites:
+      - material: "Carbon/Epoxy"
+        spec: "BMS 8-256"
+        types: ["prepreg", "fabric"]
+      - material: "Glass/Epoxy"
+        spec: "BMS 8-79"
+        types: ["prepreg", "fabric"]
+      - material: "Aramid/Epoxy"
+        spec: "BMS 8-168"
+        types: ["prepreg", "fabric"]
+    
+    adhesives:
+      - material: "FM 73"
+        spec: "BMS 5-101"
+        types: ["film", "paste"]
+        cure_temp: "121°C (250°F)"
+      - material: "FM 300"
+        spec: "BMS 5-90"
+        types: ["film"]
+        cure_temp: "177°C (350°F)"
+      - material: "EA 9394"
+        spec: "BMS 5-89"
+        types: ["paste"]
+        cure_temp: "room temperature"
+    
+    fasteners:
+      - type: "Hi-Lok"
+        spec: "HL10"
+        materials: ["titanium", "A286"]
+      - type: "Cherry Max"
+        spec: "CR2249"
+        materials: ["monel", "A286"]
+      - type: "Solid Rivet"
+        spec: "MS20470"
+        materials: ["2117-T4", "2017-T4"]
+
+  # ---------------------------------------------------------------------------
+  # TRANSFORMATION FUNCTIONS
+  # ---------------------------------------------------------------------------
+  transforms:
+    title_case:
+      function: "text_title_case"
+      parameters:
+        preserve_acronyms: true
+        
+    paragraph_format:
+      function: "format_paragraph"
+      parameters:
+        max_length: 500
+        
+    zone_list:
+      function: "list_to_zone_paras"
+      parameters:
+        include_figure_ref: true
+        
+    limits_table:
+      function: "damage_limits_to_table"
+      parameters:
+        columns:
+          - "damage_type"
+          - "zone"
+          - "max_limit"
+          - "disposition"
+        unit_conversion: true
+        
+    disposition_list:
+      function: "list_to_disposition_paras"
+      parameters:
+        include_refs: true
+        
+    material_list:
+      function: "materials_to_supplies"
+      parameters:
+        include_specs: true
+        include_equivalents: true
+        
+    fastener_list:
+      function: "fasteners_to_supplies"
+      parameters:
+        include_grip_range: true
+        include_alternates: true
+        
+    adhesive_supply:
+      function: "adhesive_to_supply"
+      parameters:
+        include_storage_requirements: true
+        include_shelf_life: true
+        
+    damage_removal_steps:
+      function: "text_to_procedural_steps"
+      parameters:
+        section_title: "Damage Removal"
+        include_ndt_checks: true
+        
+    surface_prep_steps:
+      function: "text_to_procedural_steps"
+      parameters:
+        section_title: "Surface Preparation"
+        include_cleanliness_checks: true
+        
+    installation_steps:
+      function: "text_to_procedural_steps"
+      parameters:
+        include_torque_values: true
+        include_edge_distances: true
+        
+    finishing_steps:
+      function: "text_to_procedural_steps"
+      parameters:
+        section_title: "Finishing"
+        include_sealant_application: true
+        
+    cure_steps:
+      function: "text_to_procedural_steps"
+      parameters:
+        section_title: "Cure Process"
+        include_temperature_profile: true
+        include_vacuum_requirements: true
+        
+    time_limit_warning:
+      function: "format_time_limit_warning"
+      parameters:
+        severity: "warning"
+        format: "This temporary repair is valid for {hours} flight hours or {cycles} flight cycles, whichever occurs first."
+        
+    permanent_repair_dmref:
+      function: "create_dm_reference"
+      parameters:
+        info_code: "600"
+        reference_type: "permanent_repair"
+
+  # ---------------------------------------------------------------------------
+  # TRACEABILITY CONFIGURATION
+  # ---------------------------------------------------------------------------
+  traceability:
+    enabled: true
+    
+    source_tracking:
+      capture_hash: true
+      hash_algorithm: "sha256"
+      include_fields:
+        - "repair_id"
+        - "repair_version"
+        - "dta_reference"
+        - "engineering_approval"
+    
+    target_tracking:
+      generate_id: true
+      id_format: "TRACE-REPAIR-DM-{seq:06d}"
+    
+    link_types:
+      - type: "implements"
+        source: "dm"
+        target: "repair_instruction"
+      - type: "approved_by"
+        source: "repair"
+        target: "engineering_order"
+      - type: "supersedes"
+        source: "repair_v2"
+        target: "repair_v1"
+
+  # ---------------------------------------------------------------------------
+  # VALIDATION RULES
+  # ---------------------------------------------------------------------------
+  validation:
+    pre_transform:
+      - rule: "repair_id_present"
+        message: "Repair ID is required"
+      - rule: "damage_limits_valid"
+        message: "Damage limits must be numeric and within range"
+      - rule: "material_specs_valid"
+        message: "Material specifications must reference valid specs"
+    
+    post_transform:
+      - rule: "all_refs_valid"
+        message: "All material and tool references must be valid"
+      - rule: "limits_table_complete"
+        message: "Limits table must have all required columns"
+      - rule: "safety_warnings_present"
+        message: "Structural repairs must include safety warnings"
+
+  # ---------------------------------------------------------------------------
+  # EXAMPLES
+  # ---------------------------------------------------------------------------
+  examples:
+    - name: "Allowable Damage to Description DM"
+      source:
+        repair_id: "ADL-53-10-001"
+        component_name: "Fuselage Skin Panel"
+        ata_chapter: "53"
+        ata_section: "10"
+        damage_zones:
+          - zone: "A"
+            location: "Within 2 inches of frame"
+          - zone: "B"
+            location: "Between frames, center"
+          - zone: "C"
+            location: "Non-structural fairing"
+        limits:
+          - damage_type: "scratch"
+            zone: "A"
+            max_limit: "0.003 inch depth"
+            disposition: "Blend and protect"
+          - damage_type: "dent"
+            zone: "B"
+            max_limit: "0.5 inch diameter, 0.05 inch depth"
+            disposition: "No repair required"
+      target:
+        dmc: "HJONE-A-53-10-00-00A-040A-D"
+        tech_name: "Fuselage Skin Panel"
+        info_name: "Allowable Damage"
+    
+    - name: "Standard Repair to Procedural DM"
+      source:
+        repair_id: "REP-53-10-001"
+        repair_type: "standard_repair"
+        repair_title: "Fuselage Skin Doubler Repair"
+        ata_chapter: "53"
+        ata_section: "10"
+        damage_classification: "Category 2 - Repairable"
+        material_spec:
+          - material: "2024-T3 Clad"
+            thickness: "0.040 inch"
+            spec: "QQ-A-250/5"
+        fastener_spec:
+          - type: "MS20470AD4"
+            quantity: "As required"
+        procedure_steps:
+          - "Remove damaged material to sound structure"
+          - "Prepare doubler from specified material"
+          - "Drill and deburr all holes"
+          - "Apply sealant and install doubler"
+          - "Install fasteners per pattern"
+      target:
+        dmc: "HJONE-A-53-10-00-01A-600A-D"
+        tech_name: "Fuselage Skin Doubler Repair"
+        info_name: "Standard Repair"

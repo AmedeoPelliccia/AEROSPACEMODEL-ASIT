@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+=============================================================================
+S1000D Data Module Template - Descriptive
+ASIGT S1000D Templates
+Version: 2.0.0
+Issue: 5.0
+
+Purpose: Template for descriptive data modules containing system descriptions,
+         theory of operation, functional descriptions, and general information.
+
+Info Codes: 000, 001, 010, 018, 020, 040, 041, 042
+
+Usage: This template is populated by ASIGT generators under ASIT contract
+       authority. Placeholder tokens (${...}) are replaced during generation.
+=============================================================================
+-->
+<dmodule xmlns="http://www.s1000d.org/S1000D_5-0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.s1000d.org/S1000D_5-0 S1000D_5-0/xml_schema_flat/descript.xsd">
+  
+  <!-- ===================================================================== -->
+  <!-- IDENTIFICATION AND STATUS SECTION                                     -->
+  <!-- ===================================================================== -->
+  <identAndStatusSection>
+    
+    <!-- Data Module Address -->
+    <dmAddress>
+      <dmIdent>
+        <!-- Data Module Code -->
+        <dmCode 
+          modelIdentCode="${MODEL_IDENT_CODE}"
+          systemDiffCode="${SYSTEM_DIFF_CODE}"
+          systemCode="${SYSTEM_CODE}"
+          subSystemCode="${SUBSYSTEM_CODE}"
+          subSubSystemCode="${SUB_SUBSYSTEM_CODE}"
+          assyCode="${ASSY_CODE}"
+          disassyCode="${DISASSY_CODE}"
+          disassyCodeVariant="${DISASSY_CODE_VARIANT}"
+          infoCode="${INFO_CODE}"
+          infoCodeVariant="${INFO_CODE_VARIANT}"
+          itemLocationCode="${ITEM_LOCATION_CODE}"/>
+        
+        <!-- Language -->
+        <language languageIsoCode="${LANGUAGE_CODE}" countryIsoCode="${COUNTRY_CODE}"/>
+        
+        <!-- Issue Information -->
+        <issueInfo issueNumber="${ISSUE_NUMBER}" inWork="${IN_WORK}"/>
+      </dmIdent>
+      
+      <!-- Data Module Address Items -->
+      <dmAddressItems>
+        <issueDate year="${ISSUE_YEAR}" month="${ISSUE_MONTH}" day="${ISSUE_DAY}"/>
+        <dmTitle>
+          <techName>${TECH_NAME}</techName>
+          <infoName>${INFO_NAME}</infoName>
+        </dmTitle>
+      </dmAddressItems>
+    </dmAddress>
+    
+    <!-- Data Module Status -->
+    <dmStatus issueType="${ISSUE_TYPE}">
+      <security securityClassification="${SECURITY_CLASSIFICATION}"/>
+      
+      <!-- Responsible Partner Company -->
+      <responsiblePartnerCompany>
+        <enterpriseName>${RESPONSIBLE_COMPANY}</enterpriseName>
+      </responsiblePartnerCompany>
+      
+      <!-- Originator -->
+      <originator>
+        <enterpriseName>${ORIGINATOR_NAME}</enterpriseName>
+        <enterpriseIdent>${ORIGINATOR_CAGE}</enterpriseIdent>
+      </originator>
+      
+      <!-- Applicability -->
+      <applic>
+        <displayText>
+          <simplePara>${APPLICABILITY_TEXT}</simplePara>
+        </displayText>
+      </applic>
+      
+      <!-- BREX Reference -->
+      <brexDmRef>
+        <dmRef>
+          <dmRefIdent>
+            <dmCode 
+              modelIdentCode="${BREX_MODEL_IDENT}"
+              systemDiffCode="A"
+              systemCode="00"
+              subSystemCode="0"
+              subSubSystemCode="0"
+              assyCode="00"
+              disassyCode="00"
+              disassyCodeVariant="A"
+              infoCode="022"
+              infoCodeVariant="A"
+              itemLocationCode="D"/>
+          </dmRefIdent>
+        </dmRef>
+      </brexDmRef>
+      
+      <!-- Quality Assurance -->
+      <qualityAssurance>
+        <unverified/>
+      </qualityAssurance>
+      
+      <!-- Reason for Update (if applicable) -->
+      <!-- 
+      <reasonForUpdate updateHighlight="1" updateReasonType="urt01">
+        <simplePara>${UPDATE_REASON}</simplePara>
+      </reasonForUpdate>
+      -->
+    </dmStatus>
+  </identAndStatusSection>
+  
+  <!-- ===================================================================== -->
+  <!-- CONTENT SECTION - DESCRIPTIVE                                         -->
+  <!-- ===================================================================== -->
+  <content>
+    <description>
+      
+      <!-- ================================================================= -->
+      <!-- GENERAL DESCRIPTION                                               -->
+      <!-- ================================================================= -->
+      <levelledPara>
+        <title>General</title>
+        <para>${GENERAL_DESCRIPTION}</para>
+        
+        <!-- Sub-paragraphs for detailed information -->
+        <!--
+        <levelledPara>
+          <title>${SUBPARA_TITLE}</title>
+          <para>${SUBPARA_CONTENT}</para>
+        </levelledPara>
+        -->
+      </levelledPara>
+      
+      <!-- ================================================================= -->
+      <!-- SYSTEM OVERVIEW                                                   -->
+      <!-- ================================================================= -->
+      <levelledPara>
+        <title>System Overview</title>
+        <para>${SYSTEM_OVERVIEW}</para>
+        
+        <!-- Reference to system figure -->
+        <!--
+        <para>
+          Refer to <internalRef internalRefId="fig-001" internalRefTargetType="irtt01">
+            <internalRefDescription>System Overview</internalRefDescription>
+          </internalRef> for the system schematic.
+        </para>
+        -->
+      </levelledPara>
+      
+      <!-- ================================================================= -->
+      <!-- FUNCTIONAL DESCRIPTION                                            -->
+      <!-- ================================================================= -->
+      <levelledPara>
+        <title>Functional Description</title>
+        <para>${FUNCTIONAL_DESCRIPTION}</para>
+        
+        <!-- Component descriptions -->
+        <!--
+        <levelledPara>
+          <title>${COMPONENT_NAME}</title>
+          <para>${COMPONENT_DESCRIPTION}</para>
+        </levelledPara>
+        -->
+      </levelledPara>
+      
+      <!-- ================================================================= -->
+      <!-- THEORY OF OPERATION                                               -->
+      <!-- ================================================================= -->
+      <levelledPara>
+        <title>Theory of Operation</title>
+        <para>${THEORY_OF_OPERATION}</para>
+        
+        <!-- Operating modes -->
+        <!--
+        <levelledPara>
+          <title>Normal Operation</title>
+          <para>${NORMAL_OPERATION}</para>
+        </levelledPara>
+        
+        <levelledPara>
+          <title>Alternate/Emergency Operation</title>
+          <para>${ALTERNATE_OPERATION}</para>
+        </levelledPara>
+        -->
+      </levelledPara>
+      
+      <!-- ================================================================= -->
+      <!-- SYSTEM INTERFACES                                                 -->
+      <!-- ================================================================= -->
+      <levelledPara>
+        <title>System Interfaces</title>
+        <para>${SYSTEM_INTERFACES}</para>
+        
+        <!-- Interface table -->
+        <!--
+        <table id="tbl-interfaces">
+          <title>System Interfaces</title>
+          <tgroup cols="3">
+            <colspec colname="c1" colwidth="1*"/>
+            <colspec colname="c2" colwidth="1*"/>
+            <colspec colname="c3" colwidth="2*"/>
+            <thead>
+              <row>
+                <entry>Interface</entry>
+                <entry>Connected System</entry>
+                <entry>Description</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>${INTERFACE_NAME}</entry>
+                <entry>${CONNECTED_SYSTEM}</entry>
+                <entry>${INTERFACE_DESCRIPTION}</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+        -->
+      </levelledPara>
+      
+      <!-- ================================================================= -->
+      <!-- LOCATION AND ACCESS                                               -->
+      <!-- ================================================================= -->
+      <levelledPara>
+        <title>Location and Access</title>
+        <para>${LOCATION_ACCESS}</para>
+      </levelledPara>
+      
+      <!-- ================================================================= -->
+      <!-- FIGURES                                                           -->
+      <!-- ================================================================= -->
+      <!--
+      <figure id="fig-001">
+        <title>${FIGURE_TITLE}</title>
+        <graphic infoEntityIdent="${ICN_REFERENCE}"/>
+      </figure>
+      -->
+      
+    </description>
+  </content>
+  
+</dmodule>

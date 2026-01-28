@@ -1,0 +1,146 @@
+# =============================================================================
+# HydrogenJet-100 — ATA 28 Hydrogen Fuel System
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "requirements"
+  ata_chapter: "28"
+  title: "Hydrogen Fuel System"
+  baseline: "FBL-HJ1-2026-Q1"
+
+requirements:
+  - id: "REQ-HJ1-H2-001"
+    type: "descriptive"
+    title: "Hydrogen Fuel System Description"
+    ata_code: "28-00-00"
+    info_code: "040"
+    applicability: "APP-HJ1-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        The HJ1 hydrogen fuel system stores and delivers liquid hydrogen
+        (LH2) to the fuel cell power system.
+        
+      details: |
+        The hydrogen fuel system consists of:
+        - Two cryogenic vacuum-insulated tanks (800 kg total)
+        - Hydrogen distribution system
+        - Vaporization system (LH2 to GH2)
+        - Pressure regulation system
+        - Vent and relief system
+        - Leak detection system
+        - Ground refueling interface
+        
+    traceability:
+      parent: "SYS-REQ-028"
+    special_conditions:
+      - "SC-H2-01"
+      
+    warnings:
+      - type: "hydrogen"
+        text: |
+          HYDROGEN IS EXTREMELY FLAMMABLE. Invisible flame. Wide 
+          flammability range (4-75% in air). Ensure proper ventilation
+          and leak detection before any maintenance.
+          
+  - id: "REQ-HJ1-H2-002"
+    type: "descriptive"
+    title: "Cryogenic Storage Tanks"
+    ata_code: "28-10-00"
+    info_code: "040"
+    applicability: "APP-HJ1-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        Two vacuum-insulated cryogenic tanks store liquid hydrogen
+        at -253°C.
+        
+      details: |
+        Tank specifications:
+        - Forward tank capacity: 350 kg LH2
+        - Aft tank capacity: 450 kg LH2
+        - Operating pressure: 3.5 bar
+        - Max design pressure: 5.0 bar
+        - Insulation: Multi-Layer Insulation (MLI)
+        - Vacuum level: < 0.001 mbar
+        - Boil-off rate: < 0.8% per day
+        
+    special_conditions:
+      - "SC-H2-02"
+      
+    warnings:
+      - type: "cold-injury"
+        text: |
+          CRYOGENIC HAZARD. Contact with LH2 or cold surfaces causes
+          severe frostbite. Wear appropriate cryogenic PPE including
+          face shield, insulated gloves, and apron.
+          
+  - id: "REQ-HJ1-H2-003"
+    type: "descriptive"
+    title: "Hydrogen Vaporization System"
+    ata_code: "28-30-00"
+    info_code: "040"
+    applicability: "APP-HJ1-FC"
+    
+    content:
+      summary: |
+        The vaporization system converts LH2 to gaseous hydrogen (GH2)
+        for fuel cell consumption.
+        
+      details: |
+        Vaporizer specifications:
+        - Primary: Heat exchanger using fuel cell waste heat
+        - Backup: Electric heater vaporizer
+        - Capacity: 50 kg/hr (primary), 25 kg/hr (backup)
+        - Outlet temperature: Ambient to +80°C
+        - Outlet pressure: 1.5 bar regulated
+        
+  - id: "REQ-HJ1-H2-004"
+    type: "descriptive"
+    title: "Hydrogen Leak Detection System"
+    ata_code: "28-60-00"
+    info_code: "040"
+    applicability: "APP-HJ1-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        Distributed hydrogen sensors detect leaks in all H2 zones.
+        
+      details: |
+        Detection system:
+        - Sensor type: Catalytic bead
+        - Total sensors: 14
+        - Warning threshold: 1% H2 (25% LEL)
+        - Alarm threshold: 2% H2 (50% LEL)
+        - Response time: < 3 seconds
+        
+        Sensor locations:
+        - Forward tank bay: 4 sensors
+        - Aft tank bay: 4 sensors
+        - Fuel cell compartment: 4 sensors
+        - Distribution bay: 2 sensors
+        
+    special_conditions:
+      - "SC-H2-03"
+      
+  - id: "REQ-HJ1-H2-010"
+    type: "procedural"
+    title: "LH2 Tank Inspection"
+    ata_code: "28-10-00"
+    info_code: "300"
+    applicability: "APP-HJ1-ALL"
+    task_type: "scheduled"
+    interval: "2A Check"
+    
+    content:
+      summary: "Cryogenic tank vacuum and integrity inspection"
+      
+    warnings:
+      - type: "hydrogen"
+        text: "Ensure tanks are purged with inert gas before inspection."
+      - type: "cold-injury"
+        text: "Tank may retain cryogenic temperatures for 24+ hours after draining."

@@ -1,0 +1,1306 @@
+# =============================================================================
+# CMM (Component Maintenance Manual) Pipeline
+# ASIT-Controlled Execution Pipeline
+# Version: 2.0.0
+# =============================================================================
+#
+# This pipeline defines the complete transformation workflow for generating
+# S1000D-compliant Component Maintenance Manual content from KDB sources.
+#
+# Publication scope:
+#   - Component description and operation
+#   - Testing and fault isolation
+#   - Disassembly/assembly procedures
+#   - Cleaning and inspection
+#   - Repair procedures
+#   - Illustrated Parts Data (IPD)
+#   - Storage and transportation
+#   - Special tools and equipment
+#
+# Designed for Tier-1 suppliers and component-level documentation.
+# Operates under ASIT contract authority.
+#
+# =============================================================================
+
+pipeline:
+  # ---------------------------------------------------------------------------
+  # PIPELINE METADATA
+  # ---------------------------------------------------------------------------
+  metadata:
+    pipeline_id: "PIPELINE-CMM-001"
+    name: "Component Maintenance Manual Pipeline"
+    description: |
+      End-to-end transformation pipeline for generating S1000D Component
+      Maintenance Manual (CMM) content from validated component engineering
+      data. Supports LRU, SRU, and shop-replaceable component documentation.
+    version: "2.0.0"
+    publication_type: "CMM"
+    s1000d_issue: "5.0"
+    
+    # Pipeline ownership
+    owner: "STK_ENG"
+    maintainer: "Component Engineering"
+    
+    # Timestamps
+    created: "2026-01-01"
+    last_modified: "2026-01-22"
+    
+    # Classification
+    tags:
+      - "cmm"
+      - "component"
+      - "maintenance"
+      - "overhaul"
+      - "s1000d"
+      - "supplier"
+      - "production"
+
+  # ---------------------------------------------------------------------------
+  # CONTRACT BINDING
+  # ---------------------------------------------------------------------------
+  contract:
+    # Contract template reference
+    template: "ASIT/CONTRACTS/templates/KITDM-CTR-LM-CSDB.template.yaml"
+    
+    # Required contract fields
+    required_fields:
+      - "contract_id"
+      - "baseline_ref"
+      - "scope.component_ids"
+      - "scope.part_numbers"
+      - "scope.maintenance_levels"
+      - "scope.effectivity"
+      - "authority.approved_by"
+      - "authority.oem_approval"  # OEM approval for supplier CMMs
+    
+    # Contract validation
+    validation:
+      check_baseline_exists: true
+      check_authority_valid: true
+      check_oem_approval: true
+      check_component_coverage: true
+
+  # ---------------------------------------------------------------------------
+  # PIPELINE STAGES
+  # ---------------------------------------------------------------------------
+  stages:
+    # -------------------------------------------------------------------------
+    # STAGE 1: INITIALIZATION
+    # -------------------------------------------------------------------------
+    - stage: "initialization"
+      name: "Pipeline Initialization"
+      description: "Initialize pipeline environment and validate prerequisites"
+      order: 1
+      
+      steps:
+        - step: "load_config"
+          name: "Load Configuration"
+          action: "config.load"
+          inputs:
+            config_path: "ASIT/config/asit_config.yaml"
+          outputs:
+            - "config"
+          on_failure: "abort"
+          
+        - step: "validate_contract"
+          name: "Validate ASIT Contract"
+          action: "contract.validate"
+          inputs:
+            contract_id: "${contract_id}"
+          outputs:
+            - "contract"
+            - "baseline_ref"
+            - "scope"
+          on_failure: "abort"
+          
+        - step: "validate_oem_approval"
+          name: "Validate OEM Approval"
+          action: "authority.validate_oem"
+          inputs:
+            contract: "${contract}"
+            oem_approval: "${contract.authority.oem_approval}"
+          outputs:
+            - "oem_status"
+          on_failure: "abort"
+          
+        - step: "check_baseline"
+          name: "Verify Baseline Availability"
+          action: "baseline.verify"
+          inputs:
+            baseline_ref: "${baseline_ref}"
+          outputs:
+            - "baseline"
+            - "baseline_status"
+          on_failure: "abort"
+          
+        - step: "create_run_directory"
+          name: "Create Run Directory"
+          action: "run.create_directory"
+          inputs:
+            contract_id: "${contract_id}"
+            timestamp: "${execution_timestamp}"
+          outputs:
+            - "run_directory"
+            - "run_id"
+          on_failure: "abort"
+          
+        - step: "initialize_manifests"
+          name: "Initialize Manifests"
+          action: "manifest.initialize"
+          inputs:
+            run_directory: "${run_directory}"
+            contract: "${contract}"
+            baseline: "${baseline}"
+          outputs:
+            - "input_manifest"
+            - "output_manifest"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 2: SOURCE LOADING
+    # -------------------------------------------------------------------------
+    - stage: "source_loading"
+      name: "Source Loading"
+      description: "Load component engineering data from KDB baseline"
+      order: 2
+      depends_on: ["initialization"]
+      
+      steps:
+        - step: "load_component_definitions"
+          name: "Load Component Definitions"
+          action: "source.load"
+          inputs:
+            source_type: "component_definition"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/components/definitions"
+          outputs:
+            - "component_definitions"
+          filters:
+            - field: "component_id"
+              operator: "in"
+              values: "${scope.component_ids}"
+            - field: "part_number"
+              operator: "in"
+              values: "${scope.part_numbers}"
+          on_failure: "abort"
+          
+        - step: "load_component_specs"
+          name: "Load Component Specifications"
+          action: "source.load"
+          inputs:
+            source_type: "component_spec"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/components/specifications"
+          outputs:
+            - "component_specs"
+          filters:
+            - field: "component_id"
+              operator: "in"
+              values: "${scope.component_ids}"
+          on_failure: "abort"
+          
+        - step: "load_test_procedures"
+          name: "Load Test Procedures"
+          action: "source.load"
+          inputs:
+            source_type: "test_procedure"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/components/testing"
+          outputs:
+            - "test_procedures"
+          filters:
+            - field: "component_id"
+              operator: "in"
+              values: "${scope.component_ids}"
+            - field: "test_type"
+              values: ["functional", "acceptance", "bench", "operational"]
+          on_failure: "abort"
+          
+        - step: "load_fault_isolation"
+          name: "Load Fault Isolation Data"
+          action: "source.load"
+          inputs:
+            source_type: "fault_isolation"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/components/troubleshooting"
+          outputs:
+            - "fault_isolation"
+          filters:
+            - field: "component_id"
+              operator: "in"
+              values: "${scope.component_ids}"
+          on_failure: "warn"
+          
+        - step: "load_disassembly_procedures"
+          name: "Load Disassembly Procedures"
+          action: "source.load"
+          inputs:
+            source_type: "disassembly"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/components/procedures/disassembly"
+          outputs:
+            - "disassembly_procedures"
+          filters:
+            - field: "component_id"
+              operator: "in"
+              values: "${scope.component_ids}"
+          on_failure: "abort"
+          
+        - step: "load_assembly_procedures"
+          name: "Load Assembly Procedures"
+          action: "source.load"
+          inputs:
+            source_type: "assembly"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/components/procedures/assembly"
+          outputs:
+            - "assembly_procedures"
+          filters:
+            - field: "component_id"
+              operator: "in"
+              values: "${scope.component_ids}"
+          on_failure: "abort"
+          
+        - step: "load_cleaning_procedures"
+          name: "Load Cleaning Procedures"
+          action: "source.load"
+          inputs:
+            source_type: "cleaning"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/components/procedures/cleaning"
+          outputs:
+            - "cleaning_procedures"
+          filters:
+            - field: "component_id"
+              operator: "in"
+              values: "${scope.component_ids}"
+          on_failure: "warn"
+          
+        - step: "load_inspection_procedures"
+          name: "Load Inspection Procedures"
+          action: "source.load"
+          inputs:
+            source_type: "inspection"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/components/procedures/inspection"
+          outputs:
+            - "inspection_procedures"
+          filters:
+            - field: "component_id"
+              operator: "in"
+              values: "${scope.component_ids}"
+            - field: "inspection_type"
+              values: ["visual", "dimensional", "ndt", "functional"]
+          on_failure: "abort"
+          
+        - step: "load_repair_procedures"
+          name: "Load Repair Procedures"
+          action: "source.load"
+          inputs:
+            source_type: "repair"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/components/procedures/repair"
+          outputs:
+            - "repair_procedures"
+          filters:
+            - field: "component_id"
+              operator: "in"
+              values: "${scope.component_ids}"
+          on_failure: "warn"
+          
+        - step: "load_parts_data"
+          name: "Load Parts Data"
+          action: "source.load"
+          inputs:
+            source_type: "parts"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/components/parts"
+          outputs:
+            - "parts_data"
+          filters:
+            - field: "component_id"
+              operator: "in"
+              values: "${scope.component_ids}"
+          on_failure: "abort"
+          
+        - step: "load_special_tools"
+          name: "Load Special Tools Data"
+          action: "source.load"
+          inputs:
+            source_type: "special_tools"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/tooling/special"
+          outputs:
+            - "special_tools"
+          filters:
+            - field: "applicable_components"
+              operator: "contains_any"
+              values: "${scope.component_ids}"
+          on_failure: "warn"
+          
+        - step: "load_consumables"
+          name: "Load Consumables Data"
+          action: "source.load"
+          inputs:
+            source_type: "consumables"
+            baseline: "${baseline}"
+            source_paths:
+              - "KDB/SSOT/materials/consumables"
+          outputs:
+            - "consumables"
+          on_failure: "warn"
+          
+        - step: "load_storage_data"
+          name: "Load Storage and Transportation Data"
+          action: "source.load"
+          inputs:
+            source_type: "storage"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/components/storage"
+          outputs:
+            - "storage_data"
+          filters:
+            - field: "component_id"
+              operator: "in"
+              values: "${scope.component_ids}"
+          on_failure: "warn"
+          
+        - step: "load_graphics"
+          name: "Load Graphics (ICN Sources)"
+          action: "source.load"
+          inputs:
+            source_type: "graphic"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/graphics/components"
+          outputs:
+            - "graphics"
+          filters:
+            - field: "component_id"
+              operator: "in"
+              values: "${scope.component_ids}"
+            - field: "graphic_type"
+              values: ["exploded_view", "cutaway", "schematic", "assembly_sequence", "test_setup"]
+          on_failure: "warn"
+          
+        - step: "compute_input_hashes"
+          name: "Compute Input Hashes"
+          action: "hash.compute"
+          inputs:
+            artifacts:
+              - "${component_definitions}"
+              - "${component_specs}"
+              - "${test_procedures}"
+              - "${fault_isolation}"
+              - "${disassembly_procedures}"
+              - "${assembly_procedures}"
+              - "${cleaning_procedures}"
+              - "${inspection_procedures}"
+              - "${repair_procedures}"
+              - "${parts_data}"
+              - "${special_tools}"
+              - "${consumables}"
+              - "${storage_data}"
+              - "${graphics}"
+            algorithm: "sha256"
+          outputs:
+            - "input_hashes"
+            - "combined_input_hash"
+          on_failure: "abort"
+          
+        - step: "update_input_manifest"
+          name: "Update Input Manifest"
+          action: "manifest.update"
+          inputs:
+            manifest: "${input_manifest}"
+            artifacts:
+              component_definitions: "${component_definitions}"
+              component_specs: "${component_specs}"
+              test_procedures: "${test_procedures}"
+              fault_isolation: "${fault_isolation}"
+              disassembly_procedures: "${disassembly_procedures}"
+              assembly_procedures: "${assembly_procedures}"
+              cleaning_procedures: "${cleaning_procedures}"
+              inspection_procedures: "${inspection_procedures}"
+              repair_procedures: "${repair_procedures}"
+              parts_data: "${parts_data}"
+              special_tools: "${special_tools}"
+              consumables: "${consumables}"
+              storage_data: "${storage_data}"
+              graphics: "${graphics}"
+            hashes: "${input_hashes}"
+          outputs:
+            - "input_manifest"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 3: TRANSFORMATION
+    # -------------------------------------------------------------------------
+    - stage: "transformation"
+      name: "Content Transformation"
+      description: "Transform component data to S1000D data modules"
+      order: 3
+      depends_on: ["source_loading"]
+      
+      steps:
+        - step: "generate_introduction_dms"
+          name: "Generate Introduction Data Modules"
+          action: "generator.dm_descriptive"
+          inputs:
+            sources: "${component_definitions}"
+            mapping: "ASIGT/mapping/component_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_descriptive.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "001"
+              content_type: "introduction"
+          outputs:
+            - "dm_introduction"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_description_dms"
+          name: "Generate Description and Operation Data Modules"
+          action: "generator.dm_descriptive"
+          inputs:
+            sources: "${component_specs}"
+            mapping: "ASIGT/mapping/component_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_descriptive.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "040"
+              content_type: "description_operation"
+              include_theory_of_operation: true
+              include_specifications_table: true
+          outputs:
+            - "dm_description"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_testing_dms"
+          name: "Generate Testing Data Modules"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${test_procedures}"
+            mapping: "ASIGT/mapping/task_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_procedural.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "300"
+              include_test_setup: true
+              include_acceptance_criteria: true
+              include_test_equipment: true
+          outputs:
+            - "dm_testing"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_fault_isolation_dms"
+          name: "Generate Fault Isolation Data Modules"
+          action: "generator.dm_fault_isolation"
+          inputs:
+            sources: "${fault_isolation}"
+            template: "ASIGT/s1000d_templates/dm_fault_isolation.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "400"
+              include_symptom_table: true
+              include_decision_tree: true
+          outputs:
+            - "dm_fault_isolation"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_disassembly_dms"
+          name: "Generate Disassembly Data Modules"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${disassembly_procedures}"
+            mapping: "ASIGT/mapping/task_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_procedural.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "500"
+              include_sequence_numbers: true
+              include_torque_values: false
+              include_preliminary_requirements: true
+          outputs:
+            - "dm_disassembly"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_cleaning_dms"
+          name: "Generate Cleaning Data Modules"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${cleaning_procedures}"
+            mapping: "ASIGT/mapping/task_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_procedural.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "510"
+              include_cleaning_materials: true
+              include_safety_warnings: true
+          outputs:
+            - "dm_cleaning"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_inspection_dms"
+          name: "Generate Inspection Data Modules"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${inspection_procedures}"
+            mapping: "ASIGT/mapping/task_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_procedural.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "520"
+              include_inspection_limits: true
+              include_wear_limits_table: true
+              include_serviceability_criteria: true
+          outputs:
+            - "dm_inspection"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_repair_dms"
+          name: "Generate Repair Data Modules"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${repair_procedures}"
+            mapping: "ASIGT/mapping/repair_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_procedural.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "600"
+              include_repair_limits: true
+              include_material_specifications: true
+          outputs:
+            - "dm_repair"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_assembly_dms"
+          name: "Generate Assembly Data Modules"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${assembly_procedures}"
+            mapping: "ASIGT/mapping/task_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_procedural.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "700"
+              include_sequence_numbers: true
+              include_torque_values: true
+              include_final_checks: true
+          outputs:
+            - "dm_assembly"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_storage_dms"
+          name: "Generate Storage and Transportation Data Modules"
+          action: "generator.dm_descriptive"
+          inputs:
+            sources: "${storage_data}"
+            template: "ASIGT/s1000d_templates/dm_descriptive.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "900"
+              content_type: "storage_transportation"
+              include_environmental_limits: true
+              include_packaging_requirements: true
+              include_shelf_life: true
+          outputs:
+            - "dm_storage"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_special_tools_dms"
+          name: "Generate Special Tools Data Modules"
+          action: "generator.dm_descriptive"
+          inputs:
+            sources: "${special_tools}"
+            template: "ASIGT/s1000d_templates/dm_descriptive.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "040"
+              content_type: "special_tools"
+              include_tool_list: true
+              include_calibration_requirements: true
+          outputs:
+            - "dm_special_tools"
+          parallel: true
+          on_failure: "continue"
+          
+        - step: "generate_ipd_dms"
+          name: "Generate Illustrated Parts Data Modules"
+          action: "generator.dm_ipd"
+          inputs:
+            sources: "${parts_data}"
+            mapping: "ASIGT/mapping/parts_to_ipd.yaml"
+            template: "ASIGT/s1000d_templates/dm_ipd.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "941"
+              include_vendor_codes: true
+              include_interchangeability: true
+              include_supersedure: true
+              group_by: "figure"
+          outputs:
+            - "dm_ipd"
+          parallel: true
+          batch_size: 10
+          on_failure: "continue"
+          
+        - step: "process_graphics"
+          name: "Process Graphics to ICN"
+          action: "generator.icn"
+          inputs:
+            sources: "${graphics}"
+            config:
+              output_format: "CGM"
+              resolution: 300
+              color_mode: "RGB"
+              include_hotspots: true
+              include_callouts: true
+          outputs:
+            - "icn_files"
+          parallel: true
+          batch_size: 20
+          on_failure: "continue"
+          
+        - step: "link_icn_references"
+          name: "Link ICN References in DMs"
+          action: "generator.link_icn"
+          inputs:
+            data_modules:
+              - "${dm_introduction}"
+              - "${dm_description}"
+              - "${dm_testing}"
+              - "${dm_fault_isolation}"
+              - "${dm_disassembly}"
+              - "${dm_cleaning}"
+              - "${dm_inspection}"
+              - "${dm_repair}"
+              - "${dm_assembly}"
+              - "${dm_storage}"
+              - "${dm_special_tools}"
+              - "${dm_ipd}"
+            icn_files: "${icn_files}"
+          outputs:
+            - "dm_with_icn"
+          on_failure: "warn"
+          
+        - step: "apply_applicability"
+          name: "Apply Applicability Filtering"
+          action: "applicability.apply"
+          inputs:
+            data_modules: "${dm_with_icn}"
+            act_file: "${config.act_file}"
+            pct_file: "${config.pct_file}"
+            cct_file: "${config.cct_file}"
+            effectivity: "${scope.effectivity}"
+          outputs:
+            - "dm_filtered"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 4: VALIDATION
+    # -------------------------------------------------------------------------
+    - stage: "validation"
+      name: "Content Validation"
+      description: "Validate generated content against BREX and schema"
+      order: 4
+      depends_on: ["transformation"]
+      
+      steps:
+        - step: "brex_validation"
+          name: "BREX Rule Validation"
+          action: "validator.brex"
+          inputs:
+            data_modules: "${dm_filtered}"
+            brex_file: "ASIGT/brex/S1000D_5.0_DEFAULT.yaml"
+            project_brex: "ASIGT/brex/project_brex.yaml"
+            profile: "cmm"
+          outputs:
+            - "brex_results"
+          config:
+            fail_on_error: true
+            fail_on_warning: false
+            generate_report: true
+            cmm_specific_rules:
+              - "part_number_format"
+              - "torque_value_format"
+              - "inspection_limits_format"
+              - "test_acceptance_criteria"
+          on_failure: "abort"
+          
+        - step: "schema_validation"
+          name: "XML Schema Validation"
+          action: "validator.schema"
+          inputs:
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            schema_path: "schemas/s1000d/${config.s1000d_issue}/"
+          outputs:
+            - "schema_results"
+          config:
+            validate_all: true
+            generate_report: true
+          on_failure: "abort"
+          
+        - step: "parts_data_validation"
+          name: "Parts Data Validation"
+          action: "validator.parts"
+          inputs:
+            dm_ipd: "${dm_ipd}"
+            parts_data: "${parts_data}"
+          outputs:
+            - "parts_validation_results"
+          config:
+            check_part_number_exists: true
+            check_vendor_codes: true
+            check_interchangeability: true
+            check_quantity_per_assembly: true
+          on_failure: "warn"
+          
+        - step: "procedure_validation"
+          name: "Procedure Validation"
+          action: "validator.procedures"
+          inputs:
+            data_modules:
+              - "${dm_testing}"
+              - "${dm_disassembly}"
+              - "${dm_cleaning}"
+              - "${dm_inspection}"
+              - "${dm_repair}"
+              - "${dm_assembly}"
+          outputs:
+            - "procedure_validation_results"
+          config:
+            check_step_sequence: true
+            check_tool_references: true
+            check_part_references: true
+            check_torque_values: true
+          on_failure: "warn"
+          
+        - step: "reference_validation"
+          name: "Cross-Reference Validation"
+          action: "validator.references"
+          inputs:
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+          outputs:
+            - "reference_results"
+          config:
+            check_dm_refs: true
+            check_icn_refs: true
+            check_part_refs: true
+            check_tool_refs: true
+          on_failure: "warn"
+          
+        - step: "completeness_check"
+          name: "CMM Content Completeness Check"
+          action: "validator.completeness"
+          inputs:
+            data_modules: "${dm_filtered}"
+            scope: "${scope}"
+            expected_coverage:
+              - type: "introduction"
+                required: true
+              - type: "description"
+                required: true
+              - type: "testing"
+                required: true
+              - type: "disassembly"
+                required: true
+              - type: "assembly"
+                required: true
+              - type: "ipd"
+                required: true
+          outputs:
+            - "completeness_results"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 5: TRACEABILITY
+    # -------------------------------------------------------------------------
+    - stage: "traceability"
+      name: "Traceability Generation"
+      description: "Build source-to-output traceability matrix"
+      order: 5
+      depends_on: ["validation"]
+      
+      steps:
+        - step: "build_trace_matrix"
+          name: "Build Trace Matrix"
+          action: "trace.build_matrix"
+          inputs:
+            sources:
+              component_definitions: "${component_definitions}"
+              component_specs: "${component_specs}"
+              test_procedures: "${test_procedures}"
+              fault_isolation: "${fault_isolation}"
+              disassembly_procedures: "${disassembly_procedures}"
+              assembly_procedures: "${assembly_procedures}"
+              cleaning_procedures: "${cleaning_procedures}"
+              inspection_procedures: "${inspection_procedures}"
+              repair_procedures: "${repair_procedures}"
+              parts_data: "${parts_data}"
+              special_tools: "${special_tools}"
+              storage_data: "${storage_data}"
+              graphics: "${graphics}"
+            outputs:
+              dm_introduction: "${dm_introduction}"
+              dm_description: "${dm_description}"
+              dm_testing: "${dm_testing}"
+              dm_fault_isolation: "${dm_fault_isolation}"
+              dm_disassembly: "${dm_disassembly}"
+              dm_cleaning: "${dm_cleaning}"
+              dm_inspection: "${dm_inspection}"
+              dm_repair: "${dm_repair}"
+              dm_assembly: "${dm_assembly}"
+              dm_storage: "${dm_storage}"
+              dm_special_tools: "${dm_special_tools}"
+              dm_ipd: "${dm_ipd}"
+              icn_files: "${icn_files}"
+            input_hashes: "${input_hashes}"
+          outputs:
+            - "trace_matrix"
+          on_failure: "abort"
+          
+        - step: "validate_parts_traceability"
+          name: "Validate Parts Traceability"
+          action: "trace.validate_parts"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            parts_data: "${parts_data}"
+            dm_ipd: "${dm_ipd}"
+          outputs:
+            - "parts_trace_results"
+          config:
+            require_all_parts_traced: true
+          on_failure: "warn"
+          
+        - step: "validate_traceability"
+          name: "Validate Traceability Completeness"
+          action: "validator.trace"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            requirements:
+              input_coverage: 1.0
+              output_coverage: 1.0
+              bidirectional: true
+          outputs:
+            - "trace_validation_results"
+          on_failure: "warn"
+          
+        - step: "export_trace_matrix"
+          name: "Export Trace Matrix"
+          action: "trace.export"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            output_path: "${run_directory}/TRACE_MATRIX.csv"
+            format: "csv"
+          outputs:
+            - "trace_matrix_file"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 6: PUBLICATION ASSEMBLY
+    # -------------------------------------------------------------------------
+    - stage: "publication_assembly"
+      name: "Publication Assembly"
+      description: "Assemble data modules into CMM publication structure"
+      order: 6
+      depends_on: ["traceability"]
+      
+      steps:
+        - step: "generate_pm"
+          name: "Generate Publication Module"
+          action: "generator.pm"
+          inputs:
+            data_modules: "${dm_filtered}"
+            template: "ASIGT/s1000d_templates/pm_structure.xml"
+            config:
+              publication_type: "CMM"
+              model_ident_code: "${config.model_ident_code}"
+              pm_title: "${config.component_name} Component Maintenance Manual"
+              cmm_structure: true
+              sections:
+                - "Introduction"
+                - "Description and Operation"
+                - "Testing and Fault Isolation"
+                - "Disassembly"
+                - "Cleaning"
+                - "Inspection and Check"
+                - "Repair"
+                - "Assembly"
+                - "Storage and Transportation"
+                - "Special Tools and Equipment"
+                - "Illustrated Parts Data"
+          outputs:
+            - "pm_cmm"
+          on_failure: "abort"
+          
+        - step: "generate_dml"
+          name: "Generate Data Module List"
+          action: "generator.dml"
+          inputs:
+            data_modules: "${dm_filtered}"
+            publication_module: "${pm_cmm}"
+            icn_files: "${icn_files}"
+            template: "ASIGT/s1000d_templates/dml_structure.xml"
+            config:
+              dml_type: "CSDB"
+          outputs:
+            - "dml"
+          on_failure: "abort"
+          
+        - step: "assemble_csdb"
+          name: "Assemble CSDB Package"
+          action: "package.csdb"
+          inputs:
+            data_modules: "${dm_filtered}"
+            publication_module: "${pm_cmm}"
+            dml: "${dml}"
+            icn_files: "${icn_files}"
+            output_path: "IDB/CSDB/CMM/${config.component_id}"
+          outputs:
+            - "csdb_package"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 7: OUTPUT RENDERING (OPTIONAL)
+    # -------------------------------------------------------------------------
+    - stage: "rendering"
+      name: "Output Rendering"
+      description: "Render publication to delivery formats"
+      order: 7
+      depends_on: ["publication_assembly"]
+      condition: "${config.render_outputs}"
+      
+      steps:
+        - step: "render_pdf"
+          name: "Render PDF Output"
+          action: "renderer.pdf"
+          inputs:
+            publication_module: "${pm_cmm}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            config:
+              page_size: "A4"
+              include_toc: true
+              include_lep: true
+              include_highlights: true
+              cmm_specific:
+                include_repair_limits_summary: true
+                include_inspection_limits_summary: true
+                include_parts_list_appendix: true
+          outputs:
+            - "pdf_output"
+          condition: "${config.render_pdf}"
+          on_failure: "warn"
+          
+        - step: "render_html"
+          name: "Render HTML Output"
+          action: "renderer.html"
+          inputs:
+            publication_module: "${pm_cmm}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            config:
+              responsive: true
+              dark_mode: true
+              include_search: true
+              include_navigation: true
+              cmm_specific:
+                interactive_ipd: true
+                parts_ordering_link: true
+          outputs:
+            - "html_output"
+          condition: "${config.render_html}"
+          on_failure: "warn"
+          
+        - step: "package_ietp"
+          name: "Package IETP"
+          action: "renderer.ietp"
+          inputs:
+            publication_module: "${pm_cmm}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            config:
+              format: "scorm"
+              include_viewer: true
+              cmm_features:
+                parts_breakdown_explorer: true
+                procedure_step_tracker: true
+          outputs:
+            - "ietp_package"
+          condition: "${config.package_ietp}"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 8: FINALIZATION
+    # -------------------------------------------------------------------------
+    - stage: "finalization"
+      name: "Pipeline Finalization"
+      description: "Finalize run artifacts and generate reports"
+      order: 8
+      depends_on: ["rendering"]
+      always_run: true
+      
+      steps:
+        - step: "compute_output_hashes"
+          name: "Compute Output Hashes"
+          action: "hash.compute"
+          inputs:
+            artifacts:
+              - "${dm_filtered}"
+              - "${pm_cmm}"
+              - "${dml}"
+              - "${icn_files}"
+            algorithm: "sha256"
+          outputs:
+            - "output_hashes"
+            - "combined_output_hash"
+          on_failure: "warn"
+          
+        - step: "finalize_output_manifest"
+          name: "Finalize Output Manifest"
+          action: "manifest.finalize"
+          inputs:
+            manifest: "${output_manifest}"
+            outputs:
+              dm_introduction: "${dm_introduction}"
+              dm_description: "${dm_description}"
+              dm_testing: "${dm_testing}"
+              dm_fault_isolation: "${dm_fault_isolation}"
+              dm_disassembly: "${dm_disassembly}"
+              dm_cleaning: "${dm_cleaning}"
+              dm_inspection: "${dm_inspection}"
+              dm_repair: "${dm_repair}"
+              dm_assembly: "${dm_assembly}"
+              dm_storage: "${dm_storage}"
+              dm_special_tools: "${dm_special_tools}"
+              dm_ipd: "${dm_ipd}"
+              pm: "${pm_cmm}"
+              dml: "${dml}"
+              icn: "${icn_files}"
+            hashes: "${output_hashes}"
+            validation_results:
+              brex: "${brex_results}"
+              schema: "${schema_results}"
+              parts: "${parts_validation_results}"
+              procedures: "${procedure_validation_results}"
+          outputs:
+            - "output_manifest"
+          on_failure: "warn"
+          
+        - step: "generate_validation_report"
+          name: "Generate Validation Report"
+          action: "report.validation"
+          inputs:
+            brex_results: "${brex_results}"
+            schema_results: "${schema_results}"
+            parts_results: "${parts_validation_results}"
+            procedure_results: "${procedure_validation_results}"
+            reference_results: "${reference_results}"
+            trace_results: "${trace_validation_results}"
+            parts_trace_results: "${parts_trace_results}"
+            output_path: "${run_directory}/VALIDATION_REPORT.json"
+          outputs:
+            - "validation_report"
+          on_failure: "warn"
+          
+        - step: "generate_metrics"
+          name: "Generate Metrics Report"
+          action: "report.metrics"
+          inputs:
+            run_id: "${run_id}"
+            stages: "${pipeline_stages}"
+            input_manifest: "${input_manifest}"
+            output_manifest: "${output_manifest}"
+            output_path: "${run_directory}/METRICS.json"
+          outputs:
+            - "metrics_report"
+          on_failure: "warn"
+          
+        - step: "finalize_log"
+          name: "Finalize Execution Log"
+          action: "log.finalize"
+          inputs:
+            run_directory: "${run_directory}"
+            status: "${pipeline_status}"
+          outputs:
+            - "log_file"
+          on_failure: "warn"
+          
+        - step: "archive_run"
+          name: "Archive Run Artifacts"
+          action: "run.archive"
+          inputs:
+            run_directory: "${run_directory}"
+            immutable: true
+          outputs:
+            - "archive_status"
+          on_failure: "warn"
+
+  # ---------------------------------------------------------------------------
+  # PIPELINE CONFIGURATION
+  # ---------------------------------------------------------------------------
+  config:
+    # Execution settings
+    execution:
+      parallel_enabled: true
+      max_parallel_steps: 4
+      timeout_minutes: 60
+      retry_failed_steps: false
+      max_retries: 2
+      
+    # CMM-specific settings
+    cmm:
+      maintenance_levels:
+        - "organizational"
+        - "intermediate"
+        - "depot"
+      include_repair_procedures: true
+      include_storage_procedures: true
+      ipd_format: "detailed"
+      parts_grouping: "by_figure"
+      
+    # Logging settings
+    logging:
+      level: "INFO"
+      format: "[{timestamp}] {level} {step}: {message}"
+      output_to_file: true
+      output_to_console: true
+      
+    # Notification settings
+    notifications:
+      on_success: true
+      on_failure: true
+      on_warning: true
+      channels:
+        - type: "email"
+          recipients: ["component-engineering@example.com", "pub-engineering@example.com"]
+        - type: "slack"
+          channel: "#asigt-runs"
+          
+    # Cleanup settings
+    cleanup:
+      remove_temp_files: true
+      compress_outputs: false
+      retention_days: 90
+
+  # ---------------------------------------------------------------------------
+  # ERROR HANDLING
+  # ---------------------------------------------------------------------------
+  error_handling:
+    strategies:
+      abort:
+        description: "Stop pipeline execution immediately"
+        action: "pipeline.abort"
+        cleanup: true
+        notify: true
+        
+      continue:
+        description: "Log error and continue to next step"
+        action: "log.error"
+        continue: true
+        
+      warn:
+        description: "Log warning and continue"
+        action: "log.warning"
+        continue: true
+        
+      retry:
+        description: "Retry failed step"
+        action: "step.retry"
+        max_attempts: 3
+        delay_seconds: 30
+        
+    fallback:
+      strategy: "abort"
+      
+  # ---------------------------------------------------------------------------
+  # OUTPUTS
+  # ---------------------------------------------------------------------------
+  outputs:
+    primary:
+      - name: "CSDB Package"
+        path: "IDB/CSDB/CMM/${config.component_id}"
+        type: "csdb"
+        
+      - name: "Publication Module"
+        path: "IDB/CSDB/CMM/${config.component_id}/PM"
+        type: "pm"
+        
+      - name: "Data Module List"
+        path: "IDB/CSDB/CMM/${config.component_id}/DML"
+        type: "dml"
+        
+    secondary:
+      - name: "PDF Output"
+        path: "IDB/EXPORTS/CMM/${config.component_id}/PDF"
+        type: "pdf"
+        condition: "${config.render_pdf}"
+        
+      - name: "HTML Output"
+        path: "IDB/EXPORTS/CMM/${config.component_id}/HTML"
+        type: "html"
+        condition: "${config.render_html}"
+        
+      - name: "IETP Package"
+        path: "IDB/EXPORTS/CMM/${config.component_id}/IETP"
+        type: "ietp"
+        condition: "${config.package_ietp}"
+        
+    artifacts:
+      - name: "Run Directory"
+        path: "ASIGT/runs/${run_id}"
+        type: "run_artifacts"
+        contents:
+          - "INPUT_MANIFEST.json"
+          - "OUTPUT_MANIFEST.json"
+          - "TRACE_MATRIX.csv"
+          - "VALIDATION_REPORT.json"
+          - "METRICS.json"
+          - "LOG.txt"

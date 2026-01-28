@@ -1,0 +1,16 @@
+artifact_type,action,stk_eng,stk_qa,stk_cm,stk_pm,stk_cert,notes
+baseline,create,required,required,required,informed,informed,New baseline establishment
+baseline,modify,required,required,required,informed,informed,Baseline content change
+contract,create,required,informed,required,informed,,New transformation contract
+contract,execute,informed,required,required,,,Contract execution approval
+dm,publish,required,required,informed,,,Data module publication
+dm,modify,required,informed,informed,,,Published DM modification
+pm,publish,required,required,informed,informed,,Publication module release
+ecr,submit,required,informed,required,,,Engineering change request
+ecr,approve,required,required,required,required,optional,ECR approval decision
+eco,release,required,required,required,informed,optional,Engineering change order
+gate_pdr,pass,required,required,,required,,Preliminary Design Review
+gate_cdr,pass,required,required,,required,required,Critical Design Review
+gate_trr,pass,required,required,,,,Test Readiness Review
+gate_prr,pass,required,required,,required,,Production Readiness Review
+release,production,required,required,required,required,required,Production release

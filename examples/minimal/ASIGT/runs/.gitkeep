@@ -1,0 +1,14 @@
+# ASIGT Runs
+
+Execution artifacts (trace matrices, validation reports) will appear here.
+
+Each run creates a timestamped directory:
+```
+YYYYMMDD-HHMM__<contract-id>/
+├── INPUT_MANIFEST.json
+├── OUTPUT_MANIFEST.json
+├── TRACE_MATRIX.csv
+├── VALIDATION_REPORT.json
+├── METRICS.json
+└── LOG.txt
+```

@@ -1,0 +1,546 @@
+# =============================================================================
+# Parts to IPD (Illustrated Parts Data) Mapping
+# ASIGT Transformation Rules
+# Version: 2.0.0
+# =============================================================================
+#
+# This mapping defines how parts data from engineering BOM (Bill of Materials)
+# and PLM systems is transformed into S1000D IPD Data Modules for IPC
+# (Illustrated Parts Catalog) content.
+#
+# Data sources:
+#   - Engineering BOM
+#   - PLM/PDM exports
+#   - ERP parts master
+#   - Vendor parts data
+#
+# Operates under ASIT contract authority.
+#
+# =============================================================================
+
+mapping:
+  # ---------------------------------------------------------------------------
+  # MAPPING METADATA
+  # ---------------------------------------------------------------------------
+  metadata:
+    mapping_id: "MAP-PARTS-IPD-001"
+    version: "1.0.0"
+    title: "Parts to Illustrated Parts Data Mapping"
+    description: |
+      Transforms parts data from engineering BOM and PLM systems into S1000D
+      IPD (Illustrated Parts Data) modules for IPC generation.
+    effective_date: "2026-01-01"
+    author: "ASIGT Framework"
+    
+    # Source specification
+    source:
+      type: "parts_data"
+      schema: "KDB/SSOT/parts"
+      formats:
+        - "yaml"
+        - "json"
+        - "csv"
+        - "plm_xml"      # PLM/PDM export
+        - "step_ap214"   # STEP AP214 (automotive/aerospace)
+        - "erp_export"   # ERP system export
+    
+    # Target specification
+    target:
+      type: "s1000d_dm"
+      schema: "S1000D Issue 5.0"
+      templates:
+        - "dm_ipd.xml"
+
+  # ---------------------------------------------------------------------------
+  # PARTS DATA STRUCTURE
+  # ---------------------------------------------------------------------------
+  parts_structure:
+    # Assembly hierarchy
+    hierarchy:
+      - level: 0
+        name: "Aircraft"
+        indenture: "0"
+      - level: 1
+        name: "System"
+        indenture: "1"
+      - level: 2
+        name: "Subsystem"
+        indenture: "2"
+      - level: 3
+        name: "Assembly"
+        indenture: "3"
+      - level: 4
+        name: "Subassembly"
+        indenture: "4"
+      - level: 5
+        name: "Detail Part"
+        indenture: "5"
+    
+    # Part types
+    part_types:
+      - type: "assembly"
+        s1000d_type: "catalogSeqNumber"
+        has_children: true
+      - type: "detail_part"
+        s1000d_type: "itemSeqNumber"
+        has_children: false
+      - type: "standard_part"
+        s1000d_type: "itemSeqNumber"
+        has_children: false
+        standard_reference: true
+      - type: "consumable"
+        s1000d_type: "itemSeqNumber"
+        has_children: false
+        consumable_flag: true
+      - type: "bulk_material"
+        s1000d_type: "itemSeqNumber"
+        has_children: false
+        bulk_flag: true
+
+  # ---------------------------------------------------------------------------
+  # FIELD MAPPINGS
+  # ---------------------------------------------------------------------------
+  field_mappings:
+    # Part identification
+    identification:
+      - source: "part_number"
+        target: "partIdent/partNumber"
+        transform: "none"
+        traceable: true
+        
+      - source: "manufacturer_code"
+        target: "partIdent/@manufacturerCodeValue"
+        transform: "cage_lookup"
+        
+      - source: "nsn"
+        target: "partIdent/nsn"
+        transform: "nsn_format"
+        condition: "if_present"
+        
+      - source: "alternate_part_numbers"
+        target: "partIdent/altPartNumber"
+        transform: "alt_part_list"
+        condition: "if_present"
+    
+    # Part description
+    description:
+      - source: "part_name"
+        target: "partIdentSegment/descrForPart"
+        transform: "title_case"
+        
+      - source: "nomenclature"
+        target: "partIdentSegment/descrForPart"
+        transform: "nomenclature_format"
+        
+      - source: "keywords"
+        target: "partIdentSegment/partKeyword"
+        transform: "keyword_list"
+        
+      - source: "material"
+        target: "partIdentSegment/genericPartData[genericPartDataName='Material']"
+        transform: "material_data"
+    
+    # Quantity and usage
+    quantity:
+      - source: "quantity_per_assembly"
+        target: "quantityPerNextHigherAssy"
+        transform: "quantity_format"
+        
+      - source: "unit_of_measure"
+        target: "quantityPerNextHigherAssy/@quantityUnitOfMeasure"
+        transform: "uom_code"
+        
+      - source: "usage_code"
+        target: "partIdentSegment/genericPartData[genericPartDataName='Usage']"
+        transform: "usage_code_lookup"
+    
+    # Location and reference
+    location:
+      - source: "find_number"
+        target: "itemSeqNumber/@itemSeqNumberValue"
+        transform: "find_number_format"
+        
+      - source: "csn"
+        target: "catalogSeqNumber/@catalogSeqNumberValue"
+        transform: "csn_format"
+        
+      - source: "figure_reference"
+        target: "refs/internalRef"
+        transform: "figure_ref"
+        
+      - source: "hotspot_id"
+        target: "refs/internalRef/@internalRefId"
+        transform: "hotspot_ref"
+    
+    # Applicability
+    applicability:
+      - source: "effectivity"
+        target: "applic/displayText/simplePara"
+        transform: "effectivity_text"
+        
+      - source: "serial_range"
+        target: "applic/assert"
+        transform: "serial_effectivity"
+        
+      - source: "model_applicability"
+        target: "applic/assert/@applicPropertyIdent"
+        transform: "model_applicability"
+    
+    # Procurement
+    procurement:
+      - source: "source_code"
+        target: "partIdentSegment/genericPartData[genericPartDataName='SourceCode']"
+        transform: "source_code_lookup"
+        lookup_table:
+          "M": "Manufactured"
+          "P": "Purchased"
+          "MP": "Manufactured or Purchased"
+          "I": "Interchangeable"
+          "R": "Restricted"
+        
+      - source: "overhaul_code"
+        target: "partIdentSegment/genericPartData[genericPartDataName='OverhaulCode']"
+        transform: "overhaul_code_lookup"
+        
+      - source: "replacement_code"
+        target: "partIdentSegment/genericPartData[genericPartDataName='ReplacementCode']"
+        transform: "replacement_code_lookup"
+
+  # ---------------------------------------------------------------------------
+  # CSN (CATALOG SEQUENCE NUMBER) STRUCTURE
+  # ---------------------------------------------------------------------------
+  csn_structure:
+    # Numbering scheme
+    numbering:
+      format: "NNN"           # 3-digit number
+      increment: 1
+      group_by: "figure"
+      restart_per_figure: true
+    
+    # Indenture rules
+    indenture:
+      max_levels: 5
+      indicate_by: "suffix"   # e.g., 001, 001-01, 001-01-01
+      separator: "-"
+    
+    # Sorting
+    sorting:
+      primary: "find_number"
+      secondary: "part_number"
+      group_assemblies: true
+
+  # ---------------------------------------------------------------------------
+  # ISN (ITEM SEQUENCE NUMBER) STRUCTURE
+  # ---------------------------------------------------------------------------
+  isn_structure:
+    # Numbering scheme
+    numbering:
+      format: "NNN"           # 3-digit number
+      increment: 1
+      within_csn: true
+    
+    # Multiple items handling
+    multiple_items:
+      same_part_different_qty: "separate_entries"
+      same_part_same_qty: "single_entry_with_note"
+    
+    # Attaching parts
+    attaching_parts:
+      include: true
+      indicate_by: "att"      # Attaching code
+      separate_section: false
+
+  # ---------------------------------------------------------------------------
+  # FIGURE AND HOTSPOT MAPPING
+  # ---------------------------------------------------------------------------
+  figure_mapping:
+    # Figure identification
+    figure_id:
+      source: "figure_number"
+      format: "fig-ipd-{seq:03d}"
+      
+    # Figure title
+    figure_title:
+      source: "figure_title"
+      transform: "title_case"
+      default: "Assembly Breakdown"
+    
+    # ICN reference
+    icn_reference:
+      source: "graphic_file"
+      transform: "icn_format"
+      
+    # Hotspot generation
+    hotspots:
+      enabled: true
+      source: "find_numbers"
+      id_format: "hs-{csn}-{isn}"
+      title_source: "part_name"
+      link_target: "itemSeqNumber"
+
+  # ---------------------------------------------------------------------------
+  # TRANSFORMATION FUNCTIONS
+  # ---------------------------------------------------------------------------
+  transforms:
+    title_case:
+      function: "text_title_case"
+      parameters:
+        preserve_acronyms: true
+        max_length: 256
+        
+    cage_lookup:
+      function: "lookup_cage_code"
+      parameters:
+        validate: true
+        default: "00000"
+        
+    nsn_format:
+      function: "format_nsn"
+      parameters:
+        format: "NNNN-NN-NNN-NNNN"
+        validate: true
+        
+    alt_part_list:
+      function: "list_to_alt_parts"
+      parameters:
+        include_manufacturer: true
+        
+    nomenclature_format:
+      function: "format_nomenclature"
+      parameters:
+        style: "noun_modifier"
+        uppercase: true
+        
+    keyword_list:
+      function: "list_to_keywords"
+      parameters:
+        max_keywords: 5
+        
+    material_data:
+      function: "format_material_data"
+      parameters:
+        include_spec: true
+        
+    quantity_format:
+      function: "format_quantity"
+      parameters:
+        format: "AR"          # As Required
+        numeric_format: "integer"
+        
+    uom_code:
+      function: "lookup_uom_code"
+      lookup_table:
+        "each": "EA"
+        "set": "SE"
+        "feet": "FT"
+        "inches": "IN"
+        "gallons": "GL"
+        "liters": "LI"
+        "pounds": "LB"
+        "kilograms": "KG"
+        
+    find_number_format:
+      function: "format_find_number"
+      parameters:
+        format: "NNN"
+        zero_pad: true
+        
+    csn_format:
+      function: "format_csn"
+      parameters:
+        format: "NNN"
+        include_indenture: true
+        
+    figure_ref:
+      function: "create_figure_reference"
+      parameters:
+        ref_type: "irtt03"
+        
+    hotspot_ref:
+      function: "create_hotspot_reference"
+      parameters:
+        ref_type: "irtt03"
+        
+    effectivity_text:
+      function: "format_effectivity"
+      parameters:
+        include_all: true
+        
+    serial_effectivity:
+      function: "create_serial_effectivity"
+      parameters:
+        property: "serialNumber"
+        
+    source_code_lookup:
+      function: "lookup_source_code"
+      parameters:
+        include_description: true
+        
+    icn_format:
+      function: "format_icn"
+      parameters:
+        format: "ICN-{model}-{system}-{figure}-00001-{lang}-00"
+
+  # ---------------------------------------------------------------------------
+  # DATA VALIDATION
+  # ---------------------------------------------------------------------------
+  validation:
+    pre_transform:
+      - rule: "part_number_present"
+        message: "Part number is required"
+        
+      - rule: "part_number_format"
+        pattern: "^[A-Z0-9]{1,32}(-[A-Z0-9]+)*$"
+        message: "Part number must be alphanumeric with optional dashes"
+        
+      - rule: "manufacturer_code_valid"
+        message: "Manufacturer CAGE code must be valid"
+        
+      - rule: "quantity_positive"
+        message: "Quantity must be positive number or 'AR'"
+        
+      - rule: "find_number_unique"
+        scope: "figure"
+        message: "Find numbers must be unique within a figure"
+    
+    post_transform:
+      - rule: "csn_sequential"
+        message: "CSN values must be sequential"
+        
+      - rule: "isn_sequential_within_csn"
+        message: "ISN values must be sequential within CSN"
+        
+      - rule: "hotspot_refs_valid"
+        message: "All hotspot references must point to valid ISNs"
+        
+      - rule: "figure_refs_valid"
+        message: "All figure references must exist"
+
+  # ---------------------------------------------------------------------------
+  # TRACEABILITY CONFIGURATION
+  # ---------------------------------------------------------------------------
+  traceability:
+    enabled: true
+    
+    source_tracking:
+      capture_hash: true
+      hash_algorithm: "sha256"
+      include_fields:
+        - "part_number"
+        - "revision"
+        - "effectivity"
+        - "bom_version"
+    
+    target_tracking:
+      generate_id: true
+      id_format: "TRACE-PART-IPD-{seq:06d}"
+    
+    link_types:
+      - type: "derived_from"
+        source: "ipd_entry"
+        target: "bom_item"
+      - type: "illustrates"
+        source: "ipd_figure"
+        target: "assembly"
+      - type: "supersedes"
+        source: "part_v2"
+        target: "part_v1"
+
+  # ---------------------------------------------------------------------------
+  # OUTPUT CONFIGURATION
+  # ---------------------------------------------------------------------------
+  output:
+    # DM identification
+    dm_identification:
+      info_code: "941"        # IPD info code
+      info_code_variant: "A"
+      item_location_code: "D"
+    
+    # Grouping
+    grouping:
+      by: "ata_chapter_section"
+      one_dm_per: "assembly"
+      max_items_per_dm: 200
+    
+    # Figure handling
+    figures:
+      position: "before_parts_list"
+      max_figures_per_dm: 10
+      hotspot_linking: true
+
+  # ---------------------------------------------------------------------------
+  # EXAMPLES
+  # ---------------------------------------------------------------------------
+  examples:
+    - name: "Assembly BOM to IPD DM"
+      source:
+        assembly:
+          part_number: "HJONE-28-10-001"
+          part_name: "Fuel Boost Pump Assembly"
+          ata_chapter: "28"
+          ata_section: "10"
+          manufacturer: "Green Aviation Inc."
+          cage_code: "12345"
+        parts:
+          - find_number: "001"
+            part_number: "HJONE-28-10-001-01"
+            part_name: "Pump Housing"
+            quantity: 1
+            manufacturer: "Green Aviation Inc."
+            cage_code: "12345"
+          - find_number: "002"
+            part_number: "HJONE-28-10-001-02"
+            part_name: "Impeller"
+            quantity: 1
+            manufacturer: "Green Aviation Inc."
+            cage_code: "12345"
+          - find_number: "003"
+            part_number: "MS21042-4"
+            part_name: "Nut, Self-locking"
+            quantity: 6
+            manufacturer: "Standard"
+            cage_code: "00000"
+            standard_part: true
+          - find_number: "004"
+            part_number: "AN960C416L"
+            part_name: "Washer, Flat"
+            quantity: 6
+            manufacturer: "Standard"
+            cage_code: "00000"
+            standard_part: true
+        figure:
+          figure_number: "001"
+          figure_title: "Fuel Boost Pump - Exploded View"
+          graphic_file: "ICN-HJONE-28-10-001-00001-A-00.png"
+      target:
+        dmc: "HJONE-A-28-10-00-01A-941A-D"
+        tech_name: "Fuel Boost Pump Assembly"
+        info_name: "Illustrated Parts Data"
+        structure:
+          - csn: "001"
+            indenture: "1"
+            items:
+              - isn: "001"
+                part_number: "HJONE-28-10-001-01"
+                description: "HOUSING, PUMP"
+                quantity: 1
+                hotspot: "hs-001-001"
+              - isn: "002"
+                part_number: "HJONE-28-10-001-02"
+                description: "IMPELLER"
+                quantity: 1
+                hotspot: "hs-001-002"
+          - csn: "002"
+            indenture: "1"
+            title: "Attaching Parts"
+            items:
+              - isn: "001"
+                part_number: "MS21042-4"
+                description: "NUT, SELF-LOCKING"
+                quantity: 6
+                hotspot: "hs-002-001"
+              - isn: "002"
+                part_number: "AN960C416L"
+                description: "WASHER, FLAT"
+                quantity: 6
+                hotspot: "hs-002-002"

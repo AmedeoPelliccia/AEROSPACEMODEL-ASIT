@@ -1,0 +1,106 @@
+# =============================================================================
+# SkyLift-200 — ATA 24 Electrical Power (High-Voltage Battery)
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "requirements"
+  ata_chapter: "24"
+  title: "High-Voltage Electrical Power System"
+  baseline: "FBL-SL2-2026-Q1"
+
+requirements:
+  - id: "REQ-SL2-ELEC-001"
+    type: "descriptive"
+    title: "Electrical Power System Description"
+    ata_code: "24-00-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        The SL2 electrical power system is an 800V DC high-voltage 
+        architecture providing power to distributed electric propulsion
+        and aircraft systems.
+        
+      details: |
+        The electrical system consists of:
+        - Four (4) high-voltage battery packs (160 kWh total)
+        - Power Distribution Unit (PDU)
+        - DC-DC converters for low-voltage systems
+        - Battery Management System (BMS)
+        - Contactor and isolation system
+        
+    traceability:
+      parent: "SYS-REQ-024"
+    special_conditions:
+      - "SC-VTOL-01"
+      
+  - id: "REQ-SL2-ELEC-002"
+    type: "descriptive"
+    title: "High-Voltage Battery System"
+    ata_code: "24-20-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        Four battery packs provide 800V DC power to the propulsion system.
+        
+      details: |
+        Battery specifications:
+        - Pack count: 4
+        - Pack capacity: 40 kWh each
+        - Total capacity: 160 kWh
+        - Nominal voltage: 800 VDC
+        - Operating range: 720-900 VDC
+        - Chemistry: Li-ion NMC
+        
+    special_conditions:
+      - "SC-VTOL-01"
+      - "SC-VTOL-03"
+        
+  - id: "REQ-SL2-ELEC-003"
+    type: "procedural"
+    title: "Battery Pack Removal"
+    ata_code: "24-20-00"
+    info_code: "520"
+    applicability: "APP-SL2-ALL"
+    task_type: "on-condition"
+    
+    content:
+      summary: "Procedure for safe removal of HV battery pack"
+      
+    warnings:
+      - type: "high-voltage"
+        text: "HIGH VOLTAGE - 800 VDC present. Follow lockout/tagout procedures."
+      - type: "chemical"
+        text: "Battery contains lithium. Follow hazmat procedures if damaged."
+
+  - id: "REQ-SL2-ELEC-004"
+    type: "descriptive"
+    title: "Battery Management System"
+    ata_code: "24-60-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    software_dal: "B"
+    
+    content:
+      summary: |
+        The BMS monitors and controls all battery pack functions.
+        
+      details: |
+        BMS functions:
+        - Cell voltage monitoring (all cells)
+        - Cell temperature monitoring
+        - State of Charge (SoC) estimation
+        - State of Health (SoH) estimation
+        - Thermal management control
+        - Contactor control
+        - Ground fault detection
+        - Thermal runaway detection
+        
+    traceability:
+      software: "SRS-BMS-001"

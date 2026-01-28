@@ -1,0 +1,587 @@
+# =============================================================================
+# Task to Data Module Mapping
+# ASIGT Transformation Rules
+# Version: 2.0.0
+# =============================================================================
+#
+# This mapping defines how maintenance tasks from the Knowledge Database (KDB)
+# are transformed into S1000D Procedural Data Modules. Used for generating:
+#   - Removal/Installation procedures
+#   - Servicing procedures
+#   - Inspection procedures
+#   - Operational checks
+#   - Test procedures
+#
+# Operates under ASIT contract authority.
+#
+# =============================================================================
+
+mapping:
+  # ---------------------------------------------------------------------------
+  # MAPPING METADATA
+  # ---------------------------------------------------------------------------
+  metadata:
+    mapping_id: "MAP-TASK-DM-001"
+    version: "1.0.0"
+    title: "Task to Data Module Mapping"
+    description: |
+      Transforms maintenance task definitions into S1000D procedural data
+      modules with preliminary requirements, step-by-step procedures,
+      and close-up requirements.
+    effective_date: "2026-01-01"
+    author: "ASIGT Framework"
+    
+    # Source specification
+    source:
+      type: "maintenance_task"
+      schema: "KDB/SSOT/tasks"
+      formats:
+        - "yaml"
+        - "json"
+        - "mta_xml"    # MSG-3 Task Analysis
+        - "cmms_export" # CMMS system export
+    
+    # Target specification
+    target:
+      type: "s1000d_dm"
+      schema: "S1000D Issue 5.0"
+      templates:
+        - "dm_procedural.xml"
+
+  # ---------------------------------------------------------------------------
+  # TASK TYPE MAPPINGS
+  # ---------------------------------------------------------------------------
+  type_mappings:
+    
+    # Removal Tasks
+    removal:
+      source_types:
+        - "REMOVE"
+        - "removal"
+        - "R/I"
+        - "detach"
+      target_info_codes:
+        primary: "510"      # Remove
+        secondary: "500"    # Disconnect/connect
+      dm_type: "procedural"
+      content_mapping:
+        - source_field: "task_title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "info_name"
+          target_element: "infoName"
+          transform: "none"
+          default: "Removal"
+        - source_field: "preconditions"
+          target_element: "preliminaryRqmts/reqCondGroup"
+          transform: "precondition_list"
+        - source_field: "tools_required"
+          target_element: "preliminaryRqmts/reqSupportEquips"
+          transform: "tool_list"
+        - source_field: "materials_required"
+          target_element: "preliminaryRqmts/reqSupplies"
+          transform: "supply_list"
+        - source_field: "safety_warnings"
+          target_element: "preliminaryRqmts/reqSafety/safetyRqmts/warning"
+          transform: "warning_list"
+        - source_field: "safety_cautions"
+          target_element: "preliminaryRqmts/reqSafety/safetyRqmts/caution"
+          transform: "caution_list"
+        - source_field: "procedure_steps"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "procedure_steps"
+        - source_field: "postconditions"
+          target_element: "closeRqmts/reqCondGroup"
+          transform: "postcondition_list"
+    
+    # Installation Tasks
+    installation:
+      source_types:
+        - "INSTALL"
+        - "installation"
+        - "attach"
+        - "fit"
+      target_info_codes:
+        primary: "520"      # Install
+        secondary: "500"    # Disconnect/connect
+      dm_type: "procedural"
+      content_mapping:
+        - source_field: "task_title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "info_name"
+          target_element: "infoName"
+          transform: "none"
+          default: "Installation"
+        - source_field: "preconditions"
+          target_element: "preliminaryRqmts/reqCondGroup"
+          transform: "precondition_list"
+        - source_field: "tools_required"
+          target_element: "preliminaryRqmts/reqSupportEquips"
+          transform: "tool_list"
+        - source_field: "materials_required"
+          target_element: "preliminaryRqmts/reqSupplies"
+          transform: "supply_list"
+        - source_field: "consumables"
+          target_element: "preliminaryRqmts/reqSupplies"
+          transform: "consumable_list"
+        - source_field: "spares_required"
+          target_element: "preliminaryRqmts/reqSpares"
+          transform: "spare_list"
+        - source_field: "torque_values"
+          target_element: "mainProcedure/proceduralStep/para/quantity"
+          transform: "torque_format"
+        - source_field: "procedure_steps"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "procedure_steps"
+        - source_field: "functional_check"
+          target_element: "closeRqmts/reqCondGroup/reqCondDm"
+          transform: "functional_check_ref"
+    
+    # Servicing Tasks
+    servicing:
+      source_types:
+        - "SERVICE"
+        - "servicing"
+        - "replenish"
+        - "lubricate"
+      target_info_codes:
+        primary: "200"      # Servicing
+        secondary: "210"    # Lubrication (if applicable)
+      dm_type: "procedural"
+      content_mapping:
+        - source_field: "task_title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "info_name"
+          target_element: "infoName"
+          transform: "none"
+          default: "Servicing"
+        - source_field: "service_interval"
+          target_element: "preliminaryRqmts/productionMaintData"
+          transform: "interval_format"
+        - source_field: "fluids_required"
+          target_element: "preliminaryRqmts/reqSupplies"
+          transform: "fluid_list"
+        - source_field: "quantities"
+          target_element: "mainProcedure/proceduralStep/para/quantity"
+          transform: "quantity_format"
+        - source_field: "procedure_steps"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "procedure_steps"
+    
+    # Inspection Tasks
+    inspection:
+      source_types:
+        - "INSPECT"
+        - "inspection"
+        - "examine"
+        - "check"
+      target_info_codes:
+        primary: "300"      # Examine/inspect
+        secondary: "310"    # Visual check
+        tertiary: "320"     # Detailed inspection
+      dm_type: "procedural"
+      content_mapping:
+        - source_field: "task_title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "info_name"
+          target_element: "infoName"
+          transform: "none"
+          default: "Inspection"
+        - source_field: "inspection_type"
+          target_element: "preliminaryRqmts/productionMaintData/taskType"
+          transform: "inspection_type_code"
+        - source_field: "inspection_criteria"
+          target_element: "mainProcedure/proceduralStep/para"
+          transform: "criteria_list"
+        - source_field: "limits_tolerances"
+          target_element: "mainProcedure/proceduralStep/para/quantity"
+          transform: "tolerance_format"
+        - source_field: "ndt_method"
+          target_element: "preliminaryRqmts/reqSupportEquips"
+          transform: "ndt_equipment"
+        - source_field: "acceptance_criteria"
+          target_element: "closeRqmts/reqCondGroup/reqCondDm/reqCond"
+          transform: "acceptance_text"
+    
+    # Operational Check Tasks
+    operational_check:
+      source_types:
+        - "OP_CHECK"
+        - "operational_check"
+        - "functional_check"
+        - "ops_test"
+      target_info_codes:
+        primary: "700"      # Setting/test/check
+        secondary: "720"    # Functional test
+        tertiary: "710"     # Adjustment/reset
+      dm_type: "procedural"
+      content_mapping:
+        - source_field: "task_title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "info_name"
+          target_element: "infoName"
+          transform: "none"
+          default: "Operational Check"
+        - source_field: "test_equipment"
+          target_element: "preliminaryRqmts/reqSupportEquips"
+          transform: "test_equipment_list"
+        - source_field: "system_state"
+          target_element: "preliminaryRqmts/reqCondGroup/reqCondDm/reqCond"
+          transform: "system_state_text"
+        - source_field: "procedure_steps"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "procedure_steps"
+        - source_field: "expected_results"
+          target_element: "mainProcedure/proceduralStep/note"
+          transform: "expected_result_note"
+        - source_field: "pass_criteria"
+          target_element: "closeRqmts/reqCondGroup/reqCondDm/reqCond"
+          transform: "pass_criteria_text"
+    
+    # Cleaning/Preservation Tasks
+    cleaning:
+      source_types:
+        - "CLEAN"
+        - "cleaning"
+        - "preservation"
+        - "painting"
+      target_info_codes:
+        primary: "900"      # Cleaning/painting
+        secondary: "910"    # Cleaning
+        tertiary: "920"     # Painting/finishing
+      dm_type: "procedural"
+      content_mapping:
+        - source_field: "task_title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "cleaning_agents"
+          target_element: "preliminaryRqmts/reqSupplies"
+          transform: "chemical_list"
+        - source_field: "ppe_required"
+          target_element: "preliminaryRqmts/reqSafety/safetyRqmts"
+          transform: "ppe_warnings"
+        - source_field: "procedure_steps"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "procedure_steps"
+    
+    # Storage Tasks
+    storage:
+      source_types:
+        - "STORAGE"
+        - "store"
+        - "preservation"
+        - "mothball"
+      target_info_codes:
+        primary: "800"      # Storage
+        secondary: "810"    # Short-term storage
+        tertiary: "820"     # Long-term storage
+      dm_type: "procedural"
+      content_mapping:
+        - source_field: "task_title"
+          target_element: "techName"
+          transform: "title_case"
+        - source_field: "storage_duration"
+          target_element: "preliminaryRqmts/productionMaintData"
+          transform: "duration_format"
+        - source_field: "environmental_requirements"
+          target_element: "mainProcedure/proceduralStep/note"
+          transform: "environment_note"
+        - source_field: "procedure_steps"
+          target_element: "mainProcedure/proceduralStep"
+          transform: "procedure_steps"
+
+  # ---------------------------------------------------------------------------
+  # FIELD MAPPINGS (COMMON)
+  # ---------------------------------------------------------------------------
+  field_mappings:
+    # Task identification
+    identification:
+      - source: "task_id"
+        target: "dmIdent/dmCode"
+        transform: "task_id_to_dmc"
+        traceable: true
+        
+      - source: "ata_chapter"
+        target: "dmCode/@systemCode"
+        transform: "ata_code_format"
+        
+      - source: "ata_section"
+        target: "dmCode/@subSystemCode"
+        transform: "section_code_format"
+        
+      - source: "component"
+        target: "dmCode/@assyCode"
+        transform: "component_code"
+        
+      - source: "task_version"
+        target: "issueInfo/@issueNumber"
+        transform: "version_format"
+    
+    # Maintenance level
+    maintenance:
+      - source: "maint_level"
+        target: "preliminaryRqmts/productionMaintData/maintLevel"
+        transform: "maint_level_code"
+        lookup_table:
+          "organizational": "O"
+          "intermediate": "I"
+          "depot": "D"
+          "heavy": "H"
+          "O-level": "O"
+          "I-level": "I"
+          "D-level": "D"
+        
+      - source: "skill_level"
+        target: "preliminaryRqmts/productionMaintData/skillLevel"
+        transform: "skill_level_code"
+        
+      - source: "man_hours"
+        target: "preliminaryRqmts/productionMaintData/taskDuration"
+        transform: "duration_format"
+        
+      - source: "crew_size"
+        target: "preliminaryRqmts/productionMaintData/personRequired"
+        transform: "crew_format"
+    
+    # MSG-3 / Maintenance Program fields
+    msg3:
+      - source: "mpd_item"
+        target: "dmStatus/remarks/simplePara"
+        transform: "mpd_reference"
+        
+      - source: "task_interval"
+        target: "dmStatus/remarks/simplePara"
+        transform: "interval_text"
+        
+      - source: "task_category"
+        target: "dmStatus/remarks/simplePara"
+        transform: "category_text"
+
+  # ---------------------------------------------------------------------------
+  # PROCEDURE STEP STRUCTURE
+  # ---------------------------------------------------------------------------
+  step_structure:
+    # Step numbering
+    numbering:
+      style: "sequential"
+      format: "step-{seq:03d}"
+      restart_per_procedure: true
+    
+    # Step elements order (W-C-N-P)
+    element_order:
+      - "warning"
+      - "caution"
+      - "note"
+      - "para"
+      - "figure"
+      - "proceduralStep"  # Nested sub-steps
+    
+    # Step content mapping
+    content:
+      - source: "step_number"
+        target: "@id"
+        transform: "step_id_format"
+        
+      - source: "step_warning"
+        target: "warning/warningAndCautionPara"
+        transform: "warning_format"
+        condition: "if_present"
+        
+      - source: "step_caution"
+        target: "caution/warningAndCautionPara"
+        transform: "caution_format"
+        condition: "if_present"
+        
+      - source: "step_note"
+        target: "note/notePara"
+        transform: "note_format"
+        condition: "if_present"
+        
+      - source: "step_text"
+        target: "para"
+        transform: "step_text_format"
+        
+      - source: "step_figure"
+        target: "para/internalRef"
+        transform: "figure_reference"
+        condition: "if_present"
+        
+      - source: "sub_steps"
+        target: "proceduralStep"
+        transform: "recursive_steps"
+        condition: "if_present"
+
+  # ---------------------------------------------------------------------------
+  # TRANSFORMATION FUNCTIONS
+  # ---------------------------------------------------------------------------
+  transforms:
+    title_case:
+      function: "text_title_case"
+      parameters:
+        preserve_acronyms: true
+        max_length: 256
+        
+    task_id_to_dmc:
+      function: "map_task_to_dmc"
+      parameters:
+        info_code_lookup: true
+        location_default: "D"
+        
+    precondition_list:
+      function: "list_to_reqcond"
+      parameters:
+        element: "reqCondDm/reqCond"
+        
+    tool_list:
+      function: "list_to_support_equip"
+      parameters:
+        include_part_numbers: true
+        include_quantities: true
+        
+    supply_list:
+      function: "list_to_supplies"
+      parameters:
+        include_specifications: true
+        
+    spare_list:
+      function: "list_to_spares"
+      parameters:
+        include_alternates: true
+        
+    warning_list:
+      function: "list_to_warnings"
+      parameters:
+        severity: "warning"
+        id_prefix: "wrn"
+        
+    caution_list:
+      function: "list_to_cautions"
+      parameters:
+        severity: "caution"
+        id_prefix: "ctn"
+        
+    procedure_steps:
+      function: "text_to_procedural_steps"
+      parameters:
+        detect_sub_steps: true
+        detect_conditionals: true
+        detect_references: true
+        
+    postcondition_list:
+      function: "list_to_closereq"
+      parameters:
+        element: "reqCondDm/reqCond"
+        
+    torque_format:
+      function: "format_torque_value"
+      parameters:
+        unit: "Nm"
+        include_sequence: true
+        
+    quantity_format:
+      function: "format_quantity"
+      parameters:
+        decimal_places: 2
+        
+    tolerance_format:
+      function: "format_tolerance"
+      parameters:
+        format: "+/- {value} {unit}"
+        
+    fluid_list:
+      function: "list_to_fluid_supplies"
+      parameters:
+        include_spec: true
+        include_quantity: true
+        
+    test_equipment_list:
+      function: "list_to_test_equipment"
+      parameters:
+        include_calibration: true
+        
+    functional_check_ref:
+      function: "create_dm_reference"
+      parameters:
+        info_code: "720"
+        ref_type: "reqCondDm"
+
+  # ---------------------------------------------------------------------------
+  # TRACEABILITY CONFIGURATION
+  # ---------------------------------------------------------------------------
+  traceability:
+    enabled: true
+    
+    source_tracking:
+      capture_hash: true
+      hash_algorithm: "sha256"
+      include_fields:
+        - "task_id"
+        - "task_version"
+        - "procedure_hash"
+    
+    target_tracking:
+      generate_id: true
+      id_format: "TRACE-TASK-DM-{seq:06d}"
+    
+    link_types:
+      - type: "implements"
+        source: "dm"
+        target: "task"
+      - type: "derived_from"
+        source: "dm_step"
+        target: "task_step"
+
+  # ---------------------------------------------------------------------------
+  # VALIDATION RULES
+  # ---------------------------------------------------------------------------
+  validation:
+    pre_transform:
+      - rule: "task_id_present"
+        message: "Task ID is required"
+      - rule: "procedure_not_empty"
+        message: "Procedure must have at least one step"
+      - rule: "ata_chapter_valid"
+        message: "ATA chapter must be valid"
+    
+    post_transform:
+      - rule: "wcnp_order"
+        message: "Steps must follow Warning-Caution-Note-Para order"
+      - rule: "step_ids_unique"
+        message: "All step IDs must be unique"
+      - rule: "references_valid"
+        message: "All internal references must be valid"
+
+  # ---------------------------------------------------------------------------
+  # EXAMPLES
+  # ---------------------------------------------------------------------------
+  examples:
+    - name: "Removal Task to Procedural DM"
+      source:
+        task_id: "TASK-28-10-001"
+        task_type: "removal"
+        task_title: "Fuel Boost Pump"
+        ata_chapter: "28"
+        ata_section: "10"
+        maint_level: "organizational"
+        man_hours: 2.5
+        tools_required:
+          - name: "Wrench Set"
+            part_number: "TOOL-001"
+          - name: "Safety Wire Pliers"
+            part_number: "TOOL-002"
+        safety_warnings:
+          - "Ensure fuel system is depressurized before removal"
+        procedure_steps:
+          - "Disconnect electrical connector from pump"
+          - "Remove three mounting bolts"
+          - "Carefully lower pump from housing"
+        postconditions:
+          - "Cap all open fuel lines"
+      target:
+        dmc: "HJONE-A-28-10-00-01A-510A-D"
+        tech_name: "Fuel Boost Pump"
+        info_name: "Removal"

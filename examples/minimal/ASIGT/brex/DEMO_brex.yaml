@@ -1,0 +1,73 @@
+# =============================================================================
+# Minimal Example — Project BREX Rules
+# =============================================================================
+# Simplified business rules for demo purposes.
+# =============================================================================
+
+metadata:
+  brex_id: "DEMO-BREX-001"
+  title: "Demo Aircraft Business Rules"
+  issue_date: "2026-01-22"
+  status: "active"
+  
+  extends:
+    - "S1000D_5.0_DEFAULT"
+    
+  organization:
+    name: "AEROSPACEMODEL Examples"
+    cage_code: "DEMO1"
+
+# -----------------------------------------------------------------------------
+# Data Module Code Rules
+# -----------------------------------------------------------------------------
+dm_code_rules:
+  - rule_id: "DEMO-BR-DMC-001"
+    element: "modelIdentCode"
+    description: "Model identification code must be 'DEMO'"
+    severity: "error"
+    pattern: "^DEMO$"
+    message: "Invalid model identification code. Expected 'DEMO'."
+    
+  - rule_id: "DEMO-BR-DMC-002"
+    element: "systemCode"
+    description: "System code must be valid ATA chapter"
+    severity: "error"
+    allowed_values:
+      - "28"  # Fuel (demo scope)
+    message: "System code not in approved ATA chapter list."
+
+# -----------------------------------------------------------------------------
+# Content Rules
+# -----------------------------------------------------------------------------
+content_rules:
+  - rule_id: "DEMO-BR-CNT-001"
+    element: "//para"
+    description: "Paragraphs should not be empty"
+    severity: "warning"
+    xpath_check: "string-length(normalize-space(.)) > 0"
+    message: "Empty paragraph detected."
+
+# -----------------------------------------------------------------------------
+# Metadata Rules
+# -----------------------------------------------------------------------------
+metadata_rules:
+  - rule_id: "DEMO-BR-META-001"
+    element: "//responsiblePartnerCompany/enterpriseIdent"
+    description: "RPC CAGE code must be DEMO1"
+    severity: "error"
+    allowed_values:
+      - "DEMO1"
+    message: "Unrecognized CAGE code."
+
+# -----------------------------------------------------------------------------
+# Language Rules
+# -----------------------------------------------------------------------------
+language_rules:
+  - rule_id: "DEMO-BR-LANG-001"
+    element: "//language"
+    description: "Language must be English (US)"
+    severity: "error"
+    allowed_languages:
+      - language: "en"
+        country: "US"
+    message: "Language must be en-US for this demo."

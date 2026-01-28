@@ -1,0 +1,124 @@
+# =============================================================================
+# RegionalJet-700 — Project BREX Rules
+# =============================================================================
+
+metadata:
+  brex_id: "RJ7-BREX-001"
+  title: "RegionalJet-700 Business Rules"
+  issue_date: "2026-01-15"
+  status: "active"
+  
+  extends:
+    - "S1000D_5.0_DEFAULT"
+    
+  organization:
+    name: "Regional Aircraft Corporation"
+    cage_code: "RAC01"
+
+dm_code_rules:
+  - rule_id: "RJ7-BR-DMC-001"
+    element: "modelIdentCode"
+    description: "Model identification code must be 'RJ7'"
+    severity: "error"
+    pattern: "^RJ7$"
+    message: "Invalid model identification code. Expected 'RJ7'."
+    
+  - rule_id: "RJ7-BR-DMC-002"
+    element: "systemCode"
+    description: "System code must be valid ATA chapter for RJ7"
+    severity: "error"
+    allowed_values:
+      - "05"
+      - "06"
+      - "07"
+      - "08"
+      - "09"
+      - "10"
+      - "11"
+      - "12"
+      - "21"
+      - "24"
+      - "27"
+      - "28"
+      - "29"
+      - "32"
+      - "51"
+      - "52"
+      - "53"
+      - "55"
+      - "57"
+      - "71"
+      - "72"
+      - "73"
+      - "74"
+      - "75"
+      - "76"
+      - "77"
+      - "78"
+      - "79"
+      - "80"
+    message: "System code not in approved ATA chapter list for RJ7."
+
+content_rules:
+  - rule_id: "RJ7-BR-CNT-001"
+    element: "//warning"
+    description: "Warnings must have type classification"
+    severity: "error"
+    xpath_check: "@warningType"
+    message: "Warning must specify warningType attribute."
+    
+  - rule_id: "RJ7-BR-CNT-002"
+    element: "//caution"
+    description: "Cautions must have type classification"
+    severity: "error"
+    xpath_check: "@cautionType"
+    message: "Caution must specify cautionType attribute."
+    
+  - rule_id: "RJ7-BR-CNT-003"
+    element: "//proceduralStep"
+    description: "Procedural steps should not exceed 12 sub-steps"
+    severity: "warning"
+    max_children: 12
+    child_element: "proceduralStep"
+    message: "Consider restructuring procedure with more than 12 steps."
+    
+  - rule_id: "RJ7-BR-CNT-004"
+    element: "//figure"
+    description: "Figures must have title"
+    severity: "error"
+    required_child: "title"
+    message: "Figure must include a title element."
+
+metadata_rules:
+  - rule_id: "RJ7-BR-META-001"
+    element: "//responsiblePartnerCompany/enterpriseIdent"
+    description: "RPC CAGE code must be registered"
+    severity: "error"
+    allowed_values:
+      - "RAC01"  # Regional Aircraft Corporation
+    message: "Unrecognized CAGE code in responsiblePartnerCompany."
+
+applicability_rules:
+  - rule_id: "RJ7-BR-APP-001"
+    element: "//applic"
+    description: "Applicability must reference valid RJ7 variant"
+    severity: "error"
+    allowed_products:
+      - "RJ7-STD"
+      - "RJ7-ER"
+    message: "Unknown aircraft variant in applicability."
+
+srm_rules:
+  - rule_id: "RJ7-BR-SRM-001"
+    element: "//dmAddress[contains(dmIdent/dmCode/@infoCode, '041')]"
+    description: "Allowable damage limits must include zone reference"
+    severity: "error"
+    required_element: "//zoneRef"
+    message: "Allowable damage DM must reference aircraft zone."
+    
+  - rule_id: "RJ7-BR-SRM-002"
+    element: "//dmAddress[contains(dmIdent/dmCode/@infoCode, '600')]"
+    description: "Repair DMs must reference materials"
+    severity: "warning"
+    xpath_check: ".//supplyRef or .//materialRef"
+    message: "Repair procedures should reference required materials."

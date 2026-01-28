@@ -1,0 +1,156 @@
+# =============================================================================
+# HydrogenJet-100 — ATA 71 Power Plant (Fuel Cell)
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "requirements"
+  ata_chapter: "71"
+  title: "Fuel Cell Power Plant System"
+  baseline: "FBL-HJ1-2026-Q1"
+
+requirements:
+  - id: "REQ-HJ1-FC-001"
+    type: "descriptive"
+    title: "Fuel Cell Power System Description"
+    ata_code: "71-00-00"
+    info_code: "040"
+    applicability: "APP-HJ1-FC"
+    safety_critical: true
+    
+    content:
+      summary: |
+        The fuel cell power system generates electrical power from
+        hydrogen and air using PEM fuel cell technology.
+        
+      details: |
+        System architecture:
+        - Four PEM fuel cell stacks (625 kW each)
+        - Total power output: 2.5 MW
+        - Two electric propulsion motors
+        - Power conversion and distribution
+        
+        The fuel cells combine hydrogen fuel with air to produce:
+        - Electrical power (DC)
+        - Water (product)
+        - Heat (waste)
+        
+    traceability:
+      parent: "SYS-REQ-071"
+    special_conditions:
+      - "SC-H2-04"
+      
+  - id: "REQ-HJ1-FC-002"
+    type: "descriptive"
+    title: "PEM Fuel Cell Stack"
+    ata_code: "71-10-00"
+    info_code: "040"
+    applicability: "APP-HJ1-FC"
+    
+    content:
+      summary: |
+        Each fuel cell stack contains multiple cells that convert
+        H2 and O2 electrochemically to produce electricity.
+        
+      details: |
+        Stack specifications:
+        - Type: Proton Exchange Membrane (PEM)
+        - Cells per stack: 400
+        - Cell voltage: 0.7V nominal
+        - Stack voltage: 280V nominal
+        - Power output: 625 kW per stack
+        - Efficiency: 55% (at rated power)
+        - Operating temperature: 80°C
+        
+        Balance of plant (per stack):
+        - Air compressor/humidifier
+        - Hydrogen pressure regulator
+        - Coolant circulation pump
+        - Water separator
+        
+    warnings:
+      - type: "hydrogen"
+        text: |
+          Hydrogen present in fuel cell and manifolds. Purge with
+          inert gas before any disassembly.
+          
+  - id: "REQ-HJ1-FC-003"
+    type: "descriptive"
+    title: "Air Supply System"
+    ata_code: "71-20-00"
+    info_code: "040"
+    applicability: "APP-HJ1-FC"
+    
+    content:
+      summary: |
+        The air supply system provides filtered, humidified air to
+        the fuel cell cathode.
+        
+      details: |
+        Air system specifications:
+        - Compressor type: Centrifugal turbo-compressor
+        - Flow rate: 3.5 kg/s (total)
+        - Pressure ratio: 2.5:1
+        - Humidification: Membrane humidifier
+        - Filtration: HEPA + activated carbon
+        
+  - id: "REQ-HJ1-FC-004"
+    type: "descriptive"
+    title: "Fuel Cell Cooling System"
+    ata_code: "71-30-00"
+    info_code: "040"
+    applicability: "APP-HJ1-FC"
+    
+    content:
+      summary: |
+        Liquid cooling system maintains fuel cell operating temperature.
+        
+      details: |
+        Cooling specifications:
+        - Coolant: Deionized water/glycol
+        - Operating temp: 70-80°C
+        - Heat rejection: 2 MW total
+        - Radiator location: Nacelle and fuselage
+        
+  - id: "REQ-HJ1-FC-005"
+    type: "descriptive"
+    title: "Electric Propulsion Motors"
+    ata_code: "71-50-00"
+    info_code: "040"
+    applicability: "APP-HJ1-FC"
+    
+    content:
+      summary: |
+        Two electric motors drive the propellers using fuel cell power.
+        
+      details: |
+        Motor specifications:
+        - Type: Permanent Magnet Synchronous
+        - Power: 1.25 MW each
+        - Voltage: 540 VDC
+        - RPM max: 5000
+        - Propeller: 6-blade variable pitch
+        - Gear ratio: 8.5:1
+        
+  - id: "REQ-HJ1-FC-010"
+    type: "procedural"
+    title: "Fuel Cell Stack Replacement"
+    ata_code: "71-10-00"
+    info_code: "520"
+    applicability: "APP-HJ1-FC"
+    task_type: "on-condition"
+    
+    content:
+      summary: "Procedure for fuel cell stack removal and installation"
+      
+    warnings:
+      - type: "hydrogen"
+        text: |
+          Purge hydrogen from stack and manifolds with nitrogen before
+          disconnection. Verify 0% H2 with portable detector.
+          
+    cautions:
+      - type: "contamination"
+        text: |
+          Membrane is sensitive to contamination. Maintain clean
+          environment during handling. Cap all ports immediately.

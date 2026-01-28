@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+=============================================================================
+S1000D Data Module List (DML) Template
+ASIGT S1000D Templates
+Version: 2.0.0
+Issue: 5.0
+
+Purpose: Template for Data Module Lists used to manage and track collections
+         of data modules within the Common Source Database (CSDB).
+
+DML Types:
+  - CSDB DML: Complete CSDB content inventory
+  - Delivery DML: Content for delivery to customer
+  - Change DML: Changed content since last delivery
+  - Subset DML: Filtered subset of CSDB
+
+Usage: This template is populated by ASIGT generators under ASIT contract
+       authority. Placeholder tokens (${...}) are replaced during generation.
+=============================================================================
+-->
+<dml xmlns="http://www.s1000d.org/S1000D_5-0"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://www.s1000d.org/S1000D_5-0 S1000D_5-0/xml_schema_flat/dml.xsd">
+  
+  <!-- ===================================================================== -->
+  <!-- IDENTIFICATION AND STATUS SECTION                                     -->
+  <!-- ===================================================================== -->
+  <identAndStatusSection>
+    
+    <!-- DML Address -->
+    <dmlAddress>
+      <dmlIdent>
+        <!-- DML Code -->
+        <dmlCode 
+          modelIdentCode="${MODEL_IDENT_CODE}"
+          senderIdent="${SENDER_IDENT}"
+          dmlType="${DML_TYPE}"
+          yearOfDataIssue="${YEAR_OF_ISSUE}"
+          seqNumber="${SEQ_NUMBER}"/>
+        
+        <!-- Issue Information -->
+        <issueInfo issueNumber="${ISSUE_NUMBER}" inWork="${IN_WORK}"/>
+      </dmlIdent>
+      
+      <!-- DML Address Items -->
+      <dmlAddressItems>
+        <issueDate year="${ISSUE_YEAR}" month="${ISSUE_MONTH}" day="${ISSUE_DAY}"/>
+        <dmlTitle>${DML_TITLE}</dmlTitle>
+      </dmlAddressItems>
+    </dmlAddress>
+    
+    <!-- DML Status -->
+    <dmlStatus issueType="${ISSUE_TYPE}">
+      <security securityClassification="${SECURITY_CLASSIFICATION}"/>
+      
+      <!-- Data Restrictions -->
+      <dataRestrictions>
+        <restrictionInstructions>
+          <dataDistribution>${DATA_DISTRIBUTION}</dataDistribution>
+        </restrictionInstructions>
+      </dataRestrictions>
+      
+      <!-- Responsible Partner Company -->
+      <responsiblePartnerCompany>
+        <enterpriseName>${RESPONSIBLE_COMPANY}</enterpriseName>
+      </responsiblePartnerCompany>
+      
+      <!-- Originator -->
+      <originator>
+        <enterpriseName>${ORIGINATOR_NAME}</enterpriseName>
+        <enterpriseIdent>${ORIGINATOR_CAGE}</enterpriseIdent>
+      </originator>
+      
+      <!-- BREX Reference -->
+      <brexDmRef>
+        <dmRef>
+          <dmRefIdent>
+            <dmCode 
+              modelIdentCode="${BREX_MODEL_IDENT}"
+              systemDiffCode="A"
+              systemCode="00"
+              subSystemCode="0"
+              subSubSystemCode="0"
+              assyCode="00"
+              disassyCode="00"
+              disassyCodeVariant="A"
+              infoCode="022"
+              infoCodeVariant="A"
+              itemLocationCode="D"/>
+          </dmRefIdent>
+        </dmRef>
+      </brexDmRef>
+      
+      <!-- Quality Assurance -->
+      <qualityAssurance>
+        <unverified/>
+      </qualityAssurance>
+      
+      <!-- Remarks -->
+      <!--
+      <remarks>
+        <simplePara>${DML_REMARKS}</simplePara>
+      </remarks>
+      -->
+    </dmlStatus>
+  </identAndStatusSection>
+  
+  <!-- ===================================================================== -->
+  <!-- CONTENT SECTION - DATA MODULE LIST                                    -->
+  <!-- ===================================================================== -->
+  <dmlContent>
+    
+    <!-- ================================================================= -->
+    <!-- DML ENTRY - DATA MODULE REFERENCE                                 -->
+    <!-- ================================================================= -->
+    <dmlEntry>
+      <dmRef>
+        <dmRefIdent>
+          <dmCode 
+            modelIdentCode="${DM_MODEL_IDENT}"
+            systemDiffCode="${DM_SYSTEM_DIFF}"
+            systemCode="${DM_SYSTEM_CODE}"
+            subSystemCode="${DM_SUBSYSTEM}"
+            subSubSystemCode="${DM_SUB_SUBSYSTEM}"
+            assyCode="${DM_ASSY}"
+            disassyCode="${DM_DISASSY}"
+            disassyCodeVariant="${DM_DISASSY_VAR}"
+            infoCode="${DM_INFO}"
+            infoCodeVariant="${DM_INFO_VAR}"
+            itemLocationCode="${DM_LOCATION}"/>
+          <language languageIsoCode="${DM_LANGUAGE}" countryIsoCode="${DM_COUNTRY}"/>
+          <issueInfo issueNumber="${DM_ISSUE}" inWork="${DM_INWORK}"/>
+        </dmRefIdent>
+        <dmRefAddressItems>
+          <dmTitle>
+            <techName>${DM_TECH_NAME}</techName>
+            <infoName>${DM_INFO_NAME}</infoName>
+          </dmTitle>
+          <issueDate year="${DM_ISSUE_YEAR}" month="${DM_ISSUE_MONTH}" day="${DM_ISSUE_DAY}"/>
+        </dmRefAddressItems>
+      </dmRef>
+      
+      <!-- Entry Status -->
+      <dmlEntryStatus>
+        <!-- Answer - Action for this entry -->
+        <answer answerStatusCode="${ANSWER_CODE}"/>
+        <!-- 
+        Answer codes:
+          0 = Not applicable
+          1 = Accept
+          2 = Reject
+          3 = Comment
+        -->
+        
+        <!-- Responsible Partner -->
+        <responsiblePartnerCompany>
+          <enterpriseName>${DM_RESPONSIBLE_COMPANY}</enterpriseName>
+        </responsiblePartnerCompany>
+        
+        <!-- Security -->
+        <security securityClassification="${DM_SECURITY}"/>
+        
+        <!-- Remarks -->
+        <!--
+        <remarks>
+          <simplePara>${DM_ENTRY_REMARKS}</simplePara>
+        </remarks>
+        -->
+      </dmlEntryStatus>
+    </dmlEntry>
+    
+    <!-- ================================================================= -->
+    <!-- ADDITIONAL DML ENTRIES                                            -->
+    <!-- ================================================================= -->
+    <!--
+    <dmlEntry>
+      <dmRef>
+        <dmRefIdent>
+          <dmCode 
+            modelIdentCode="${DM2_MODEL_IDENT}"
+            systemDiffCode="${DM2_SYSTEM_DIFF}"
+            systemCode="${DM2_SYSTEM_CODE}"
+            subSystemCode="${DM2_SUBSYSTEM}"
+            subSubSystemCode="${DM2_SUB_SUBSYSTEM}"
+            assyCode="${DM2_ASSY}"
+            disassyCode="${DM2_DISASSY}"
+            disassyCodeVariant="${DM2_DISASSY_VAR}"
+            infoCode="${DM2_INFO}"
+            infoCodeVariant="${DM2_INFO_VAR}"
+            itemLocationCode="${DM2_LOCATION}"/>
+          <language languageIsoCode="${DM2_LANGUAGE}" countryIsoCode="${DM2_COUNTRY}"/>
+          <issueInfo issueNumber="${DM2_ISSUE}" inWork="${DM2_INWORK}"/>
+        </dmRefIdent>
+        <dmRefAddressItems>
+          <dmTitle>
+            <techName>${DM2_TECH_NAME}</techName>
+            <infoName>${DM2_INFO_NAME}</infoName>
+          </dmTitle>
+        </dmRefAddressItems>
+      </dmRef>
+      <dmlEntryStatus>
+        <answer answerStatusCode="0"/>
+        <responsiblePartnerCompany>
+          <enterpriseName>${DM2_RESPONSIBLE_COMPANY}</enterpriseName>
+        </responsiblePartnerCompany>
+        <security securityClassification="${DM2_SECURITY}"/>
+      </dmlEntryStatus>
+    </dmlEntry>
+    -->
+    
+    <!-- ================================================================= -->
+    <!-- DML ENTRY - PUBLICATION MODULE REFERENCE                          -->
+    <!-- ================================================================= -->
+    <!--
+    <dmlEntry>
+      <pmRef>
+        <pmRefIdent>
+          <pmCode 
+            modelIdentCode="${PM_MODEL_IDENT}"
+            pmIssuer="${PM_ISSUER}"
+            pmNumber="${PM_NUMBER}"
+            pmVolume="${PM_VOLUME}"/>
+          <language languageIsoCode="${PM_LANGUAGE}" countryIsoCode="${PM_COUNTRY}"/>
+          <issueInfo issueNumber="${PM_ISSUE}" inWork="${PM_INWORK}"/>
+        </pmRefIdent>
+        <pmRefAddressItems>
+          <pmTitle>${PM_TITLE}</pmTitle>
+          <issueDate year="${PM_ISSUE_YEAR}" month="${PM_ISSUE_MONTH}" day="${PM_ISSUE_DAY}"/>
+        </pmRefAddressItems>
+      </pmRef>
+      <dmlEntryStatus>
+        <answer answerStatusCode="0"/>
+        <responsiblePartnerCompany>
+          <enterpriseName>${PM_RESPONSIBLE_COMPANY}</enterpriseName>
+        </responsiblePartnerCompany>
+        <security securityClassification="${PM_SECURITY}"/>
+      </dmlEntryStatus>
+    </dmlEntry>
+    -->
+    
+    <!-- ================================================================= -->
+    <!-- DML ENTRY - ICN REFERENCE                                         -->
+    <!-- ================================================================= -->
+    <!--
+    <dmlEntry>
+      <infoEntityRef infoEntityRefIdent="${ICN_IDENT}">
+        <issueInfo issueNumber="${ICN_ISSUE}" inWork="${ICN_INWORK}"/>
+      </infoEntityRef>
+      <dmlEntryStatus>
+        <answer answerStatusCode="0"/>
+        <responsiblePartnerCompany>
+          <enterpriseName>${ICN_RESPONSIBLE_COMPANY}</enterpriseName>
+        </responsiblePartnerCompany>
+        <security securityClassification="${ICN_SECURITY}"/>
+      </dmlEntryStatus>
+    </dmlEntry>
+    -->
+    
+    <!-- ================================================================= -->
+    <!-- DML ENTRY - COMMENT CODE REFERENCE                                -->
+    <!-- ================================================================= -->
+    <!--
+    <dmlEntry>
+      <commentRef>
+        <commentRefIdent>
+          <commentCode 
+            modelIdentCode="${COMMENT_MODEL}"
+            senderIdent="${COMMENT_SENDER}"
+            yearOfDataIssue="${COMMENT_YEAR}"
+            seqNumber="${COMMENT_SEQ}"
+            commentType="${COMMENT_TYPE}"/>
+          <language languageIsoCode="${COMMENT_LANGUAGE}" countryIsoCode="${COMMENT_COUNTRY}"/>
+        </commentRefIdent>
+      </commentRef>
+      <dmlEntryStatus>
+        <answer answerStatusCode="0"/>
+        <responsiblePartnerCompany>
+          <enterpriseName>${COMMENT_RESPONSIBLE_COMPANY}</enterpriseName>
+        </responsiblePartnerCompany>
+        <security securityClassification="${COMMENT_SECURITY}"/>
+      </dmlEntryStatus>
+    </dmlEntry>
+    -->
+    
+  </dmlContent>
+  
+</dml>

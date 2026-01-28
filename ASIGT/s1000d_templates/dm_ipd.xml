@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+=============================================================================
+S1000D Data Module Template - Illustrated Parts Data (IPD)
+ASIGT S1000D Templates
+Version: 2.0.0
+Issue: 5.0
+
+Purpose: Template for illustrated parts data modules containing parts lists,
+         exploded view illustrations, and part number information for IPC.
+
+Info Codes: 941, 942, 944
+
+Usage: This template is populated by ASIGT generators under ASIT contract
+       authority. Placeholder tokens (${...}) are replaced during generation.
+=============================================================================
+-->
+<dmodule xmlns="http://www.s1000d.org/S1000D_5-0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.s1000d.org/S1000D_5-0 S1000D_5-0/xml_schema_flat/ipd.xsd">
+  
+  <!-- ===================================================================== -->
+  <!-- IDENTIFICATION AND STATUS SECTION                                     -->
+  <!-- ===================================================================== -->
+  <identAndStatusSection>
+    
+    <!-- Data Module Address -->
+    <dmAddress>
+      <dmIdent>
+        <!-- Data Module Code -->
+        <dmCode 
+          modelIdentCode="${MODEL_IDENT_CODE}"
+          systemDiffCode="${SYSTEM_DIFF_CODE}"
+          systemCode="${SYSTEM_CODE}"
+          subSystemCode="${SUBSYSTEM_CODE}"
+          subSubSystemCode="${SUB_SUBSYSTEM_CODE}"
+          assyCode="${ASSY_CODE}"
+          disassyCode="${DISASSY_CODE}"
+          disassyCodeVariant="${DISASSY_CODE_VARIANT}"
+          infoCode="${INFO_CODE}"
+          infoCodeVariant="${INFO_CODE_VARIANT}"
+          itemLocationCode="${ITEM_LOCATION_CODE}"/>
+        
+        <!-- Language -->
+        <language languageIsoCode="${LANGUAGE_CODE}" countryIsoCode="${COUNTRY_CODE}"/>
+        
+        <!-- Issue Information -->
+        <issueInfo issueNumber="${ISSUE_NUMBER}" inWork="${IN_WORK}"/>
+      </dmIdent>
+      
+      <!-- Data Module Address Items -->
+      <dmAddressItems>
+        <issueDate year="${ISSUE_YEAR}" month="${ISSUE_MONTH}" day="${ISSUE_DAY}"/>
+        <dmTitle>
+          <techName>${TECH_NAME}</techName>
+          <infoName>Illustrated Parts Data</infoName>
+        </dmTitle>
+      </dmAddressItems>
+    </dmAddress>
+    
+    <!-- Data Module Status -->
+    <dmStatus issueType="${ISSUE_TYPE}">
+      <security securityClassification="${SECURITY_CLASSIFICATION}"/>
+      
+      <!-- Responsible Partner Company -->
+      <responsiblePartnerCompany>
+        <enterpriseName>${RESPONSIBLE_COMPANY}</enterpriseName>
+      </responsiblePartnerCompany>
+      
+      <!-- Originator -->
+      <originator>
+        <enterpriseName>${ORIGINATOR_NAME}</enterpriseName>
+        <enterpriseIdent>${ORIGINATOR_CAGE}</enterpriseIdent>
+      </originator>
+      
+      <!-- Applicability -->
+      <applic>
+        <displayText>
+          <simplePara>${APPLICABILITY_TEXT}</simplePara>
+        </displayText>
+      </applic>
+      
+      <!-- BREX Reference -->
+      <brexDmRef>
+        <dmRef>
+          <dmRefIdent>
+            <dmCode 
+              modelIdentCode="${BREX_MODEL_IDENT}"
+              systemDiffCode="A"
+              systemCode="00"
+              subSystemCode="0"
+              subSubSystemCode="0"
+              assyCode="00"
+              disassyCode="00"
+              disassyCodeVariant="A"
+              infoCode="022"
+              infoCodeVariant="A"
+              itemLocationCode="D"/>
+          </dmRefIdent>
+        </dmRef>
+      </brexDmRef>
+      
+      <!-- Quality Assurance -->
+      <qualityAssurance>
+        <unverified/>
+      </qualityAssurance>
+    </dmStatus>
+  </identAndStatusSection>
+  
+  <!-- ===================================================================== -->
+  <!-- CONTENT SECTION - ILLUSTRATED PARTS DATA                              -->
+  <!-- ===================================================================== -->
+  <content>
+    <illustratedPartsCatalog>
+      
+      <!-- ================================================================= -->
+      <!-- FIGURE SECTION                                                    -->
+      <!-- ================================================================= -->
+      <figure id="fig-ipd-001">
+        <title>${FIGURE_TITLE}</title>
+        <graphic infoEntityIdent="${ICN_REFERENCE}">
+          <!-- Hotspots linking to parts -->
+          <!--
+          <hotspot id="hs-001" 
+                   applicationStructIdent="item-001"
+                   hotspotTitle="${ITEM_1_NAME}"/>
+          <hotspot id="hs-002" 
+                   applicationStructIdent="item-002"
+                   hotspotTitle="${ITEM_2_NAME}"/>
+          <hotspot id="hs-003" 
+                   applicationStructIdent="item-003"
+                   hotspotTitle="${ITEM_3_NAME}"/>
+          -->
+        </graphic>
+      </figure>
+      
+      <!-- ================================================================= -->
+      <!-- PARTS LIST / CATALOG SEQUENCE NUMBER                              -->
+      <!-- ================================================================= -->
+      <catalogSeqNumber id="csn-001" 
+                        catalogSeqNumberValue="${CSN_VALUE}"
+                        indenture="${INDENTURE_LEVEL}">
+        
+        <!-- Assembly/Item Information -->
+        <itemSeqNumber itemSeqNumberValue="${ITEM_SEQ_NUM}">
+          
+          <!-- Quantity Per Assembly -->
+          <quantityPerNextHigherAssy>${QUANTITY}</quantityPerNextHigherAssy>
+          
+          <!-- Part Identification -->
+          <partRef>
+            <partIdent manufacturerCodeValue="${MANUFACTURER_CAGE}">
+              <partNumber>${PART_NUMBER}</partNumber>
+            </partIdent>
+          </partRef>
+          
+          <!-- Part Identification Segment -->
+          <partIdentSegment>
+            <!-- Nomenclature / Description -->
+            <descrForPart>${PART_DESCRIPTION}</descrForPart>
+            
+            <!-- Additional Part Information -->
+            <!--
+            <partKeyword>${KEYWORD}</partKeyword>
+            -->
+          </partIdentSegment>
+          
+          <!-- Part Location Segment -->
+          <partLocationSegment>
+            <attachStoreShipPart>
+              <attachedPart>
+                <locationRcmdSegment>
+                  <genericPartDataGroup>
+                    <genericPartData>
+                      <genericPartDataName>${LOCATION_TYPE}</genericPartDataName>
+                      <genericPartDataValue>${LOCATION_VALUE}</genericPartDataValue>
+                    </genericPartData>
+                  </genericPartDataGroup>
+                </locationRcmdSegment>
+              </attachedPart>
+            </attachStoreShipPart>
+          </partLocationSegment>
+          
+          <!-- References to Illustration -->
+          <refs>
+            <internalRef internalRefId="hs-001" internalRefTargetType="irtt03"/>
+          </refs>
+          
+          <!-- Applicability for this part -->
+          <!--
+          <applic>
+            <displayText>
+              <simplePara>${PART_APPLICABILITY}</simplePara>
+            </displayText>
+          </applic>
+          -->
+          
+        </itemSeqNumber>
+        
+        <!-- Additional Items in this CSN -->
+        <!--
+        <itemSeqNumber itemSeqNumberValue="${ITEM_SEQ_NUM_2}">
+          <quantityPerNextHigherAssy>${QUANTITY_2}</quantityPerNextHigherAssy>
+          <partRef>
+            <partIdent manufacturerCodeValue="${MANUFACTURER_CAGE_2}">
+              <partNumber>${PART_NUMBER_2}</partNumber>
+            </partIdent>
+          </partRef>
+          <partIdentSegment>
+            <descrForPart>${PART_DESCRIPTION_2}</descrForPart>
+          </partIdentSegment>
+        </itemSeqNumber>
+        -->
+        
+      </catalogSeqNumber>
+      
+      <!-- ================================================================= -->
+      <!-- ADDITIONAL CATALOG SEQUENCE NUMBERS                               -->
+      <!-- ================================================================= -->
+      <!--
+      <catalogSeqNumber id="csn-002" 
+                        catalogSeqNumberValue="${CSN_VALUE_2}"
+                        indenture="${INDENTURE_LEVEL_2}">
+        <itemSeqNumber itemSeqNumberValue="${ITEM_SEQ_NUM_3}">
+          <quantityPerNextHigherAssy>${QUANTITY_3}</quantityPerNextHigherAssy>
+          <partRef>
+            <partIdent manufacturerCodeValue="${MANUFACTURER_CAGE_3}">
+              <partNumber>${PART_NUMBER_3}</partNumber>
+            </partIdent>
+          </partRef>
+          <partIdentSegment>
+            <descrForPart>${PART_DESCRIPTION_3}</descrForPart>
+          </partIdentSegment>
+        </itemSeqNumber>
+      </catalogSeqNumber>
+      -->
+      
+      <!-- ================================================================= -->
+      <!-- SUB-ASSEMBLY (NESTED CSN)                                         -->
+      <!-- ================================================================= -->
+      <!--
+      <catalogSeqNumber id="csn-sub-001" 
+                        catalogSeqNumberValue="${SUB_CSN_VALUE}"
+                        indenture="2">
+        
+        <itemSeqNumber itemSeqNumberValue="${SUB_ITEM_SEQ}">
+          <quantityPerNextHigherAssy>${SUB_QUANTITY}</quantityPerNextHigherAssy>
+          <partRef>
+            <partIdent manufacturerCodeValue="${SUB_MANUFACTURER}">
+              <partNumber>${SUB_PART_NUMBER}</partNumber>
+            </partIdent>
+          </partRef>
+          <partIdentSegment>
+            <descrForPart>${SUB_PART_DESCRIPTION}</descrForPart>
+          </partIdentSegment>
+        </itemSeqNumber>
+        
+      </catalogSeqNumber>
+      -->
+      
+    </illustratedPartsCatalog>
+  </content>
+  
+</dmodule>

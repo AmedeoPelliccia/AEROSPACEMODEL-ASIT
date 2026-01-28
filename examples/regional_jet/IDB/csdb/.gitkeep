@@ -1,0 +1,14 @@
+# IDB — Information Database
+
+Generated S1000D content will appear here after running:
+
+```bash
+python run_example.py --all
+```
+
+Or for specific publications:
+```bash
+aerospacemodel run --contract RJ7-CTR-AMM-001 --baseline FBL-RJ7-2026-Q1
+aerospacemodel run --contract RJ7-CTR-IPC-001 --baseline PBL-RJ7-2026-Q1
+aerospacemodel run --contract RJ7-CTR-SRM-001 --baseline FBL-RJ7-2026-Q1
+```

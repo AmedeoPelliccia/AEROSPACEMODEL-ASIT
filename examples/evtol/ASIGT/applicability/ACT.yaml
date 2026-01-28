@@ -1,0 +1,62 @@
+# =============================================================================
+# SkyLift-200 — Applicability Cross-Reference Table (ACT)
+# =============================================================================
+
+metadata:
+  program: "SkyLift-200"
+  model_code: "SL2"
+  version: "1.0.0"
+
+product_attributes:
+  - id: "aircraft_variant"
+    name: "Aircraft Variant"
+    values:
+      - value: "SL2-P"
+        description: "Piloted variant"
+      - value: "SL2-A"
+        description: "Autonomous-capable variant (future)"
+        
+  - id: "software_version"
+    name: "Flight Software Version"
+    values:
+      - value: "FCC-1.0"
+        description: "FCC Software v1.0"
+      - value: "BMS-1.0"
+        description: "BMS Software v1.0"
+      - value: "VMS-1.0"
+        description: "VMS Software v1.0"
+        
+  - id: "battery_config"
+    name: "Battery Configuration"
+    values:
+      - value: "BATT-STD"
+        description: "Standard 160kWh configuration"
+
+cross_reference:
+  - applic_id: "APP-SL2-ALL"
+    description: "All SL2 variants"
+    conditions:
+      - attribute: "aircraft_variant"
+        operator: "in"
+        values: ["SL2-P", "SL2-A"]
+        
+  - applic_id: "APP-SL2-P"
+    description: "Piloted variant only"
+    conditions:
+      - attribute: "aircraft_variant"
+        operator: "equals"
+        values: ["SL2-P"]
+        
+  - applic_id: "APP-SL2-A"
+    description: "Autonomous variant only (future)"
+    conditions:
+      - attribute: "aircraft_variant"
+        operator: "equals"
+        values: ["SL2-A"]
+        
+  - applic_id: "APP-SL2-FCC-1.0"
+    description: "FCC Software v1.0 installed"
+    conditions:
+      - attribute: "software_version"
+        operator: "includes"
+        values: ["FCC-1.0"]

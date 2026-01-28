@@ -1,0 +1,97 @@
+# =============================================================================
+# SkyLift-200 — ATA 45 Central Maintenance / Health Monitoring
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "requirements"
+  ata_chapter: "45"
+  title: "Integrated Health Management System"
+  baseline: "FBL-SL2-2026-Q1"
+
+requirements:
+  - id: "REQ-SL2-HM-001"
+    type: "descriptive"
+    title: "Health Monitoring System Description"
+    ata_code: "45-00-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    software_dal: "C"
+    
+    content:
+      summary: |
+        The Integrated Health Management System provides real-time monitoring,
+        diagnostics, and prognostics for all aircraft systems.
+        
+      details: |
+        IHMS functions:
+        - Continuous system monitoring
+        - Fault detection and isolation
+        - Prognostic health assessment
+        - Maintenance action recommendations
+        - Flight data recording
+        - Ground data download
+        
+    traceability:
+      parent: "SYS-REQ-045"
+      
+  - id: "REQ-SL2-HM-002"
+    type: "descriptive"
+    title: "Propulsion Health Monitoring"
+    ata_code: "45-10-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    
+    content:
+      summary: |
+        Monitoring of all 8 motor units and associated systems.
+        
+      details: |
+        Monitored parameters:
+        - Motor temperature (each motor)
+        - Motor vibration
+        - Bearing condition
+        - Controller temperature
+        - Power consumption
+        - RPM accuracy
+        
+        Prognostics:
+        - Bearing wear trending
+        - Insulation degradation
+        - Efficiency degradation
+        
+  - id: "REQ-SL2-HM-003"
+    type: "descriptive"
+    title: "Battery Health Monitoring"
+    ata_code: "45-10-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    
+    content:
+      summary: |
+        Continuous monitoring of battery system health and degradation.
+        
+      details: |
+        Monitored parameters:
+        - Cell voltage imbalance
+        - Capacity fade
+        - Internal resistance
+        - Thermal behavior
+        - Charge cycles
+        
+        Prognostics:
+        - State of Health (SoH) trending
+        - Remaining useful life (RUL)
+        - Replacement scheduling
+        
+  - id: "REQ-SL2-HM-004"
+    type: "procedural"
+    title: "Health Data Download"
+    ata_code: "45-30-00"
+    info_code: "300"
+    applicability: "APP-SL2-ALL"
+    task_type: "scheduled"
+    interval: "Each flight"
+    
+    content:
+      summary: "Procedure to download health monitoring data"

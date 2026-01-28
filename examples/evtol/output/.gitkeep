@@ -1,0 +1,9 @@
+# Output Directory
+
+Rendered publications for SkyLift-200:
+
+```
+output/
+├── amm/        # Aircraft Maintenance Manual
+└── cmm/        # Component Maintenance Manual (Battery)
+```

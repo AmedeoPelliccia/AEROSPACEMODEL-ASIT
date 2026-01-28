@@ -1,0 +1,5 @@
+baseline_id,type,name,description,status,created_date,approved_date,approved_by,scope,content_hash,notes
+DBL-SL2-2025-Q3,DBL,Concept Design Baseline,Initial concept design freeze,frozen,2025-07-15,2025-07-20,CCB-2025-012,All systems,sha256:evtol1...,Concept approved
+DBL-SL2-2025-Q4,DBL,Preliminary Design Baseline,PDR freeze,frozen,2025-10-15,2025-10-20,CCB-2025-028,All systems,sha256:evtol2...,PDR passed
+FBL-SL2-2026-Q1,FBL,Development Baseline,Active development baseline,active,2026-01-10,2026-01-15,CCB-2026-005,All systems,sha256:evtol3...,CDR in progress
+SBL-SL2-2026-Q1,SBL,Software Baseline,Flight software v1.0,active,2026-01-15,2026-01-18,SCCB-2026-002,FCC/BMS/VMS software,sha256:soft1...,DO-178C DAL A/B

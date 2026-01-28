@@ -1,0 +1,117 @@
+# =============================================================================
+# {{ program_name }} — CSDB Transformation Contract Template
+# =============================================================================
+# Template for creating contracts that transform KDB content to CSDB modules.
+#
+# Contract Type: KDB → IDB (CSDB)
+# =============================================================================
+
+contract:
+  id: "{{ model_code }}-CTR-{TYPE}-{SEQUENCE}"
+  version: "1.0.0"
+  type: "KDB_TO_CSDB"
+  
+  metadata:
+    title: "{Publication Type} Generation Contract"
+    description: "Transform KDB source data to S1000D data modules"
+    created_date: "{{ created_date }}"
+    created_by: "{{ created_by }}"
+    
+  status: "draft"  # draft | review | approved | active | superseded
+
+# -----------------------------------------------------------------------------
+# Source Definition
+# -----------------------------------------------------------------------------
+source:
+  baseline:
+    type: "{FBL | PBL}"
+    id: "{baseline-id}"
+    
+  scope:
+    ata_chapters:
+      - "{chapter}"
+    content_types:
+      - "{requirements | tasks | parts | repairs | faults}"
+      
+  location:
+    path: "KDB/{category}/"
+    filter: "*.{xml | yaml}"
+
+# -----------------------------------------------------------------------------
+# Target Definition
+# -----------------------------------------------------------------------------
+target:
+  publication:
+    type: "{AMM | CMM | IPC | SRM | TSM}"
+    pm_code: "PMC-{{ model_code }}-{{ cage_code }}-{number}-00"
+    
+  output:
+    format: "S1000D"
+    issue: "{{ s1000d_issue }}"
+    
+  location:
+    path: "IDB/csdb/"
+
+# -----------------------------------------------------------------------------
+# Transformation Rules
+# -----------------------------------------------------------------------------
+transformation:
+  generators:
+    - type: "dm"
+      enabled: true
+      mapping: "requirement_to_dm.yaml"
+      
+  options:
+    include_graphics: true
+    generate_dml: true
+    
+# -----------------------------------------------------------------------------
+# Validation Requirements
+# -----------------------------------------------------------------------------
+validation:
+  brex:
+    enabled: true
+    rules: "{{ model_code }}_brex.yaml"
+    strict: true
+    
+  schema:
+    enabled: true
+    fail_on_error: true
+    
+  trace:
+    enabled: true
+    require_complete: true
+
+# -----------------------------------------------------------------------------
+# Approval
+# -----------------------------------------------------------------------------
+approval:
+  required: true
+  
+  authority:
+    role: "STK_CM"
+    name: ""
+    date: ""
+    signature: ""
+    
+  reviewers:
+    - role: "STK_ENG"
+      name: ""
+      date: ""
+    - role: "STK_QA"
+      name: ""
+      date: ""
+
+# -----------------------------------------------------------------------------
+# Execution Control
+# -----------------------------------------------------------------------------
+execution:
+  pipeline: "pipelines/{type}_pipeline.yaml"
+  
+  schedule:
+    type: "manual"  # manual | scheduled | triggered
+    
+  notifications:
+    on_start: []
+    on_complete: []
+    on_failure: ["{{ created_by }}"]

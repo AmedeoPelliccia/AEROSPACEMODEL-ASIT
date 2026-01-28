@@ -1,0 +1,84 @@
+# =============================================================================
+# RegionalJet-700 — Source Requirements: ATA 28 Fuel
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "requirements"
+  ata_chapter: "28"
+  title: "Fuel System Requirements"
+  baseline: "FBL-RJ7-2026-Q1"
+
+requirements:
+  - id: "REQ-RJ7-FUEL-001"
+    type: "descriptive"
+    title: "Fuel System Description"
+    ata_code: "28-00-00"
+    info_code: "040"
+    applicability: "APP-RJ7-ALL"
+    
+    content:
+      summary: |
+        The RJ7 fuel system provides fuel storage, management, and delivery
+        to the twin turbofan engines.
+        
+      details: |
+        The fuel system consists of:
+        - Two wing fuel tanks (integral)
+        - Center auxiliary tank (RJ7-ER only)
+        - Engine feed system
+        - Fuel quantity indicating system
+        - Fuel management computer
+        
+    traceability:
+      parent: "SYS-REQ-028"
+      
+  - id: "REQ-RJ7-FUEL-002"
+    type: "descriptive"
+    title: "Wing Tank Description"
+    ata_code: "28-10-00"
+    info_code: "040"
+    applicability: "APP-RJ7-ALL"
+    
+    content:
+      summary: |
+        Each wing contains an integral fuel tank providing primary fuel storage.
+        
+      details: |
+        Wing tank specifications:
+        - Left wing tank capacity: 1,200 gallons
+        - Right wing tank capacity: 1,200 gallons
+        - Usable fuel: 2,350 gallons (combined)
+        - Tank material: Integral aluminum structure with sealant
+        
+  - id: "REQ-RJ7-FUEL-003"
+    type: "descriptive"
+    title: "Center Tank Description (ER)"
+    ata_code: "28-10-00"
+    info_code: "040"
+    applicability: "APP-RJ7-ER"
+    
+    content:
+      summary: |
+        The RJ7-ER includes a center fuselage auxiliary fuel tank.
+        
+      details: |
+        Center tank specifications (ER variant only):
+        - Capacity: 600 gallons
+        - Location: Center fuselage, below cabin floor
+        - Feed priority: Center tank empties first
+        
+  - id: "REQ-RJ7-FUEL-010"
+    type: "procedural"
+    title: "Fuel Tank Inspection"
+    ata_code: "28-10-00"
+    info_code: "300"
+    applicability: "APP-RJ7-ALL"
+    task_type: "scheduled"
+    interval: "C-Check"
+    
+    content:
+      summary: "Internal fuel tank inspection procedure"
+      
+    traceability:
+      parent: "MRB-28-001"

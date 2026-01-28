@@ -1,0 +1,90 @@
+# =============================================================================
+# RegionalJet-700 — Source Requirements: ATA 32 Landing Gear
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "requirements"
+  ata_chapter: "32"
+  title: "Landing Gear System Requirements"
+  baseline: "FBL-RJ7-2026-Q1"
+
+requirements:
+  - id: "REQ-RJ7-LG-001"
+    type: "descriptive"
+    title: "Landing Gear System Description"
+    ata_code: "32-00-00"
+    info_code: "040"
+    applicability: "APP-RJ7-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        The RJ7 landing gear system provides ground support during taxi,
+        takeoff, and landing operations.
+        
+      details: |
+        Landing gear configuration:
+        - Tricycle arrangement
+        - Retractable nose and main gear
+        - Hydraulically actuated with manual extension backup
+        
+        Components:
+        - Nose landing gear (single wheel)
+        - Main landing gear (dual wheel per strut)
+        - Gear doors
+        - Position indicating system
+        - Steering system
+        - Brake system with anti-skid
+        
+  - id: "REQ-RJ7-LG-002"
+    type: "descriptive"
+    title: "Main Landing Gear"
+    ata_code: "32-10-00"
+    info_code: "040"
+    applicability: "APP-RJ7-ALL"
+    
+    content:
+      summary: |
+        Two main landing gear assemblies support aircraft weight during
+        ground operations.
+        
+      details: |
+        Main gear specifications:
+        - Type: Trailing arm with dual wheels
+        - Tire size: 40x14
+        - Wheel brake: Carbon multi-disc
+        - Shock absorber: Oleo-pneumatic
+        - Retraction: Forward into wing/fuselage fairing
+        
+  - id: "REQ-RJ7-LG-003"
+    type: "descriptive"
+    title: "Nose Landing Gear"
+    ata_code: "32-20-00"
+    info_code: "040"
+    applicability: "APP-RJ7-ALL"
+    
+    content:
+      summary: |
+        The nose landing gear provides directional control during ground
+        operations.
+        
+      details: |
+        Nose gear specifications:
+        - Type: Forward retracting with single wheel
+        - Tire size: 24x7.7
+        - Steering: Hydraulic, ±70° authority
+        - Shock absorber: Oleo-pneumatic
+        - Retraction: Forward into fuselage bay
+        
+  - id: "REQ-RJ7-LG-010"
+    type: "procedural"
+    title: "Landing Gear Retraction Test"
+    ata_code: "32-30-00"
+    info_code: "300"
+    applicability: "APP-RJ7-ALL"
+    task_type: "scheduled"
+    interval: "A-Check"
+    
+    content:
+      summary: "Operational test of landing gear retraction system"

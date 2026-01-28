@@ -1,0 +1,285 @@
+# =============================================================================
+# {{ program_name }} — ASIGT Layer Configuration
+# =============================================================================
+# Configuration for the Aircraft Systems Information Generative Transponder.
+# Defines generation, validation, and rendering settings.
+#
+# Program: {{ program_name }} ({{ model_code }})
+# Generated: {{ created_date }}
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# ASIGT Identity
+# -----------------------------------------------------------------------------
+asigt:
+  version: "2.0.0"
+  program:
+    name: "{{ program_name }}"
+    model_code: "{{ model_code }}"
+    organization: "{{ organization }}"
+
+# -----------------------------------------------------------------------------
+# S1000D Configuration
+# -----------------------------------------------------------------------------
+s1000d:
+  issue: "{{ s1000d_issue }}"
+  namespace: "http://www.s1000d.org/S1000D_{{ s1000d_issue | replace('.', '-') }}"
+  
+  # Data Module Code Defaults
+  dm_code:
+    model_ident_code: "{{ model_code }}"
+    system_diff_code: "A"
+    system_code: "00"
+    sub_system_code: "0"
+    sub_sub_system_code: "0"
+    assy_code: "00"
+    disassy_code: "00"
+    disassy_code_variant: "A"
+    info_code: "000"
+    info_code_variant: "A"
+    item_location_code: "A"
+    learn_code: null
+    learn_event_code: null
+    
+  # Publication Module Code Defaults
+  pm_code:
+    model_ident_code: "{{ model_code }}"
+    pm_issuer: "{{ cage_code }}"
+    pm_number: "00001"
+    pm_volume: "00"
+    
+  # Issue Info Defaults
+  issue_info:
+    issue_number: "001"
+    in_work: "00"
+    
+  # Security Classification
+  security:
+    classification: "01"  # 01 = Unclassified
+    caveats: []
+    
+  # Responsible Partner Company
+  rpc:
+    cage: "{{ cage_code }}"
+    
+  # Originator
+  originator:
+    cage: "{{ cage_code }}"
+
+# -----------------------------------------------------------------------------
+# Generator Configuration
+# -----------------------------------------------------------------------------
+generators:
+  # Data Module Generator
+  dm_generator:
+    enabled: true
+    template_directory: "{{ aerospacemodel_root }}/ASIGT/s1000d_templates"
+    
+    types:
+      descriptive:
+        template: "dm_descriptive.xml"
+        info_codes: ["040", "041", "042"]
+        
+      procedural:
+        template: "dm_procedural.xml"
+        info_codes: ["100", "200", "300", "500", "600", "700", "710", "720"]
+        
+      fault:
+        template: "dm_fault_isolation.xml"
+        info_codes: ["400", "401"]
+        
+      ipd:
+        template: "dm_ipd.xml"
+        info_codes: ["941"]
+        
+    defaults:
+      language: "{{ language_code }}"
+      country: "{{ country_code }}"
+      
+  # Publication Module Generator
+  pm_generator:
+    enabled: true
+    template: "pm_structure.xml"
+    
+  # Data Module List Generator
+  dml_generator:
+    enabled: true
+    template: "dml_structure.xml"
+    
+  # ICN (Graphics) Handler
+  icn_handler:
+    enabled: true
+    
+    input_formats:
+      - extension: ".cgm"
+        mime_type: "image/cgm"
+      - extension: ".png"
+        mime_type: "image/png"
+      - extension: ".svg"
+        mime_type: "image/svg+xml"
+      - extension: ".tif"
+        mime_type: "image/tiff"
+      - extension: ".tiff"
+        mime_type: "image/tiff"
+        
+    output_format: "CGM"  # CGM | PNG | SVG
+    
+    naming:
+      pattern: "ICN-{{ model_code }}-{sequence}-{variant}-{issue}.{ext}"
+      
+  # Applicability Handler
+  applicability:
+    enabled: true
+    
+    act_file: null  # Applicability Cross-reference Table
+    cct_file: null  # Conditions Cross-reference Table
+    pct_file: null  # Product Cross-reference Table
+
+# -----------------------------------------------------------------------------
+# Validator Configuration
+# -----------------------------------------------------------------------------
+validators:
+  # BREX Validator
+  brex:
+    enabled: true
+    strict_mode: true
+    
+    rules:
+      base: "{{ aerospacemodel_root }}/ASIGT/brex/S1000D_{{ s1000d_issue }}_DEFAULT.yaml"
+      project: "brex/{{ model_code }}_brex.yaml"
+      
+    options:
+      fail_on_warning: false
+      report_all_violations: true
+      
+  # Schema Validator
+  schema:
+    enabled: true
+    
+    schema_directory: "{{ aerospacemodel_root }}/schemas/s1000d/{{ s1000d_issue }}"
+    
+    validation_options:
+      validate_on_generate: true
+      validate_on_save: true
+      cache_schemas: true
+      
+  # Traceability Validator
+  trace:
+    enabled: true
+    
+    requirements:
+      every_dm_traced: true
+      every_requirement_covered: false  # Set true for certification
+      orphan_detection: true
+      
+    link_validation:
+      verify_targets_exist: true
+      verify_bidirectional: false
+
+# -----------------------------------------------------------------------------
+# Renderer Configuration
+# -----------------------------------------------------------------------------
+renderers:
+  # PDF Renderer
+  pdf:
+    enabled: true
+    
+    engine: "fop"  # fop | weasyprint | prince
+    
+    stylesheet:
+      base: "{{ aerospacemodel_root }}/ASIGT/renderers/stylesheets/pdf_default.xsl"
+      custom: null
+      
+    options:
+      page_size: "A4"
+      orientation: "portrait"
+      embed_fonts: true
+      pdf_version: "1.7"
+      
+    output:
+      directory: "output/pdf"
+      naming_pattern: "{pm_code}_{issue}_{date}.pdf"
+      
+  # HTML Renderer
+  html:
+    enabled: true
+    
+    stylesheet:
+      base: "{{ aerospacemodel_root }}/ASIGT/renderers/stylesheets/html_default.xsl"
+      custom: null
+      css: "{{ aerospacemodel_root }}/ASIGT/renderers/stylesheets/s1000d.css"
+      
+    options:
+      single_page: false
+      include_toc: true
+      responsive: true
+      
+    output:
+      directory: "output/html"
+      
+  # IETP Packager
+  ietp:
+    enabled: true
+    
+    format: "SCORM"  # SCORM | S1000D_IETP
+    scorm_version: "2004"
+    
+    viewer:
+      include: true
+      type: "embedded"  # embedded | external
+      
+    output:
+      directory: "output/ietp"
+      naming_pattern: "{pm_code}_{issue}_IETP.zip"
+
+# -----------------------------------------------------------------------------
+# Run Configuration
+# -----------------------------------------------------------------------------
+runs:
+  directory: "runs"
+  
+  naming:
+    pattern: "{date}_{time}__{contract_id}"
+    date_format: "YYYYMMDD"
+    time_format: "HHMM"
+    
+  artifacts:
+    input_manifest: true
+    output_manifest: true
+    trace_matrix: true
+    validation_report: true
+    metrics: true
+    log: true
+    
+  retention:
+    days: 365
+    archive_completed: true
+    archive_format: "zip"
+    
+  immutability:
+    enabled: true
+    hash_algorithm: "SHA-256"
+    sign_artifacts: false
+
+# -----------------------------------------------------------------------------
+# Mapping Configuration
+# -----------------------------------------------------------------------------
+mapping:
+  directory: "{{ aerospacemodel_root }}/ASIGT/mapping"
+  
+  rules:
+    - name: "requirement_to_dm"
+      file: "requirement_to_dm.yaml"
+      enabled: true
+      
+    - name: "task_to_dm"
+      file: "task_to_dm.yaml"
+      enabled: true
+      
+    - name: "repair_to_dm"
+      file: "repair_to_dm.yaml"
+      enabled: true
+      
+    - name: "parts_to_ipd"
+      file: "parts_to_ipd.yaml"
+      enabled: true

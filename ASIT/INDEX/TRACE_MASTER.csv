@@ -1,0 +1,24 @@
+trace_id,source_type,source_id,source_baseline,target_type,target_id,target_baseline,contract_id,run_id,created_date,status,notes
+# =============================================================================
+# TRACE MASTER
+# Master traceability matrix for all source→target relationships
+# =============================================================================
+#
+# COLUMNS:
+#   trace_id        - Unique trace identifier (TRC-NNNNNN)
+#   source_type     - Source artifact type (REQUIREMENT, TASK, PART, etc.)
+#   source_id       - Source artifact ID
+#   source_baseline - Baseline containing source
+#   target_type     - Target artifact type (DM, PM, ICN, etc.)
+#   target_id       - Target artifact ID (DMC, PMC, etc.)
+#   target_baseline - Baseline containing target
+#   contract_id     - Contract that created the trace
+#   run_id          - ASIGT run that created the trace
+#   created_date    - ISO 8601 creation date
+#   status          - ACTIVE, SUPERSEDED, DELETED
+#   notes           - Additional notes
+#
+# EXAMPLE ENTRIES:
+# TRC-000001,REQUIREMENT,KDB-REQ-SYS-0001,FBL-2026-Q1-001,DM,HJ1-A-28-00-00-00A-040A-A,OBL-2026-Q2-001,KITDM-CTR-LM-CSDB_ATA28-v1.0.0,20260122-1430__KITDM-CTR-LM-CSDB_ATA28,2026-01-22,ACTIVE,Initial generation
+# TRC-000002,TASK,KDB-TSK-MNT-0042,FBL-2026-Q1-001,DM,HJ1-A-28-10-00-00A-720A-A,OBL-2026-Q2-001,KITDM-CTR-LM-CSDB_ATA28-v1.0.0,20260122-1430__KITDM-CTR-LM-CSDB_ATA28,2026-01-22,ACTIVE,Fuel tank inspection
+#

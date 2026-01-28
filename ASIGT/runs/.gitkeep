@@ -1,0 +1,8 @@
+This file preserves the runs/ directory in version control.
+Run artifacts are generated at execution time and should be
+# added to .gitignore for production deployments.
+#
+# Each run creates an immutable subdirectory:
+#   YYYYMMDD-HHMM__<contract-id>/
+#
+# See README.md in this directory for structure details.

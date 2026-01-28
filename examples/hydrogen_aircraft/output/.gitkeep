@@ -1,0 +1,9 @@
+# Output Directory
+
+Rendered publications for HydrogenJet-100:
+
+```
+output/
+├── amm/        # Aircraft Maintenance Manual
+└── cmm/        # Component Maintenance Manual (Fuel Cell)
+```

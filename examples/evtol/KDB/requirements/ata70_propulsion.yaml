@@ -1,0 +1,116 @@
+# =============================================================================
+# SkyLift-200 — ATA 70-72 Distributed Electric Propulsion
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "requirements"
+  ata_chapter: "70-72"
+  title: "Distributed Electric Propulsion System"
+  baseline: "FBL-SL2-2026-Q1"
+
+requirements:
+  - id: "REQ-SL2-PROP-001"
+    type: "descriptive"
+    title: "Propulsion System Description"
+    ata_code: "71-00-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        The SL2 uses Distributed Electric Propulsion (DEP) with eight
+        electric motor units for lift and thrust.
+        
+      details: |
+        Propulsion configuration:
+        - Motor count: 8
+        - Configuration: Tilt-rotor
+        - Power per motor: 100 kW
+        - Total installed power: 800 kW
+        
+        Motor arrangement:
+        - 4 forward motors (tiltable)
+        - 4 aft motors (tiltable)
+        
+    traceability:
+      parent: "SYS-REQ-071"
+    special_conditions:
+      - "SC-VTOL-02"
+      - "SC-VTOL-04"
+      
+  - id: "REQ-SL2-PROP-002"
+    type: "descriptive"
+    title: "Electric Motor Unit"
+    ata_code: "72-10-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        Each motor unit consists of a permanent magnet synchronous motor
+        with integrated controller.
+        
+      details: |
+        Motor unit specifications:
+        - Type: Permanent Magnet Synchronous Motor (PMSM)
+        - Continuous power: 100 kW
+        - Peak power: 120 kW
+        - Operating voltage: 800 VDC
+        - RPM range: 0-3000
+        - Cooling: Liquid cooled
+        
+  - id: "REQ-SL2-PROP-003"
+    type: "descriptive"
+    title: "Motor Controller Unit (MCU)"
+    ata_code: "72-20-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        Each motor is controlled by a dedicated Motor Controller Unit.
+        
+      details: |
+        MCU functions:
+        - Motor speed/torque control
+        - Current limiting
+        - Over-temperature protection
+        - Position sensing
+        - Communication with FCC
+        
+  - id: "REQ-SL2-PROP-004"
+    type: "descriptive"
+    title: "Rotor Assembly"
+    ata_code: "72-30-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    
+    content:
+      summary: |
+        Each motor drives a fixed-pitch rotor assembly.
+        
+      details: |
+        Rotor specifications:
+        - Type: Fixed-pitch
+        - Blade count: 5
+        - Diameter: 1.5 m
+        - Material: Carbon fiber composite
+        
+  - id: "REQ-SL2-PROP-010"
+    type: "procedural"
+    title: "Motor Unit Replacement"
+    ata_code: "72-10-00"
+    info_code: "520"
+    applicability: "APP-SL2-ALL"
+    task_type: "on-condition"
+    
+    content:
+      summary: "Procedure for motor unit replacement"
+      
+    warnings:
+      - type: "high-voltage"
+        text: "Ensure HV system is isolated before motor removal."

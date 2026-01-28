@@ -1,0 +1,350 @@
+# =============================================================================
+# ATA iSpec 2200 Document Type Codes
+# Reference Data for AEROSPACEMODEL
+# =============================================================================
+#
+# This file defines document type codes and publication categories per 
+# ATA iSpec 2200 and S1000D mapping.
+#
+# Source: ATA iSpec 2200 (Reference structure - obtain full spec from A4A)
+# =============================================================================
+
+metadata:
+  specification: "ATA iSpec 2200"
+  version: "2023"
+  description: "Document Type Codes and Publication Categories"
+  note: "Cross-referenced with S1000D publication types"
+
+# -----------------------------------------------------------------------------
+# Primary Publication Types
+# -----------------------------------------------------------------------------
+publication_types:
+  # ---------------------------------------------------------------------------
+  # Maintenance Publications
+  # ---------------------------------------------------------------------------
+  AMM:
+    code: "AMM"
+    title: "Aircraft Maintenance Manual"
+    description: "Maintenance procedures for on-aircraft tasks"
+    s1000d_type: "PM"
+    typical_info_codes:
+      - "040"  # Description
+      - "100"  # Operations
+      - "200"  # Servicing
+      - "300"  # Inspections
+      - "500"  # Remove/Install
+      - "600"  # Repairs
+      - "700"  # Storage
+    update_cycle: "Revision"
+    
+  CMM:
+    code: "CMM"
+    title: "Component Maintenance Manual"
+    description: "Maintenance procedures for off-aircraft component work"
+    s1000d_type: "PM"
+    typical_info_codes:
+      - "001"  # Introduction
+      - "040"  # Description
+      - "300"  # Testing
+      - "400"  # Troubleshooting
+      - "500"  # Disassembly
+      - "520"  # Inspection
+      - "600"  # Repair
+      - "700"  # Assembly
+      - "941"  # IPD
+    update_cycle: "Revision"
+    
+  EMM:
+    code: "EMM"
+    title: "Engine Maintenance Manual"
+    description: "Maintenance procedures for engine overhaul"
+    s1000d_type: "PM"
+    typical_info_codes:
+      - "040"  # Description
+      - "300"  # Testing
+      - "500"  # Disassembly
+      - "520"  # Inspection
+      - "600"  # Repair
+      - "700"  # Assembly
+    update_cycle: "Revision"
+    
+  SRM:
+    code: "SRM"
+    title: "Structural Repair Manual"
+    description: "Structural damage assessment and repair procedures"
+    s1000d_type: "PM"
+    typical_info_codes:
+      - "040"  # Description
+      - "041"  # Allowable Damage
+      - "600"  # Standard Repairs
+      - "620"  # Bonded Repairs
+      - "650"  # Temporary Repairs
+    update_cycle: "Revision"
+    
+  # ---------------------------------------------------------------------------
+  # Troubleshooting Publications
+  # ---------------------------------------------------------------------------
+  TSM:
+    code: "TSM"
+    title: "Troubleshooting Manual"
+    description: "Fault isolation and diagnostic procedures"
+    s1000d_type: "PM"
+    typical_info_codes:
+      - "040"  # Description
+      - "400"  # Fault Isolation
+      - "401"  # Fault Reports
+    update_cycle: "Revision"
+    
+  FIM:
+    code: "FIM"
+    title: "Fault Isolation Manual"
+    description: "Detailed fault isolation procedures"
+    s1000d_type: "PM"
+    typical_info_codes:
+      - "400"  # Fault Isolation
+      - "401"  # Fault Reports
+    update_cycle: "Revision"
+    
+  # ---------------------------------------------------------------------------
+  # Parts Publications
+  # ---------------------------------------------------------------------------
+  IPC:
+    code: "IPC"
+    title: "Illustrated Parts Catalog"
+    description: "Parts identification and ordering information"
+    s1000d_type: "PM"
+    typical_info_codes:
+      - "001"  # Introduction
+      - "00N"  # Numerical Index
+      - "941"  # IPD
+    update_cycle: "Revision"
+    
+  # ---------------------------------------------------------------------------
+  # Wiring Publications
+  # ---------------------------------------------------------------------------
+  WDM:
+    code: "WDM"
+    title: "Wiring Diagram Manual"
+    description: "Electrical wiring diagrams and data"
+    s1000d_type: "PM"
+    typical_info_codes:
+      - "040"  # Description
+      - "C00"  # Schematic
+      - "D00"  # Interconnect
+    update_cycle: "Revision"
+    
+  AWL:
+    code: "AWL"
+    title: "Aircraft Wiring List"
+    description: "Wire list and routing data"
+    s1000d_type: "PM"
+    update_cycle: "Revision"
+    
+  ESDS:
+    code: "ESDS"
+    title: "Electrical Standard Diagram Symbols"
+    description: "Standard symbols for electrical diagrams"
+    s1000d_type: "PM"
+    update_cycle: "Revision"
+    
+  # ---------------------------------------------------------------------------
+  # Flight Operations Publications
+  # ---------------------------------------------------------------------------
+  FCOM:
+    code: "FCOM"
+    title: "Flight Crew Operating Manual"
+    description: "Flight crew procedures and reference"
+    s1000d_type: "PM"
+    typical_info_codes:
+      - "040"  # Description
+      - "100"  # Normal Operations
+      - "200"  # Abnormal Operations
+      - "300"  # Emergency Operations
+    update_cycle: "Revision"
+    
+  QRH:
+    code: "QRH"
+    title: "Quick Reference Handbook"
+    description: "Quick reference for abnormal/emergency procedures"
+    s1000d_type: "PM"
+    update_cycle: "Revision"
+    
+  AFM:
+    code: "AFM"
+    title: "Airplane Flight Manual"
+    description: "FAA/EASA approved flight manual"
+    s1000d_type: "PM"
+    regulatory: true
+    update_cycle: "Approved Revision"
+    
+  # ---------------------------------------------------------------------------
+  # Service Publications
+  # ---------------------------------------------------------------------------
+  SB:
+    code: "SB"
+    title: "Service Bulletin"
+    description: "Recommended modifications and improvements"
+    s1000d_type: "DM"
+    typical_info_codes:
+      - "040"  # Description
+      - "720"  # Modification Procedure
+    update_cycle: "Issue"
+    categories:
+      - "Mandatory"
+      - "Alert"
+      - "Recommended"
+      - "Optional"
+    
+  SL:
+    code: "SL"
+    title: "Service Letter"
+    description: "Service information and guidance"
+    s1000d_type: "DM"
+    update_cycle: "Issue"
+    
+  AOT:
+    code: "AOT"
+    title: "All Operators Telex/Message"
+    description: "Urgent service information"
+    s1000d_type: "DM"
+    update_cycle: "Issue"
+    
+  # ---------------------------------------------------------------------------
+  # Planning Publications
+  # ---------------------------------------------------------------------------
+  MPD:
+    code: "MPD"
+    title: "Maintenance Planning Document"
+    description: "Scheduled maintenance requirements"
+    s1000d_type: "PM"
+    typical_info_codes:
+      - "040"  # Description
+      - "A00"  # Airworthiness Limitations
+      - "B00"  # Certification Requirements
+    update_cycle: "Revision"
+    
+  MRBR:
+    code: "MRBR"
+    title: "Maintenance Review Board Report"
+    description: "MSG-3 analysis results and scheduled tasks"
+    s1000d_type: "PM"
+    regulatory: true
+    update_cycle: "Approved Revision"
+    
+  # ---------------------------------------------------------------------------
+  # Training Publications
+  # ---------------------------------------------------------------------------
+  TMM:
+    code: "TMM"
+    title: "Training Maintenance Manual"
+    description: "Maintenance training materials"
+    s1000d_type: "PM"
+    update_cycle: "Revision"
+    
+  # ---------------------------------------------------------------------------
+  # Digital Formats
+  # ---------------------------------------------------------------------------
+  IETP:
+    code: "IETP"
+    title: "Interactive Electronic Technical Publication"
+    description: "Digital interactive publication package"
+    s1000d_type: "SCORM/IETP"
+    formats:
+      - "SCORM 2004"
+      - "S1000D IETP"
+    update_cycle: "Revision"
+
+# -----------------------------------------------------------------------------
+# S1000D Info Code Reference
+# -----------------------------------------------------------------------------
+info_codes:
+  "001":
+    title: "Title page"
+    category: "Introduction"
+  "00A":
+    title: "Applicability cross-reference table"
+    category: "Reference"
+  "00N":
+    title: "Numerical index"
+    category: "Reference"
+  "00S":
+    title: "List of abbreviations"
+    category: "Reference"
+  "00T":
+    title: "Table of contents"
+    category: "Reference"
+  "00U":
+    title: "Highlights"
+    category: "Reference"
+  "040":
+    title: "Description"
+    category: "Descriptive"
+  "041":
+    title: "Allowable damage limits"
+    category: "Descriptive"
+  "100":
+    title: "Operation"
+    category: "Procedural"
+  "200":
+    title: "Servicing"
+    category: "Procedural"
+  "300":
+    title: "Inspection/Check"
+    category: "Procedural"
+  "400":
+    title: "Fault isolation"
+    category: "Fault"
+  "500":
+    title: "Disconnect/Remove"
+    category: "Procedural"
+  "510":
+    title: "Disassembly"
+    category: "Procedural"
+  "520":
+    title: "Clean"
+    category: "Procedural"
+  "600":
+    title: "Repair"
+    category: "Procedural"
+  "700":
+    title: "Assemble"
+    category: "Procedural"
+  "710":
+    title: "Install/Connect"
+    category: "Procedural"
+  "720":
+    title: "Modification"
+    category: "Procedural"
+  "800":
+    title: "Storage"
+    category: "Procedural"
+  "900":
+    title: "Miscellaneous"
+    category: "Procedural"
+  "941":
+    title: "Illustrated Parts Data"
+    category: "IPD"
+
+# -----------------------------------------------------------------------------
+# Update Categories
+# -----------------------------------------------------------------------------
+update_types:
+  revision:
+    code: "REV"
+    description: "Standard revision cycle"
+    tracking: "Revision number"
+    
+  temporary_revision:
+    code: "TR"
+    description: "Temporary revision pending incorporation"
+    tracking: "TR number"
+    
+  supplement:
+    code: "SUP"
+    description: "Supplemental information"
+    tracking: "Supplement number"
+    
+  service_bulletin:
+    code: "SB"
+    description: "Service bulletin incorporation"
+    tracking: "SB number"

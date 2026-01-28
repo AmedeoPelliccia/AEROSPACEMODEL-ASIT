@@ -1,0 +1,314 @@
+# Artifact Catalog
+# Complete inventory of program artifacts
+# Version: 2.0.0
+# Last Updated: 2026-01-22
+
+metadata:
+  version: "2.0.0"
+  program: "<PROGRAM_NAME>"
+  model_code: "<MODEL_CODE>"
+  last_updated: "2026-01-22"
+  description: "Complete catalog of all program artifacts"
+
+# =============================================================================
+# CATALOG STRUCTURE
+# =============================================================================
+
+catalog_schema:
+  artifact_entry:
+    required_fields:
+      - artifact_id
+      - artifact_type
+      - title
+      - location
+      - baseline
+      - status
+      - created_date
+    optional_fields:
+      - description
+      - ata_chapter
+      - version
+      - supersedes
+      - superseded_by
+      - owner
+      - classification
+      - tags
+      - trace_sources
+      - trace_targets
+
+# =============================================================================
+# ARTIFACT TYPE DEFINITIONS
+# =============================================================================
+
+artifact_types:
+  # KDB Types
+  REQUIREMENT:
+    description: "Engineering requirement"
+    database: "KDB"
+    id_pattern: "KDB-REQ-*"
+    
+  DESIGN:
+    description: "Design artifact"
+    database: "KDB"
+    id_pattern: "KDB-DSN-*"
+    
+  ANALYSIS:
+    description: "Engineering analysis"
+    database: "KDB"
+    id_pattern: "KDB-ANA-*"
+    
+  TEST:
+    description: "Test artifact"
+    database: "KDB"
+    id_pattern: "KDB-TST-*"
+    
+  CERTIFICATION:
+    description: "Certification artifact"
+    database: "KDB"
+    id_pattern: "KDB-CRT-*"
+    
+  TASK:
+    description: "Maintenance task"
+    database: "KDB"
+    id_pattern: "KDB-TSK-*"
+    
+  PART:
+    description: "Parts data"
+    database: "KDB"
+    id_pattern: "KDB-PRT-*"
+    
+  REPAIR:
+    description: "Repair data"
+    database: "KDB"
+    id_pattern: "KDB-RPR-*"
+    
+  FAULT:
+    description: "Fault isolation data"
+    database: "KDB"
+    id_pattern: "KDB-FLT-*"
+  
+  # IDB Types
+  DM:
+    description: "S1000D Data Module"
+    database: "IDB"
+    id_pattern: "DMC"
+    
+  PM:
+    description: "S1000D Publication Module"
+    database: "IDB"
+    id_pattern: "PMC"
+    
+  DML:
+    description: "S1000D Data Module List"
+    database: "IDB"
+    id_pattern: "DML"
+    
+  ICN:
+    description: "Information Control Number (graphic)"
+    database: "IDB"
+    id_pattern: "ICN-*"
+  
+  # Governance Types
+  BASELINE:
+    description: "Configuration baseline"
+    database: "ASIT"
+    id_pattern: "*BL-*"
+    
+  ECR:
+    description: "Engineering Change Request"
+    database: "ASIT"
+    id_pattern: "ECR-*"
+    
+  ECO:
+    description: "Engineering Change Order"
+    database: "ASIT"
+    id_pattern: "ECO-*"
+    
+  CONTRACT:
+    description: "Transformation contract"
+    database: "ASIT"
+    id_pattern: "*-CTR-*"
+
+# =============================================================================
+# STATUS DEFINITIONS
+# =============================================================================
+
+status_codes:
+  DRAFT:
+    description: "Under development, not approved"
+    editable: true
+    executable: false
+    
+  REVIEW:
+    description: "Submitted for approval"
+    editable: false
+    executable: false
+    
+  APPROVED:
+    description: "Approved, pending release"
+    editable: false
+    executable: true
+    
+  ACTIVE:
+    description: "Released and in use"
+    editable: false
+    executable: true
+    
+  SUPERSEDED:
+    description: "Replaced by newer version"
+    editable: false
+    executable: false
+    
+  WITHDRAWN:
+    description: "Cancelled or removed"
+    editable: false
+    executable: false
+    
+  RESERVED:
+    description: "ID reserved, artifact pending"
+    editable: true
+    executable: false
+
+# =============================================================================
+# ARTIFACT INVENTORY
+# =============================================================================
+# 
+# This section contains the actual artifact entries.
+# Entries are organized by artifact type.
+#
+# Template for adding artifacts:
+#
+# artifacts:
+#   <ARTIFACT_TYPE>:
+#     - artifact_id: "<ID>"
+#       title: "<Title>"
+#       description: "<Description>"
+#       location: "<Path>"
+#       baseline: "<Baseline ID>"
+#       status: "<Status>"
+#       created_date: "<YYYY-MM-DD>"
+#       ata_chapter: "<ATA>" (optional)
+#       version: "<version>" (optional)
+#       owner: "<STK_*>" (optional)
+#       trace_sources: [] (optional)
+#       trace_targets: [] (optional)
+
+artifacts:
+  # ---------------------------------------------------------------------------
+  # BASELINES
+  # ---------------------------------------------------------------------------
+  BASELINE:
+    # Example entries - replace with actual baselines
+    # - artifact_id: "FBL-2026-Q1-001"
+    #   title: "Initial Functional Baseline"
+    #   description: "First program functional baseline"
+    #   location: "ASIT/GOVERNANCE/BASELINE_REGISTER.csv"
+    #   baseline: "FBL-2026-Q1-001"
+    #   status: "ACTIVE"
+    #   created_date: "2026-01-15"
+    #   owner: "STK_CM"
+    []
+
+  # ---------------------------------------------------------------------------
+  # CONTRACTS
+  # ---------------------------------------------------------------------------
+  CONTRACT:
+    # Example entries - replace with actual contracts
+    # - artifact_id: "KITDM-CTR-LM-CSDB_ATA28-v1.0.0"
+    #   title: "ATA 28 CSDB Generation Contract"
+    #   description: "Generate CSDB content for fuel system"
+    #   location: "ASIT/CONTRACTS/active/KITDM-CTR-LM-CSDB_ATA28-v1.0.0.yaml"
+    #   baseline: "FBL-2026-Q1-001"
+    #   status: "ACTIVE"
+    #   created_date: "2026-01-20"
+    #   ata_chapter: "28"
+    #   owner: "STK_CM"
+    []
+
+  # ---------------------------------------------------------------------------
+  # REQUIREMENTS
+  # ---------------------------------------------------------------------------
+  REQUIREMENT:
+    []
+
+  # ---------------------------------------------------------------------------
+  # TASKS
+  # ---------------------------------------------------------------------------
+  TASK:
+    []
+
+  # ---------------------------------------------------------------------------
+  # PARTS
+  # ---------------------------------------------------------------------------
+  PART:
+    []
+
+  # ---------------------------------------------------------------------------
+  # DATA MODULES
+  # ---------------------------------------------------------------------------
+  DM:
+    []
+
+  # ---------------------------------------------------------------------------
+  # GRAPHICS
+  # ---------------------------------------------------------------------------
+  ICN:
+    []
+
+# =============================================================================
+# STATISTICS
+# =============================================================================
+# Auto-generated section - do not edit manually
+# Updated by ASIGT runs
+
+statistics:
+  last_calculated: null
+  counts_by_type: {}
+  counts_by_status: {}
+  counts_by_baseline: {}
+  counts_by_ata: {}
+
+# =============================================================================
+# QUERIES
+# =============================================================================
+# Predefined queries for catalog navigation
+
+queries:
+  active_by_baseline:
+    description: "All active artifacts for a baseline"
+    filter:
+      status: "ACTIVE"
+      baseline: "<baseline_id>"
+      
+  by_ata_chapter:
+    description: "All artifacts for an ATA chapter"
+    filter:
+      ata_chapter: "<ata>"
+      
+  pending_approval:
+    description: "All artifacts pending approval"
+    filter:
+      status: "REVIEW"
+      
+  trace_orphans:
+    description: "Artifacts with no trace relationships"
+    filter:
+      trace_sources: []
+      trace_targets: []
+
+# =============================================================================
+# MAINTENANCE
+# =============================================================================
+
+maintenance:
+  # Catalog refresh schedule
+  refresh:
+    trigger: "On ASIGT run completion"
+    manual: "aerospacemodel catalog refresh"
+    
+  # Validation rules
+  validation:
+    - "All artifacts must have unique IDs"
+    - "All artifacts must reference valid baseline"
+    - "Active artifacts must have complete metadata"
+    - "Superseded artifacts must reference successor"

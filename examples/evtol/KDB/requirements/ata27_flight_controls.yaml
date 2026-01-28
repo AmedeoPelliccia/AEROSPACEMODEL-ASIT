@@ -1,0 +1,103 @@
+# =============================================================================
+# SkyLift-200 — ATA 27 Flight Controls (Fly-By-Wire)
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "requirements"
+  ata_chapter: "27"
+  title: "Flight Control System"
+  baseline: "FBL-SL2-2026-Q1"
+
+requirements:
+  - id: "REQ-SL2-FCC-001"
+    type: "descriptive"
+    title: "Flight Control System Description"
+    ata_code: "27-00-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    safety_critical: true
+    software_dal: "A"
+    
+    content:
+      summary: |
+        The SL2 flight control system is a quadruple-redundant fly-by-wire
+        system controlling aircraft attitude through differential rotor
+        commands.
+        
+      details: |
+        The FCS provides:
+        - Roll control via differential rotor thrust
+        - Pitch control via differential forward/aft thrust
+        - Yaw control via differential torque
+        - Vertical control via collective thrust
+        - Transition control (hover to cruise)
+        
+    traceability:
+      parent: "SYS-REQ-027"
+      software: "SRS-FCC-001"
+      
+  - id: "REQ-SL2-FCC-002"
+    type: "descriptive"
+    title: "Flight Control Computer"
+    ata_code: "27-40-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    safety_critical: true
+    software_dal: "A"
+    
+    content:
+      summary: |
+        Four Flight Control Computers provide quadruple-redundant control.
+        
+      details: |
+        FCC architecture:
+        - Quantity: 4
+        - Voting: 2-of-4 for commands
+        - Cross-channel monitoring
+        - Dissimilar software (pairs)
+        
+        Software:
+        - DAL: A (per DO-178C)
+        - Version: FCC-1.0
+        
+    traceability:
+      software: "SRS-FCC-001"
+      
+  - id: "REQ-SL2-FCC-003"
+    type: "descriptive"
+    title: "Control Law Modes"
+    ata_code: "27-40-00"
+    info_code: "040"
+    applicability: "APP-SL2-ALL"
+    
+    content:
+      summary: |
+        The FCC implements three control law modes.
+        
+      details: |
+        Normal Mode:
+        - Full envelope protection
+        - Automatic thrust management
+        - Transition automation
+        
+        Alternate Mode (single FCC failure):
+        - Reduced envelope protection
+        - Manual thrust bias available
+        
+        Direct Mode (multiple FCC failures):
+        - Basic rate damping only
+        - No envelope protection
+        - Emergency use only
+        
+  - id: "REQ-SL2-FCC-010"
+    type: "procedural"
+    title: "FCC BITE Test"
+    ata_code: "27-40-00"
+    info_code: "300"
+    applicability: "APP-SL2-ALL"
+    task_type: "scheduled"
+    interval: "Daily"
+    
+    content:
+      summary: "Flight Control Computer built-in test execution"

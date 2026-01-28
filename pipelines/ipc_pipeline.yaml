@@ -1,0 +1,1279 @@
+# =============================================================================
+# IPC (Illustrated Parts Catalog) Pipeline
+# ASIT-Controlled Execution Pipeline
+# Version: 2.0.0
+# =============================================================================
+#
+# This pipeline defines the complete transformation workflow for generating
+# S1000D-compliant Illustrated Parts Catalog content from KDB sources.
+#
+# Publication scope:
+#   - Parts breakdown by ATA chapter/system
+#   - Exploded view illustrations with callouts
+#   - Detailed parts lists (DPL)
+#   - Numerical index (NI)
+#   - Vendor codes and CAGE information
+#   - Interchangeability and substitutability
+#   - Supersedure/replacement data
+#   - Effectivity by MSN/tail number
+#
+# Operates under ASIT contract authority.
+#
+# =============================================================================
+
+pipeline:
+  # ---------------------------------------------------------------------------
+  # PIPELINE METADATA
+  # ---------------------------------------------------------------------------
+  metadata:
+    pipeline_id: "PIPELINE-IPC-001"
+    name: "Illustrated Parts Catalog Pipeline"
+    description: |
+      End-to-end transformation pipeline for generating S1000D Illustrated
+      Parts Catalog (IPC) content from validated parts engineering data.
+      Produces IPD data modules with exploded views, parts lists, and
+      comprehensive parts indexing.
+    version: "2.0.0"
+    publication_type: "IPC"
+    s1000d_issue: "5.0"
+    
+    # Pipeline ownership
+    owner: "STK_ENG"
+    maintainer: "Parts Engineering / Provisioning"
+    
+    # Timestamps
+    created: "2026-01-01"
+    last_modified: "2026-01-22"
+    
+    # Classification
+    tags:
+      - "ipc"
+      - "ipd"
+      - "parts"
+      - "provisioning"
+      - "s1000d"
+      - "production"
+
+  # ---------------------------------------------------------------------------
+  # CONTRACT BINDING
+  # ---------------------------------------------------------------------------
+  contract:
+    # Contract template reference
+    template: "ASIT/CONTRACTS/templates/KITDM-CTR-LM-CSDB.template.yaml"
+    
+    # Required contract fields
+    required_fields:
+      - "contract_id"
+      - "baseline_ref"
+      - "scope.ata_chapters"
+      - "scope.effectivity"
+      - "scope.parts_scope"
+      - "authority.approved_by"
+      - "authority.provisioning_approval"
+    
+    # Contract validation
+    validation:
+      check_baseline_exists: true
+      check_authority_valid: true
+      check_provisioning_approval: true
+      check_parts_data_complete: true
+
+  # ---------------------------------------------------------------------------
+  # PIPELINE STAGES
+  # ---------------------------------------------------------------------------
+  stages:
+    # -------------------------------------------------------------------------
+    # STAGE 1: INITIALIZATION
+    # -------------------------------------------------------------------------
+    - stage: "initialization"
+      name: "Pipeline Initialization"
+      description: "Initialize pipeline environment and validate prerequisites"
+      order: 1
+      
+      steps:
+        - step: "load_config"
+          name: "Load Configuration"
+          action: "config.load"
+          inputs:
+            config_path: "ASIT/config/asit_config.yaml"
+          outputs:
+            - "config"
+          on_failure: "abort"
+          
+        - step: "validate_contract"
+          name: "Validate ASIT Contract"
+          action: "contract.validate"
+          inputs:
+            contract_id: "${contract_id}"
+          outputs:
+            - "contract"
+            - "baseline_ref"
+            - "scope"
+          on_failure: "abort"
+          
+        - step: "validate_provisioning_approval"
+          name: "Validate Provisioning Approval"
+          action: "authority.validate_provisioning"
+          inputs:
+            contract: "${contract}"
+            provisioning_approval: "${contract.authority.provisioning_approval}"
+          outputs:
+            - "provisioning_status"
+          on_failure: "abort"
+          
+        - step: "check_baseline"
+          name: "Verify Baseline Availability"
+          action: "baseline.verify"
+          inputs:
+            baseline_ref: "${baseline_ref}"
+          outputs:
+            - "baseline"
+            - "baseline_status"
+          on_failure: "abort"
+          
+        - step: "create_run_directory"
+          name: "Create Run Directory"
+          action: "run.create_directory"
+          inputs:
+            contract_id: "${contract_id}"
+            timestamp: "${execution_timestamp}"
+          outputs:
+            - "run_directory"
+            - "run_id"
+          on_failure: "abort"
+          
+        - step: "initialize_manifests"
+          name: "Initialize Manifests"
+          action: "manifest.initialize"
+          inputs:
+            run_directory: "${run_directory}"
+            contract: "${contract}"
+            baseline: "${baseline}"
+          outputs:
+            - "input_manifest"
+            - "output_manifest"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 2: SOURCE LOADING
+    # -------------------------------------------------------------------------
+    - stage: "source_loading"
+      name: "Source Loading"
+      description: "Load parts engineering data from KDB baseline"
+      order: 2
+      depends_on: ["initialization"]
+      
+      steps:
+        - step: "load_parts_master"
+          name: "Load Parts Master Data"
+          action: "source.load"
+          inputs:
+            source_type: "parts_master"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/parts/master"
+          outputs:
+            - "parts_master"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "abort"
+          
+        - step: "load_bom_data"
+          name: "Load Bill of Materials Data"
+          action: "source.load"
+          inputs:
+            source_type: "bom"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/parts/bom"
+          outputs:
+            - "bom_data"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "abort"
+          
+        - step: "load_assembly_structure"
+          name: "Load Assembly Structure"
+          action: "source.load"
+          inputs:
+            source_type: "assembly_structure"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/parts/assemblies"
+          outputs:
+            - "assembly_structure"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "abort"
+          
+        - step: "load_vendor_data"
+          name: "Load Vendor/CAGE Data"
+          action: "source.load"
+          inputs:
+            source_type: "vendor"
+            baseline: "${baseline}"
+            source_paths:
+              - "KDB/SSOT/vendors"
+          outputs:
+            - "vendor_data"
+          on_failure: "warn"
+          
+        - step: "load_interchangeability"
+          name: "Load Interchangeability Data"
+          action: "source.load"
+          inputs:
+            source_type: "interchangeability"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/parts/interchange"
+          outputs:
+            - "interchangeability_data"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "load_supersedure"
+          name: "Load Supersedure Data"
+          action: "source.load"
+          inputs:
+            source_type: "supersedure"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/parts/supersedure"
+          outputs:
+            - "supersedure_data"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "load_effectivity_data"
+          name: "Load Parts Effectivity Data"
+          action: "source.load"
+          inputs:
+            source_type: "parts_effectivity"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/parts/effectivity"
+          outputs:
+            - "effectivity_data"
+          filters:
+            - field: "effectivity"
+              operator: "overlaps"
+              values: "${scope.effectivity}"
+          on_failure: "warn"
+          
+        - step: "load_consumables"
+          name: "Load Consumables Data"
+          action: "source.load"
+          inputs:
+            source_type: "consumables"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/materials/consumables"
+          outputs:
+            - "consumables"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "load_standard_parts"
+          name: "Load Standard Parts Data"
+          action: "source.load"
+          inputs:
+            source_type: "standard_parts"
+            baseline: "${baseline}"
+            source_paths:
+              - "KDB/SSOT/parts/standard"
+          outputs:
+            - "standard_parts"
+          on_failure: "warn"
+          
+        - step: "load_attaching_parts"
+          name: "Load Attaching Parts Data"
+          action: "source.load"
+          inputs:
+            source_type: "attaching_parts"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/parts/attaching"
+          outputs:
+            - "attaching_parts"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "load_exploded_views"
+          name: "Load Exploded View Graphics"
+          action: "source.load"
+          inputs:
+            source_type: "graphic"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/graphics/ipc"
+          outputs:
+            - "exploded_views"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+            - field: "graphic_type"
+              values: ["exploded_view", "assembly_view", "detail_view", "cutaway"]
+          on_failure: "abort"
+          
+        - step: "load_figure_callouts"
+          name: "Load Figure Callout Data"
+          action: "source.load"
+          inputs:
+            source_type: "callouts"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/graphics/callouts"
+          outputs:
+            - "figure_callouts"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "compute_input_hashes"
+          name: "Compute Input Hashes"
+          action: "hash.compute"
+          inputs:
+            artifacts:
+              - "${parts_master}"
+              - "${bom_data}"
+              - "${assembly_structure}"
+              - "${vendor_data}"
+              - "${interchangeability_data}"
+              - "${supersedure_data}"
+              - "${effectivity_data}"
+              - "${consumables}"
+              - "${standard_parts}"
+              - "${attaching_parts}"
+              - "${exploded_views}"
+              - "${figure_callouts}"
+            algorithm: "sha256"
+          outputs:
+            - "input_hashes"
+            - "combined_input_hash"
+          on_failure: "abort"
+          
+        - step: "update_input_manifest"
+          name: "Update Input Manifest"
+          action: "manifest.update"
+          inputs:
+            manifest: "${input_manifest}"
+            artifacts:
+              parts_master: "${parts_master}"
+              bom_data: "${bom_data}"
+              assembly_structure: "${assembly_structure}"
+              vendor_data: "${vendor_data}"
+              interchangeability_data: "${interchangeability_data}"
+              supersedure_data: "${supersedure_data}"
+              effectivity_data: "${effectivity_data}"
+              consumables: "${consumables}"
+              standard_parts: "${standard_parts}"
+              attaching_parts: "${attaching_parts}"
+              exploded_views: "${exploded_views}"
+              figure_callouts: "${figure_callouts}"
+            hashes: "${input_hashes}"
+          outputs:
+            - "input_manifest"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 3: TRANSFORMATION
+    # -------------------------------------------------------------------------
+    - stage: "transformation"
+      name: "Content Transformation"
+      description: "Transform parts data to S1000D IPD data modules"
+      order: 3
+      depends_on: ["source_loading"]
+      
+      steps:
+        - step: "build_parts_hierarchy"
+          name: "Build Parts Hierarchy"
+          action: "transform.build_hierarchy"
+          inputs:
+            parts_master: "${parts_master}"
+            bom_data: "${bom_data}"
+            assembly_structure: "${assembly_structure}"
+            ata_chapters: "${scope.ata_chapters}"
+          outputs:
+            - "parts_hierarchy"
+          config:
+            group_by: "ata_chapter"
+            subgroup_by: "figure"
+            include_indentured_levels: true
+            max_indent_level: 10
+          on_failure: "abort"
+          
+        - step: "resolve_vendor_codes"
+          name: "Resolve Vendor/CAGE Codes"
+          action: "transform.resolve_vendors"
+          inputs:
+            parts_master: "${parts_master}"
+            vendor_data: "${vendor_data}"
+          outputs:
+            - "parts_with_vendors"
+          config:
+            include_cage_code: true
+            include_vendor_name: true
+            include_alternate_sources: true
+          on_failure: "warn"
+          
+        - step: "apply_interchangeability"
+          name: "Apply Interchangeability Rules"
+          action: "transform.apply_interchange"
+          inputs:
+            parts_with_vendors: "${parts_with_vendors}"
+            interchangeability_data: "${interchangeability_data}"
+          outputs:
+            - "parts_with_interchange"
+          config:
+            interchange_codes:
+              - code: "O"
+                description: "One-way interchangeable"
+              - code: "T"
+                description: "Two-way interchangeable"
+              - code: "N"
+                description: "Not interchangeable"
+          on_failure: "warn"
+          
+        - step: "apply_supersedure"
+          name: "Apply Supersedure Data"
+          action: "transform.apply_supersedure"
+          inputs:
+            parts_with_interchange: "${parts_with_interchange}"
+            supersedure_data: "${supersedure_data}"
+          outputs:
+            - "parts_with_supersedure"
+          config:
+            include_superseded_by: true
+            include_supersedes: true
+            include_effective_date: true
+          on_failure: "warn"
+          
+        - step: "apply_effectivity"
+          name: "Apply Parts Effectivity"
+          action: "transform.apply_effectivity"
+          inputs:
+            parts_with_supersedure: "${parts_with_supersedure}"
+            effectivity_data: "${effectivity_data}"
+            scope_effectivity: "${scope.effectivity}"
+          outputs:
+            - "parts_with_effectivity"
+          config:
+            effectivity_format: "msn_range"
+            include_from_msn: true
+            include_to_msn: true
+          on_failure: "warn"
+          
+        - step: "generate_introduction_dm"
+          name: "Generate IPC Introduction Data Module"
+          action: "generator.dm_descriptive"
+          inputs:
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "001"
+              content_type: "ipc_introduction"
+              include_abbreviations: true
+              include_vendor_code_list: true
+          outputs:
+            - "dm_introduction"
+          on_failure: "continue"
+          
+        - step: "generate_ipd_dms"
+          name: "Generate IPD Data Modules"
+          action: "generator.dm_ipd"
+          inputs:
+            parts_data: "${parts_with_effectivity}"
+            parts_hierarchy: "${parts_hierarchy}"
+            mapping: "ASIGT/mapping/parts_to_ipd.yaml"
+            template: "ASIGT/s1000d_templates/dm_ipd.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "941"
+              include_item_seq_number: true
+              include_quantity_per_assy: true
+              include_units_per_assy: true
+              include_vendor_code: true
+              include_cage_code: true
+              include_interchangeability: true
+              include_supersedure: true
+              include_effectivity: true
+              include_remarks: true
+              group_by: "figure"
+              parts_list_format: "detailed"
+          outputs:
+            - "dm_ipd"
+          parallel: true
+          batch_size: 10
+          on_failure: "continue"
+          
+        - step: "generate_consumables_dm"
+          name: "Generate Consumables Data Module"
+          action: "generator.dm_ipd"
+          inputs:
+            parts_data: "${consumables}"
+            template: "ASIGT/s1000d_templates/dm_ipd.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "941"
+              content_type: "consumables"
+              include_specification: true
+              include_shelf_life: true
+          outputs:
+            - "dm_consumables"
+          on_failure: "continue"
+          
+        - step: "generate_standard_parts_dm"
+          name: "Generate Standard Parts Data Module"
+          action: "generator.dm_ipd"
+          inputs:
+            parts_data: "${standard_parts}"
+            template: "ASIGT/s1000d_templates/dm_ipd.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "941"
+              content_type: "standard_parts"
+              group_by: "standard_type"
+          outputs:
+            - "dm_standard_parts"
+          on_failure: "continue"
+          
+        - step: "generate_attaching_parts_dm"
+          name: "Generate Attaching Parts Data Module"
+          action: "generator.dm_ipd"
+          inputs:
+            parts_data: "${attaching_parts}"
+            template: "ASIGT/s1000d_templates/dm_ipd.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "941"
+              content_type: "attaching_parts"
+              include_torque_values: true
+          outputs:
+            - "dm_attaching_parts"
+          on_failure: "continue"
+          
+        - step: "process_exploded_views"
+          name: "Process Exploded View Graphics to ICN"
+          action: "generator.icn"
+          inputs:
+            sources: "${exploded_views}"
+            callouts: "${figure_callouts}"
+            config:
+              output_format: "CGM"
+              resolution: 300
+              color_mode: "RGB"
+              include_hotspots: true
+              include_callout_numbers: true
+              callout_style: "ipc_balloon"
+          outputs:
+            - "icn_exploded_views"
+          parallel: true
+          batch_size: 20
+          on_failure: "continue"
+          
+        - step: "link_icn_to_ipd"
+          name: "Link ICN References to IPD DMs"
+          action: "generator.link_icn"
+          inputs:
+            data_modules:
+              - "${dm_introduction}"
+              - "${dm_ipd}"
+              - "${dm_consumables}"
+              - "${dm_standard_parts}"
+              - "${dm_attaching_parts}"
+            icn_files: "${icn_exploded_views}"
+          outputs:
+            - "dm_with_icn"
+          on_failure: "warn"
+          
+        - step: "generate_numerical_index"
+          name: "Generate Numerical Index"
+          action: "generator.numerical_index"
+          inputs:
+            all_parts:
+              - "${parts_with_effectivity}"
+              - "${consumables}"
+              - "${standard_parts}"
+              - "${attaching_parts}"
+            config:
+              sort_by: "part_number"
+              include_figure_reference: true
+              include_item_reference: true
+              include_nomenclature: true
+          outputs:
+            - "numerical_index"
+          on_failure: "warn"
+          
+        - step: "generate_ni_dm"
+          name: "Generate Numerical Index Data Module"
+          action: "generator.dm_descriptive"
+          inputs:
+            sources: "${numerical_index}"
+            template: "ASIGT/s1000d_templates/dm_descriptive.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "00N"
+              content_type: "numerical_index"
+          outputs:
+            - "dm_numerical_index"
+          on_failure: "continue"
+          
+        - step: "apply_applicability"
+          name: "Apply Applicability Filtering"
+          action: "applicability.apply"
+          inputs:
+            data_modules: "${dm_with_icn}"
+            act_file: "${config.act_file}"
+            pct_file: "${config.pct_file}"
+            cct_file: "${config.cct_file}"
+            effectivity: "${scope.effectivity}"
+          outputs:
+            - "dm_filtered"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 4: VALIDATION
+    # -------------------------------------------------------------------------
+    - stage: "validation"
+      name: "Content Validation"
+      description: "Validate generated content against BREX and schema"
+      order: 4
+      depends_on: ["transformation"]
+      
+      steps:
+        - step: "brex_validation"
+          name: "BREX Rule Validation"
+          action: "validator.brex"
+          inputs:
+            data_modules: "${dm_filtered}"
+            brex_file: "ASIGT/brex/S1000D_5.0_DEFAULT.yaml"
+            project_brex: "ASIGT/brex/project_brex.yaml"
+            profile: "ipc"
+          outputs:
+            - "brex_results"
+          config:
+            fail_on_error: true
+            fail_on_warning: false
+            generate_report: true
+            ipc_specific_rules:
+              - "part_number_format"
+              - "cage_code_format"
+              - "item_sequence_format"
+              - "quantity_per_assembly"
+              - "interchangeability_code"
+              - "effectivity_format"
+          on_failure: "abort"
+          
+        - step: "schema_validation"
+          name: "XML Schema Validation"
+          action: "validator.schema"
+          inputs:
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_exploded_views}"
+            schema_path: "schemas/s1000d/${config.s1000d_issue}/"
+          outputs:
+            - "schema_results"
+          config:
+            validate_all: true
+            generate_report: true
+          on_failure: "abort"
+          
+        - step: "parts_data_validation"
+          name: "Parts Data Validation"
+          action: "validator.parts"
+          inputs:
+            dm_ipd: "${dm_ipd}"
+            parts_master: "${parts_master}"
+            bom_data: "${bom_data}"
+          outputs:
+            - "parts_validation_results"
+          config:
+            check_part_number_exists: true
+            check_vendor_codes_valid: true
+            check_cage_codes_valid: true
+            check_quantities_positive: true
+            check_figure_item_unique: true
+            check_effectivity_valid: true
+          on_failure: "warn"
+          
+        - step: "interchangeability_validation"
+          name: "Interchangeability Validation"
+          action: "validator.interchange"
+          inputs:
+            parts_with_interchange: "${parts_with_interchange}"
+            interchangeability_data: "${interchangeability_data}"
+          outputs:
+            - "interchange_validation_results"
+          config:
+            check_bidirectional_consistency: true
+            check_code_validity: true
+          on_failure: "warn"
+          
+        - step: "figure_validation"
+          name: "Figure and Callout Validation"
+          action: "validator.figures"
+          inputs:
+            dm_ipd: "${dm_ipd}"
+            icn_files: "${icn_exploded_views}"
+            figure_callouts: "${figure_callouts}"
+          outputs:
+            - "figure_validation_results"
+          config:
+            check_all_items_have_callouts: true
+            check_callout_to_item_match: true
+            check_figure_referenced: true
+          on_failure: "warn"
+          
+        - step: "reference_validation"
+          name: "Cross-Reference Validation"
+          action: "validator.references"
+          inputs:
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_exploded_views}"
+          outputs:
+            - "reference_results"
+          config:
+            check_dm_refs: true
+            check_icn_refs: true
+            check_part_refs: true
+            check_ni_refs: true
+          on_failure: "warn"
+          
+        - step: "completeness_check"
+          name: "IPC Content Completeness Check"
+          action: "validator.completeness"
+          inputs:
+            data_modules: "${dm_filtered}"
+            scope: "${scope}"
+            parts_master: "${parts_master}"
+            expected_coverage:
+              - type: "introduction"
+                required: true
+              - type: "ipd"
+                min_count_per_chapter: 1
+              - type: "numerical_index"
+                required: true
+          outputs:
+            - "completeness_results"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 5: TRACEABILITY
+    # -------------------------------------------------------------------------
+    - stage: "traceability"
+      name: "Traceability Generation"
+      description: "Build source-to-output traceability matrix"
+      order: 5
+      depends_on: ["validation"]
+      
+      steps:
+        - step: "build_trace_matrix"
+          name: "Build Trace Matrix"
+          action: "trace.build_matrix"
+          inputs:
+            sources:
+              parts_master: "${parts_master}"
+              bom_data: "${bom_data}"
+              assembly_structure: "${assembly_structure}"
+              vendor_data: "${vendor_data}"
+              interchangeability_data: "${interchangeability_data}"
+              supersedure_data: "${supersedure_data}"
+              effectivity_data: "${effectivity_data}"
+              consumables: "${consumables}"
+              standard_parts: "${standard_parts}"
+              attaching_parts: "${attaching_parts}"
+              exploded_views: "${exploded_views}"
+            outputs:
+              dm_introduction: "${dm_introduction}"
+              dm_ipd: "${dm_ipd}"
+              dm_consumables: "${dm_consumables}"
+              dm_standard_parts: "${dm_standard_parts}"
+              dm_attaching_parts: "${dm_attaching_parts}"
+              dm_numerical_index: "${dm_numerical_index}"
+              icn_files: "${icn_exploded_views}"
+            input_hashes: "${input_hashes}"
+          outputs:
+            - "trace_matrix"
+          on_failure: "abort"
+          
+        - step: "validate_parts_traceability"
+          name: "Validate Parts Traceability"
+          action: "trace.validate_parts"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            parts_master: "${parts_master}"
+            dm_ipd: "${dm_ipd}"
+          outputs:
+            - "parts_trace_results"
+          config:
+            require_all_parts_traced: true
+            trace_to_bom: true
+          on_failure: "warn"
+          
+        - step: "validate_figure_traceability"
+          name: "Validate Figure Traceability"
+          action: "trace.validate_figures"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            exploded_views: "${exploded_views}"
+            icn_files: "${icn_exploded_views}"
+          outputs:
+            - "figure_trace_results"
+          config:
+            require_all_figures_traced: true
+          on_failure: "warn"
+          
+        - step: "validate_traceability"
+          name: "Validate Traceability Completeness"
+          action: "validator.trace"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            requirements:
+              input_coverage: 1.0
+              output_coverage: 1.0
+              bidirectional: true
+          outputs:
+            - "trace_validation_results"
+          on_failure: "warn"
+          
+        - step: "export_trace_matrix"
+          name: "Export Trace Matrix"
+          action: "trace.export"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            output_path: "${run_directory}/TRACE_MATRIX.csv"
+            format: "csv"
+          outputs:
+            - "trace_matrix_file"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 6: PUBLICATION ASSEMBLY
+    # -------------------------------------------------------------------------
+    - stage: "publication_assembly"
+      name: "Publication Assembly"
+      description: "Assemble data modules into IPC publication structure"
+      order: 6
+      depends_on: ["traceability"]
+      
+      steps:
+        - step: "generate_pm"
+          name: "Generate Publication Module"
+          action: "generator.pm"
+          inputs:
+            data_modules: "${dm_filtered}"
+            template: "ASIGT/s1000d_templates/pm_structure.xml"
+            config:
+              publication_type: "IPC"
+              model_ident_code: "${config.model_ident_code}"
+              pm_title: "${config.program_name} Illustrated Parts Catalog"
+              ipc_structure: true
+              sections:
+                - "Introduction"
+                - "ATA Chapter Groups"
+                - "Consumables"
+                - "Standard Parts"
+                - "Attaching Parts"
+                - "Numerical Index"
+              organization: "ata_chapter_system"
+          outputs:
+            - "pm_ipc"
+          on_failure: "abort"
+          
+        - step: "generate_dml"
+          name: "Generate Data Module List"
+          action: "generator.dml"
+          inputs:
+            data_modules: "${dm_filtered}"
+            publication_module: "${pm_ipc}"
+            icn_files: "${icn_exploded_views}"
+            template: "ASIGT/s1000d_templates/dml_structure.xml"
+            config:
+              dml_type: "CSDB"
+          outputs:
+            - "dml"
+          on_failure: "abort"
+          
+        - step: "assemble_csdb"
+          name: "Assemble CSDB Package"
+          action: "package.csdb"
+          inputs:
+            data_modules: "${dm_filtered}"
+            publication_module: "${pm_ipc}"
+            dml: "${dml}"
+            icn_files: "${icn_exploded_views}"
+            output_path: "IDB/CSDB/IPC"
+          outputs:
+            - "csdb_package"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 7: OUTPUT RENDERING (OPTIONAL)
+    # -------------------------------------------------------------------------
+    - stage: "rendering"
+      name: "Output Rendering"
+      description: "Render publication to delivery formats"
+      order: 7
+      depends_on: ["publication_assembly"]
+      condition: "${config.render_outputs}"
+      
+      steps:
+        - step: "render_pdf"
+          name: "Render PDF Output"
+          action: "renderer.pdf"
+          inputs:
+            publication_module: "${pm_ipc}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_exploded_views}"
+            config:
+              page_size: "A4"
+              include_toc: true
+              include_lep: true
+              include_numerical_index: true
+              ipc_specific:
+                figure_on_left: true
+                parts_list_on_right: true
+                include_effectivity_column: true
+                include_supersedure_column: true
+          outputs:
+            - "pdf_output"
+          condition: "${config.render_pdf}"
+          on_failure: "warn"
+          
+        - step: "render_html"
+          name: "Render HTML Output"
+          action: "renderer.html"
+          inputs:
+            publication_module: "${pm_ipc}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_exploded_views}"
+            config:
+              responsive: true
+              dark_mode: true
+              include_search: true
+              include_navigation: true
+              ipc_specific:
+                interactive_figures: true
+                click_to_highlight: true
+                parts_ordering_integration: true
+                effectivity_filter: true
+          outputs:
+            - "html_output"
+          condition: "${config.render_html}"
+          on_failure: "warn"
+          
+        - step: "package_ietp"
+          name: "Package IETP"
+          action: "renderer.ietp"
+          inputs:
+            publication_module: "${pm_ipc}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_exploded_views}"
+            config:
+              format: "scorm"
+              include_viewer: true
+              ipc_features:
+                interactive_exploded_views: true
+                parts_breakdown_navigator: true
+                shopping_cart_integration: true
+                effectivity_configurator: true
+          outputs:
+            - "ietp_package"
+          condition: "${config.package_ietp}"
+          on_failure: "warn"
+          
+        - step: "export_parts_data"
+          name: "Export Parts Data"
+          action: "export.parts_data"
+          inputs:
+            parts_with_effectivity: "${parts_with_effectivity}"
+            consumables: "${consumables}"
+            standard_parts: "${standard_parts}"
+            attaching_parts: "${attaching_parts}"
+            config:
+              format: "${config.parts_export_format}"
+              include_all_fields: true
+          outputs:
+            - "parts_export"
+          condition: "${config.export_parts_data}"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 8: FINALIZATION
+    # -------------------------------------------------------------------------
+    - stage: "finalization"
+      name: "Pipeline Finalization"
+      description: "Finalize run artifacts and generate reports"
+      order: 8
+      depends_on: ["rendering"]
+      always_run: true
+      
+      steps:
+        - step: "compute_output_hashes"
+          name: "Compute Output Hashes"
+          action: "hash.compute"
+          inputs:
+            artifacts:
+              - "${dm_filtered}"
+              - "${pm_ipc}"
+              - "${dml}"
+              - "${icn_exploded_views}"
+            algorithm: "sha256"
+          outputs:
+            - "output_hashes"
+            - "combined_output_hash"
+          on_failure: "warn"
+          
+        - step: "finalize_output_manifest"
+          name: "Finalize Output Manifest"
+          action: "manifest.finalize"
+          inputs:
+            manifest: "${output_manifest}"
+            outputs:
+              dm_introduction: "${dm_introduction}"
+              dm_ipd: "${dm_ipd}"
+              dm_consumables: "${dm_consumables}"
+              dm_standard_parts: "${dm_standard_parts}"
+              dm_attaching_parts: "${dm_attaching_parts}"
+              dm_numerical_index: "${dm_numerical_index}"
+              pm: "${pm_ipc}"
+              dml: "${dml}"
+              icn: "${icn_exploded_views}"
+            hashes: "${output_hashes}"
+            validation_results:
+              brex: "${brex_results}"
+              schema: "${schema_results}"
+              parts: "${parts_validation_results}"
+              figures: "${figure_validation_results}"
+          outputs:
+            - "output_manifest"
+          on_failure: "warn"
+          
+        - step: "generate_validation_report"
+          name: "Generate Validation Report"
+          action: "report.validation"
+          inputs:
+            brex_results: "${brex_results}"
+            schema_results: "${schema_results}"
+            parts_results: "${parts_validation_results}"
+            interchange_results: "${interchange_validation_results}"
+            figure_results: "${figure_validation_results}"
+            reference_results: "${reference_results}"
+            trace_results: "${trace_validation_results}"
+            parts_trace_results: "${parts_trace_results}"
+            figure_trace_results: "${figure_trace_results}"
+            output_path: "${run_directory}/VALIDATION_REPORT.json"
+          outputs:
+            - "validation_report"
+          on_failure: "warn"
+          
+        - step: "generate_parts_summary"
+          name: "Generate Parts Summary Report"
+          action: "report.parts_summary"
+          inputs:
+            parts_master: "${parts_master}"
+            dm_ipd: "${dm_ipd}"
+            output_path: "${run_directory}/PARTS_SUMMARY.json"
+          outputs:
+            - "parts_summary"
+          config:
+            include_part_count: true
+            include_by_ata_chapter: true
+            include_vendor_summary: true
+            include_supersedure_summary: true
+          on_failure: "warn"
+          
+        - step: "generate_metrics"
+          name: "Generate Metrics Report"
+          action: "report.metrics"
+          inputs:
+            run_id: "${run_id}"
+            stages: "${pipeline_stages}"
+            input_manifest: "${input_manifest}"
+            output_manifest: "${output_manifest}"
+            output_path: "${run_directory}/METRICS.json"
+          outputs:
+            - "metrics_report"
+          on_failure: "warn"
+          
+        - step: "finalize_log"
+          name: "Finalize Execution Log"
+          action: "log.finalize"
+          inputs:
+            run_directory: "${run_directory}"
+            status: "${pipeline_status}"
+          outputs:
+            - "log_file"
+          on_failure: "warn"
+          
+        - step: "archive_run"
+          name: "Archive Run Artifacts"
+          action: "run.archive"
+          inputs:
+            run_directory: "${run_directory}"
+            immutable: true
+          outputs:
+            - "archive_status"
+          on_failure: "warn"
+
+  # ---------------------------------------------------------------------------
+  # PIPELINE CONFIGURATION
+  # ---------------------------------------------------------------------------
+  config:
+    # Execution settings
+    execution:
+      parallel_enabled: true
+      max_parallel_steps: 6
+      timeout_minutes: 120
+      retry_failed_steps: false
+      max_retries: 2
+      
+    # IPC-specific settings
+    ipc:
+      parts_grouping: "by_figure"
+      include_numerical_index: true
+      include_consumables: true
+      include_standard_parts: true
+      include_attaching_parts: true
+      interchangeability_codes:
+        - "O"  # One-way
+        - "T"  # Two-way
+        - "N"  # Not interchangeable
+      effectivity_format: "msn_range"
+      figure_layout: "left_right"
+      parts_export_format: "csv"
+      
+    # Logging settings
+    logging:
+      level: "INFO"
+      format: "[{timestamp}] {level} {step}: {message}"
+      output_to_file: true
+      output_to_console: true
+      
+    # Notification settings
+    notifications:
+      on_success: true
+      on_failure: true
+      on_warning: true
+      channels:
+        - type: "email"
+          recipients: ["parts-engineering@example.com", "provisioning@example.com", "pub-engineering@example.com"]
+        - type: "slack"
+          channel: "#asigt-runs"
+          
+    # Cleanup settings
+    cleanup:
+      remove_temp_files: true
+      compress_outputs: false
+      retention_days: 90
+
+  # ---------------------------------------------------------------------------
+  # ERROR HANDLING
+  # ---------------------------------------------------------------------------
+  error_handling:
+    strategies:
+      abort:
+        description: "Stop pipeline execution immediately"
+        action: "pipeline.abort"
+        cleanup: true
+        notify: true
+        
+      continue:
+        description: "Log error and continue to next step"
+        action: "log.error"
+        continue: true
+        
+      warn:
+        description: "Log warning and continue"
+        action: "log.warning"
+        continue: true
+        
+      retry:
+        description: "Retry failed step"
+        action: "step.retry"
+        max_attempts: 3
+        delay_seconds: 30
+        
+    fallback:
+      strategy: "abort"
+      
+  # ---------------------------------------------------------------------------
+  # OUTPUTS
+  # ---------------------------------------------------------------------------
+  outputs:
+    primary:
+      - name: "CSDB Package"
+        path: "IDB/CSDB/IPC"
+        type: "csdb"
+        
+      - name: "Publication Module"
+        path: "IDB/CSDB/IPC/PM"
+        type: "pm"
+        
+      - name: "Data Module List"
+        path: "IDB/CSDB/IPC/DML"
+        type: "dml"
+        
+    secondary:
+      - name: "PDF Output"
+        path: "IDB/EXPORTS/IPC/PDF"
+        type: "pdf"
+        condition: "${config.render_pdf}"
+        
+      - name: "HTML Output"
+        path: "IDB/EXPORTS/IPC/HTML"
+        type: "html"
+        condition: "${config.render_html}"
+        
+      - name: "IETP Package"
+        path: "IDB/EXPORTS/IPC/IETP"
+        type: "ietp"
+        condition: "${config.package_ietp}"
+        
+      - name: "Parts Data Export"
+        path: "IDB/EXPORTS/IPC/PARTS"
+        type: "csv"
+        condition: "${config.export_parts_data}"
+        
+    artifacts:
+      - name: "Run Directory"
+        path: "ASIGT/runs/${run_id}"
+        type: "run_artifacts"
+        contents:
+          - "INPUT_MANIFEST.json"
+          - "OUTPUT_MANIFEST.json"
+          - "TRACE_MATRIX.csv"
+          - "VALIDATION_REPORT.json"
+          - "PARTS_SUMMARY.json"
+          - "METRICS.json"
+          - "LOG.txt"

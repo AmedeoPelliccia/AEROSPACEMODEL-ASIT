@@ -1,0 +1,91 @@
+# =============================================================================
+# AeroParts International — IPC Generation Contract
+# =============================================================================
+
+contract:
+  id: "API-CTR-IPC-001"
+  version: "1.0.0"
+  type: "KDB_TO_CSDB"
+  
+  metadata:
+    title: "Illustrated Parts Catalog - LGA-5000 Series"
+    description: "Generate IPC for landing gear actuator family"
+    created_date: "2026-01-10"
+    created_by: "Configuration Management"
+    
+  status: "active"
+
+source:
+  baseline:
+    type: "CBL"
+    id: "CBL-LGA5000-2026-Q1"
+    
+  scope:
+    products:
+      - "LGA-5000-100"
+      - "LGA-5000-200"
+      - "LGA-5000-150"
+      - "LGA-5000-250"
+    content_types:
+      - "components"
+      
+  location:
+    path: "KDB/"
+
+target:
+  publication:
+    type: "IPC"
+    pm_code: "PMC-LGA5K-API01-00002-00"
+    title: "LGA-5000 Series Landing Gear Actuator Illustrated Parts Catalog"
+    
+  output:
+    format: "S1000D"
+    issue: "5.0"
+    
+  location:
+    path: "IDB/csdb/"
+
+transformation:
+  generators:
+    - type: "dm"
+      enabled: true
+      mappings:
+        - "parts_to_ipd"
+        
+  options:
+    include_graphics: true
+    generate_dml: true
+    include_effectivity: true
+    include_nsn: true
+    include_cage: true
+    multi_customer_pn: true
+
+validation:
+  brex:
+    enabled: true
+    rules: "API_brex"
+    strict: true
+    
+  schema:
+    enabled: true
+    
+  trace:
+    enabled: true
+
+approval:
+  required: true
+  
+  authority:
+    role: "STK_CM"
+    name: "D. Wilson"
+    date: "2026-01-10"
+    
+  reviewers:
+    - role: "STK_ENG"
+      name: "M. Adams"
+      date: "2026-01-09"
+
+execution:
+  pipeline: "ipc_pipeline"
+  schedule:
+    type: "manual"

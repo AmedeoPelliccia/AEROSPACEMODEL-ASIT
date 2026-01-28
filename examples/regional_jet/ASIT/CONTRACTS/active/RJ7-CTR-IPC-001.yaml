@@ -1,0 +1,90 @@
+# =============================================================================
+# RegionalJet-700 — IPC Generation Contract
+# =============================================================================
+
+contract:
+  id: "RJ7-CTR-IPC-001"
+  version: "1.0.0"
+  type: "KDB_TO_CSDB"
+  
+  metadata:
+    title: "Illustrated Parts Catalog Generation"
+    description: "Generate IPC for all RJ7 systems"
+    created_date: "2026-01-18"
+    created_by: "Configuration Management"
+    
+  status: "active"
+
+source:
+  baseline:
+    type: "PBL"
+    id: "PBL-RJ7-2026-Q1"
+    
+  scope:
+    ata_chapters:
+      - "21"
+      - "24"
+      - "27"
+      - "28"
+      - "29"
+      - "32"
+      - "52"
+      - "53"
+      - "55"
+      - "57"
+      - "72"
+    content_types:
+      - "parts"
+      
+  location:
+    path: "KDB/parts/"
+
+target:
+  publication:
+    type: "IPC"
+    pm_code: "PMC-RJ7-RAC01-00002-00"
+    title: "RegionalJet-700 Illustrated Parts Catalog"
+    
+  output:
+    format: "S1000D"
+    issue: "5.0"
+    
+  location:
+    path: "IDB/csdb/"
+
+transformation:
+  generators:
+    - type: "dm"
+      enabled: true
+      mappings:
+        - "parts_to_ipd"
+        
+  options:
+    include_graphics: true
+    generate_numerical_index: true
+    generate_dml: true
+
+validation:
+  brex:
+    enabled: true
+    rules: "RJ7_brex"
+    strict: true
+    
+  schema:
+    enabled: true
+    
+  trace:
+    enabled: true
+
+approval:
+  required: true
+  
+  authority:
+    role: "STK_CM"
+    name: "J. Smith"
+    date: "2026-01-18"
+
+execution:
+  pipeline: "ipc_pipeline"
+  schedule:
+    type: "manual"

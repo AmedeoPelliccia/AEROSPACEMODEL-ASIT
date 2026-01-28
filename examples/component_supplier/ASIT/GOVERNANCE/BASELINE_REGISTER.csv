@@ -1,0 +1,5 @@
+baseline_id,type,name,description,status,created_date,approved_date,approved_by,scope,content_hash,notes
+DBL-LGA5000-2025-Q2,DBL,Design Baseline,LGA-5000 design freeze,frozen,2025-04-15,2025-04-20,CCB-2025-012,All variants,sha256:lga1...,Initial design approval
+CBL-LGA5000-2025-Q3,CBL,Component Baseline,Production release baseline,frozen,2025-08-01,2025-08-05,CCB-2025-028,All variants,sha256:lga2...,FAA-PMA approved
+CBL-LGA5000-2026-Q1,CBL,Component Baseline,Current production baseline,active,2026-01-10,2026-01-12,CCB-2026-003,All variants,sha256:lga3...,Rev B updates
+SBL-LGA5000-SB001,SBL,Service Bulletin Baseline,SB-001 implementation,active,2026-01-18,2026-01-20,CCB-2026-006,Affected S/Ns,sha256:sb1...,Field modification

@@ -1,0 +1,9 @@
+artifact_type,action,stk_eng,stk_qa,stk_cm,stk_pm,stk_sales,stk_customer,notes
+baseline_dbl,create,required,required,required,informed,informed,,Design baseline
+baseline_cbl,create,required,required,required,required,informed,required,Component baseline requires customer approval
+baseline_sbl,create,required,required,required,,informed,required,Service bulletin requires customer notification
+contract_cmm,execute,required,required,required,,,,CMM generation
+contract_ipc,execute,required,required,required,,,,IPC generation
+dm_publish,approve,required,required,informed,,,,Data module approval
+part_change,approve,required,required,required,,informed,required,Part changes require customer notification
+sb_release,approve,required,required,required,required,,required,SB release requires customer approval

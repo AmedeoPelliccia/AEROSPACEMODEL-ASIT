@@ -1,0 +1,61 @@
+# {{ program_name }} — Knowledge Database (KDB)
+
+## Overview
+
+The **Knowledge Database (KDB)** is the **Single Source of Truth (SSOT)** for all engineering data in the {{ program_name }} program.
+
+## Structure
+
+```
+KDB/
+├── requirements/       # Engineering requirements
+│   ├── system/         # System requirements
+│   ├── safety/         # Safety requirements
+│   └── certification/  # Certification requirements
+│
+├── design/             # Design data
+│   ├── models/         # 3D models (STEP, CATIA)
+│   ├── drawings/       # Engineering drawings
+│   └── analysis/       # Analysis reports
+│
+├── parts/              # Parts and BOM data
+│   ├── bom/            # Bills of material
+│   └── catalog/        # Parts catalog data
+│
+├── tasks/              # Maintenance task data
+│   ├── scheduled/      # Scheduled maintenance
+│   └── unscheduled/    # Unscheduled maintenance
+│
+├── repairs/            # Structural repair data
+│   ├── standard/       # Standard repairs
+│   └── allowable/      # Allowable damage limits
+│
+└── faults/             # Fault and troubleshooting data
+    ├── isolation/      # Fault isolation procedures
+    └── symptoms/       # Symptom-fault correlation
+```
+
+## Governance
+
+- **Authority:** Engineering owns KDB content
+- **Baseline:** KDB content is baselined per ASIT governance
+- **Changes:** All changes require ECR/ECO process
+- **Traceability:** All content linked to requirements
+
+## Usage
+
+KDB content is transformed to IDB (CSDB) through ASIGT under ASIT contract control.
+
+```
+KDB (Engineering Truth) → ASIGT → IDB (Operational Information)
+```
+
+## Important
+
+> **KDB is the authoritative source.**  
+> Do not modify IDB content directly — regenerate from KDB.
+
+---
+
+**Program:** {{ program_name }} ({{ model_code }})  
+**Organization:** {{ organization }}

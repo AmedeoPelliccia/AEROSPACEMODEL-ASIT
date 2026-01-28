@@ -1,0 +1,101 @@
+# =============================================================================
+# Minimal Example — Transformation Contract
+# =============================================================================
+# Contract ID: DEMO-CTR-AMM-001
+# Purpose: Generate AMM content for ATA 28 (Fuel)
+# =============================================================================
+
+contract:
+  id: "DEMO-CTR-AMM-001"
+  version: "1.0.0"
+  type: "KDB_TO_CSDB"
+  
+  metadata:
+    title: "Demo AMM Generation - Fuel System"
+    description: "Minimal example contract for ATA 28 fuel system content"
+    created_date: "2026-01-22"
+    created_by: "example"
+    
+  status: "active"
+
+# -----------------------------------------------------------------------------
+# Source Definition
+# -----------------------------------------------------------------------------
+source:
+  baseline:
+    type: "DBL"
+    id: "DBL-DEMO-001"
+    
+  scope:
+    ata_chapters:
+      - "28"
+    content_types:
+      - "requirements"
+      
+  location:
+    path: "KDB/requirements/"
+    filter: "ata28_*.yaml"
+
+# -----------------------------------------------------------------------------
+# Target Definition
+# -----------------------------------------------------------------------------
+target:
+  publication:
+    type: "AMM"
+    pm_code: "PMC-DEMO-DEMO1-00001-00"
+    
+  output:
+    format: "S1000D"
+    issue: "5.0"
+    
+  location:
+    path: "IDB/csdb/"
+
+# -----------------------------------------------------------------------------
+# Transformation Rules
+# -----------------------------------------------------------------------------
+transformation:
+  generators:
+    - type: "dm"
+      enabled: true
+      mapping: "requirement_to_dm"
+      
+  options:
+    include_graphics: false
+    generate_dml: false
+
+# -----------------------------------------------------------------------------
+# Validation Requirements
+# -----------------------------------------------------------------------------
+validation:
+  brex:
+    enabled: true
+    rules: "DEMO_brex"
+    strict: false
+    
+  schema:
+    enabled: false
+    
+  trace:
+    enabled: true
+    require_complete: true
+
+# -----------------------------------------------------------------------------
+# Approval (Simplified for Demo)
+# -----------------------------------------------------------------------------
+approval:
+  required: false
+  
+  authority:
+    role: "example"
+    name: "Demo User"
+    date: "2026-01-22"
+
+# -----------------------------------------------------------------------------
+# Execution
+# -----------------------------------------------------------------------------
+execution:
+  pipeline: "amm_pipeline"
+  
+  schedule:
+    type: "manual"

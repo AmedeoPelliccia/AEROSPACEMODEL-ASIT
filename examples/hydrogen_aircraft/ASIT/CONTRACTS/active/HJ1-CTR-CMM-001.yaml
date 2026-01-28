@@ -1,0 +1,104 @@
+# =============================================================================
+# HydrogenJet-100 — CMM Generation Contract (Fuel Cell Stack)
+# =============================================================================
+
+contract:
+  id: "HJ1-CTR-CMM-001"
+  version: "1.0.0"
+  type: "KDB_TO_CSDB"
+  
+  metadata:
+    title: "Component Maintenance Manual - Fuel Cell Stack"
+    description: "Generate CMM for PEM fuel cell stack assembly"
+    created_date: "2026-01-18"
+    created_by: "Configuration Management"
+    
+  status: "active"
+
+source:
+  baseline:
+    type: "CBL"
+    id: "CBL-HJ1-2026-Q1"
+    
+  scope:
+    components:
+      - part_number: "HJ1-24-0001"
+        description: "Fuel Cell Stack Assembly"
+    ata_chapters:
+      - "24"
+      - "71"
+    content_types:
+      - "requirements"
+      - "tasks"
+      
+  location:
+    path: "KDB/"
+
+target:
+  publication:
+    type: "CMM"
+    pm_code: "PMC-HJ1-GAI01-00010-00"
+    title: "Fuel Cell Stack Assembly Component Maintenance Manual"
+    
+  output:
+    format: "S1000D"
+    issue: "5.0"
+    
+  location:
+    path: "IDB/csdb/"
+
+transformation:
+  generators:
+    - type: "dm"
+      enabled: true
+      mappings:
+        - "requirement_to_dm"
+        - "task_to_dm"
+        
+  options:
+    include_graphics: true
+    generate_dml: true
+    include_warnings: true
+    hydrogen_warnings: true
+    include_special_tools: true
+
+validation:
+  brex:
+    enabled: true
+    rules: "HJ1_brex"
+    strict: true
+    
+  schema:
+    enabled: true
+    
+  trace:
+    enabled: true
+    
+  # Fuel cell specific validation
+  additional:
+    - type: "hydrogen_safety"
+      enabled: true
+    - type: "membrane_handling"
+      enabled: true
+
+approval:
+  required: true
+  
+  authority:
+    role: "STK_CM"
+    name: "J. Green"
+    date: "2026-01-18"
+    
+  reviewers:
+    - role: "STK_ENG"
+      name: "R. Martinez"
+      specialty: "Fuel Cells"
+      date: "2026-01-17"
+    - role: "STK_SAFETY"
+      name: "M. Chen"
+      date: "2026-01-17"
+
+execution:
+  pipeline: "cmm_pipeline"
+  schedule:
+    type: "manual"

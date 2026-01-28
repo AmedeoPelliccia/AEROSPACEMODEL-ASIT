@@ -1,0 +1,322 @@
+# =============================================================================
+# ATA iSpec 2200 Aircraft Zone Definitions
+# Reference Data for AEROSPACEMODEL
+# =============================================================================
+#
+# This file defines aircraft zones per ATA iSpec 2200 for structural 
+# organization and location reference.
+#
+# Zones are used in SRM and for locating structural items on the aircraft.
+#
+# Source: ATA iSpec 2200 (Reference structure - obtain full spec from A4A)
+# =============================================================================
+
+metadata:
+  specification: "ATA iSpec 2200"
+  version: "2023"
+  description: "Aircraft Zone Definitions"
+  note: "Generic zone structure - actual zones vary by aircraft type"
+
+# -----------------------------------------------------------------------------
+# Major Zone Definitions
+# -----------------------------------------------------------------------------
+major_zones:
+  # ---------------------------------------------------------------------------
+  # Zone 100 - Lower Fuselage
+  # ---------------------------------------------------------------------------
+  "100":
+    title: "Lower Fuselage"
+    description: "Lower half of fuselage below floor level"
+    subzones:
+      "110":
+        title: "Lower Forward Fuselage"
+        description: "Lower fuselage forward of wing"
+        station_range:
+          from: "STA 0"
+          to: "STA 500"
+      "120":
+        title: "Lower Center Fuselage"
+        description: "Lower fuselage at wing"
+        station_range:
+          from: "STA 500"
+          to: "STA 900"
+      "130":
+        title: "Lower Aft Fuselage"
+        description: "Lower fuselage aft of wing"
+        station_range:
+          from: "STA 900"
+          to: "STA END"
+      "140":
+        title: "Main Landing Gear Wheel Well"
+        description: "Main gear bay area"
+      "150":
+        title: "Nose Landing Gear Wheel Well"
+        description: "Nose gear bay area"
+
+  # ---------------------------------------------------------------------------
+  # Zone 200 - Upper Fuselage
+  # ---------------------------------------------------------------------------
+  "200":
+    title: "Upper Fuselage"
+    description: "Upper half of fuselage above floor level"
+    subzones:
+      "210":
+        title: "Upper Forward Fuselage"
+        description: "Upper fuselage forward of wing"
+        station_range:
+          from: "STA 0"
+          to: "STA 500"
+      "220":
+        title: "Upper Center Fuselage"
+        description: "Upper fuselage at wing"
+        station_range:
+          from: "STA 500"
+          to: "STA 900"
+      "230":
+        title: "Upper Aft Fuselage"
+        description: "Upper fuselage aft of wing"
+        station_range:
+          from: "STA 900"
+          to: "STA END"
+      "240":
+        title: "Flight Compartment"
+        description: "Cockpit area"
+      "250":
+        title: "Passenger Cabin"
+        description: "Main passenger cabin"
+
+  # ---------------------------------------------------------------------------
+  # Zone 300 - Empennage
+  # ---------------------------------------------------------------------------
+  "300":
+    title: "Empennage"
+    description: "Tail section including stabilizers"
+    subzones:
+      "310":
+        title: "Tail Cone"
+        description: "Aft fuselage cone"
+      "320":
+        title: "Vertical Stabilizer"
+        description: "Vertical fin structure"
+      "330":
+        title: "Horizontal Stabilizer - Left"
+        description: "Left horizontal stabilizer"
+      "340":
+        title: "Horizontal Stabilizer - Right"
+        description: "Right horizontal stabilizer"
+      "350":
+        title: "APU Compartment"
+        description: "Auxiliary power unit bay"
+
+  # ---------------------------------------------------------------------------
+  # Zone 400 - Nacelles and Pylons
+  # ---------------------------------------------------------------------------
+  "400":
+    title: "Nacelles and Pylons"
+    description: "Engine nacelles and support structures"
+    subzones:
+      "410":
+        title: "Left Inboard Nacelle/Pylon"
+        description: "Engine #2 nacelle (4-engine)"
+      "420":
+        title: "Left Outboard Nacelle/Pylon"
+        description: "Engine #1 nacelle (4-engine)"
+      "430":
+        title: "Right Inboard Nacelle/Pylon"
+        description: "Engine #3 nacelle (4-engine)"
+      "440":
+        title: "Right Outboard Nacelle/Pylon"
+        description: "Engine #4 nacelle (4-engine)"
+      "450":
+        title: "Left Nacelle/Pylon"
+        description: "Engine #1 nacelle (2-engine)"
+      "460":
+        title: "Right Nacelle/Pylon"
+        description: "Engine #2 nacelle (2-engine)"
+      "470":
+        title: "Center/Tail Nacelle"
+        description: "Engine #3 nacelle (3-engine)"
+
+  # ---------------------------------------------------------------------------
+  # Zone 500 - Left Wing
+  # ---------------------------------------------------------------------------
+  "500":
+    title: "Left Wing"
+    description: "Left wing structure"
+    subzones:
+      "510":
+        title: "Left Wing Center Section"
+        description: "Center wing box - left side"
+      "520":
+        title: "Left Wing Inboard"
+        description: "Inboard wing panel"
+        span_range:
+          from: "BL 0"
+          to: "BL 200"
+      "530":
+        title: "Left Wing Center"
+        description: "Center wing panel"
+        span_range:
+          from: "BL 200"
+          to: "BL 400"
+      "540":
+        title: "Left Wing Outboard"
+        description: "Outboard wing panel"
+        span_range:
+          from: "BL 400"
+          to: "BL END"
+      "550":
+        title: "Left Wing Tip"
+        description: "Wing tip and winglet"
+      "560":
+        title: "Left Wing Leading Edge"
+        description: "Leading edge structure"
+      "570":
+        title: "Left Wing Trailing Edge"
+        description: "Trailing edge structure"
+
+  # ---------------------------------------------------------------------------
+  # Zone 600 - Right Wing
+  # ---------------------------------------------------------------------------
+  "600":
+    title: "Right Wing"
+    description: "Right wing structure"
+    subzones:
+      "610":
+        title: "Right Wing Center Section"
+        description: "Center wing box - right side"
+      "620":
+        title: "Right Wing Inboard"
+        description: "Inboard wing panel"
+        span_range:
+          from: "BL 0"
+          to: "BL 200"
+      "630":
+        title: "Right Wing Center"
+        description: "Center wing panel"
+        span_range:
+          from: "BL 200"
+          to: "BL 400"
+      "640":
+        title: "Right Wing Outboard"
+        description: "Outboard wing panel"
+        span_range:
+          from: "BL 400"
+          to: "BL END"
+      "650":
+        title: "Right Wing Tip"
+        description: "Wing tip and winglet"
+      "660":
+        title: "Right Wing Leading Edge"
+        description: "Leading edge structure"
+      "670":
+        title: "Right Wing Trailing Edge"
+        description: "Trailing edge structure"
+
+  # ---------------------------------------------------------------------------
+  # Zone 700 - Landing Gear
+  # ---------------------------------------------------------------------------
+  "700":
+    title: "Landing Gear"
+    description: "Landing gear structures and components"
+    subzones:
+      "710":
+        title: "Main Landing Gear - Left"
+        description: "Left main gear assembly"
+      "720":
+        title: "Main Landing Gear - Right"
+        description: "Right main gear assembly"
+      "730":
+        title: "Nose Landing Gear"
+        description: "Nose gear assembly"
+      "740":
+        title: "Main Landing Gear Doors - Left"
+        description: "Left main gear doors"
+      "750":
+        title: "Main Landing Gear Doors - Right"
+        description: "Right main gear doors"
+      "760":
+        title: "Nose Landing Gear Doors"
+        description: "Nose gear doors"
+
+  # ---------------------------------------------------------------------------
+  # Zone 800 - Doors
+  # ---------------------------------------------------------------------------
+  "800":
+    title: "Doors"
+    description: "Aircraft doors and hatches"
+    subzones:
+      "810":
+        title: "Forward Passenger Doors"
+        description: "Forward entry doors"
+      "820":
+        title: "Aft Passenger Doors"
+        description: "Aft entry doors"
+      "830":
+        title: "Emergency Exit Doors"
+        description: "Emergency exits"
+      "840":
+        title: "Forward Cargo Door"
+        description: "Forward cargo compartment door"
+      "850":
+        title: "Aft Cargo Door"
+        description: "Aft cargo compartment door"
+      "860":
+        title: "Service Doors"
+        description: "Service access doors"
+      "870":
+        title: "Access Panels"
+        description: "Maintenance access panels"
+
+  # ---------------------------------------------------------------------------
+  # Zone 900 - Reserved
+  # ---------------------------------------------------------------------------
+  "900":
+    title: "Reserved"
+    description: "Reserved for project-specific zones"
+    subzones: {}
+
+# -----------------------------------------------------------------------------
+# Zone Numbering Convention
+# -----------------------------------------------------------------------------
+numbering:
+  format: "XYZ"
+  explanation:
+    X: "Major zone (1-9)"
+    Y: "Subzone within major zone (0-9)"
+    Z: "Detailed area within subzone (0-9)"
+  examples:
+    - zone: "521"
+      meaning: "Left Wing (5) - Inboard (2) - Forward Spar Area (1)"
+    - zone: "324"
+      meaning: "Empennage (3) - Vertical Stabilizer (2) - Rudder Area (4)"
+    - zone: "140"
+      meaning: "Lower Fuselage (1) - Main Gear Wheel Well (4) - General (0)"
+
+# -----------------------------------------------------------------------------
+# Station Reference System
+# -----------------------------------------------------------------------------
+reference_system:
+  fuselage_station:
+    abbreviation: "STA"
+    description: "Longitudinal position from aircraft datum"
+    unit: "inches"
+    direction: "positive aft"
+    
+  butt_line:
+    abbreviation: "BL"
+    description: "Lateral position from aircraft centerline"
+    unit: "inches"
+    direction: "positive right"
+    
+  water_line:
+    abbreviation: "WL"
+    description: "Vertical position from ground reference"
+    unit: "inches"
+    direction: "positive up"
+    
+  wing_station:
+    abbreviation: "WS"
+    description: "Spanwise position along wing"
+    unit: "inches"
+    direction: "positive outboard"

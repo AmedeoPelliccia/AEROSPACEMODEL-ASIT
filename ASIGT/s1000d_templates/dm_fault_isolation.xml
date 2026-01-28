@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+=============================================================================
+S1000D Data Module Template - Fault Isolation
+ASIGT S1000D Templates
+Version: 2.0.0
+Issue: 5.0
+
+Purpose: Template for fault isolation data modules containing troubleshooting
+         procedures, fault trees, diagnostic logic, and corrective actions.
+
+Info Codes: 400, 401, 410, 411, 420, 430
+
+Usage: This template is populated by ASIGT generators under ASIT contract
+       authority. Placeholder tokens (${...}) are replaced during generation.
+=============================================================================
+-->
+<dmodule xmlns="http://www.s1000d.org/S1000D_5-0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.s1000d.org/S1000D_5-0 S1000D_5-0/xml_schema_flat/fault.xsd">
+  
+  <!-- ===================================================================== -->
+  <!-- IDENTIFICATION AND STATUS SECTION                                     -->
+  <!-- ===================================================================== -->
+  <identAndStatusSection>
+    
+    <!-- Data Module Address -->
+    <dmAddress>
+      <dmIdent>
+        <!-- Data Module Code -->
+        <dmCode 
+          modelIdentCode="${MODEL_IDENT_CODE}"
+          systemDiffCode="${SYSTEM_DIFF_CODE}"
+          systemCode="${SYSTEM_CODE}"
+          subSystemCode="${SUBSYSTEM_CODE}"
+          subSubSystemCode="${SUB_SUBSYSTEM_CODE}"
+          assyCode="${ASSY_CODE}"
+          disassyCode="${DISASSY_CODE}"
+          disassyCodeVariant="${DISASSY_CODE_VARIANT}"
+          infoCode="${INFO_CODE}"
+          infoCodeVariant="${INFO_CODE_VARIANT}"
+          itemLocationCode="${ITEM_LOCATION_CODE}"/>
+        
+        <!-- Language -->
+        <language languageIsoCode="${LANGUAGE_CODE}" countryIsoCode="${COUNTRY_CODE}"/>
+        
+        <!-- Issue Information -->
+        <issueInfo issueNumber="${ISSUE_NUMBER}" inWork="${IN_WORK}"/>
+      </dmIdent>
+      
+      <!-- Data Module Address Items -->
+      <dmAddressItems>
+        <issueDate year="${ISSUE_YEAR}" month="${ISSUE_MONTH}" day="${ISSUE_DAY}"/>
+        <dmTitle>
+          <techName>${TECH_NAME}</techName>
+          <infoName>${INFO_NAME}</infoName>
+        </dmTitle>
+      </dmAddressItems>
+    </dmAddress>
+    
+    <!-- Data Module Status -->
+    <dmStatus issueType="${ISSUE_TYPE}">
+      <security securityClassification="${SECURITY_CLASSIFICATION}"/>
+      
+      <!-- Responsible Partner Company -->
+      <responsiblePartnerCompany>
+        <enterpriseName>${RESPONSIBLE_COMPANY}</enterpriseName>
+      </responsiblePartnerCompany>
+      
+      <!-- Originator -->
+      <originator>
+        <enterpriseName>${ORIGINATOR_NAME}</enterpriseName>
+        <enterpriseIdent>${ORIGINATOR_CAGE}</enterpriseIdent>
+      </originator>
+      
+      <!-- Applicability -->
+      <applic>
+        <displayText>
+          <simplePara>${APPLICABILITY_TEXT}</simplePara>
+        </displayText>
+      </applic>
+      
+      <!-- BREX Reference -->
+      <brexDmRef>
+        <dmRef>
+          <dmRefIdent>
+            <dmCode 
+              modelIdentCode="${BREX_MODEL_IDENT}"
+              systemDiffCode="A"
+              systemCode="00"
+              subSystemCode="0"
+              subSubSystemCode="0"
+              assyCode="00"
+              disassyCode="00"
+              disassyCodeVariant="A"
+              infoCode="022"
+              infoCodeVariant="A"
+              itemLocationCode="D"/>
+          </dmRefIdent>
+        </dmRef>
+      </brexDmRef>
+      
+      <!-- Quality Assurance -->
+      <qualityAssurance>
+        <unverified/>
+      </qualityAssurance>
+    </dmStatus>
+  </identAndStatusSection>
+  
+  <!-- ===================================================================== -->
+  <!-- CONTENT SECTION - FAULT ISOLATION                                     -->
+  <!-- ===================================================================== -->
+  <content>
+    <faultIsolation>
+      
+      <!-- ================================================================= -->
+      <!-- FAULT ISOLATION PROCEDURE                                         -->
+      <!-- ================================================================= -->
+      <faultIsolationProcedure>
+        
+        <!-- Fault Information -->
+        <fault faultCode="${FAULT_CODE}">
+          <faultDescr>
+            <descr>${FAULT_DESCRIPTION}</descr>
+          </faultDescr>
+        </fault>
+        
+        <!-- Fault Symptom / Observed Condition -->
+        <faultDescr>
+          <descr>${SYMPTOM_DESCRIPTION}</descr>
+        </faultDescr>
+        
+        <!-- ============================================================= -->
+        <!-- ISOLATION PROCEDURE                                           -->
+        <!-- ============================================================= -->
+        <isolationProcedure>
+          
+          <!-- Preliminary Requirements -->
+          <preliminaryRqmts>
+            <reqCondGroup>
+              <reqCondDm>
+                <reqCond>${ISOLATION_PRECONDITION}</reqCond>
+              </reqCondDm>
+            </reqCondGroup>
+            
+            <reqSupportEquips>
+              <supportEquipDescrGroup>
+                <!--
+                <supportEquipDescr id="fi-seq-001">
+                  <name>${TEST_EQUIPMENT_NAME}</name>
+                  <identNumber>
+                    <manufacturerCode>${MANUFACTURER}</manufacturerCode>
+                    <partAndSerialNumber>
+                      <partNumber>${PART_NUMBER}</partNumber>
+                    </partAndSerialNumber>
+                  </identNumber>
+                </supportEquipDescr>
+                -->
+                <noSupportEquips/>
+              </supportEquipDescrGroup>
+            </reqSupportEquips>
+            
+            <reqSupplies>
+              <supplyDescrGroup>
+                <noSupplies/>
+              </supplyDescrGroup>
+            </reqSupplies>
+            
+            <reqSpares>
+              <spareDescrGroup>
+                <noSpares/>
+              </spareDescrGroup>
+            </reqSpares>
+            
+            <reqSafety>
+              <!--
+              <safetyRqmts>
+                <warning id="fi-wrn-001">
+                  <warningAndCautionPara>${ISOLATION_WARNING}</warningAndCautionPara>
+                </warning>
+              </safetyRqmts>
+              -->
+              <noSafety/>
+            </reqSafety>
+          </preliminaryRqmts>
+          
+          <!-- =========================================================== -->
+          <!-- ISOLATION STEPS                                             -->
+          <!-- =========================================================== -->
+          <isolationMainProcedure>
+            
+            <!-- Isolation Step 1 - Initial Check -->
+            <isolationStep id="fi-step-001">
+              <isolationStepQuestion>${QUESTION_1}</isolationStepQuestion>
+              <isolationStepAnswer>
+                
+                <!-- YES Branch -->
+                <yesNoAnswer>
+                  <yesAnswer>
+                    <simplePara>${YES_ANSWER_1}</simplePara>
+                    
+                    <!-- Action for YES -->
+                    <!--
+                    <isolationProcedureEnd>
+                      <action>
+                        <internalRef internalRefId="corrective-action-001" 
+                                     internalRefTargetType="irtt07">
+                          Proceed to corrective action.
+                        </internalRef>
+                      </action>
+                    </isolationProcedureEnd>
+                    -->
+                    
+                    <!-- Or continue to next step -->
+                    <isolationStepRef>
+                      <internalRef internalRefId="fi-step-002" 
+                                   internalRefTargetType="irtt51"/>
+                    </isolationStepRef>
+                  </yesAnswer>
+                  
+                  <!-- NO Branch -->
+                  <noAnswer>
+                    <simplePara>${NO_ANSWER_1}</simplePara>
+                    
+                    <!-- Continue to different step -->
+                    <isolationStepRef>
+                      <internalRef internalRefId="fi-step-003" 
+                                   internalRefTargetType="irtt51"/>
+                    </isolationStepRef>
+                  </noAnswer>
+                </yesNoAnswer>
+              </isolationStepAnswer>
+            </isolationStep>
+            
+            <!-- Isolation Step 2 -->
+            <isolationStep id="fi-step-002">
+              <isolationStepQuestion>${QUESTION_2}</isolationStepQuestion>
+              <isolationStepAnswer>
+                <yesNoAnswer>
+                  <yesAnswer>
+                    <simplePara>${YES_ANSWER_2}</simplePara>
+                    <isolationProcedureEnd>
+                      <action>
+                        <simplePara>${CORRECTIVE_ACTION_A}</simplePara>
+                        <!--
+                        <dmRef>
+                          <dmRefIdent>
+                            <dmCode 
+                              modelIdentCode="${REPAIR_DM_MODEL}"
+                              systemDiffCode="${REPAIR_DM_DIFF}"
+                              systemCode="${REPAIR_DM_SYSTEM}"
+                              subSystemCode="${REPAIR_DM_SUBSYSTEM}"
+                              subSubSystemCode="${REPAIR_DM_SUB_SUBSYSTEM}"
+                              assyCode="${REPAIR_DM_ASSY}"
+                              disassyCode="${REPAIR_DM_DISASSY}"
+                              disassyCodeVariant="${REPAIR_DM_DISASSY_VAR}"
+                              infoCode="600"
+                              infoCodeVariant="A"
+                              itemLocationCode="${REPAIR_DM_LOCATION}"/>
+                          </dmRefIdent>
+                        </dmRef>
+                        -->
+                      </action>
+                    </isolationProcedureEnd>
+                  </yesAnswer>
+                  <noAnswer>
+                    <simplePara>${NO_ANSWER_2}</simplePara>
+                    <isolationStepRef>
+                      <internalRef internalRefId="fi-step-003" 
+                                   internalRefTargetType="irtt51"/>
+                    </isolationStepRef>
+                  </noAnswer>
+                </yesNoAnswer>
+              </isolationStepAnswer>
+            </isolationStep>
+            
+            <!-- Isolation Step 3 -->
+            <isolationStep id="fi-step-003">
+              <isolationStepQuestion>${QUESTION_3}</isolationStepQuestion>
+              <isolationStepAnswer>
+                <yesNoAnswer>
+                  <yesAnswer>
+                    <simplePara>${YES_ANSWER_3}</simplePara>
+                    <isolationProcedureEnd>
+                      <action>
+                        <simplePara>${CORRECTIVE_ACTION_B}</simplePara>
+                      </action>
+                    </isolationProcedureEnd>
+                  </yesAnswer>
+                  <noAnswer>
+                    <simplePara>${NO_ANSWER_3}</simplePara>
+                    <isolationProcedureEnd>
+                      <action>
+                        <simplePara>${CORRECTIVE_ACTION_C}</simplePara>
+                      </action>
+                    </isolationProcedureEnd>
+                  </noAnswer>
+                </yesNoAnswer>
+              </isolationStepAnswer>
+            </isolationStep>
+            
+          </isolationMainProcedure>
+          
+          <!-- Close-up Requirements -->
+          <closeRqmts>
+            <reqCondGroup>
+              <reqCondDm>
+                <reqCond>${CLOSEUP_CONDITION}</reqCond>
+              </reqCondDm>
+            </reqCondGroup>
+          </closeRqmts>
+          
+        </isolationProcedure>
+        
+      </faultIsolationProcedure>
+      
+      <!-- ================================================================= -->
+      <!-- CORRECTIVE ACTIONS SUMMARY                                        -->
+      <!-- ================================================================= -->
+      <!--
+      <correctiveActions id="corrective-action-001">
+        <correctiveAction>
+          <descr>${CORRECTIVE_ACTION_DESCRIPTION}</descr>
+          <dmRef>
+            <dmRefIdent>
+              <dmCode ... />
+            </dmRefIdent>
+          </dmRef>
+        </correctiveAction>
+      </correctiveActions>
+      -->
+      
+    </faultIsolation>
+  </content>
+  
+</dmodule>

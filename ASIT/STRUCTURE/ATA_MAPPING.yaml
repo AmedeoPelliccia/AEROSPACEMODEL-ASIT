@@ -1,0 +1,687 @@
+# ATA iSpec 2200 Chapter Mapping
+# ASIT Structure Definition
+# Version: 2.0.0
+# Standard: ATA iSpec 2200
+
+metadata:
+  standard: "ATA iSpec 2200"
+  version: "2.0.0"
+  last_updated: "2026-01-22"
+  description: "Aircraft system breakdown per ATA chapter structure"
+
+# =============================================================================
+# AIRCRAFT GENERAL
+# =============================================================================
+chapters:
+  "00":
+    title: "General"
+    description: "Introduction and general information"
+    sections:
+      "00-00": "General"
+
+  "01":
+    title: "Reserved"
+    description: "Reserved for airline use"
+
+  "02":
+    title: "Reserved"
+    description: "Reserved for airline use"
+
+  "03":
+    title: "Reserved"
+    description: "Reserved for airline use"
+
+  "04":
+    title: "Airworthiness Limitations"
+    description: "Certification maintenance requirements"
+    sections:
+      "04-00": "General"
+      "04-10": "Airworthiness Limitations"
+      "04-20": "Certification Maintenance Requirements"
+
+  "05":
+    title: "Time Limits/Maintenance Checks"
+    description: "Scheduled maintenance requirements"
+    sections:
+      "05-00": "General"
+      "05-10": "Time Limits"
+      "05-20": "Scheduled Maintenance Checks"
+      "05-50": "Unscheduled Maintenance Checks"
+
+  "06":
+    title: "Dimensions and Areas"
+    description: "Aircraft dimensions and access"
+    sections:
+      "06-00": "General"
+      "06-10": "Principal Dimensions"
+      "06-20": "Stations"
+
+  "07":
+    title: "Lifting and Shoring"
+    description: "Aircraft handling on ground"
+    sections:
+      "07-00": "General"
+      "07-10": "Jacking"
+      "07-20": "Shoring"
+
+  "08":
+    title: "Leveling and Weighing"
+    description: "Weight and balance"
+    sections:
+      "08-00": "General"
+      "08-10": "Weighing and Balancing"
+      "08-20": "Leveling"
+
+  "09":
+    title: "Towing and Taxiing"
+    description: "Ground movement"
+    sections:
+      "09-00": "General"
+      "09-10": "Towing"
+      "09-20": "Taxiing"
+
+  "10":
+    title: "Parking, Mooring, Storage, and Return to Service"
+    description: "Aircraft storage and preservation"
+    sections:
+      "10-00": "General"
+      "10-10": "Parking/Storage"
+      "10-20": "Mooring"
+      "10-30": "Return to Service"
+
+  "11":
+    title: "Placards and Markings"
+    description: "Required placards and labels"
+    sections:
+      "11-00": "General"
+      "11-10": "Exterior Color Schemes and Markings"
+      "11-20": "Exterior Placards and Markings"
+      "11-30": "Interior Placards"
+
+  "12":
+    title: "Servicing"
+    description: "Routine servicing"
+    sections:
+      "12-00": "General"
+      "12-10": "Replenishing"
+      "12-20": "Scheduled Servicing"
+      "12-30": "Unscheduled Servicing"
+
+# =============================================================================
+# AIRFRAME SYSTEMS
+# =============================================================================
+  "20":
+    title: "Standard Practices - Airframe"
+    description: "General airframe maintenance practices"
+    sections:
+      "20-00": "General"
+      "20-10": "Safety Precautions"
+      "20-20": "Materials"
+      "20-30": "Fasteners"
+      "20-40": "Sealing"
+      "20-50": "Electrical Bonding"
+
+  "21":
+    title: "Air Conditioning"
+    description: "Environmental control system"
+    sections:
+      "21-00": "General"
+      "21-10": "Compression"
+      "21-20": "Distribution"
+      "21-30": "Pressurization Control"
+      "21-40": "Heating"
+      "21-50": "Cooling"
+      "21-60": "Temperature Control"
+      "21-70": "Moisture/Air Contaminant Control"
+
+  "22":
+    title: "Auto Flight"
+    description: "Automatic flight control systems"
+    sections:
+      "22-00": "General"
+      "22-10": "Autopilot"
+      "22-20": "Speed-Attitude Correction"
+      "22-30": "Auto Throttle"
+      "22-40": "System Monitor"
+      "22-50": "Aerodynamic Load Alleviating"
+
+  "23":
+    title: "Communications"
+    description: "Communication systems"
+    sections:
+      "23-00": "General"
+      "23-10": "Speech Communications"
+      "23-15": "SATCOM"
+      "23-20": "Data Transmission and Automatic Calling"
+      "23-30": "Passenger Address and Entertainment"
+      "23-40": "Interphone"
+      "23-50": "Audio Integrating"
+      "23-60": "Static Discharging"
+      "23-70": "Audio and Video Monitoring"
+      "23-80": "Integrated Automatic Tuning"
+
+  "24":
+    title: "Electrical Power"
+    description: "Electrical generation and distribution"
+    sections:
+      "24-00": "General"
+      "24-10": "Generator Drive"
+      "24-20": "AC Generation"
+      "24-30": "DC Generation"
+      "24-40": "External Power"
+      "24-50": "AC Electrical Load Distribution"
+      "24-60": "DC Electrical Load Distribution"
+
+  "25":
+    title: "Equipment/Furnishings"
+    description: "Cabin equipment and furnishings"
+    sections:
+      "25-00": "General"
+      "25-10": "Flight Compartment"
+      "25-20": "Passenger Compartment"
+      "25-30": "Buffet/Galley"
+      "25-40": "Lavatories"
+      "25-50": "Cargo Compartments"
+      "25-60": "Emergency"
+      "25-70": "Accessory Compartments"
+      "25-80": "Insulation"
+
+  "26":
+    title: "Fire Protection"
+    description: "Fire detection and suppression"
+    sections:
+      "26-00": "General"
+      "26-10": "Detection"
+      "26-20": "Extinguishing"
+      "26-30": "Explosion Suppression"
+
+  "27":
+    title: "Flight Controls"
+    description: "Primary and secondary flight controls"
+    sections:
+      "27-00": "General"
+      "27-10": "Aileron"
+      "27-20": "Rudder"
+      "27-30": "Elevator"
+      "27-40": "Horizontal Stabilizer"
+      "27-50": "Flaps"
+      "27-60": "Spoilers, Drag Devices, and Variable Aerodynamic Fairings"
+      "27-70": "Gust Lock and Damper"
+      "27-80": "Lift Augmenting"
+
+  "28":
+    title: "Fuel"
+    description: "Fuel system"
+    sections:
+      "28-00": "General"
+      "28-10": "Storage"
+      "28-20": "Distribution"
+      "28-30": "Dump"
+      "28-40": "Indicating"
+
+  "29":
+    title: "Hydraulic Power"
+    description: "Hydraulic systems"
+    sections:
+      "29-00": "General"
+      "29-10": "Main"
+      "29-20": "Auxiliary"
+      "29-30": "Indicating"
+
+  "30":
+    title: "Ice and Rain Protection"
+    description: "Anti-ice and de-ice systems"
+    sections:
+      "30-00": "General"
+      "30-10": "Airfoil"
+      "30-20": "Air Intakes"
+      "30-30": "Pitot and Static"
+      "30-40": "Windows, Windshields, and Doors"
+      "30-50": "Antennas and Radomes"
+      "30-60": "Propellers/Rotors"
+      "30-70": "Water Lines"
+      "30-80": "Detection"
+
+  "31":
+    title: "Indicating/Recording Systems"
+    description: "Instruments and recorders"
+    sections:
+      "31-00": "General"
+      "31-10": "Instrument and Control Panels"
+      "31-20": "Independent Instruments"
+      "31-30": "Recorders"
+      "31-40": "Central Computers"
+      "31-50": "Central Warning Systems"
+      "31-60": "Central Display Systems"
+      "31-70": "Automatic Data Reporting Systems"
+
+  "32":
+    title: "Landing Gear"
+    description: "Landing gear system"
+    sections:
+      "32-00": "General"
+      "32-10": "Main Gear and Doors"
+      "32-20": "Nose Gear and Doors"
+      "32-30": "Extension and Retraction"
+      "32-40": "Wheels and Brakes"
+      "32-50": "Steering"
+      "32-60": "Position and Warning"
+      "32-70": "Supplementary Gear"
+
+  "33":
+    title: "Lights"
+    description: "Aircraft lighting"
+    sections:
+      "33-00": "General"
+      "33-10": "Flight Compartment"
+      "33-20": "Passenger Compartment"
+      "33-30": "Cargo and Service Compartments"
+      "33-40": "Exterior Lighting"
+      "33-50": "Emergency Lighting"
+
+  "34":
+    title: "Navigation"
+    description: "Navigation systems"
+    sections:
+      "34-00": "General"
+      "34-10": "Flight Environment Data"
+      "34-20": "Attitude and Direction"
+      "34-30": "Landing and Taxiing Aids"
+      "34-40": "Independent Position Determining"
+      "34-50": "Dependent Position Determining"
+      "34-60": "Flight Management Computing"
+
+  "35":
+    title: "Oxygen"
+    description: "Oxygen systems"
+    sections:
+      "35-00": "General"
+      "35-10": "Crew"
+      "35-20": "Passenger"
+      "35-30": "Portable"
+
+  "36":
+    title: "Pneumatic"
+    description: "Pneumatic systems"
+    sections:
+      "36-00": "General"
+      "36-10": "Distribution"
+      "36-20": "Indicating"
+
+  "37":
+    title: "Vacuum"
+    description: "Vacuum systems"
+    sections:
+      "37-00": "General"
+      "37-10": "Distribution"
+      "37-20": "Indicating"
+
+  "38":
+    title: "Water/Waste"
+    description: "Water and waste systems"
+    sections:
+      "38-00": "General"
+      "38-10": "Potable"
+      "38-20": "Wash"
+      "38-30": "Waste Disposal"
+      "38-40": "Air Supply"
+
+  "39":
+    title: "Electrical - Electronic Panels and Multipurpose Components"
+    description: "Electrical and electronic panels"
+    sections:
+      "39-00": "General"
+      "39-10": "Instrument and Control Panels"
+      "39-20": "Electrical and Electronic Equipment Racks"
+      "39-30": "Electrical and Electronic Junction Boxes"
+      "39-40": "Multipurpose Electronic Components"
+
+# =============================================================================
+# AIRFRAME STRUCTURE
+# =============================================================================
+  "51":
+    title: "Standard Practices and Structures - General"
+    description: "Structural repair practices"
+    sections:
+      "51-00": "General"
+      "51-10": "Investigation, Cleanup, and Aerodynamic Smoothness"
+      "51-20": "Processes"
+      "51-30": "Materials"
+      "51-40": "Fasteners"
+      "51-50": "Support of Aircraft for Repair and Alignment Procedures"
+      "51-60": "Control of Aircraft Plating and Anodizing Processes"
+      "51-70": "Repairs"
+      "51-80": "Electrical Bonding"
+
+  "52":
+    title: "Doors"
+    description: "Aircraft doors"
+    sections:
+      "52-00": "General"
+      "52-10": "Passenger/Crew"
+      "52-20": "Emergency Exit"
+      "52-30": "Cargo"
+      "52-40": "Service and Miscellaneous"
+      "52-50": "Fixed Interior"
+      "52-60": "Entrance Stairs"
+      "52-70": "Door Warning"
+      "52-80": "Landing Gear"
+
+  "53":
+    title: "Fuselage"
+    description: "Fuselage structure"
+    sections:
+      "53-00": "General"
+      "53-10": "Main Frame"
+      "53-20": "Auxiliary Structure"
+      "53-30": "Plates/Skin"
+      "53-40": "Attach Fittings"
+      "53-50": "Aerodynamic Fairings"
+
+  "54":
+    title: "Nacelles/Pylons"
+    description: "Engine nacelles and pylons"
+    sections:
+      "54-00": "General"
+      "54-10": "Nacelle Section"
+      "54-20": "Pylon"
+      "54-50": "Nacelle/Pylon Attach Fittings"
+      "54-80": "Nacelle/Pylon Aerodynamic Fairings"
+
+  "55":
+    title: "Stabilizers"
+    description: "Horizontal and vertical stabilizers"
+    sections:
+      "55-00": "General"
+      "55-10": "Horizontal Stabilizer or Canard"
+      "55-20": "Elevator"
+      "55-30": "Vertical Stabilizer"
+      "55-40": "Rudder"
+
+  "56":
+    title: "Windows"
+    description: "Windows and windshields"
+    sections:
+      "56-00": "General"
+      "56-10": "Flight Compartment"
+      "56-20": "Passenger Compartment"
+      "56-30": "Door"
+      "56-40": "Inspection and Observation"
+
+  "57":
+    title: "Wings"
+    description: "Wing structure"
+    sections:
+      "57-00": "General"
+      "57-10": "Center Wing"
+      "57-20": "Outer Wing"
+      "57-30": "Wing Tip"
+      "57-40": "Leading Edge and Leading Edge Devices"
+      "57-50": "Trailing Edge and Trailing Edge Devices"
+      "57-60": "Ailerons and Elevons"
+      "57-70": "Spoilers"
+      "57-90": "Wing Folding System"
+
+# =============================================================================
+# PROPELLER/ROTOR
+# =============================================================================
+  "61":
+    title: "Propellers/Propulsors"
+    description: "Propeller systems"
+    sections:
+      "61-00": "General"
+      "61-10": "Propeller Assembly"
+      "61-20": "Controlling"
+      "61-30": "Braking"
+      "61-40": "Indicating"
+      "61-50": "Propulsor Duct"
+
+  "62":
+    title: "Main Rotor"
+    description: "Main rotor system (rotorcraft)"
+    sections:
+      "62-00": "General"
+      "62-10": "Rotor Blades"
+      "62-20": "Rotor Head"
+      "62-30": "Rotor Shaft"
+      "62-40": "Indicating"
+
+  "63":
+    title: "Main Rotor Drive"
+    description: "Main rotor drive system"
+    sections:
+      "63-00": "General"
+      "63-10": "Engine/Gearbox Couplings"
+      "63-20": "Gearboxes"
+      "63-30": "Mounts, Attachments"
+      "63-40": "Indicating"
+
+  "64":
+    title: "Tail Rotor"
+    description: "Tail rotor system"
+    sections:
+      "64-00": "General"
+      "64-10": "Rotor Blades"
+      "64-20": "Rotor Head"
+      "64-40": "Indicating"
+
+  "65":
+    title: "Tail Rotor Drive"
+    description: "Tail rotor drive system"
+    sections:
+      "65-00": "General"
+      "65-10": "Shafts"
+      "65-20": "Gearboxes"
+      "65-40": "Indicating"
+
+  "66":
+    title: "Folding Blades/Pylon"
+    description: "Blade and pylon folding"
+    sections:
+      "66-00": "General"
+      "66-10": "Rotor Blades"
+      "66-20": "Tail Pylon"
+      "66-30": "Controls and Indicating"
+
+  "67":
+    title: "Rotors Flight Control"
+    description: "Rotor flight controls"
+    sections:
+      "67-00": "General"
+      "67-10": "Rotor Control"
+      "67-20": "Anti-Torque Rotor Control"
+      "67-30": "Servo Control System"
+
+# =============================================================================
+# POWERPLANT
+# =============================================================================
+  "70":
+    title: "Standard Practices - Engine"
+    description: "Engine maintenance practices"
+    sections:
+      "70-00": "General"
+      "70-10": "Alignment"
+      "70-20": "Cleaning"
+      "70-30": "Preservation"
+
+  "71":
+    title: "Power Plant - General"
+    description: "Power plant general"
+    sections:
+      "71-00": "General"
+      "71-10": "Cowling"
+      "71-20": "Mounts"
+      "71-30": "Fireseals"
+      "71-40": "Attach Fittings"
+      "71-50": "Electrical Harness"
+      "71-60": "Air Intakes"
+      "71-70": "Engine Drains"
+
+  "72":
+    title: "Engine - Turbine/Turboprop, Ducted Fan/Unducted Fan"
+    description: "Gas turbine engines"
+    sections:
+      "72-00": "General"
+      "72-10": "Reduction Gear, Shaft Section"
+      "72-20": "Air Inlet Section"
+      "72-30": "Compressor Section"
+      "72-40": "Combustion Section"
+      "72-50": "Turbine Section"
+      "72-60": "Accessory Drives"
+      "72-70": "Bypass Section"
+      "72-80": "Propulsor Section"
+
+  "73":
+    title: "Engine Fuel and Control"
+    description: "Engine fuel system"
+    sections:
+      "73-00": "General"
+      "73-10": "Distribution"
+      "73-20": "Controlling"
+      "73-30": "Indicating"
+
+  "74":
+    title: "Ignition"
+    description: "Engine ignition system"
+    sections:
+      "74-00": "General"
+      "74-10": "Electrical Power Supply"
+      "74-20": "Distribution"
+      "74-30": "Switching"
+
+  "75":
+    title: "Air"
+    description: "Engine air system"
+    sections:
+      "75-00": "General"
+      "75-10": "Engine Anti-Icing"
+      "75-20": "Cooling"
+      "75-30": "Compressor Control"
+      "75-40": "Indicating"
+
+  "76":
+    title: "Engine Controls"
+    description: "Engine controls"
+    sections:
+      "76-00": "General"
+      "76-10": "Power Control"
+      "76-20": "Emergency Shutdown"
+
+  "77":
+    title: "Engine Indicating"
+    description: "Engine instruments"
+    sections:
+      "77-00": "General"
+      "77-10": "Power"
+      "77-20": "Temperature"
+      "77-30": "Analyzers"
+      "77-40": "Integrated Engine Instrument Systems"
+
+  "78":
+    title: "Exhaust"
+    description: "Engine exhaust system"
+    sections:
+      "78-00": "General"
+      "78-10": "Collector/Tailpipe"
+      "78-20": "Noise Suppressor"
+      "78-30": "Thrust Reverser"
+      "78-40": "Supplemental Air"
+
+  "79":
+    title: "Oil"
+    description: "Engine oil system"
+    sections:
+      "79-00": "General"
+      "79-10": "Storage"
+      "79-20": "Distribution"
+      "79-30": "Indicating"
+
+  "80":
+    title: "Starting"
+    description: "Engine starting system"
+    sections:
+      "80-00": "General"
+      "80-10": "Cranking"
+      "80-20": "Starting"
+
+  "81":
+    title: "Turbines"
+    description: "Auxiliary power turbines"
+    sections:
+      "81-00": "General"
+      "81-10": "Power Recovery"
+      "81-20": "Turbo-Supercharger"
+
+  "82":
+    title: "Water Injection"
+    description: "Water injection system"
+    sections:
+      "82-00": "General"
+      "82-10": "Storage"
+      "82-20": "Distribution"
+      "82-30": "Dumping and Purging"
+      "82-40": "Indicating"
+
+  "83":
+    title: "Accessory Gearboxes"
+    description: "Engine accessory drives"
+    sections:
+      "83-00": "General"
+      "83-10": "Drive Shaft Section"
+      "83-20": "Gearbox Section"
+
+  "84":
+    title: "Propulsion Augmentation"
+    description: "Thrust augmentation"
+    sections:
+      "84-00": "General"
+      "84-10": "Jet Assist Takeoff"
+
+  "85":
+    title: "Reciprocating Engine"
+    description: "Piston engines"
+    sections:
+      "85-00": "General"
+      "85-10": "Front Section"
+      "85-20": "Power Section"
+      "85-30": "Cylinder Section"
+      "85-40": "Supercharger Section"
+      "85-50": "Lubrication"
+
+# =============================================================================
+# AUXILIARY POWER UNIT
+# =============================================================================
+  "49":
+    title: "Airborne Auxiliary Power"
+    description: "APU systems"
+    sections:
+      "49-00": "General"
+      "49-10": "Power Plant"
+      "49-20": "Engine"
+      "49-30": "Engine Fuel and Control"
+      "49-40": "Ignition/Starting"
+      "49-50": "Air"
+      "49-60": "Engine Controls"
+      "49-70": "Indicating"
+      "49-80": "Exhaust"
+      "49-90": "Oil"
+
+# =============================================================================
+# WIRING
+# =============================================================================
+  "91":
+    title: "Charts"
+    description: "Wiring diagrams"
+    sections:
+      "91-00": "General"
+
+  "92":
+    title: "Electrical Installations"
+    description: "Electrical wiring"
+    sections:
+      "92-00": "General"
+
+# Mapping metadata
+mapping_rules:
+  dm_code_format: "{model_ident_code}-{system_diff_code}-{system_code}-{sub_system_code}-{sub_sub_system_code}-{assy_code}-{disassy_code_variant}-{info_code}-{item_location_code}"
+  ata_to_system_code: "Direct mapping: ATA chapter XX-YY-ZZ maps to system code XXYYZZ"

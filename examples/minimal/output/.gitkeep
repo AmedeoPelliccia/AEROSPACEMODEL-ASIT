@@ -1,0 +1,5 @@
+# Output Directory
+
+Rendered publications (HTML, PDF) will appear here after running the example.
+
+Run: `python run_example.py`

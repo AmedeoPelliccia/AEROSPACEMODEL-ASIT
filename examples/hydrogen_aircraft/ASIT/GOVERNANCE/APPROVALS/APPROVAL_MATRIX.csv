@@ -1,0 +1,10 @@
+artifact_type,action,stk_eng,stk_qa,stk_cm,stk_pm,stk_cert,stk_safety,stk_ground,notes
+baseline_dbl,create,required,required,required,informed,informed,required,informed,Design baseline - safety review required
+baseline_fbl,create,required,required,required,required,required,required,required,FBL requires all stakeholders for H2
+baseline_cbl,create,required,required,required,,required,required,,Component baseline for H2 systems
+contract_amm,execute,required,required,required,,,required,,AMM with H2 safety content
+contract_cmm,execute,required,required,required,,,required,,CMM for H2 components
+dm_publish,approve,required,required,informed,,,required,,H2 DMs require safety review
+hydrogen_change,approve,required,required,required,,required,required,required,Any H2 system change requires full review
+ground_ops_change,approve,required,required,required,,,required,required,Ground ops requires airport stakeholder
+special_condition,close,required,required,required,,required,required,,SC closure requires safety

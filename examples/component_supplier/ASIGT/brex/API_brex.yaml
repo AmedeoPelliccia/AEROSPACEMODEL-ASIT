@@ -1,0 +1,125 @@
+# =============================================================================
+# AeroParts International — Project BREX Rules
+# =============================================================================
+
+metadata:
+  brex_id: "API-BREX-001"
+  title: "AeroParts LGA-5000 Business Rules"
+  issue_date: "2026-01-10"
+  status: "active"
+  
+  extends:
+    - "S1000D_5.0_DEFAULT"
+    
+  organization:
+    name: "AeroParts International"
+    cage_code: "API01"
+
+dm_code_rules:
+  - rule_id: "API-BR-DMC-001"
+    element: "modelIdentCode"
+    description: "Model identification code must be 'LGA5K'"
+    severity: "error"
+    pattern: "^LGA5K$"
+    message: "Invalid model identification code. Expected 'LGA5K'."
+    
+  - rule_id: "API-BR-DMC-002"
+    element: "systemCode"
+    description: "System code must be '32' for landing gear"
+    severity: "error"
+    pattern: "^32$"
+    message: "LGA-5000 documentation must use ATA 32."
+
+part_number_rules:
+  - rule_id: "API-BR-PN-001"
+    element: "//partNumber"
+    description: "Part numbers must include CAGE code"
+    severity: "warning"
+    xpath_check: "../manufacturerCode"
+    message: "Part number should include manufacturer CAGE code."
+    
+  - rule_id: "API-BR-PN-002"
+    element: "//partNumber[starts-with(., 'LGA-5000')]"
+    description: "LGA-5000 series part numbers must follow standard format"
+    severity: "error"
+    pattern: "^LGA-5000-[0-9]{3}(-[0-9]{2})?$"
+    message: "Invalid LGA-5000 part number format."
+
+supplier_rules:
+  - rule_id: "API-BR-SUP-001"
+    element: "//responsiblePartnerCompany"
+    description: "Responsible partner must be API01"
+    severity: "error"
+    xpath_check: "enterpriseIdent/@manufacturerCodeValue='API01'"
+    message: "Responsible partner company must be API01."
+    
+  - rule_id: "API-BR-SUP-002"
+    element: "//dmIdent"
+    description: "All DMs must include supplier info in status"
+    severity: "warning"
+    message: "DM should include supplier information."
+
+effectivity_rules:
+  - rule_id: "API-BR-EFF-001"
+    element: "//applic"
+    description: "Effectivity must specify customer applicability"
+    severity: "warning"
+    xpath_check: ".//assert"
+    message: "Consider adding customer-specific applicability."
+    
+  - rule_id: "API-BR-EFF-002"
+    element: "//serialNumber"
+    description: "Serial number effectivity must follow API format"
+    severity: "error"
+    pattern: "^[0-9]{3,6}$"
+    message: "Serial number must be 3-6 digits."
+
+quality_rules:
+  - rule_id: "API-BR-QA-001"
+    element: "//proceduralStep[contains(., 'inspect') or contains(., 'Inspect')]"
+    description: "Inspection steps should reference quality criteria"
+    severity: "warning"
+    message: "Inspection steps should include acceptance criteria."
+    
+  - rule_id: "API-BR-QA-002"
+    element: "//warningAndCautionPara[@warningType='hydraulic']"
+    description: "Hydraulic warnings must include pressure specifications"
+    severity: "warning"
+    message: "Hydraulic warnings should specify operating pressure."
+
+content_rules:
+  - rule_id: "API-BR-CNT-001"
+    element: "//warning"
+    description: "Warnings must have type classification"
+    severity: "error"
+    xpath_check: "@warningType"
+    message: "Warning must specify warningType attribute."
+    
+  - rule_id: "API-BR-CNT-002"
+    element: "//figure"
+    description: "Figures must have title"
+    severity: "error"
+    required_child: "title"
+    message: "Figure must include a title element."
+    
+  - rule_id: "API-BR-CNT-003"
+    element: "//toolsSetup | //supplySetup"
+    description: "Tool/supply lists must include part numbers"
+    severity: "warning"
+    message: "Tool and supply lists should include ordering information."
+
+# Customer-specific rule extensions
+customer_rules:
+  oem_a:
+    - rule_id: "API-BR-OEMA-001"
+      element: "//dmAddress[contains(@targetCustomer, 'OEM-A')]"
+      description: "OEM-A deliverables must use their BREX extensions"
+      severity: "info"
+      message: "Applying OEM-A specific rules."
+      
+  oem_b:
+    - rule_id: "API-BR-OEMB-001"
+      element: "//dmAddress[contains(@targetCustomer, 'OEM-B')]"
+      description: "OEM-B deliverables require French translation"
+      severity: "warning"
+      message: "OEM-B deliverables should include French language version."

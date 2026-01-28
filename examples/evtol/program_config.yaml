@@ -1,0 +1,157 @@
+# =============================================================================
+# eVTOL Example — Program Configuration
+# =============================================================================
+# Electric Vertical Take-Off and Landing aircraft for Urban Air Mobility.
+# Novel certification basis with Special Conditions.
+# =============================================================================
+
+program:
+  name: "SkyLift-200"
+  model_code: "SL2"
+  description: "4-passenger electric VTOL for urban air mobility"
+  
+  organization:
+    name: "Urban Mobility Systems Inc."
+    cage_code: "UMS01"
+    country_code: "US"
+    
+  aircraft:
+    type: "Powered-Lift"
+    category: "Normal (Part 23)"
+    passenger_capacity: 4
+    crew: 1
+    
+    propulsion:
+      type: "Distributed Electric"
+      motor_count: 8
+      configuration: "Tilt-rotor"
+      
+    battery:
+      voltage: 800
+      chemistry: "Li-ion NMC"
+      capacity_kwh: 160
+      
+    performance:
+      range_nm: 60
+      cruise_speed_ktas: 120
+      max_altitude_ft: 10000
+      
+  variants:
+    - code: "SL2-P"
+      name: "Piloted"
+      description: "Single pilot operation"
+      
+    - code: "SL2-A"
+      name: "Autonomous"
+      description: "Autonomous-capable (future certification)"
+      
+  version:
+    current: "1.0.0"
+    aerospacemodel: "2.0.0"
+
+standards:
+  s1000d:
+    issue: "5.0"
+    brex:
+      base: "S1000D_5.0_DEFAULT"
+      project: "SL2_brex"
+      
+  language:
+    primary: "en"
+    
+  country:
+    primary: "US"
+
+certification:
+  basis: "14 CFR Part 23 Amendment 64"
+  special_conditions:
+    - "SC-VTOL-01: High-Voltage Electrical Systems"
+    - "SC-VTOL-02: Distributed Propulsion"
+    - "SC-VTOL-03: Battery Fire Protection"
+    - "SC-VTOL-04: CSFL for DEP"
+    - "SC-VTOL-05: Autonomous Flight Functions"
+    - "SC-VTOL-06: Cyber Security"
+    
+  software:
+    standard: "DO-178C"
+    supplements:
+      - "DO-331"  # Model-Based Development
+      - "DO-332"  # Object-Oriented Technology
+      
+  hardware:
+    standard: "DO-254"
+
+asit:
+  governance:
+    baseline_policy: "strict"
+    change_control: true
+    approval_required: true
+    
+  contracts:
+    active_dir: "ASIT/CONTRACTS/active"
+    require_approval: true
+
+asigt:
+  generators:
+    dm_generator:
+      enabled: true
+    pm_generator:
+      enabled: true
+      
+  validators:
+    brex:
+      enabled: true
+      strict_mode: true
+    schema:
+      enabled: true
+    trace:
+      enabled: true
+      require_complete: true
+      
+  renderers:
+    html:
+      enabled: true
+    pdf:
+      enabled: true
+    ietp:
+      enabled: true
+
+directories:
+  kdb:
+    path: "KDB"
+  idb:
+    path: "IDB"
+  output:
+    path: "output"
+
+publications:
+  enabled:
+    - AMM
+    - CMM
+    - IPC
+    - TSM
+    - FCOM
+    
+  defaults:
+    issue_info:
+      issue_number: "001"
+      in_work: "00"
+    responsible_partner_company:
+      cage: "UMS01"
+
+traceability:
+  enabled: true
+  
+  software:
+    enabled: true
+    standard: "DO-178C"
+    trace_to_requirements: true
+    
+  evidence:
+    generate_matrices: true
+    hash_algorithm: "SHA-256"
+
+environment:
+  mode: "development"
+  logging:
+    level: "INFO"

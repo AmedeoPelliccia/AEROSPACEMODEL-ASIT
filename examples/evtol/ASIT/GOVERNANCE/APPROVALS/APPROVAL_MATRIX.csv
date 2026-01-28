@@ -1,0 +1,10 @@
+artifact_type,action,stk_eng,stk_qa,stk_cm,stk_pm,stk_cert,stk_sw,stk_safety,notes
+baseline_dbl,create,required,required,required,informed,informed,informed,informed,Design baseline
+baseline_fbl,create,required,required,required,required,required,informed,required,Functional baseline - cert involved
+baseline_sbl,create,required,required,required,,required,required,required,Software baseline - SCCB
+contract_amm,execute,required,required,required,,,,AMM generation
+contract_cmm,execute,required,required,required,,,,CMM generation for components
+dm_publish,approve,required,required,informed,,,,,Data module publication
+software_release,approve,required,required,required,,required,required,required,DO-178C controlled
+battery_change,approve,required,required,required,,required,,required,Battery system changes require safety
+special_condition,close,required,required,required,,required,,required,SC closure requires certification

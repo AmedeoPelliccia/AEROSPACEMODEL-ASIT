@@ -1,0 +1,163 @@
+{
+  "$schema": "../schemas/validation_report.schema.json",
+  "run_id": "20260122-1430__KITDM-CTR-LM-CSDB_ATA28",
+  "validation_timestamp": "2026-01-22T14:44:00Z",
+  "overall_status": "PASS",
+  "brex_validation": {
+    "brex_file": "ASIGT/brex/S1000D_5.0_DEFAULT.yaml",
+    "project_brex": "ASIGT/brex/project_brex.yaml",
+    "profile": "default",
+    "s1000d_issue": "5.0",
+    "summary": {
+      "total_rules_checked": 42,
+      "passed": 42,
+      "failed": 0,
+      "warnings": 3,
+      "skipped": 0
+    },
+    "results": [
+      {
+        "rule_id": "BREX-ID-001",
+        "rule_name": "DMC Format Validation",
+        "category": "identification",
+        "severity": "error",
+        "status": "PASS",
+        "checked_count": 18,
+        "passed_count": 18,
+        "failed_count": 0,
+        "details": []
+      },
+      {
+        "rule_id": "BREX-STR-001",
+        "rule_name": "WCNP Order Validation",
+        "category": "structure",
+        "severity": "error",
+        "status": "PASS",
+        "checked_count": 6,
+        "passed_count": 6,
+        "failed_count": 0,
+        "details": []
+      },
+      {
+        "rule_id": "BREX-CON-003",
+        "rule_name": "Paragraph Length Check",
+        "category": "content",
+        "severity": "warning",
+        "status": "PASS_WITH_WARNINGS",
+        "checked_count": 156,
+        "passed_count": 153,
+        "warning_count": 3,
+        "failed_count": 0,
+        "details": [
+          {
+            "document": "DMC-HJONE-A-28-10-00-00A-040A-D",
+            "location": "//levelledPara[3]/para",
+            "message": "Paragraph exceeds recommended length (520 chars, max 500)",
+            "severity": "warning"
+          },
+          {
+            "document": "DMC-HJONE-A-28-10-00-00A-041A-D",
+            "location": "//levelledPara[1]/para",
+            "message": "Paragraph exceeds recommended length (512 chars, max 500)",
+            "severity": "warning"
+          },
+          {
+            "document": "DMC-HJONE-A-28-10-00-01A-510A-D",
+            "location": "//proceduralStep[5]/para",
+            "message": "Paragraph exceeds recommended length (508 chars, max 500)",
+            "severity": "warning"
+          }
+        ]
+      },
+      {
+        "rule_id": "BREX-REF-001",
+        "rule_name": "Internal Reference Validation",
+        "category": "references",
+        "severity": "error",
+        "status": "PASS",
+        "checked_count": 87,
+        "passed_count": 87,
+        "failed_count": 0,
+        "details": []
+      }
+    ]
+  },
+  "schema_validation": {
+    "schema_version": "S1000D Issue 5.0",
+    "schema_path": "schemas/s1000d/5.0/",
+    "summary": {
+      "total_validated": 23,
+      "valid": 23,
+      "invalid": 0
+    },
+    "results": [
+      {
+        "document": "DMC-HJONE-A-28-10-00-00A-040A-D",
+        "document_type": "dmodule",
+        "schema": "descript.xsd",
+        "status": "VALID",
+        "errors": [],
+        "validated_at": "2026-01-22T14:42:15Z"
+      },
+      {
+        "document": "DMC-HJONE-A-28-10-00-01A-510A-D",
+        "document_type": "dmodule",
+        "schema": "proced.xsd",
+        "status": "VALID",
+        "errors": [],
+        "validated_at": "2026-01-22T14:42:28Z"
+      },
+      {
+        "document": "DMC-HJONE-A-28-10-00-01A-941A-D",
+        "document_type": "dmodule",
+        "schema": "ipd.xsd",
+        "status": "VALID",
+        "errors": [],
+        "validated_at": "2026-01-22T14:42:45Z"
+      },
+      {
+        "document": "PMC-HJONE-A-28-00-00-00-00A-D",
+        "document_type": "pm",
+        "schema": "pm.xsd",
+        "status": "VALID",
+        "errors": [],
+        "validated_at": "2026-01-22T14:43:02Z"
+      }
+    ]
+  },
+  "trace_validation": {
+    "summary": {
+      "total_traces": 156,
+      "complete": 156,
+      "incomplete": 0,
+      "orphaned_outputs": 0,
+      "missing_sources": 0
+    },
+    "coverage": {
+      "input_coverage": 1.0,
+      "output_coverage": 1.0,
+      "bidirectional_coverage": 1.0
+    },
+    "details": {
+      "inputs_traced": 47,
+      "inputs_total": 47,
+      "outputs_traced": 23,
+      "outputs_total": 23
+    }
+  },
+  "certification_evidence": {
+    "do178c_compliance": {
+      "traceability_complete": true,
+      "bidirectional_traces": true,
+      "coverage_analysis": "PASS"
+    },
+    "arp4754a_compliance": {
+      "development_assurance": true,
+      "validation_evidence": true
+    },
+    "as9100_compliance": {
+      "quality_records": true,
+      "audit_trail": true
+    }
+  }
+}

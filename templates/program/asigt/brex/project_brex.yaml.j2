@@ -1,0 +1,231 @@
+# =============================================================================
+# {{ program_name }} — Project BREX Rules
+# =============================================================================
+# Business Rules Exchange (BREX) customization for this program.
+# Extends the base S1000D {{ s1000d_issue }} BREX with project-specific rules.
+#
+# Program: {{ program_name }} ({{ model_code }})
+# Generated: {{ created_date }}
+# =============================================================================
+
+metadata:
+  brex_id: "{{ model_code }}-BREX-001"
+  title: "{{ program_name }} Business Rules"
+  issue_date: "{{ created_date }}"
+  status: "draft"
+  
+  extends:
+    - "S1000D_{{ s1000d_issue }}_DEFAULT"
+    
+  organization:
+    name: "{{ organization }}"
+    cage_code: "{{ cage_code }}"
+
+# -----------------------------------------------------------------------------
+# Data Module Code Rules
+# -----------------------------------------------------------------------------
+dm_code_rules:
+  # Model Identification Code
+  - rule_id: "{{ model_code }}-BR-DMC-001"
+    element: "modelIdentCode"
+    description: "Model identification code must be '{{ model_code }}'"
+    severity: "error"
+    pattern: "^{{ model_code }}$"
+    message: "Invalid model identification code. Expected '{{ model_code }}'."
+    
+  # System Codes — Define allowed ATA chapters
+  - rule_id: "{{ model_code }}-BR-DMC-002"
+    element: "systemCode"
+    description: "System code must be valid ATA chapter"
+    severity: "error"
+    allowed_values:
+      # Add your program's ATA chapters here
+      - "00"  # General
+      - "05"  # Time Limits
+      - "06"  # Dimensions
+      - "07"  # Lifting/Shoring
+      - "08"  # Leveling/Weighing
+      - "09"  # Towing/Taxiing
+      - "10"  # Parking/Storage
+      - "11"  # Placards
+      - "12"  # Servicing
+      - "21"  # Air Conditioning
+      - "24"  # Electrical Power
+      - "27"  # Flight Controls
+      - "28"  # Fuel
+      - "29"  # Hydraulic Power
+      - "32"  # Landing Gear
+      - "34"  # Navigation
+      - "49"  # APU
+      - "52"  # Doors
+      - "53"  # Fuselage
+      - "55"  # Stabilizers
+      - "57"  # Wings
+      - "72"  # Engine
+    message: "System code not in approved ATA chapter list."
+
+# -----------------------------------------------------------------------------
+# Content Rules
+# -----------------------------------------------------------------------------
+content_rules:
+  # Warning/Caution Requirements
+  - rule_id: "{{ model_code }}-BR-CNT-001"
+    element: "//proceduralStep[.//warningRef]"
+    description: "Warning references must include severity level"
+    severity: "warning"
+    xpath_check: ".//warningRef[@warningIdentNumber]"
+    message: "Warning reference should include warning identifier."
+    
+  - rule_id: "{{ model_code }}-BR-CNT-002"
+    element: "//warning"
+    description: "Warnings must have type classification"
+    severity: "error"
+    xpath_check: "@warningType"
+    message: "Warning must specify warningType attribute."
+    
+  # Procedural Step Rules
+  - rule_id: "{{ model_code }}-BR-CNT-003"
+    element: "//proceduralStep"
+    description: "Procedural steps should not exceed 10 sub-steps"
+    severity: "warning"
+    max_children: 10
+    child_element: "proceduralStep"
+    message: "Procedural step has too many sub-steps. Consider restructuring."
+    
+  # Figure Requirements
+  - rule_id: "{{ model_code }}-BR-CNT-004"
+    element: "//figure"
+    description: "Figures must have title"
+    severity: "error"
+    required_child: "title"
+    message: "Figure must include a title element."
+    
+  # Table Requirements
+  - rule_id: "{{ model_code }}-BR-CNT-005"
+    element: "//table"
+    description: "Tables must have title"
+    severity: "error"
+    required_child: "title"
+    message: "Table must include a title element."
+
+# -----------------------------------------------------------------------------
+# Metadata Rules
+# -----------------------------------------------------------------------------
+metadata_rules:
+  # Responsible Partner Company
+  - rule_id: "{{ model_code }}-BR-META-001"
+    element: "//responsiblePartnerCompany/enterpriseIdent"
+    description: "RPC CAGE code must be registered"
+    severity: "error"
+    allowed_values:
+      - "{{ cage_code }}"
+      # Add approved supplier CAGE codes here
+    message: "Unrecognized CAGE code in responsiblePartnerCompany."
+    
+  # Originator
+  - rule_id: "{{ model_code }}-BR-META-002"
+    element: "//originator/enterpriseIdent"
+    description: "Originator CAGE code must be registered"
+    severity: "error"
+    allowed_values:
+      - "{{ cage_code }}"
+      # Add approved originator CAGE codes here
+    message: "Unrecognized CAGE code in originator."
+    
+  # Security Classification
+  - rule_id: "{{ model_code }}-BR-META-003"
+    element: "//security/@securityClassification"
+    description: "Security classification must be valid"
+    severity: "error"
+    allowed_values:
+      - "01"  # Unclassified
+      # Add other classifications as needed
+    message: "Invalid security classification code."
+    
+  # Quality Assurance
+  - rule_id: "{{ model_code }}-BR-META-004"
+    element: "//qualityAssurance"
+    description: "Quality assurance must specify verification type"
+    severity: "warning"
+    required_attribute: "verificationType"
+    message: "Quality assurance should specify verificationType."
+
+# -----------------------------------------------------------------------------
+# Language Rules
+# -----------------------------------------------------------------------------
+language_rules:
+  - rule_id: "{{ model_code }}-BR-LANG-001"
+    element: "//language"
+    description: "Language code must be approved"
+    severity: "error"
+    allowed_languages:
+      - language: "{{ language_code }}"
+        country: "{{ country_code }}"
+    message: "Language/country combination not approved for this program."
+
+# -----------------------------------------------------------------------------
+# Cross-Reference Rules
+# -----------------------------------------------------------------------------
+xref_rules:
+  # Internal References
+  - rule_id: "{{ model_code }}-BR-XREF-001"
+    element: "//dmRef"
+    description: "DM references must target existing modules"
+    severity: "error"
+    check_type: "reference_exists"
+    scope: "project"
+    message: "Referenced data module does not exist in project."
+    
+  # External References
+  - rule_id: "{{ model_code }}-BR-XREF-002"
+    element: "//externalPubRef"
+    description: "External publication references should be validated"
+    severity: "warning"
+    check_type: "format_valid"
+    message: "External publication reference format should be verified."
+    
+  # Graphic References
+  - rule_id: "{{ model_code }}-BR-XREF-003"
+    element: "//graphic"
+    description: "Graphics must reference existing ICN"
+    severity: "error"
+    check_type: "icn_exists"
+    message: "Referenced ICN does not exist."
+
+# -----------------------------------------------------------------------------
+# Applicability Rules
+# -----------------------------------------------------------------------------
+applicability_rules:
+  - rule_id: "{{ model_code }}-BR-APP-001"
+    element: "//applic"
+    description: "Applicability must reference valid product"
+    severity: "error"
+    check_type: "act_valid"
+    message: "Applicability references unknown product attribute."
+
+# -----------------------------------------------------------------------------
+# Custom Project Rules
+# -----------------------------------------------------------------------------
+custom_rules:
+  # Add your program-specific rules here
+  # Example:
+  # - rule_id: "{{ model_code }}-BR-CUST-001"
+  #   element: "//customElement"
+  #   description: "Custom rule description"
+  #   severity: "error"
+  #   check_type: "custom"
+  #   check_function: "validate_custom_element"
+  #   message: "Custom validation failed."
+  []
+
+# -----------------------------------------------------------------------------
+# Rule Exemptions
+# -----------------------------------------------------------------------------
+exemptions:
+  # List rule IDs that are exempted with justification
+  # Example:
+  # - rule_id: "S1000D-BR-XXX"
+  #   reason: "Not applicable to this program type"
+  #   approved_by: "Configuration Management"
+  #   approval_date: "{{ created_date }}"
+  []

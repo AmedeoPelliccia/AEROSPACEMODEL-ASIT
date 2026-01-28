@@ -1,0 +1,476 @@
+# =============================================================================
+# Project BREX Configuration Template
+# ASIGT Project-Specific Business Rules
+# Version: 2.0.0
+# =============================================================================
+#
+# This template defines project-specific BREX rules that extend, restrict,
+# or customize the S1000D 5.0 default rules for a particular aircraft program.
+#
+# Copy this file to your project and customize as needed:
+#   cp project_brex.template.yaml <program>/config/project_brex.yaml
+#
+# Project BREX rules operate under ASIT contract authority.
+# Changes require CCB approval per ASIT governance.
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# PROJECT IDENTIFICATION
+# -----------------------------------------------------------------------------
+project:
+  # Unique project identifier
+  project_id: "${PROJECT_ID}"         # e.g., "HJ1" for HydrogenJet-100
+  project_name: "${PROJECT_NAME}"     # e.g., "HydrogenJet-100"
+  organization: "${ORGANIZATION}"     # e.g., "Green Aviation Inc."
+  
+  # Model identification code (used in DMC)
+  model_ident_code: "${MODEL_IDENT_CODE}"  # e.g., "HJONE" (2-14 chars)
+  
+  # System diff code for this project
+  system_diff_code: "A"               # Default: A
+  
+  # BREX effective date
+  effective_date: "${EFFECTIVE_DATE}" # e.g., "2026-01-15"
+  
+  # Version control
+  brex_version: "1.0.0"
+  brex_issue: "001"
+  brex_inwork: "00"
+  
+  # Authority
+  approved_by: "${APPROVED_BY}"       # e.g., "STK_CM"
+  approval_reference: "${CCB_REF}"    # e.g., "CCB-2026-0042"
+
+# -----------------------------------------------------------------------------
+# BASE BREX INHERITANCE
+# -----------------------------------------------------------------------------
+inheritance:
+  # Base BREX to inherit from
+  base_brex: "S1000D_5.0_DEFAULT.yaml"
+  
+  # Inheritance mode
+  mode: "extend"  # Options: extend, restrict, replace
+  
+  # Profile to use from base
+  base_profile: "default"
+
+# -----------------------------------------------------------------------------
+# RULE MODIFICATIONS
+# -----------------------------------------------------------------------------
+rule_modifications:
+  # Disable specific rules from base BREX
+  disabled_rules:
+    # Example: Disable trailing whitespace check for legacy content
+    # - rule_id: "BREX-CONT-006"
+    #   reason: "Legacy content migration - whitespace cleanup scheduled for Phase 2"
+    #   waiver_ref: "WAIVER-2026-001"
+    []
+  
+  # Promote warnings to errors
+  promoted_to_error:
+    # Example: Make QA status mandatory
+    # - rule_id: "BREX-META-005"
+    #   reason: "Project quality mandate requires QA status on all DMs"
+    []
+  
+  # Demote errors to warnings
+  demoted_to_warning:
+    # Example: Allow legacy info codes during migration
+    # - rule_id: "BREX-IDENT-004"
+    #   reason: "Migration period - legacy codes permitted until Phase 2"
+    #   expiration: "2026-06-30"
+    []
+
+# -----------------------------------------------------------------------------
+# PROJECT-SPECIFIC RULES
+# -----------------------------------------------------------------------------
+custom_rules:
+  identification:
+    # Project-specific DMC rules
+    - id: "PROJ-IDENT-001"
+      name: "Project Model Code"
+      description: "DMC must use project-specific model identification code"
+      severity: "ERROR"
+      category: "identification"
+      xpath: "//dmCode/@modelIdentCode"
+      validation:
+        type: "enumeration"
+        values:
+          - "${MODEL_IDENT_CODE}"  # Primary model code
+          # Add derivative codes as needed:
+          # - "HJ1A"  # Variant A
+          # - "HJ1B"  # Variant B
+      message: "modelIdentCode must be project-approved code"
+      
+    - id: "PROJ-IDENT-002"
+      name: "Project System Codes"
+      description: "Only approved ATA chapters allowed for this project"
+      severity: "ERROR"
+      category: "identification"
+      xpath: "//dmCode/@systemCode"
+      validation:
+        type: "enumeration"
+        values:
+          # Define allowed ATA chapters for this project
+          - "00"  # General
+          - "05"  # Time limits / Maintenance checks
+          - "06"  # Dimensions and areas
+          - "07"  # Lifting and shoring
+          - "08"  # Leveling and weighing
+          - "09"  # Towing and taxiing
+          - "10"  # Parking and mooring
+          - "11"  # Placards and markings
+          - "12"  # Servicing
+          - "20"  # Standard practices - Airframe
+          - "21"  # Air conditioning
+          - "22"  # Auto flight
+          - "23"  # Communications
+          - "24"  # Electrical power
+          - "25"  # Equipment / Furnishings
+          - "26"  # Fire protection
+          - "27"  # Flight controls
+          - "28"  # Fuel
+          - "29"  # Hydraulic power
+          - "30"  # Ice and rain protection
+          - "31"  # Indicating / Recording systems
+          - "32"  # Landing gear
+          - "33"  # Lights
+          - "34"  # Navigation
+          - "35"  # Oxygen
+          - "36"  # Pneumatic
+          - "38"  # Water / Waste
+          - "49"  # Airborne auxiliary power
+          - "51"  # Standard practices - Structures
+          - "52"  # Doors
+          - "53"  # Fuselage
+          - "54"  # Nacelles / Pylons
+          - "55"  # Stabilizers
+          - "56"  # Windows
+          - "57"  # Wings
+          - "70"  # Standard practices - Engines
+          - "71"  # Power plant - General
+          - "72"  # Engine turbine/turboprop
+          - "73"  # Engine fuel and control
+          - "74"  # Ignition
+          - "75"  # Air
+          - "76"  # Engine controls
+          - "77"  # Engine indicating
+          - "78"  # Exhaust
+          - "79"  # Oil
+          - "80"  # Starting
+          - "91"  # Charts
+          - "97"  # Wiring reporting
+      message: "systemCode must be approved ATA chapter for this project"
+  
+  structure:
+    # Project-specific structural requirements
+    - id: "PROJ-STRUCT-001"
+      name: "Mandatory Warning for H2 Systems"
+      description: "Hydrogen system procedures must include safety warning"
+      severity: "ERROR"
+      category: "structure"
+      xpath: "//proceduralStep[ancestor::content[//dmCode[@systemCode='28']]]"
+      validation:
+        type: "child_required_conditional"
+        condition: "contains(., 'hydrogen') or contains(., 'H2')"
+        children:
+          - "warning"
+      message: "Hydrogen-related procedures must include warning"
+      
+    - id: "PROJ-STRUCT-002"
+      name: "Electric System Caution"
+      description: "High-voltage electrical procedures require caution"
+      severity: "ERROR"
+      category: "structure"
+      xpath: "//proceduralStep[ancestor::content[//dmCode[@systemCode='24']]]"
+      validation:
+        type: "child_required_conditional"
+        condition: "contains(., 'high voltage') or contains(., 'HV')"
+        children:
+          - "caution"
+      message: "High-voltage procedures must include caution"
+  
+  content:
+    # Project-specific content rules
+    - id: "PROJ-CONT-001"
+      name: "Project Terminology"
+      description: "Use approved project terminology"
+      severity: "WARNING"
+      category: "content"
+      xpath: "//*[text()]"
+      validation:
+        type: "pattern_forbidden"
+        patterns:
+          # Forbidden terms and their replacements
+          - pattern: "\\bplane\\b"
+            replacement: "aircraft"
+          - pattern: "\\bgas\\b"
+            replacement: "fuel"
+          - pattern: "\\bjet fuel\\b"
+            replacement: "sustainable aviation fuel"
+      message: "Use approved project terminology"
+      
+    - id: "PROJ-CONT-002"
+      name: "Metric Units Required"
+      description: "Primary measurements must be metric"
+      severity: "WARNING"
+      category: "content"
+      xpath: "//quantity"
+      validation:
+        type: "attribute_recommended"
+        attributes:
+          - "quantityUnitOfMeasure"
+        preferred_values:
+          length: ["mm", "cm", "m", "km"]
+          mass: ["g", "kg"]
+          volume: ["ml", "L"]
+          temperature: ["degC", "K"]
+      message: "Primary units should be metric (imperial may be secondary)"
+  
+  references:
+    # Project-specific reference rules
+    - id: "PROJ-REF-001"
+      name: "Cross-Program Reference Restricted"
+      description: "References to other programs require approval"
+      severity: "WARNING"
+      category: "references"
+      xpath: "//externalPubRef"
+      validation:
+        type: "custom"
+        function: "validate_external_refs"
+        parameters:
+          allowed_external:
+            - "S1000D"
+            - "ATA iSpec 2200"
+            - "ARP4754A"
+            - "ARP4761"
+            - "DO-178C"
+          require_approval_for_others: true
+      message: "External references to non-standard documents require approval"
+  
+  applicability:
+    # Project-specific applicability rules
+    - id: "PROJ-APP-001"
+      name: "Variant Applicability Required"
+      description: "DMs must specify aircraft variant applicability"
+      severity: "WARNING"
+      category: "applicability"
+      xpath: "//identAndStatusSection"
+      validation:
+        type: "child_recommended"
+        children:
+          - "applic"
+      message: "DMs should specify variant applicability"
+      
+    - id: "PROJ-APP-002"
+      name: "Serial Number Effectivity Format"
+      description: "Serial effectivity must use project format"
+      severity: "ERROR"
+      category: "applicability"
+      xpath: "//serialNumber"
+      validation:
+        type: "pattern"
+        pattern: "^${MODEL_IDENT_CODE}[0-9]{5}$"
+      message: "Serial numbers must follow project format: ${MODEL_IDENT_CODE}NNNNN"
+  
+  metadata:
+    # Project-specific metadata rules
+    - id: "PROJ-META-001"
+      name: "Project Security Classification"
+      description: "Default security classification for project"
+      severity: "ERROR"
+      category: "metadata"
+      xpath: "//security/@securityClassification"
+      validation:
+        type: "enumeration"
+        values:
+          - "01"  # Unclassified - Standard
+          - "02"  # Restricted - Export controlled
+        default: "01"
+      message: "Security classification must be project-approved value"
+      
+    - id: "PROJ-META-002"
+      name: "Responsible Partner Company"
+      description: "Responsible partner must be project organization"
+      severity: "ERROR"
+      category: "metadata"
+      xpath: "//responsiblePartnerCompany/enterpriseName"
+      validation:
+        type: "enumeration"
+        values:
+          - "${ORGANIZATION}"
+          # Add approved partners:
+          # - "Partner Aviation Ltd."
+          # - "Component Supplier Inc."
+      message: "Responsible partner must be approved organization"
+      
+    - id: "PROJ-META-003"
+      name: "Originator Code"
+      description: "Originator must use project-assigned CAGE/NCAGE"
+      severity: "ERROR"
+      category: "metadata"
+      xpath: "//originator/enterpriseIdent"
+      validation:
+        type: "enumeration"
+        values:
+          - "${CAGE_CODE}"  # Primary CAGE/NCAGE
+          # Add partner codes:
+          # - "12345"
+          # - "ABCDE"
+      message: "Originator must use approved CAGE/NCAGE code"
+
+# -----------------------------------------------------------------------------
+# CONTROLLED VOCABULARY EXTENSIONS
+# -----------------------------------------------------------------------------
+vocabulary_extensions:
+  # Project-specific terminology
+  approved_terms:
+    aircraft_type:
+      - term: "HydrogenJet-100"
+        abbreviation: "HJ100"
+        context: "Full aircraft reference"
+      - term: "HydrogenJet"
+        abbreviation: "HJ"
+        context: "Short reference"
+    
+    propulsion:
+      - term: "hydrogen fuel cell"
+        abbreviation: "HFC"
+        forbidden_alternatives: ["H2 battery", "hydrogen battery"]
+      - term: "electric motor"
+        abbreviation: "EM"
+        forbidden_alternatives: ["electromotor"]
+      - term: "sustainable aviation fuel"
+        abbreviation: "SAF"
+        forbidden_alternatives: ["biofuel", "green fuel"]
+    
+    systems:
+      - term: "thermal management system"
+        abbreviation: "TMS"
+      - term: "battery management system"
+        abbreviation: "BMS"
+      - term: "power distribution unit"
+        abbreviation: "PDU"
+  
+  # Acronyms dictionary
+  acronyms:
+    HJ: "HydrogenJet"
+    HFC: "Hydrogen Fuel Cell"
+    TMS: "Thermal Management System"
+    BMS: "Battery Management System"
+    PDU: "Power Distribution Unit"
+    SAF: "Sustainable Aviation Fuel"
+    eVTOL: "Electric Vertical Take-Off and Landing"
+
+# -----------------------------------------------------------------------------
+# VALIDATION PROFILES
+# -----------------------------------------------------------------------------
+profiles:
+  development:
+    name: "Development Profile"
+    description: "Relaxed rules for development phase"
+    inherit_from: "default"
+    modifications:
+      demote_to_warning:
+        - "PROJ-APP-001"
+        - "PROJ-CONT-002"
+      disabled:
+        - "PROJ-META-003"  # Allow any originator during development
+    
+  pre_certification:
+    name: "Pre-Certification Profile"
+    description: "Strict rules for certification preparation"
+    inherit_from: "strict"
+    modifications:
+      promote_to_error:
+        - "PROJ-APP-001"
+        - "PROJ-CONT-001"
+        - "PROJ-META-002"
+    additional_checks:
+      - "all_references_resolved"
+      - "no_tbd_content"
+      - "all_warnings_verified"
+      - "traceability_complete"
+    
+  production:
+    name: "Production Profile"
+    description: "Full compliance for production content"
+    inherit_from: "strict"
+    all_rules_error: true
+    no_waivers_allowed: true
+
+# -----------------------------------------------------------------------------
+# WAIVER MANAGEMENT
+# -----------------------------------------------------------------------------
+waivers:
+  # Waiver policy
+  policy:
+    require_approval: true
+    approval_authority: "STK_CM"
+    require_ccb: true
+    max_duration_days: 180
+    renewal_allowed: true
+    documentation_required: true
+  
+  # Active waivers
+  active:
+    # Example waiver:
+    # - waiver_id: "WAIVER-2026-001"
+    #   rule_id: "PROJ-IDENT-002"
+    #   scope: "ATA chapter 99 (legacy test content)"
+    #   justification: "Legacy test content during migration"
+    #   approved_by: "John Smith (STK_CM)"
+    #   approval_date: "2026-01-15"
+    #   expiration_date: "2026-07-15"
+    #   ccb_reference: "CCB-2026-0042"
+    []
+
+# -----------------------------------------------------------------------------
+# REPORTING CONFIGURATION
+# -----------------------------------------------------------------------------
+reporting:
+  # Report format
+  format: "json"  # Options: json, xml, csv, html
+  
+  # Include in reports
+  include:
+    - rule_id
+    - severity
+    - location
+    - message
+    - suggestion
+    
+  # Group violations by
+  group_by: "severity"  # Options: severity, category, dm_code
+  
+  # Summary statistics
+  summary:
+    total_violations: true
+    by_severity: true
+    by_category: true
+    by_dm: true
+    
+  # Output paths
+  output:
+    directory: "runs/${RUN_ID}/"
+    filename: "BREX_VALIDATION_REPORT"
+
+# -----------------------------------------------------------------------------
+# INTEGRATION
+# -----------------------------------------------------------------------------
+integration:
+  # ASIT contract binding
+  contract_binding:
+    require_contract: true
+    validate_contract_brex: true
+    
+  # Baseline validation
+  baseline:
+    validate_against_baseline: true
+    require_baseline_approval: true
+    
+  # Traceability
+  traceability:
+    include_in_trace: true
+    trace_field: "brex_validation"

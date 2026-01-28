@@ -1,0 +1,170 @@
+# =============================================================================
+# SkyLift-200 — ATA Chapter Mapping (eVTOL Adaptation)
+# =============================================================================
+
+metadata:
+  program: "SkyLift-200"
+  model_code: "SL2"
+  specification: "ATA iSpec 2200 (eVTOL Adapted)"
+  notes: |
+    Traditional ATA chapters adapted for electric VTOL aircraft.
+    Novel systems mapped to closest applicable chapter.
+
+systems:
+  # -------------------------------------------------------------------------
+  # General
+  # -------------------------------------------------------------------------
+  - ata_chapter: "05"
+    title: "Time Limits/Maintenance Checks"
+    enabled: true
+    publications: ["AMM"]
+    evtol_notes: "Includes battery cycle limits"
+    
+  - ata_chapter: "06"
+    title: "Dimensions and Areas"
+    enabled: true
+    publications: ["AMM"]
+    
+  - ata_chapter: "12"
+    title: "Servicing"
+    enabled: true
+    publications: ["AMM"]
+    evtol_notes: "Battery charging procedures"
+
+  # -------------------------------------------------------------------------
+  # Electrical Systems (High-Voltage)
+  # -------------------------------------------------------------------------
+  - ata_chapter: "24"
+    title: "Electrical Power"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC", "CMM"]
+    priority: "critical"
+    safety_critical: true
+    evtol_adaptation: "High-Voltage Battery System"
+    subsystems:
+      - code: "24-00"
+        title: "Electrical Power - General"
+      - code: "24-20"
+        title: "High-Voltage DC Generation (Battery)"
+      - code: "24-30"
+        title: "High-Voltage DC Distribution"
+      - code: "24-40"
+        title: "Low-Voltage DC Auxiliary"
+      - code: "24-50"
+        title: "Power Conversion (DC-DC)"
+      - code: "24-60"
+        title: "Battery Management System"
+    special_conditions:
+      - "SC-VTOL-01"
+      - "SC-VTOL-03"
+
+  # -------------------------------------------------------------------------
+  # Flight Controls
+  # -------------------------------------------------------------------------
+  - ata_chapter: "27"
+    title: "Flight Controls"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    priority: "critical"
+    safety_critical: true
+    evtol_adaptation: "Fly-by-Wire with Rotor Mixing"
+    subsystems:
+      - code: "27-00"
+        title: "Flight Controls - General"
+      - code: "27-10"
+        title: "Roll Control (Differential Rotor)"
+      - code: "27-20"
+        title: "Pitch Control (Cyclic/Collective)"
+      - code: "27-30"
+        title: "Yaw Control (Differential Torque)"
+      - code: "27-40"
+        title: "Flight Control Computer"
+
+  # -------------------------------------------------------------------------
+  # Central Maintenance / Health Monitoring
+  # -------------------------------------------------------------------------
+  - ata_chapter: "45"
+    title: "Central Maintenance System"
+    enabled: true
+    publications: ["AMM", "TSM"]
+    priority: "high"
+    evtol_adaptation: "Integrated Health Management"
+    subsystems:
+      - code: "45-00"
+        title: "CMS - General"
+      - code: "45-10"
+        title: "Aircraft Health Monitoring"
+      - code: "45-20"
+        title: "Prognostics and Diagnostics"
+      - code: "45-30"
+        title: "Data Recording"
+
+  # -------------------------------------------------------------------------
+  # Propulsion (Electric)
+  # -------------------------------------------------------------------------
+  - ata_chapter: "70"
+    title: "Standard Practices - Propulsion"
+    enabled: true
+    publications: ["AMM"]
+    evtol_adaptation: "Electric Propulsion Practices"
+    
+  - ata_chapter: "71"
+    title: "Power Plant - General"
+    enabled: true
+    publications: ["AMM"]
+    evtol_adaptation: "Distributed Electric Propulsion System"
+    special_conditions:
+      - "SC-VTOL-02"
+    
+  - ata_chapter: "72"
+    title: "Engine (Motor Units)"
+    enabled: true
+    publications: ["AMM", "CMM", "IPC"]
+    priority: "critical"
+    safety_critical: true
+    evtol_adaptation: "Electric Motor/Controller Units"
+    subsystems:
+      - code: "72-00"
+        title: "Motor Unit - General"
+      - code: "72-10"
+        title: "Electric Motor Assembly"
+      - code: "72-20"
+        title: "Motor Controller Unit (MCU)"
+      - code: "72-30"
+        title: "Rotor Assembly"
+      - code: "72-40"
+        title: "Motor Cooling System"
+
+  # -------------------------------------------------------------------------
+  # Structures
+  # -------------------------------------------------------------------------
+  - ata_chapter: "52"
+    title: "Doors"
+    enabled: true
+    publications: ["AMM", "SRM"]
+    
+  - ata_chapter: "53"
+    title: "Fuselage"
+    enabled: true
+    publications: ["AMM", "SRM"]
+    evtol_notes: "Composite construction"
+    
+  - ata_chapter: "55"
+    title: "Stabilizers / Canard"
+    enabled: true
+    publications: ["AMM", "SRM"]
+
+  # -------------------------------------------------------------------------
+  # Avionics
+  # -------------------------------------------------------------------------
+  - ata_chapter: "34"
+    title: "Navigation"
+    enabled: true
+    publications: ["AMM", "TSM"]
+    evtol_notes: "GPS/INS for vertiport operations"
+    
+  - ata_chapter: "31"
+    title: "Instruments"
+    enabled: true
+    publications: ["AMM", "TSM"]
+    evtol_notes: "Glass cockpit displays"

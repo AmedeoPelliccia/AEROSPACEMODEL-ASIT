@@ -1,0 +1,550 @@
+# Lifecycle Phases Definition
+# ASIT Structure Definition
+# Version: 2.0.0
+# Based on: ARP4754A, ARP4761, AS9100
+
+metadata:
+  version: "2.0.0"
+  last_updated: "2026-01-22"
+  description: "Aircraft program lifecycle phases LC01-LC14"
+  standards:
+    - "ARP4754A - Development Assurance"
+    - "ARP4761 - Safety Assessment"
+    - "AS9100 - Quality Management"
+
+# =============================================================================
+# LIFECYCLE PHASES
+# =============================================================================
+
+phases:
+  LC01:
+    code: "LC01"
+    name: "Concept"
+    description: "Initial concept definition and feasibility assessment"
+    objectives:
+      - "Define market requirements"
+      - "Establish technical feasibility"
+      - "Develop initial business case"
+      - "Identify key technologies"
+    artifacts:
+      kdb:
+        - "Market analysis"
+        - "Concept sketches"
+        - "Feasibility studies"
+        - "Technology assessments"
+      idb: []
+    gates:
+      entry: "Program authorization"
+      exit: "Concept Review (CR)"
+    baselines:
+      established: []
+      consumed: []
+    stakeholders:
+      primary: ["STK_ENG", "STK_BUS"]
+      informed: ["STK_CERT", "STK_OPS"]
+    duration_typical: "6-12 months"
+
+  LC02:
+    code: "LC02"
+    name: "Requirements"
+    description: "System requirements definition and allocation"
+    objectives:
+      - "Capture stakeholder requirements"
+      - "Define system requirements"
+      - "Establish safety requirements"
+      - "Define certification basis"
+    artifacts:
+      kdb:
+        - "System requirements specification"
+        - "Interface requirements"
+        - "Safety requirements"
+        - "Certification plan"
+      idb: []
+    gates:
+      entry: "Concept Review (CR)"
+      exit: "System Requirements Review (SRR)"
+    baselines:
+      established: ["FBL"]
+      consumed: []
+    stakeholders:
+      primary: ["STK_ENG", "STK_CERT"]
+      informed: ["STK_QA", "STK_OPS"]
+    duration_typical: "12-18 months"
+
+  LC03:
+    code: "LC03"
+    name: "Design"
+    description: "Preliminary and detailed design"
+    objectives:
+      - "Develop preliminary design"
+      - "Complete detailed design"
+      - "Define manufacturing processes"
+      - "Establish supplier requirements"
+    artifacts:
+      kdb:
+        - "Design specifications"
+        - "CAD models"
+        - "Analysis reports"
+        - "Interface control documents"
+      idb:
+        - "Preliminary maintenance concepts"
+    gates:
+      entry: "System Requirements Review (SRR)"
+      exit: "Critical Design Review (CDR)"
+    baselines:
+      established: ["ABL"]
+      consumed: ["FBL"]
+    stakeholders:
+      primary: ["STK_ENG"]
+      informed: ["STK_CM", "STK_QA", "STK_CERT"]
+    duration_typical: "18-36 months"
+
+  LC04:
+    code: "LC04"
+    name: "Development"
+    description: "Build, integration, and initial testing"
+    objectives:
+      - "Manufacture prototypes"
+      - "Integrate systems"
+      - "Conduct development testing"
+      - "Refine design"
+    artifacts:
+      kdb:
+        - "Build records"
+        - "Integration procedures"
+        - "Development test results"
+        - "Design updates"
+      idb:
+        - "Draft maintenance procedures"
+    gates:
+      entry: "Critical Design Review (CDR)"
+      exit: "Test Readiness Review (TRR)"
+    baselines:
+      established: []
+      consumed: ["ABL"]
+    stakeholders:
+      primary: ["STK_ENG", "STK_MFG"]
+      informed: ["STK_QA", "STK_CERT"]
+    duration_typical: "24-48 months"
+
+  LC05:
+    code: "LC05"
+    name: "Verification"
+    description: "Formal test and validation"
+    objectives:
+      - "Execute qualification testing"
+      - "Verify requirements compliance"
+      - "Validate design solutions"
+      - "Complete certification testing"
+    artifacts:
+      kdb:
+        - "Test procedures"
+        - "Test reports"
+        - "Compliance matrices"
+        - "Qualification records"
+      idb:
+        - "Test-derived maintenance data"
+    gates:
+      entry: "Test Readiness Review (TRR)"
+      exit: "Production Readiness Review (PRR)"
+    baselines:
+      established: ["PBL"]
+      consumed: ["ABL"]
+    stakeholders:
+      primary: ["STK_ENG", "STK_QA", "STK_CERT"]
+      informed: ["STK_OPS"]
+    duration_typical: "12-24 months"
+
+  LC06:
+    code: "LC06"
+    name: "Certification"
+    description: "Type certificate achievement"
+    objectives:
+      - "Submit certification documentation"
+      - "Support authority reviews"
+      - "Address certification issues"
+      - "Obtain Type Certificate"
+    artifacts:
+      kdb:
+        - "Type design data"
+        - "Compliance documents"
+        - "Means of compliance"
+        - "Type Certificate Data Sheet"
+      idb:
+        - "Instructions for Continued Airworthiness"
+        - "Initial AMM, SRM, IPC"
+    gates:
+      entry: "Production Readiness Review (PRR)"
+      exit: "Type Certificate (TC)"
+    baselines:
+      established: []
+      consumed: ["PBL"]
+    stakeholders:
+      primary: ["STK_CERT", "STK_ENG"]
+      informed: ["STK_OPS", "STK_CM"]
+    duration_typical: "6-12 months"
+
+  LC07:
+    code: "LC07"
+    name: "Production"
+    description: "Serial manufacturing"
+    objectives:
+      - "Establish production capability"
+      - "Manufacture serial aircraft"
+      - "Maintain production quality"
+      - "Implement production improvements"
+    artifacts:
+      kdb:
+        - "Production specifications"
+        - "Manufacturing processes"
+        - "Quality records"
+        - "Production configuration"
+      idb:
+        - "Production support publications"
+    gates:
+      entry: "Type Certificate (TC)"
+      exit: "Ongoing (production life)"
+    baselines:
+      established: []
+      consumed: ["PBL"]
+    stakeholders:
+      primary: ["STK_MFG", "STK_QA"]
+      informed: ["STK_ENG", "STK_CM"]
+    duration_typical: "10-30 years"
+
+  LC08:
+    code: "LC08"
+    name: "Delivery"
+    description: "Customer acceptance and delivery"
+    objectives:
+      - "Complete customer acceptance"
+      - "Transfer aircraft"
+      - "Provide documentation"
+      - "Establish support agreements"
+    artifacts:
+      kdb:
+        - "Acceptance test records"
+        - "Delivery configuration"
+      idb:
+        - "Operator manuals"
+        - "Training materials"
+        - "Spare parts documentation"
+    gates:
+      entry: "Aircraft completion"
+      exit: "Customer acceptance"
+    baselines:
+      established: ["OBL"]
+      consumed: ["PBL"]
+    stakeholders:
+      primary: ["STK_OPS", "STK_CM"]
+      informed: ["STK_ENG", "STK_QA"]
+    duration_typical: "1-3 months per aircraft"
+
+  LC09:
+    code: "LC09"
+    name: "Operations"
+    description: "In-service operational use"
+    objectives:
+      - "Support aircraft operations"
+      - "Monitor operational performance"
+      - "Process operational feedback"
+      - "Maintain airworthiness"
+    artifacts:
+      kdb:
+        - "Operational data"
+        - "Performance reports"
+        - "Reliability data"
+      idb:
+        - "FCOM"
+        - "QRH"
+        - "MEL/CDL"
+        - "Operational bulletins"
+    gates:
+      entry: "Entry into service"
+      exit: "Retirement decision"
+    baselines:
+      established: []
+      consumed: ["OBL"]
+    stakeholders:
+      primary: ["STK_OPS"]
+      informed: ["STK_ENG", "STK_CERT"]
+    duration_typical: "20-40 years"
+
+  LC10:
+    code: "LC10"
+    name: "Maintenance"
+    description: "Scheduled and unscheduled maintenance"
+    objectives:
+      - "Execute scheduled maintenance"
+      - "Perform unscheduled repairs"
+      - "Maintain configuration"
+      - "Support continued airworthiness"
+    artifacts:
+      kdb:
+        - "Maintenance task data"
+        - "Repair data"
+        - "Parts data"
+      idb:
+        - "AMM"
+        - "SRM"
+        - "CMM"
+        - "IPC"
+        - "WDM"
+        - "TSM"
+    gates:
+      entry: "Entry into service"
+      exit: "Retirement"
+    baselines:
+      established: []
+      consumed: ["OBL"]
+    stakeholders:
+      primary: ["STK_MRO", "STK_CM"]
+      informed: ["STK_ENG", "STK_OPS"]
+    duration_typical: "Concurrent with LC09"
+
+  LC11:
+    code: "LC11"
+    name: "Modification"
+    description: "In-service design changes"
+    objectives:
+      - "Implement service improvements"
+      - "Address service issues"
+      - "Incorporate regulatory changes"
+      - "Support fleet modernization"
+    artifacts:
+      kdb:
+        - "Modification designs"
+        - "STC data"
+        - "Engineering orders"
+      idb:
+        - "Service Bulletins"
+        - "Service Letters"
+        - "Revised manuals"
+    gates:
+      entry: "Modification requirement"
+      exit: "Modification approval"
+    baselines:
+      established: []
+      consumed: ["OBL"]
+    stakeholders:
+      primary: ["STK_ENG", "STK_CERT"]
+      informed: ["STK_OPS", "STK_MRO"]
+    duration_typical: "Variable"
+
+  LC12:
+    code: "LC12"
+    name: "Storage"
+    description: "Aircraft preservation and storage"
+    objectives:
+      - "Preserve aircraft condition"
+      - "Maintain storage configuration"
+      - "Enable return to service"
+      - "Comply with storage requirements"
+    artifacts:
+      kdb:
+        - "Storage procedures"
+        - "Preservation requirements"
+      idb:
+        - "Storage manual sections"
+        - "Return to service procedures"
+    gates:
+      entry: "Storage decision"
+      exit: "Return to service or retirement"
+    baselines:
+      established: []
+      consumed: ["OBL"]
+    stakeholders:
+      primary: ["STK_MRO"]
+      informed: ["STK_OPS", "STK_CM"]
+    duration_typical: "Variable"
+
+  LC13:
+    code: "LC13"
+    name: "Retirement"
+    description: "End of operational service"
+    objectives:
+      - "Complete final operations"
+      - "Preserve records"
+      - "Prepare for disposal"
+      - "Archive configuration"
+    artifacts:
+      kdb:
+        - "Final configuration records"
+        - "Lifetime data summary"
+      idb:
+        - "Retirement documentation"
+    gates:
+      entry: "Retirement decision"
+      exit: "Disposal readiness"
+    baselines:
+      established: []
+      consumed: ["OBL"]
+    stakeholders:
+      primary: ["STK_OPS", "STK_CM"]
+      informed: ["STK_CERT"]
+    duration_typical: "1-6 months"
+
+  LC14:
+    code: "LC14"
+    name: "Disposal"
+    description: "Decommissioning and disposal"
+    objectives:
+      - "Execute safe disposal"
+      - "Recover valuable components"
+      - "Comply with environmental regulations"
+      - "Complete record retention"
+    artifacts:
+      kdb:
+        - "Disposal records"
+        - "Component disposition"
+        - "Environmental compliance"
+      idb:
+        - "Disposal procedures"
+    gates:
+      entry: "Disposal authorization"
+      exit: "Disposal completion"
+    baselines:
+      established: []
+      consumed: []
+    stakeholders:
+      primary: ["STK_OPS"]
+      informed: ["STK_CERT", "STK_CM"]
+    duration_typical: "3-12 months"
+
+# =============================================================================
+# PHASE TRANSITIONS
+# =============================================================================
+
+transitions:
+  - from: "LC01"
+    to: "LC02"
+    gate: "Concept Review"
+    criteria:
+      - "Concept feasibility confirmed"
+      - "Business case approved"
+      - "Program resources allocated"
+
+  - from: "LC02"
+    to: "LC03"
+    gate: "System Requirements Review"
+    criteria:
+      - "System requirements complete"
+      - "FBL established"
+      - "Certification basis agreed"
+
+  - from: "LC03"
+    to: "LC04"
+    gate: "Critical Design Review"
+    criteria:
+      - "Detailed design complete"
+      - "ABL established"
+      - "Manufacturing readiness confirmed"
+
+  - from: "LC04"
+    to: "LC05"
+    gate: "Test Readiness Review"
+    criteria:
+      - "Prototypes complete"
+      - "Test articles available"
+      - "Test plans approved"
+
+  - from: "LC05"
+    to: "LC06"
+    gate: "Production Readiness Review"
+    criteria:
+      - "Qualification complete"
+      - "PBL established"
+      - "Production capability confirmed"
+
+  - from: "LC06"
+    to: "LC07"
+    gate: "Type Certificate"
+    criteria:
+      - "TC granted"
+      - "ICA approved"
+      - "Production certificate issued"
+
+  - from: "LC07"
+    to: "LC08"
+    gate: "Aircraft Completion"
+    criteria:
+      - "Aircraft manufactured"
+      - "Acceptance testing complete"
+      - "Documentation delivered"
+
+  - from: "LC08"
+    to: "LC09"
+    gate: "Entry Into Service"
+    criteria:
+      - "Customer acceptance complete"
+      - "OBL established"
+      - "Support agreements active"
+
+# =============================================================================
+# STAKEHOLDER DEFINITIONS
+# =============================================================================
+
+stakeholders:
+  STK_ENG:
+    name: "Engineering"
+    description: "Design and systems engineering"
+    responsibilities:
+      - "Design authority"
+      - "Requirements management"
+      - "Technical decisions"
+
+  STK_CERT:
+    name: "Certification"
+    description: "Airworthiness and regulatory compliance"
+    responsibilities:
+      - "Certification planning"
+      - "Compliance demonstration"
+      - "Authority liaison"
+
+  STK_CM:
+    name: "Configuration Management"
+    description: "Configuration control and baselines"
+    responsibilities:
+      - "Baseline management"
+      - "Change control"
+      - "Configuration status"
+
+  STK_QA:
+    name: "Quality Assurance"
+    description: "Quality management and verification"
+    responsibilities:
+      - "Quality planning"
+      - "Verification oversight"
+      - "Nonconformance management"
+
+  STK_MFG:
+    name: "Manufacturing"
+    description: "Production and assembly"
+    responsibilities:
+      - "Production planning"
+      - "Manufacturing execution"
+      - "Production quality"
+
+  STK_OPS:
+    name: "Operations"
+    description: "Flight and ground operations"
+    responsibilities:
+      - "Operational requirements"
+      - "Fleet management"
+      - "Operator liaison"
+
+  STK_MRO:
+    name: "Maintenance, Repair, Overhaul"
+    description: "Maintenance services"
+    responsibilities:
+      - "Maintenance execution"
+      - "Repair development"
+      - "Parts management"
+
+  STK_BUS:
+    name: "Business"
+    description: "Program management and business"
+    responsibilities:
+      - "Program direction"
+      - "Resource allocation"
+      - "Business decisions"

@@ -1,0 +1,201 @@
+{
+  "$schema": "../schemas/metrics.schema.json",
+  "run_id": "20260122-1430__KITDM-CTR-LM-CSDB_ATA28",
+  "execution": {
+    "start_time": "2026-01-22T14:30:00Z",
+    "end_time": "2026-01-22T14:45:23Z",
+    "duration_seconds": 923,
+    "duration_formatted": "15m 23s",
+    "status": "SUCCESS",
+    "exit_code": 0
+  },
+  "environment": {
+    "hostname": "asigt-runner-01",
+    "platform": "linux-x86_64",
+    "python_version": "3.11.5",
+    "asit_version": "2.0.0",
+    "asigt_version": "2.0.0",
+    "cpu_count": 8,
+    "memory_total_gb": 32
+  },
+  "processing": {
+    "phases": {
+      "initialization": {
+        "duration_seconds": 2,
+        "status": "SUCCESS"
+      },
+      "input_loading": {
+        "duration_seconds": 15,
+        "items_loaded": 47,
+        "status": "SUCCESS"
+      },
+      "transformation": {
+        "duration_seconds": 540,
+        "items_transformed": 47,
+        "status": "SUCCESS"
+      },
+      "validation": {
+        "duration_seconds": 180,
+        "items_validated": 23,
+        "status": "SUCCESS"
+      },
+      "output_writing": {
+        "duration_seconds": 120,
+        "items_written": 23,
+        "status": "SUCCESS"
+      },
+      "finalization": {
+        "duration_seconds": 66,
+        "status": "SUCCESS"
+      }
+    },
+    "totals": {
+      "inputs_processed": 47,
+      "outputs_generated": 23,
+      "traces_created": 156,
+      "validations_performed": 65
+    }
+  },
+  "performance": {
+    "throughput": {
+      "inputs_per_second": 0.051,
+      "outputs_per_second": 0.025,
+      "traces_per_second": 0.169
+    },
+    "latency": {
+      "avg_dm_generation_ms": 245,
+      "min_dm_generation_ms": 120,
+      "max_dm_generation_ms": 890,
+      "p95_dm_generation_ms": 450,
+      "avg_validation_ms": 89,
+      "min_validation_ms": 45,
+      "max_validation_ms": 210,
+      "p95_validation_ms": 156
+    },
+    "resources": {
+      "peak_memory_mb": 512,
+      "avg_memory_mb": 384,
+      "cpu_time_seconds": 456,
+      "cpu_utilization_percent": 49.4,
+      "io_read_mb": 24,
+      "io_write_mb": 48
+    }
+  },
+  "artifacts": {
+    "by_type": {
+      "dm_descriptive": {
+        "count": 8,
+        "total_size_bytes": 121872,
+        "avg_size_bytes": 15234,
+        "avg_generation_ms": 198
+      },
+      "dm_procedural": {
+        "count": 6,
+        "total_size_bytes": 170736,
+        "avg_size_bytes": 28456,
+        "avg_generation_ms": 312
+      },
+      "dm_fault_isolation": {
+        "count": 2,
+        "total_size_bytes": 67890,
+        "avg_size_bytes": 33945,
+        "avg_generation_ms": 445
+      },
+      "dm_ipd": {
+        "count": 2,
+        "total_size_bytes": 91356,
+        "avg_size_bytes": 45678,
+        "avg_generation_ms": 567
+      },
+      "pm": {
+        "count": 2,
+        "total_size_bytes": 25780,
+        "avg_size_bytes": 12890,
+        "avg_generation_ms": 156
+      },
+      "dml": {
+        "count": 1,
+        "total_size_bytes": 8456,
+        "avg_size_bytes": 8456,
+        "avg_generation_ms": 89
+      },
+      "icn": {
+        "count": 12,
+        "total_size_bytes": 1611062,
+        "avg_size_bytes": 134255,
+        "avg_generation_ms": 23
+      }
+    },
+    "totals": {
+      "total_artifacts": 33,
+      "total_dm": 18,
+      "total_pm": 2,
+      "total_dml": 1,
+      "total_icn": 12
+    }
+  },
+  "size": {
+    "input": {
+      "total_bytes": 245760,
+      "total_formatted": "240.0 KB",
+      "by_type": {
+        "requirement": 30720,
+        "task": 49152,
+        "repair": 20480,
+        "parts_bom": 122880,
+        "icn_source": 22528
+      }
+    },
+    "output": {
+      "total_bytes": 2097152,
+      "total_formatted": "2.0 MB",
+      "by_type": {
+        "dm_xml": 451854,
+        "pm_xml": 25780,
+        "dml_xml": 8456,
+        "icn": 1611062
+      }
+    },
+    "expansion_ratio": 8.53,
+    "compression": {
+      "enabled": false,
+      "compressed_size_bytes": null,
+      "compression_ratio": null
+    }
+  },
+  "quality": {
+    "validation": {
+      "brex_pass_rate": 1.0,
+      "schema_pass_rate": 1.0,
+      "trace_coverage": 1.0,
+      "overall_quality_score": 0.98
+    },
+    "warnings": {
+      "total_warnings": 3,
+      "by_category": {
+        "content_length": 3,
+        "deprecated_elements": 0,
+        "style_recommendations": 0
+      }
+    },
+    "errors": {
+      "total_errors": 0,
+      "by_category": {}
+    }
+  },
+  "comparison": {
+    "previous_run_id": "20260115-1030__KITDM-CTR-LM-CSDB_ATA28",
+    "changes": {
+      "inputs_added": 3,
+      "inputs_modified": 5,
+      "inputs_removed": 0,
+      "outputs_added": 2,
+      "outputs_modified": 8,
+      "outputs_removed": 0
+    },
+    "performance_delta": {
+      "duration_change_percent": -5.2,
+      "memory_change_percent": 2.1
+    }
+  }
+}

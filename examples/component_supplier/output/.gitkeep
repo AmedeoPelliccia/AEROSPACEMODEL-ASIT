@@ -1,0 +1,9 @@
+# Output Directory
+
+Rendered publications for LGA-5000:
+
+```
+output/
+├── cmm/        # Component Maintenance Manual
+└── ipc/        # Illustrated Parts Catalog
+```

@@ -1,0 +1,1055 @@
+# =============================================================================
+# SRM (Structural Repair Manual) Pipeline
+# ASIT-Controlled Execution Pipeline
+# Version: 2.0.0
+# =============================================================================
+#
+# This pipeline defines the complete transformation workflow for generating
+# S1000D-compliant Structural Repair Manual content from KDB sources.
+#
+# Publication scope:
+#   - Allowable damage limits
+#   - Damage assessment procedures
+#   - Standard structural repairs
+#   - Bonded/composite repairs
+#   - Temporary/ferry repairs
+#   - NDT inspection requirements
+#   - Material specifications
+#
+# Operates under ASIT contract authority.
+#
+# =============================================================================
+
+pipeline:
+  # ---------------------------------------------------------------------------
+  # PIPELINE METADATA
+  # ---------------------------------------------------------------------------
+  metadata:
+    pipeline_id: "PIPELINE-SRM-001"
+    name: "Structural Repair Manual Pipeline"
+    description: |
+      End-to-end transformation pipeline for generating S1000D Structural
+      Repair Manual (SRM) content from validated structural engineering data.
+    version: "2.0.0"
+    publication_type: "SRM"
+    s1000d_issue: "5.0"
+    
+    # Pipeline ownership
+    owner: "STK_ENG"
+    maintainer: "Structural Engineering"
+    
+    # Timestamps
+    created: "2026-01-01"
+    last_modified: "2026-01-22"
+    
+    # Classification
+    tags:
+      - "srm"
+      - "structural"
+      - "repair"
+      - "s1000d"
+      - "production"
+
+  # ---------------------------------------------------------------------------
+  # CONTRACT BINDING
+  # ---------------------------------------------------------------------------
+  contract:
+    # Contract template reference
+    template: "ASIT/CONTRACTS/templates/KITDM-CTR-OPS-REPAIR.template.yaml"
+    
+    # Required contract fields
+    required_fields:
+      - "contract_id"
+      - "baseline_ref"
+      - "scope.ata_chapters"
+      - "scope.structural_zones"
+      - "scope.effectivity"
+      - "authority.approved_by"
+      - "authority.des_approval"  # DER/DES approval for structural data
+    
+    # Contract validation
+    validation:
+      check_baseline_exists: true
+      check_authority_valid: true
+      check_des_approval: true
+      check_scope_coverage: true
+
+  # ---------------------------------------------------------------------------
+  # PIPELINE STAGES
+  # ---------------------------------------------------------------------------
+  stages:
+    # -------------------------------------------------------------------------
+    # STAGE 1: INITIALIZATION
+    # -------------------------------------------------------------------------
+    - stage: "initialization"
+      name: "Pipeline Initialization"
+      description: "Initialize pipeline environment and validate prerequisites"
+      order: 1
+      
+      steps:
+        - step: "load_config"
+          name: "Load Configuration"
+          action: "config.load"
+          inputs:
+            config_path: "ASIT/config/asit_config.yaml"
+          outputs:
+            - "config"
+          on_failure: "abort"
+          
+        - step: "validate_contract"
+          name: "Validate ASIT Contract"
+          action: "contract.validate"
+          inputs:
+            contract_id: "${contract_id}"
+          outputs:
+            - "contract"
+            - "baseline_ref"
+            - "scope"
+          on_failure: "abort"
+          
+        - step: "validate_des_approval"
+          name: "Validate DES/DER Approval"
+          action: "authority.validate_des"
+          inputs:
+            contract: "${contract}"
+            des_approval: "${contract.authority.des_approval}"
+          outputs:
+            - "des_status"
+          on_failure: "abort"
+          
+        - step: "check_baseline"
+          name: "Verify Baseline Availability"
+          action: "baseline.verify"
+          inputs:
+            baseline_ref: "${baseline_ref}"
+          outputs:
+            - "baseline"
+            - "baseline_status"
+          on_failure: "abort"
+          
+        - step: "create_run_directory"
+          name: "Create Run Directory"
+          action: "run.create_directory"
+          inputs:
+            contract_id: "${contract_id}"
+            timestamp: "${execution_timestamp}"
+          outputs:
+            - "run_directory"
+            - "run_id"
+          on_failure: "abort"
+          
+        - step: "initialize_manifests"
+          name: "Initialize Manifests"
+          action: "manifest.initialize"
+          inputs:
+            run_directory: "${run_directory}"
+            contract: "${contract}"
+            baseline: "${baseline}"
+          outputs:
+            - "input_manifest"
+            - "output_manifest"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 2: SOURCE LOADING
+    # -------------------------------------------------------------------------
+    - stage: "source_loading"
+      name: "Source Loading"
+      description: "Load structural engineering data from KDB baseline"
+      order: 2
+      depends_on: ["initialization"]
+      
+      steps:
+        - step: "load_structural_definitions"
+          name: "Load Structural Definitions"
+          action: "source.load"
+          inputs:
+            source_type: "structural_definition"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/structures/definitions"
+          outputs:
+            - "structural_definitions"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+            - field: "zone"
+              operator: "in"
+              values: "${scope.structural_zones}"
+          on_failure: "warn"
+          
+        - step: "load_allowable_damage"
+          name: "Load Allowable Damage Data"
+          action: "source.load"
+          inputs:
+            source_type: "allowable_damage"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/structures/damage_limits"
+          outputs:
+            - "allowable_damage"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+            - field: "zone"
+              operator: "in"
+              values: "${scope.structural_zones}"
+          on_failure: "abort"
+          
+        - step: "load_repair_instructions"
+          name: "Load Repair Instructions"
+          action: "source.load"
+          inputs:
+            source_type: "repair"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/repairs/structural"
+          outputs:
+            - "repairs"
+          filters:
+            - field: "repair_type"
+              values: ["standard_repair", "bonded_repair", "temporary_repair", "permanent_repair"]
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "abort"
+          
+        - step: "load_dta_data"
+          name: "Load Damage Tolerance Analysis Data"
+          action: "source.load"
+          inputs:
+            source_type: "dta"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/structures/dta"
+          outputs:
+            - "dta_data"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "load_material_specs"
+          name: "Load Material Specifications"
+          action: "source.load"
+          inputs:
+            source_type: "material_spec"
+            baseline: "${baseline}"
+            source_paths:
+              - "KDB/SSOT/materials"
+          outputs:
+            - "material_specs"
+          filters:
+            - field: "material_type"
+              values: ["aluminum", "composite", "titanium", "steel", "adhesive", "sealant"]
+          on_failure: "warn"
+          
+        - step: "load_fastener_data"
+          name: "Load Fastener Data"
+          action: "source.load"
+          inputs:
+            source_type: "fastener"
+            baseline: "${baseline}"
+            source_paths:
+              - "KDB/SSOT/fasteners"
+          outputs:
+            - "fastener_data"
+          on_failure: "warn"
+          
+        - step: "load_ndt_procedures"
+          name: "Load NDT Procedures"
+          action: "source.load"
+          inputs:
+            source_type: "ndt_procedure"
+            baseline: "${baseline}"
+            source_paths:
+              - "KDB/SSOT/ndt"
+          outputs:
+            - "ndt_procedures"
+          filters:
+            - field: "method"
+              values: ["visual", "ultrasonic", "eddy_current", "radiographic", "tap_test", "thermography"]
+          on_failure: "warn"
+          
+        - step: "load_graphics"
+          name: "Load Graphics (ICN Sources)"
+          action: "source.load"
+          inputs:
+            source_type: "graphic"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/graphics/structural"
+          outputs:
+            - "graphics"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+            - field: "graphic_type"
+              values: ["zone_diagram", "repair_detail", "damage_map", "cross_section"]
+          on_failure: "warn"
+          
+        - step: "compute_input_hashes"
+          name: "Compute Input Hashes"
+          action: "hash.compute"
+          inputs:
+            artifacts:
+              - "${structural_definitions}"
+              - "${allowable_damage}"
+              - "${repairs}"
+              - "${dta_data}"
+              - "${material_specs}"
+              - "${fastener_data}"
+              - "${ndt_procedures}"
+              - "${graphics}"
+            algorithm: "sha256"
+          outputs:
+            - "input_hashes"
+            - "combined_input_hash"
+          on_failure: "abort"
+          
+        - step: "update_input_manifest"
+          name: "Update Input Manifest"
+          action: "manifest.update"
+          inputs:
+            manifest: "${input_manifest}"
+            artifacts:
+              structural_definitions: "${structural_definitions}"
+              allowable_damage: "${allowable_damage}"
+              repairs: "${repairs}"
+              dta_data: "${dta_data}"
+              material_specs: "${material_specs}"
+              fastener_data: "${fastener_data}"
+              ndt_procedures: "${ndt_procedures}"
+              graphics: "${graphics}"
+            hashes: "${input_hashes}"
+          outputs:
+            - "input_manifest"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 3: TRANSFORMATION
+    # -------------------------------------------------------------------------
+    - stage: "transformation"
+      name: "Content Transformation"
+      description: "Transform structural data to S1000D data modules"
+      order: 3
+      depends_on: ["source_loading"]
+      
+      steps:
+        - step: "generate_zone_description_dms"
+          name: "Generate Zone Description Data Modules"
+          action: "generator.dm_descriptive"
+          inputs:
+            sources: "${structural_definitions}"
+            mapping: "ASIGT/mapping/structure_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_descriptive.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "040"
+              content_type: "zone_description"
+          outputs:
+            - "dm_zone_description"
+          parallel: true
+          batch_size: 10
+          on_failure: "continue"
+          
+        - step: "generate_allowable_damage_dms"
+          name: "Generate Allowable Damage Data Modules"
+          action: "generator.dm_allowable_damage"
+          inputs:
+            sources: "${allowable_damage}"
+            dta_data: "${dta_data}"
+            mapping: "ASIGT/mapping/repair_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_descriptive.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "040"
+              content_type: "allowable_damage"
+              include_damage_limits_table: true
+              include_zone_diagram: true
+          outputs:
+            - "dm_allowable_damage"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_standard_repair_dms"
+          name: "Generate Standard Repair Data Modules"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${repairs}"
+            mapping: "ASIGT/mapping/repair_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_procedural.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "600"
+              repair_type: "standard"
+              include_material_list: true
+              include_fastener_pattern: true
+          outputs:
+            - "dm_standard_repair"
+          filters:
+            - field: "repair_type"
+              values: ["standard_repair", "permanent_repair"]
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_bonded_repair_dms"
+          name: "Generate Bonded/Composite Repair Data Modules"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${repairs}"
+            mapping: "ASIGT/mapping/repair_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_procedural.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "620"
+              repair_type: "bonded"
+              include_cure_cycle: true
+              include_vacuum_bag_setup: true
+              include_ndt_requirements: true
+          outputs:
+            - "dm_bonded_repair"
+          filters:
+            - field: "repair_type"
+              values: ["bonded_repair", "composite_repair"]
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_temporary_repair_dms"
+          name: "Generate Temporary/Ferry Repair Data Modules"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${repairs}"
+            mapping: "ASIGT/mapping/repair_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_procedural.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "650"
+              repair_type: "temporary"
+              include_time_limits: true
+              include_flight_restrictions: true
+              include_permanent_repair_ref: true
+          outputs:
+            - "dm_temporary_repair"
+          filters:
+            - field: "repair_type"
+              values: ["temporary_repair", "ferry_repair", "deferred_repair"]
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_ndt_inspection_dms"
+          name: "Generate NDT Inspection Data Modules"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${ndt_procedures}"
+            template: "ASIGT/s1000d_templates/dm_procedural.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "300"
+              include_equipment_setup: true
+              include_acceptance_criteria: true
+              include_calibration_requirements: true
+          outputs:
+            - "dm_ndt_inspection"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_material_spec_dms"
+          name: "Generate Material Specification Data Modules"
+          action: "generator.dm_descriptive"
+          inputs:
+            sources: "${material_specs}"
+            template: "ASIGT/s1000d_templates/dm_descriptive.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "040"
+              content_type: "material_specification"
+              include_equivalents: true
+              include_storage_requirements: true
+          outputs:
+            - "dm_material_spec"
+          parallel: true
+          on_failure: "continue"
+          
+        - step: "process_graphics"
+          name: "Process Graphics to ICN"
+          action: "generator.icn"
+          inputs:
+            sources: "${graphics}"
+            config:
+              output_format: "CGM"
+              resolution: 300
+              color_mode: "RGB"
+              include_hotspots: true
+              include_damage_zones: true
+          outputs:
+            - "icn_files"
+          parallel: true
+          batch_size: 20
+          on_failure: "continue"
+          
+        - step: "link_icn_references"
+          name: "Link ICN References in DMs"
+          action: "generator.link_icn"
+          inputs:
+            data_modules:
+              - "${dm_zone_description}"
+              - "${dm_allowable_damage}"
+              - "${dm_standard_repair}"
+              - "${dm_bonded_repair}"
+              - "${dm_temporary_repair}"
+              - "${dm_ndt_inspection}"
+              - "${dm_material_spec}"
+            icn_files: "${icn_files}"
+          outputs:
+            - "dm_with_icn"
+          on_failure: "warn"
+          
+        - step: "apply_applicability"
+          name: "Apply Applicability Filtering"
+          action: "applicability.apply"
+          inputs:
+            data_modules: "${dm_with_icn}"
+            act_file: "${config.act_file}"
+            pct_file: "${config.pct_file}"
+            cct_file: "${config.cct_file}"
+            effectivity: "${scope.effectivity}"
+          outputs:
+            - "dm_filtered"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 4: VALIDATION
+    # -------------------------------------------------------------------------
+    - stage: "validation"
+      name: "Content Validation"
+      description: "Validate generated content against BREX and schema"
+      order: 4
+      depends_on: ["transformation"]
+      
+      steps:
+        - step: "brex_validation"
+          name: "BREX Rule Validation"
+          action: "validator.brex"
+          inputs:
+            data_modules: "${dm_filtered}"
+            brex_file: "ASIGT/brex/S1000D_5.0_DEFAULT.yaml"
+            project_brex: "ASIGT/brex/project_brex.yaml"
+            profile: "srm"
+          outputs:
+            - "brex_results"
+          config:
+            fail_on_error: true
+            fail_on_warning: false
+            generate_report: true
+            srm_specific_rules:
+              - "damage_limits_format"
+              - "repair_classification"
+              - "material_spec_references"
+              - "ndt_requirements"
+          on_failure: "abort"
+          
+        - step: "schema_validation"
+          name: "XML Schema Validation"
+          action: "validator.schema"
+          inputs:
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            schema_path: "schemas/s1000d/${config.s1000d_issue}/"
+          outputs:
+            - "schema_results"
+          config:
+            validate_all: true
+            generate_report: true
+          on_failure: "abort"
+          
+        - step: "structural_data_validation"
+          name: "Structural Data Validation"
+          action: "validator.structural"
+          inputs:
+            dm_allowable_damage: "${dm_allowable_damage}"
+            dm_repairs: 
+              - "${dm_standard_repair}"
+              - "${dm_bonded_repair}"
+              - "${dm_temporary_repair}"
+            dta_data: "${dta_data}"
+          outputs:
+            - "structural_validation_results"
+          config:
+            check_damage_limits_consistency: true
+            check_repair_classification: true
+            check_dta_compliance: true
+            check_material_compatibility: true
+          on_failure: "warn"
+          
+        - step: "reference_validation"
+          name: "Cross-Reference Validation"
+          action: "validator.references"
+          inputs:
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+          outputs:
+            - "reference_results"
+          config:
+            check_dm_refs: true
+            check_icn_refs: true
+            check_material_refs: true
+            check_amm_refs: true
+          on_failure: "warn"
+          
+        - step: "completeness_check"
+          name: "SRM Content Completeness Check"
+          action: "validator.completeness"
+          inputs:
+            data_modules: "${dm_filtered}"
+            scope: "${scope}"
+            expected_coverage:
+              - type: "zone_description"
+                required: true
+              - type: "allowable_damage"
+                min_count_per_zone: 1
+              - type: "standard_repair"
+                min_count_per_zone: 1
+          outputs:
+            - "completeness_results"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 5: TRACEABILITY
+    # -------------------------------------------------------------------------
+    - stage: "traceability"
+      name: "Traceability Generation"
+      description: "Build source-to-output traceability matrix"
+      order: 5
+      depends_on: ["validation"]
+      
+      steps:
+        - step: "build_trace_matrix"
+          name: "Build Trace Matrix"
+          action: "trace.build_matrix"
+          inputs:
+            sources:
+              structural_definitions: "${structural_definitions}"
+              allowable_damage: "${allowable_damage}"
+              repairs: "${repairs}"
+              dta_data: "${dta_data}"
+              material_specs: "${material_specs}"
+              ndt_procedures: "${ndt_procedures}"
+              graphics: "${graphics}"
+            outputs:
+              dm_zone_description: "${dm_zone_description}"
+              dm_allowable_damage: "${dm_allowable_damage}"
+              dm_standard_repair: "${dm_standard_repair}"
+              dm_bonded_repair: "${dm_bonded_repair}"
+              dm_temporary_repair: "${dm_temporary_repair}"
+              dm_ndt_inspection: "${dm_ndt_inspection}"
+              dm_material_spec: "${dm_material_spec}"
+              icn_files: "${icn_files}"
+            input_hashes: "${input_hashes}"
+          outputs:
+            - "trace_matrix"
+          on_failure: "abort"
+          
+        - step: "validate_dta_traceability"
+          name: "Validate DTA Traceability"
+          action: "trace.validate_dta"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            dta_data: "${dta_data}"
+            dm_allowable_damage: "${dm_allowable_damage}"
+          outputs:
+            - "dta_trace_results"
+          config:
+            require_dta_link: true
+          on_failure: "warn"
+          
+        - step: "validate_traceability"
+          name: "Validate Traceability Completeness"
+          action: "validator.trace"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            requirements:
+              input_coverage: 1.0
+              output_coverage: 1.0
+              bidirectional: true
+          outputs:
+            - "trace_validation_results"
+          on_failure: "warn"
+          
+        - step: "export_trace_matrix"
+          name: "Export Trace Matrix"
+          action: "trace.export"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            output_path: "${run_directory}/TRACE_MATRIX.csv"
+            format: "csv"
+          outputs:
+            - "trace_matrix_file"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 6: PUBLICATION ASSEMBLY
+    # -------------------------------------------------------------------------
+    - stage: "publication_assembly"
+      name: "Publication Assembly"
+      description: "Assemble data modules into SRM publication structure"
+      order: 6
+      depends_on: ["traceability"]
+      
+      steps:
+        - step: "generate_pm"
+          name: "Generate Publication Module"
+          action: "generator.pm"
+          inputs:
+            data_modules: "${dm_filtered}"
+            template: "ASIGT/s1000d_templates/pm_structure.xml"
+            config:
+              publication_type: "SRM"
+              model_ident_code: "${config.model_ident_code}"
+              pm_title: "${config.program_name} Structural Repair Manual"
+              srm_structure: true
+              sections:
+                - "General Information"
+                - "Allowable Damage"
+                - "Standard Repairs"
+                - "Bonded Repairs"
+                - "Temporary Repairs"
+                - "NDT Inspection"
+                - "Materials"
+          outputs:
+            - "pm_srm"
+          on_failure: "abort"
+          
+        - step: "generate_dml"
+          name: "Generate Data Module List"
+          action: "generator.dml"
+          inputs:
+            data_modules: "${dm_filtered}"
+            publication_module: "${pm_srm}"
+            icn_files: "${icn_files}"
+            template: "ASIGT/s1000d_templates/dml_structure.xml"
+            config:
+              dml_type: "CSDB"
+          outputs:
+            - "dml"
+          on_failure: "abort"
+          
+        - step: "assemble_csdb"
+          name: "Assemble CSDB Package"
+          action: "package.csdb"
+          inputs:
+            data_modules: "${dm_filtered}"
+            publication_module: "${pm_srm}"
+            dml: "${dml}"
+            icn_files: "${icn_files}"
+            output_path: "IDB/CSDB/SRM"
+          outputs:
+            - "csdb_package"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 7: OUTPUT RENDERING (OPTIONAL)
+    # -------------------------------------------------------------------------
+    - stage: "rendering"
+      name: "Output Rendering"
+      description: "Render publication to delivery formats"
+      order: 7
+      depends_on: ["publication_assembly"]
+      condition: "${config.render_outputs}"
+      
+      steps:
+        - step: "render_pdf"
+          name: "Render PDF Output"
+          action: "renderer.pdf"
+          inputs:
+            publication_module: "${pm_srm}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            config:
+              page_size: "A4"
+              include_toc: true
+              include_lep: true
+              include_highlights: true
+              srm_specific:
+                damage_limits_color_coding: true
+                repair_classification_badges: true
+          outputs:
+            - "pdf_output"
+          condition: "${config.render_pdf}"
+          on_failure: "warn"
+          
+        - step: "render_html"
+          name: "Render HTML Output"
+          action: "renderer.html"
+          inputs:
+            publication_module: "${pm_srm}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            config:
+              responsive: true
+              dark_mode: true
+              include_search: true
+              include_navigation: true
+              srm_specific:
+                interactive_zone_maps: true
+                damage_assessment_tool: true
+          outputs:
+            - "html_output"
+          condition: "${config.render_html}"
+          on_failure: "warn"
+          
+        - step: "package_ietp"
+          name: "Package IETP"
+          action: "renderer.ietp"
+          inputs:
+            publication_module: "${pm_srm}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            config:
+              format: "scorm"
+              include_viewer: true
+              srm_features:
+                damage_assessment_wizard: true
+                repair_selector: true
+          outputs:
+            - "ietp_package"
+          condition: "${config.package_ietp}"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 8: FINALIZATION
+    # -------------------------------------------------------------------------
+    - stage: "finalization"
+      name: "Pipeline Finalization"
+      description: "Finalize run artifacts and generate reports"
+      order: 8
+      depends_on: ["rendering"]
+      always_run: true
+      
+      steps:
+        - step: "compute_output_hashes"
+          name: "Compute Output Hashes"
+          action: "hash.compute"
+          inputs:
+            artifacts:
+              - "${dm_filtered}"
+              - "${pm_srm}"
+              - "${dml}"
+              - "${icn_files}"
+            algorithm: "sha256"
+          outputs:
+            - "output_hashes"
+            - "combined_output_hash"
+          on_failure: "warn"
+          
+        - step: "finalize_output_manifest"
+          name: "Finalize Output Manifest"
+          action: "manifest.finalize"
+          inputs:
+            manifest: "${output_manifest}"
+            outputs:
+              dm_zone_description: "${dm_zone_description}"
+              dm_allowable_damage: "${dm_allowable_damage}"
+              dm_standard_repair: "${dm_standard_repair}"
+              dm_bonded_repair: "${dm_bonded_repair}"
+              dm_temporary_repair: "${dm_temporary_repair}"
+              dm_ndt_inspection: "${dm_ndt_inspection}"
+              dm_material_spec: "${dm_material_spec}"
+              pm: "${pm_srm}"
+              dml: "${dml}"
+              icn: "${icn_files}"
+            hashes: "${output_hashes}"
+            validation_results:
+              brex: "${brex_results}"
+              schema: "${schema_results}"
+              structural: "${structural_validation_results}"
+          outputs:
+            - "output_manifest"
+          on_failure: "warn"
+          
+        - step: "generate_validation_report"
+          name: "Generate Validation Report"
+          action: "report.validation"
+          inputs:
+            brex_results: "${brex_results}"
+            schema_results: "${schema_results}"
+            structural_results: "${structural_validation_results}"
+            reference_results: "${reference_results}"
+            trace_results: "${trace_validation_results}"
+            dta_trace_results: "${dta_trace_results}"
+            output_path: "${run_directory}/VALIDATION_REPORT.json"
+          outputs:
+            - "validation_report"
+          on_failure: "warn"
+          
+        - step: "generate_metrics"
+          name: "Generate Metrics Report"
+          action: "report.metrics"
+          inputs:
+            run_id: "${run_id}"
+            stages: "${pipeline_stages}"
+            input_manifest: "${input_manifest}"
+            output_manifest: "${output_manifest}"
+            output_path: "${run_directory}/METRICS.json"
+          outputs:
+            - "metrics_report"
+          on_failure: "warn"
+          
+        - step: "finalize_log"
+          name: "Finalize Execution Log"
+          action: "log.finalize"
+          inputs:
+            run_directory: "${run_directory}"
+            status: "${pipeline_status}"
+          outputs:
+            - "log_file"
+          on_failure: "warn"
+          
+        - step: "archive_run"
+          name: "Archive Run Artifacts"
+          action: "run.archive"
+          inputs:
+            run_directory: "${run_directory}"
+            immutable: true
+          outputs:
+            - "archive_status"
+          on_failure: "warn"
+
+  # ---------------------------------------------------------------------------
+  # PIPELINE CONFIGURATION
+  # ---------------------------------------------------------------------------
+  config:
+    # Execution settings
+    execution:
+      parallel_enabled: true
+      max_parallel_steps: 4
+      timeout_minutes: 90
+      retry_failed_steps: false
+      max_retries: 2
+      
+    # SRM-specific settings
+    srm:
+      include_temporary_repairs: true
+      include_ndt_procedures: true
+      damage_classification:
+        - "negligible"
+        - "repairable"
+        - "replace"
+      repair_classification:
+        - "standard"
+        - "bonded"
+        - "temporary"
+        - "permanent"
+      
+    # Logging settings
+    logging:
+      level: "INFO"
+      format: "[{timestamp}] {level} {step}: {message}"
+      output_to_file: true
+      output_to_console: true
+      
+    # Notification settings
+    notifications:
+      on_success: true
+      on_failure: true
+      on_warning: true
+      channels:
+        - type: "email"
+          recipients: ["structures-engineering@example.com", "pub-engineering@example.com"]
+        - type: "slack"
+          channel: "#asigt-runs"
+          
+    # Cleanup settings
+    cleanup:
+      remove_temp_files: true
+      compress_outputs: false
+      retention_days: 90
+
+  # ---------------------------------------------------------------------------
+  # ERROR HANDLING
+  # ---------------------------------------------------------------------------
+  error_handling:
+    strategies:
+      abort:
+        description: "Stop pipeline execution immediately"
+        action: "pipeline.abort"
+        cleanup: true
+        notify: true
+        
+      continue:
+        description: "Log error and continue to next step"
+        action: "log.error"
+        continue: true
+        
+      warn:
+        description: "Log warning and continue"
+        action: "log.warning"
+        continue: true
+        
+      retry:
+        description: "Retry failed step"
+        action: "step.retry"
+        max_attempts: 3
+        delay_seconds: 30
+        
+    fallback:
+      strategy: "abort"
+      
+  # ---------------------------------------------------------------------------
+  # OUTPUTS
+  # ---------------------------------------------------------------------------
+  outputs:
+    primary:
+      - name: "CSDB Package"
+        path: "IDB/CSDB/SRM"
+        type: "csdb"
+        
+      - name: "Publication Module"
+        path: "IDB/CSDB/SRM/PM"
+        type: "pm"
+        
+      - name: "Data Module List"
+        path: "IDB/CSDB/SRM/DML"
+        type: "dml"
+        
+    secondary:
+      - name: "PDF Output"
+        path: "IDB/EXPORTS/SRM/PDF"
+        type: "pdf"
+        condition: "${config.render_pdf}"
+        
+      - name: "HTML Output"
+        path: "IDB/EXPORTS/SRM/HTML"
+        type: "html"
+        condition: "${config.render_html}"
+        
+      - name: "IETP Package"
+        path: "IDB/EXPORTS/SRM/IETP"
+        type: "ietp"
+        condition: "${config.package_ietp}"
+        
+    artifacts:
+      - name: "Run Directory"
+        path: "ASIGT/runs/${run_id}"
+        type: "run_artifacts"
+        contents:
+          - "INPUT_MANIFEST.json"
+          - "OUTPUT_MANIFEST.json"
+          - "TRACE_MATRIX.csv"
+          - "VALIDATION_REPORT.json"
+          - "METRICS.json"
+          - "LOG.txt"

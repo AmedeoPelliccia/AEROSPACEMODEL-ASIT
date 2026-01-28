@@ -1,0 +1,5 @@
+baseline_id,type,name,description,status,created_date,approved_date,approved_by,scope,content_hash,notes
+DBL-RJ7-2025-Q4,DBL,Initial Design Baseline,Preliminary design freeze after PDR,frozen,2025-10-15,2025-10-20,CCB-2025-042,ATA 00-99,sha256:abc123...,"PDR passed, design frozen"
+FBL-RJ7-2026-Q1,FBL,Development Functional Baseline,Development phase baseline after CDR,active,2026-01-10,2026-01-15,CCB-2026-003,"ATA 21,24,27,28,29,32,52,53,57,72",sha256:def456...,CDR passed - active development
+PBL-RJ7-2026-Q1,PBL,Parts Baseline Q1,Parts catalog baseline for IPC,active,2026-01-18,2026-01-20,CCB-2026-005,All chapters,sha256:ghi789...,Parts data frozen for IPC
+PBL-RJ7-2026-Q2,PBL,Production Baseline,Production configuration baseline,draft,2026-01-22,,,All chapters,,"Pending TRR completion"

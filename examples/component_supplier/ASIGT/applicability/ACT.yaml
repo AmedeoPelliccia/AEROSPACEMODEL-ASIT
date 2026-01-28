@@ -1,0 +1,102 @@
+# =============================================================================
+# AeroParts International — Applicability Cross-Reference Table (ACT)
+# =============================================================================
+
+metadata:
+  organization: "AeroParts International"
+  product_family: "LGA-5000"
+  version: "1.0.0"
+
+product_attributes:
+  - id: "customer"
+    name: "Customer"
+    values:
+      - value: "OEM-A"
+        description: "Aircraft Manufacturer A"
+      - value: "OEM-B"
+        description: "Aircraft Manufacturer B"
+      - value: "ALL"
+        description: "All customers"
+        
+  - id: "product_variant"
+    name: "Product Variant"
+    values:
+      - value: "LGA-5000-100"
+        description: "Main Gear Actuator (OEM-A)"
+      - value: "LGA-5000-200"
+        description: "Nose Gear Actuator (OEM-A)"
+      - value: "LGA-5000-150"
+        description: "Main Gear Actuator (OEM-B)"
+      - value: "LGA-5000-250"
+        description: "Nose Gear Actuator (OEM-B)"
+        
+  - id: "revision"
+    name: "Revision Level"
+    values:
+      - value: "REV-A"
+        description: "Revision A"
+      - value: "REV-B"
+        description: "Revision B (current)"
+        
+  - id: "position"
+    name: "Installation Position"
+    values:
+      - value: "MAIN-GEAR"
+        description: "Main landing gear"
+      - value: "NOSE-GEAR"
+        description: "Nose landing gear"
+
+cross_reference:
+  - applic_id: "APP-ALL"
+    description: "All LGA-5000 variants"
+    conditions:
+      - attribute: "product_variant"
+        operator: "in"
+        values: ["LGA-5000-100", "LGA-5000-200", "LGA-5000-150", "LGA-5000-250"]
+        
+  - applic_id: "APP-OEM-A"
+    description: "OEM-A applications only"
+    conditions:
+      - attribute: "customer"
+        operator: "equals"
+        values: ["OEM-A"]
+      - attribute: "product_variant"
+        operator: "in"
+        values: ["LGA-5000-100", "LGA-5000-200"]
+        
+  - applic_id: "APP-OEM-B"
+    description: "OEM-B applications only"
+    conditions:
+      - attribute: "customer"
+        operator: "equals"
+        values: ["OEM-B"]
+      - attribute: "product_variant"
+        operator: "in"
+        values: ["LGA-5000-150", "LGA-5000-250"]
+        
+  - applic_id: "APP-MAIN-GEAR"
+    description: "Main gear actuators"
+    conditions:
+      - attribute: "position"
+        operator: "equals"
+        values: ["MAIN-GEAR"]
+      - attribute: "product_variant"
+        operator: "in"
+        values: ["LGA-5000-100", "LGA-5000-150"]
+        
+  - applic_id: "APP-NOSE-GEAR"
+    description: "Nose gear actuators"
+    conditions:
+      - attribute: "position"
+        operator: "equals"
+        values: ["NOSE-GEAR"]
+      - attribute: "product_variant"
+        operator: "in"
+        values: ["LGA-5000-200", "LGA-5000-250"]
+        
+  - applic_id: "APP-REV-B"
+    description: "Revision B units only"
+    conditions:
+      - attribute: "revision"
+        operator: "equals"
+        values: ["REV-B"]

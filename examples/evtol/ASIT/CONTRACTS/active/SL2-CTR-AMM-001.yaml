@@ -1,0 +1,106 @@
+# =============================================================================
+# SkyLift-200 — AMM Generation Contract
+# =============================================================================
+
+contract:
+  id: "SL2-CTR-AMM-001"
+  version: "1.0.0"
+  type: "KDB_TO_CSDB"
+  
+  metadata:
+    title: "Aircraft Maintenance Manual Generation"
+    description: "Generate AMM for SkyLift-200 eVTOL"
+    created_date: "2026-01-15"
+    created_by: "Configuration Management"
+    
+  status: "active"
+
+source:
+  baseline:
+    type: "FBL"
+    id: "FBL-SL2-2026-Q1"
+    
+  scope:
+    ata_chapters:
+      - "05"  # Time Limits
+      - "12"  # Servicing (Charging)
+      - "24"  # Electrical (HV Battery)
+      - "27"  # Flight Controls
+      - "45"  # Health Monitoring
+      - "70"  # Propulsion Practices
+      - "71"  # Power Plant General
+      - "72"  # Motor Units
+    content_types:
+      - "requirements"
+      - "tasks"
+      
+  location:
+    path: "KDB/"
+
+target:
+  publication:
+    type: "AMM"
+    pm_code: "PMC-SL2-UMS01-00001-00"
+    title: "SkyLift-200 Aircraft Maintenance Manual"
+    
+  output:
+    format: "S1000D"
+    issue: "5.0"
+    
+  location:
+    path: "IDB/csdb/"
+
+transformation:
+  generators:
+    - type: "dm"
+      enabled: true
+      mappings:
+        - "requirement_to_dm"
+        - "task_to_dm"
+        
+  options:
+    include_graphics: true
+    generate_dml: true
+    include_warnings: true
+    high_voltage_warnings: true
+
+validation:
+  brex:
+    enabled: true
+    rules: "SL2_brex"
+    strict: true
+    
+  schema:
+    enabled: true
+    
+  trace:
+    enabled: true
+    require_complete: true
+    
+  # eVTOL-specific validation
+  additional:
+    - type: "high_voltage_safety"
+      enabled: true
+    - type: "software_trace"
+      standard: "DO-178C"
+
+approval:
+  required: true
+  
+  authority:
+    role: "STK_CM"
+    name: "K. Chen"
+    date: "2026-01-15"
+    
+  reviewers:
+    - role: "STK_ENG"
+      name: "M. Johnson"
+      date: "2026-01-14"
+    - role: "STK_SAFETY"
+      name: "L. Williams"
+      date: "2026-01-14"
+
+execution:
+  pipeline: "amm_pipeline"
+  schedule:
+    type: "manual"

@@ -1,0 +1,127 @@
+# =============================================================================
+# SkyLift-200 — Flight Control Software (DO-178C)
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "software"
+  title: "Flight Control Software Requirements"
+  baseline: "SBL-SL2-2026-Q1"
+  standard: "DO-178C"
+
+software_components:
+  # ---------------------------------------------------------------------------
+  # Flight Control Computer Software
+  # ---------------------------------------------------------------------------
+  - component_id: "FCC-SW"
+    name: "Flight Control Computer Software"
+    version: "1.0.0"
+    dal: "A"
+    
+    description: |
+      Primary flight control software executing on quadruple-redundant FCCs.
+      
+    partitions:
+      - partition_id: "FCC-CTRL"
+        name: "Control Laws"
+        dal: "A"
+        
+      - partition_id: "FCC-MON"
+        name: "Cross-Channel Monitor"
+        dal: "A"
+        
+      - partition_id: "FCC-IO"
+        name: "I/O Management"
+        dal: "A"
+        
+    requirements:
+      - id: "SRS-FCC-001"
+        title: "Control Law Execution"
+        description: "FCC shall execute control laws at 200 Hz minimum"
+        dal: "A"
+        traces_to: "REQ-SL2-FCC-001"
+        
+      - id: "SRS-FCC-002"
+        title: "Cross-Channel Monitoring"
+        description: "FCC shall detect cross-channel disagreement within 50ms"
+        dal: "A"
+        traces_to: "REQ-SL2-FCC-002"
+        
+      - id: "SRS-FCC-003"
+        title: "Watchdog Timer"
+        description: "FCC shall implement hardware watchdog with 100ms timeout"
+        dal: "A"
+        
+      - id: "SRS-FCC-004"
+        title: "Mode Transition"
+        description: "FCC shall transition to Alternate mode on single FCC failure"
+        dal: "A"
+        traces_to: "REQ-SL2-FCC-003"
+        
+  # ---------------------------------------------------------------------------
+  # Battery Management System Software
+  # ---------------------------------------------------------------------------
+  - component_id: "BMS-SW"
+    name: "Battery Management System Software"
+    version: "1.0.0"
+    dal: "B"
+    
+    description: |
+      Battery monitoring and control software for each pack BMS.
+      
+    requirements:
+      - id: "SRS-BMS-001"
+        title: "Cell Voltage Monitoring"
+        description: "BMS shall monitor all cell voltages at 10 Hz minimum"
+        dal: "B"
+        traces_to: "REQ-SL2-BATT-001"
+        
+      - id: "SRS-BMS-002"
+        title: "Thermal Runaway Detection"
+        description: "BMS shall detect thermal runaway precursors within 1 second"
+        dal: "B"
+        traces_to: "REQ-SL2-BATT-003"
+        
+      - id: "SRS-BMS-003"
+        title: "Contactor Control"
+        description: "BMS shall open contactors on fault detection within 100ms"
+        dal: "B"
+        
+  # ---------------------------------------------------------------------------
+  # Vehicle Management System Software
+  # ---------------------------------------------------------------------------
+  - component_id: "VMS-SW"
+    name: "Vehicle Management System Software"
+    version: "1.0.0"
+    dal: "B"
+    
+    description: |
+      High-level vehicle management and monitoring functions.
+      
+    requirements:
+      - id: "SRS-VMS-001"
+        title: "System Health Aggregation"
+        description: "VMS shall aggregate health status from all subsystems"
+        dal: "B"
+        traces_to: "REQ-SL2-HM-001"
+        
+      - id: "SRS-VMS-002"
+        title: "Energy Management"
+        description: "VMS shall compute remaining energy and range"
+        dal: "B"
+
+verification:
+  methods:
+    - "Review"
+    - "Analysis"
+    - "Test"
+    
+  test_levels:
+    - level: "Unit Test"
+      coverage: "MC/DC for DAL A, Statement for DAL B"
+      
+    - level: "Integration Test"
+      description: "Software-software integration"
+      
+    - level: "Hardware-Software Integration"
+      description: "Target platform testing"

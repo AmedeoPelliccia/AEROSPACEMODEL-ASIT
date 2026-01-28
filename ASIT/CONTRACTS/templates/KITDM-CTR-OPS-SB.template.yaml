@@ -1,0 +1,277 @@
+# =============================================================================
+# ASIT Contract Template: Service Bulletin Generation
+# Template ID: KITDM-CTR-OPS-SB
+# =============================================================================
+# 
+# PURPOSE: Generate Service Bulletins from approved engineering changes
+# 
+# USAGE:
+#   1. Copy this template to active/ directory
+#   2. Replace placeholder values (marked with <...>)
+#   3. Submit for approval
+#   4. Execute with: aerospacemodel run --contract <contract_id>
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# HEADER
+# -----------------------------------------------------------------------------
+header:
+  contract_id: "KITDM-CTR-OPS-SB_<SB-NUMBER>"        # e.g., KITDM-CTR-OPS-SB_28-001
+  version: "v1.0.0"
+  title: "Service Bulletin <SB-NUMBER> Generation"
+  description: |
+    Generate Service Bulletin <SB-NUMBER> for <brief description>.
+    
+    This contract transforms approved engineering change data into
+    a formal Service Bulletin publication per S1000D standards.
+  
+  category: "OPS"                                    # Operations
+  status: "DRAFT"
+  
+  created_date: "<YYYY-MM-DD>"
+  effective_date: "<YYYY-MM-DD>"
+  
+  supersedes: ""
+
+# -----------------------------------------------------------------------------
+# AUTHORITY
+# -----------------------------------------------------------------------------
+authority:
+  owner: "STK_ENG"
+  approver: "STK_CERT"                               # SBs require cert approval
+  approval_date: ""
+  approval_reference: ""                             # ECO reference
+
+# -----------------------------------------------------------------------------
+# SOURCE SPECIFICATION
+# -----------------------------------------------------------------------------
+source:
+  baseline:
+    type: "OBL"
+    id: "<BASELINE-ID>"
+    locked: true
+  
+  scope:
+    ata_chapters:
+      - "<ATA>"
+    
+    artifact_types:
+      - "ECO"                                        # Engineering Change Order
+      - "MODIFICATION"                               # Modification data
+      - "TASK"                                       # Implementation tasks
+      - "PART"                                       # Parts affected
+    
+    filters:
+      eco_reference: "<ECO-ID>"                      # Specific ECO
+      effectivity: "<EFFECTIVITY>"
+  
+  paths:
+    - "KDB/MODIFICATIONS/<ECO-ID>/"
+    - "ASIT/GOVERNANCE/CHANGE_CONTROL/ECO/<ECO-ID>.md"
+
+# -----------------------------------------------------------------------------
+# TARGET SPECIFICATION
+# -----------------------------------------------------------------------------
+target:
+  publication: "SB"
+  
+  format:
+    standard: "S1000D_5.0"
+    output_types:
+      - "DM"                                         # SB Data Module
+      - "PDF"                                        # Deliverable PDF
+  
+  destination: "IDB/PUBLICATIONS/SB/"
+  
+  naming:
+    model_ident_code: "<MODEL>"
+    system_diff_code: "A"
+    
+    # SB-specific naming
+    sb_number: "<SB-NUMBER>"                         # e.g., "28-001"
+    sb_revision: "A"                                 # Initial revision
+
+# -----------------------------------------------------------------------------
+# TRANSFORMATION RULES
+# -----------------------------------------------------------------------------
+transformation:
+  mapping_rules:
+    - source_type: "ECO"
+      target_type: "DM_SB"
+      mapping_file: "ASIGT/mapping/eco_to_sb.yaml"
+    
+    - source_type: "MODIFICATION"
+      target_type: "DM_PROCEDURAL"
+      mapping_file: "ASIGT/mapping/mod_to_procedure.yaml"
+    
+    - source_type: "PART"
+      target_type: "DM_IPD"
+      mapping_file: "ASIGT/mapping/parts_to_ipd.yaml"
+  
+  generators:
+    - "dm_generator"
+    - "sb_generator"
+    - "pdf_renderer"
+  
+  options:
+    include_graphics: true
+    generate_toc: true
+    
+    # SB-specific options
+    sb_options:
+      include_planning_info: true
+      include_accomplishment: true
+      include_material_info: true
+      include_manpower: true
+      
+      compliance:
+        category: "<MANDATORY|RECOMMENDED|OPTIONAL>"
+        compliance_time: "<description>"
+        
+      references:
+        affected_publications:
+          - "AMM"
+          - "IPC"
+        related_sbs: []
+        ad_reference: ""                             # Airworthiness Directive if applicable
+
+# -----------------------------------------------------------------------------
+# VALIDATION REQUIREMENTS
+# -----------------------------------------------------------------------------
+validation:
+  brex:
+    enabled: true
+    rules_file: "ASIGT/brex/project_brex.yaml"
+    severity_threshold: "ERROR"
+  
+  schema:
+    enabled: true
+    schema_version: "5.0"
+  
+  trace:
+    enabled: true
+    require_complete: true
+  
+  custom_rules:
+    - rule_id: "SB-001"
+      description: "Verify ECO approval status"
+      validator: "validators/eco_approved.py"
+    
+    - rule_id: "SB-002"
+      description: "Verify effectivity completeness"
+      validator: "validators/effectivity_check.py"
+    
+    - rule_id: "SB-003"
+      description: "Verify parts availability"
+      validator: "validators/parts_check.py"
+
+# -----------------------------------------------------------------------------
+# EXECUTION CONFIGURATION
+# -----------------------------------------------------------------------------
+execution:
+  mode: "FULL"
+  parallel: false                                    # SBs process sequentially
+  timeout_minutes: 30
+  
+  on_error: "STOP"
+  
+  pre_checks:
+    - "eco_approved"
+    - "effectivity_defined"
+    - "certification_clearance"
+  
+  post_actions:
+    - "generate_metrics"
+    - "archive_run"
+    - "notify_stakeholders"
+    - "register_sb"                                  # Add to SB register
+  
+  notifications:
+    on_success:
+      - "STK_ENG"
+      - "STK_CERT"
+      - "STK_OPS"
+    on_failure:
+      - "STK_ENG"
+      - "STK_CM"
+
+# -----------------------------------------------------------------------------
+# OUTPUT SPECIFICATION
+# -----------------------------------------------------------------------------
+outputs:
+  artifacts:
+    - "SB_DATA_MODULE"
+    - "SB_PDF"
+    - "TRACE_MATRIX"
+    - "VALIDATION_REPORT"
+    - "METRICS"
+    - "LOG"
+  
+  archive:
+    enabled: true
+    retention_days: -1                               # Permanent retention for SBs
+    location: "ASIGT/runs/"
+  
+  metadata:
+    include_provenance: true
+    include_hashes: true
+    include_metrics: true
+    include_contract_copy: true
+  
+  # SB-specific outputs
+  sb_outputs:
+    register_entry: true                             # Add to SB register
+    notification_list: true                          # Operator notification list
+    compliance_tracking: true                        # Compliance tracking data
+
+# -----------------------------------------------------------------------------
+# SERVICE BULLETIN METADATA
+# -----------------------------------------------------------------------------
+sb_metadata:
+  sb_number: "<SB-NUMBER>"
+  revision: "A"
+  title: "<SB Title>"
+  
+  classification:
+    category: "<MANDATORY|RECOMMENDED|OPTIONAL>"
+    priority: "<ROUTINE|URGENT|ALERT>"
+  
+  effectivity:
+    model: "<MODEL>"
+    serial_numbers: "<MSN range or list>"
+    engines: "<if applicable>"
+  
+  compliance:
+    time_limit: "<compliance time description>"
+    man_hours: "<estimated man-hours>"
+    downtime: "<estimated downtime>"
+  
+  reason:
+    description: "<reason for SB>"
+    safety_impact: "<YES|NO>"
+    ad_related: "<AD reference if applicable>"
+  
+  approval:
+    engineering: ""
+    certification: ""
+    date: ""
+
+# -----------------------------------------------------------------------------
+# NOTES
+# -----------------------------------------------------------------------------
+notes: |
+  Service Bulletin generation notes:
+  
+  - SBs require certification approval before release
+  - Effectivity must be verified against fleet records
+  - Parts availability confirmed before compliance time set
+
+# -----------------------------------------------------------------------------
+# REVISION HISTORY
+# -----------------------------------------------------------------------------
+revision_history:
+  - version: "v1.0.0"
+    date: "<YYYY-MM-DD>"
+    author: "<Author>"
+    description: "Initial contract"

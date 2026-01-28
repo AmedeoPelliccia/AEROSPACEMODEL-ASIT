@@ -1,0 +1,148 @@
+# =============================================================================
+# SkyLift-200 — Novel eVTOL Systems Definition
+# =============================================================================
+
+metadata:
+  program: "SkyLift-200"
+  model_code: "SL2"
+  description: "Novel system definitions specific to eVTOL architecture"
+
+# -----------------------------------------------------------------------------
+# High-Voltage Battery System
+# -----------------------------------------------------------------------------
+battery_system:
+  designation: "High-Voltage Battery System (HVBS)"
+  ata_mapping: "24-20"
+  
+  architecture:
+    voltage_nominal: 800
+    voltage_range: "720-900 VDC"
+    total_capacity_kwh: 160
+    pack_count: 4
+    
+  packs:
+    - id: "BATT-1"
+      location: "Forward Left"
+      capacity_kwh: 40
+      
+    - id: "BATT-2"
+      location: "Forward Right"
+      capacity_kwh: 40
+      
+    - id: "BATT-3"
+      location: "Aft Left"
+      capacity_kwh: 40
+      
+    - id: "BATT-4"
+      location: "Aft Right"
+      capacity_kwh: 40
+      
+  bms:
+    designation: "Battery Management System"
+    software_dal: "B"
+    functions:
+      - "Cell voltage monitoring"
+      - "Cell temperature monitoring"
+      - "State of charge estimation"
+      - "State of health estimation"
+      - "Thermal management control"
+      - "Contactor control"
+      - "Isolation monitoring"
+
+# -----------------------------------------------------------------------------
+# Distributed Electric Propulsion
+# -----------------------------------------------------------------------------
+propulsion_system:
+  designation: "Distributed Electric Propulsion (DEP)"
+  ata_mapping: "71/72"
+  
+  configuration: "Tilt-rotor"
+  motor_count: 8
+  
+  motors:
+    - id: "MTR-1"
+      location: "Forward Left Outer"
+      type: "Tilt"
+      power_kw: 100
+      
+    - id: "MTR-2"
+      location: "Forward Left Inner"
+      type: "Tilt"
+      power_kw: 100
+      
+    - id: "MTR-3"
+      location: "Forward Right Inner"
+      type: "Tilt"
+      power_kw: 100
+      
+    - id: "MTR-4"
+      location: "Forward Right Outer"
+      type: "Tilt"
+      power_kw: 100
+      
+    - id: "MTR-5"
+      location: "Aft Left Outer"
+      type: "Tilt"
+      power_kw: 100
+      
+    - id: "MTR-6"
+      location: "Aft Left Inner"
+      type: "Tilt"
+      power_kw: 100
+      
+    - id: "MTR-7"
+      location: "Aft Right Inner"
+      type: "Tilt"
+      power_kw: 100
+      
+    - id: "MTR-8"
+      location: "Aft Right Outer"
+      type: "Tilt"
+      power_kw: 100
+      
+  redundancy:
+    csfl_requirement: "Any 2 adjacent motors failed"
+    motor_out_performance: "Documented in FCOM"
+
+# -----------------------------------------------------------------------------
+# Flight Control System
+# -----------------------------------------------------------------------------
+flight_control_system:
+  designation: "Fly-By-Wire Flight Control System"
+  ata_mapping: "27"
+  
+  architecture:
+    type: "Quadruple Redundant"
+    computers: 4
+    
+  fcc:
+    designation: "Flight Control Computer"
+    software_dal: "A"
+    quantity: 4
+    voting: "2-of-4"
+    
+  control_law_modes:
+    - mode: "Normal"
+      description: "Full envelope protection"
+      
+    - mode: "Alternate"
+      description: "Reduced protection (single FCC failure)"
+      
+    - mode: "Direct"
+      description: "Basic control (multiple FCC failures)"
+
+# -----------------------------------------------------------------------------
+# Vehicle Management System
+# -----------------------------------------------------------------------------
+vehicle_management:
+  designation: "Vehicle Management System (VMS)"
+  ata_mapping: "45"
+  
+  software_dal: "B"
+  
+  functions:
+    - "System monitoring and alerts"
+    - "Energy management"
+    - "Autonomous taxi (future)"
+    - "Route optimization"
+    - "Weather integration"

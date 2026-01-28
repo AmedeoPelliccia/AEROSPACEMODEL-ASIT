@@ -1,0 +1,3 @@
+release_id,publication,version,baseline_ref,release_date,released_by,distribution,status,notes
+REL-RJ7-AMM-001,AMM,001-00,FBL-RJ7-2026-Q1,2026-01-20,STK_CM,internal,released,Initial AMM release for review
+REL-RJ7-IPC-001,IPC,001-00,PBL-RJ7-2026-Q1,2026-01-22,STK_CM,internal,released,Initial IPC for parts ordering

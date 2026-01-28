@@ -1,0 +1,167 @@
+# =============================================================================
+# AeroParts International — Product Breakdown Structure
+# =============================================================================
+
+metadata:
+  organization: "AeroParts International"
+  cage_code: "API01"
+  product_family: "LGA-5000"
+  ata_chapter: "32"
+
+products:
+  # ---------------------------------------------------------------------------
+  # LGA-5000-100: Main Gear Actuator (OEM-A Application)
+  # ---------------------------------------------------------------------------
+  - part_number: "LGA-5000-100"
+    description: "Main Landing Gear Actuator Assembly"
+    revision: "B"
+    cage: "API01"
+    
+    customer_mappings:
+      - customer: "OEM-A"
+        oem_pn: "OEM-A-32-4001"
+        aircraft: "Type-X"
+        ata_code: "32-31-01"
+        
+    nsn: "1680-01-123-4567"
+    
+    specifications:
+      weight_kg: 12.5
+      stroke_mm: 450
+      force_kn: 85
+      operating_pressure_bar: 210
+      
+    components:
+      - pn: "LGA-5000-100-01"
+        description: "Cylinder Housing"
+        qty: 1
+        
+      - pn: "LGA-5000-100-02"
+        description: "Piston Assembly"
+        qty: 1
+        
+      - pn: "LGA-5000-100-03"
+        description: "Seal Kit"
+        qty: 1
+        make_buy: "buy"
+        
+      - pn: "LGA-5000-100-04"
+        description: "Rod End Bearing"
+        qty: 2
+        make_buy: "buy"
+        
+      - pn: "LGA-5000-100-05"
+        description: "Position Sensor"
+        qty: 1
+        make_buy: "buy"
+
+  # ---------------------------------------------------------------------------
+  # LGA-5000-200: Nose Gear Actuator (OEM-A Application)
+  # ---------------------------------------------------------------------------
+  - part_number: "LGA-5000-200"
+    description: "Nose Landing Gear Actuator Assembly"
+    revision: "B"
+    cage: "API01"
+    
+    customer_mappings:
+      - customer: "OEM-A"
+        oem_pn: "OEM-A-32-4002"
+        aircraft: "Type-X"
+        ata_code: "32-21-01"
+        
+    nsn: "1680-01-123-4568"
+    
+    specifications:
+      weight_kg: 8.2
+      stroke_mm: 320
+      force_kn: 45
+      operating_pressure_bar: 210
+      
+    components:
+      - pn: "LGA-5000-200-01"
+        description: "Cylinder Housing"
+        qty: 1
+        
+      - pn: "LGA-5000-200-02"
+        description: "Piston Assembly"
+        qty: 1
+        
+      - pn: "LGA-5000-200-03"
+        description: "Seal Kit"
+        qty: 1
+        make_buy: "buy"
+        
+      - pn: "LGA-5000-200-04"
+        description: "Rod End Bearing"
+        qty: 2
+        make_buy: "buy"
+
+  # ---------------------------------------------------------------------------
+  # LGA-5000-150: Main Gear Actuator (OEM-B Application)
+  # ---------------------------------------------------------------------------
+  - part_number: "LGA-5000-150"
+    description: "Main Landing Gear Actuator Assembly (Type-Y)"
+    revision: "A"
+    cage: "API01"
+    
+    customer_mappings:
+      - customer: "OEM-B"
+        oem_pn: "OEM-B-LG-001"
+        aircraft: "Type-Y"
+        ata_code: "32-31-01"
+        
+    specifications:
+      weight_kg: 13.1
+      stroke_mm: 480
+      force_kn: 90
+      operating_pressure_bar: 210
+      
+    components:
+      - pn: "LGA-5000-150-01"
+        description: "Cylinder Housing"
+        qty: 1
+        
+      - pn: "LGA-5000-150-02"
+        description: "Piston Assembly"
+        qty: 1
+        
+      - pn: "LGA-5000-150-03"
+        description: "Seal Kit"
+        qty: 1
+        make_buy: "buy"
+
+  # ---------------------------------------------------------------------------
+  # LGA-5000-250: Nose Gear Actuator (OEM-B Application)
+  # ---------------------------------------------------------------------------
+  - part_number: "LGA-5000-250"
+    description: "Nose Landing Gear Actuator Assembly (Type-Y)"
+    revision: "A"
+    cage: "API01"
+    
+    customer_mappings:
+      - customer: "OEM-B"
+        oem_pn: "OEM-B-LG-002"
+        aircraft: "Type-Y"
+        ata_code: "32-21-01"
+        
+    specifications:
+      weight_kg: 8.8
+      stroke_mm: 340
+      force_kn: 50
+      operating_pressure_bar: 210
+
+# ---------------------------------------------------------------------------
+# Common/Interchangeable Parts
+# ---------------------------------------------------------------------------
+common_parts:
+  - pn: "LGA-5000-SEAL-001"
+    description: "O-Ring Kit (Standard)"
+    applicable_to: ["LGA-5000-100", "LGA-5000-200", "LGA-5000-150", "LGA-5000-250"]
+    
+  - pn: "LGA-5000-BEAR-001"
+    description: "Rod End Bearing (Standard)"
+    applicable_to: ["LGA-5000-100", "LGA-5000-200"]
+    
+  - pn: "LGA-5000-BEAR-002"
+    description: "Rod End Bearing (Heavy Duty)"
+    applicable_to: ["LGA-5000-150", "LGA-5000-250"]

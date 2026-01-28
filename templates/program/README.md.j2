@@ -1,0 +1,153 @@
+# {{ program_name }}
+
+## ASIT-ASIGT Program Instance
+
+**Organization:** {{ organization }}  
+**Model Code:** {{ model_code }}  
+**Created:** {{ created_date }}  
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Program-{{ model_code }}-blue.svg" alt="Program">
+  <img src="https://img.shields.io/badge/S1000D-Issue%20{{ s1000d_issue }}-teal" alt="S1000D">
+  <img src="https://img.shields.io/badge/AEROSPACEMODEL-2.0.0-green" alt="AEROSPACEMODEL">
+</p>
+
+---
+
+## Overview
+
+This is an **AEROSPACEMODEL** program instance for **{{ program_name }}**.
+
+It contains the complete ASIT-ASIGT structure for managing technical publications and operational information.
+
+## Program Configuration
+
+| Parameter | Value |
+|-----------|-------|
+| Program Name | {{ program_name }} |
+| Model Code | {{ model_code }} |
+| Organization | {{ organization }} |
+| CAGE Code | {{ cage_code }} |
+| S1000D Issue | {{ s1000d_issue }} |
+| Language | {{ language_code }} |
+| Country | {{ country_code }} |
+
+## Directory Structure
+
+```
+{{ model_code }}-ASIT-ASIGT/
+├── README.md                   # This file
+├── program_config.yaml         # Master configuration
+│
+├── ASIT/                       # Governance layer
+│   ├── asit_config.yaml
+│   ├── GOVERNANCE/
+│   │   ├── BASELINES.md
+│   │   ├── BASELINE_REGISTER.csv
+│   │   ├── CHANGE_CONTROL/
+│   │   ├── APPROVALS/
+│   │   └── RELEASES/
+│   ├── STRUCTURE/
+│   │   ├── ATA_MAPPING.yaml
+│   │   └── LIFECYCLE_PHASES.yaml
+│   ├── CONTRACTS/
+│   │   ├── templates/
+│   │   └── active/
+│   └── INDEX/
+│       ├── SSOT_INDEX.yaml
+│       └── TRACE_MASTER.csv
+│
+├── ASIGT/                      # Generation layer
+│   ├── asigt_config.yaml
+│   ├── brex/
+│   │   └── {{ model_code }}_brex.yaml
+│   └── runs/
+│
+├── KDB/                        # Knowledge Database (source)
+│   └── .gitkeep
+│
+├── IDB/                        # Information Database (output)
+│   └── .gitkeep
+│
+└── output/                     # Generated publications
+    └── .gitkeep
+```
+
+## Quick Start
+
+### 1. Configure Program
+
+Edit `program_config.yaml` with program-specific settings.
+
+### 2. Establish Baseline
+
+```bash
+# Create initial functional baseline
+aerospacemodel baseline create \
+  --type FBL \
+  --name "{{ model_code }}-Initial" \
+  --description "Initial program baseline"
+```
+
+### 3. Define Contracts
+
+Create transformation contracts in `ASIT/CONTRACTS/active/`:
+
+```bash
+# Generate contract from template
+aerospacemodel contract create \
+  --template KITDM-CTR-LM-CSDB \
+  --scope "ATA 21-28" \
+  --output ASIT/CONTRACTS/active/
+```
+
+### 4. Run Transformation
+
+```bash
+# Execute under contract
+aerospacemodel run \
+  --contract {{ model_code }}-CTR-AMM-001 \
+  --baseline FBL-{{ created_date[:4] }}-001
+```
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `program_config.yaml` | Master program configuration |
+| `ASIT/asit_config.yaml` | Governance layer settings |
+| `ASIGT/asigt_config.yaml` | Generation layer settings |
+| `ASIGT/brex/{{ model_code }}_brex.yaml` | Program-specific business rules |
+
+## Standards Compliance
+
+This program instance is configured for:
+
+- **S1000D Issue {{ s1000d_issue }}** — Technical publication standard
+- **ATA iSpec 2200** — System breakdown structure
+- **ARP4754A** — Development assurance
+- **AS9100** — Quality management alignment
+
+## Governance
+
+All transformations require:
+
+1. ✓ Approved contract in `ASIT/CONTRACTS/active/`
+2. ✓ Valid baseline reference
+3. ✓ Authorized approver sign-off
+4. ✓ BREX validation pass
+
+## Support
+
+- **Framework Documentation:** [AEROSPACEMODEL Docs](https://docs.aerospacemodel.io)
+- **Program Issues:** Track in your organization's issue system
+
+---
+
+<p align="center">
+  <strong>{{ program_name }}</strong> — Powered by AEROSPACEMODEL
+</p>
+
+<p align="center">
+  <em>Structure by ASIT. Content by ASIGT. Truth preserved end-to-end.</em>
+</p>

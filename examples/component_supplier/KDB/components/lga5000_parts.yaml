@@ -1,0 +1,147 @@
+# =============================================================================
+# AeroParts International — LGA-5000 Parts Data
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "components"
+  product_family: "LGA-5000"
+  baseline: "CBL-LGA5000-2026-Q1"
+
+# -----------------------------------------------------------------------------
+# LGA-5000-100 Parts Breakdown
+# -----------------------------------------------------------------------------
+parts_lists:
+  - assembly_pn: "LGA-5000-100"
+    assembly_name: "Main Gear Actuator Assembly"
+    revision: "B"
+    cage: "API01"
+    
+    parts:
+      - item: 1
+        pn: "LGA-5000-100"
+        description: "Actuator Assembly, Complete"
+        qty: 1
+        uom: "EA"
+        effectivity: "APP-OEM-A"
+        
+      - item: 2
+        pn: "LGA-5000-100-01"
+        description: "Housing, Cylinder"
+        qty: 1
+        uom: "EA"
+        cage: "API01"
+        nsn: "1680-01-123-4570"
+        
+      - item: 3
+        pn: "LGA-5000-100-02"
+        description: "Assembly, Piston and Rod"
+        qty: 1
+        uom: "EA"
+        cage: "API01"
+        nsn: "1680-01-123-4571"
+        
+      - item: 4
+        pn: "LGA-5000-SEAL-001"
+        description: "Kit, Seal"
+        qty: 1
+        uom: "KT"
+        cage: "API01"
+        nsn: "5330-01-123-4580"
+        make_buy: "buy"
+        vendor: "SealsPlus Inc."
+        vendor_pn: "SP-5000-SK"
+        
+      - item: 5
+        pn: "LGA-5000-BEAR-001"
+        description: "Bearing, Rod End"
+        qty: 2
+        uom: "EA"
+        cage: "API01"
+        nsn: "3120-01-123-4590"
+        make_buy: "buy"
+        vendor: "BearingCo"
+        vendor_pn: "BC-RE-5000"
+        
+      - item: 6
+        pn: "LGA-5000-100-05"
+        description: "Sensor, Position"
+        qty: 1
+        uom: "EA"
+        cage: "API01"
+        nsn: "6680-01-123-4595"
+        make_buy: "buy"
+        vendor: "SensorTech"
+        vendor_pn: "ST-LP-100"
+
+  # ---------------------------------------------------------------------------
+  # LGA-5000-200 Parts Breakdown
+  # ---------------------------------------------------------------------------
+  - assembly_pn: "LGA-5000-200"
+    assembly_name: "Nose Gear Actuator Assembly"
+    revision: "B"
+    cage: "API01"
+    
+    parts:
+      - item: 1
+        pn: "LGA-5000-200"
+        description: "Actuator Assembly, Complete"
+        qty: 1
+        uom: "EA"
+        effectivity: "APP-OEM-A"
+        
+      - item: 2
+        pn: "LGA-5000-200-01"
+        description: "Housing, Cylinder"
+        qty: 1
+        uom: "EA"
+        cage: "API01"
+        
+      - item: 3
+        pn: "LGA-5000-200-02"
+        description: "Assembly, Piston and Rod"
+        qty: 1
+        uom: "EA"
+        cage: "API01"
+        
+      - item: 4
+        pn: "LGA-5000-SEAL-001"
+        description: "Kit, Seal"
+        qty: 1
+        uom: "KT"
+        cage: "API01"
+        
+      - item: 5
+        pn: "LGA-5000-BEAR-001"
+        description: "Bearing, Rod End"
+        qty: 2
+        uom: "EA"
+        cage: "API01"
+
+  # ---------------------------------------------------------------------------
+  # Common Spares
+  # ---------------------------------------------------------------------------
+  - assembly_pn: "LGA-5000-SPARES"
+    assembly_name: "Recommended Spares Package"
+    
+    parts:
+      - item: 1
+        pn: "LGA-5000-SEAL-001"
+        description: "Kit, Seal (O-Ring and Backup)"
+        qty: 5
+        uom: "KT"
+        category: "consumable"
+        
+      - item: 2
+        pn: "LGA-5000-BEAR-001"
+        description: "Bearing, Rod End (Standard)"
+        qty: 2
+        uom: "EA"
+        category: "rotable"
+        
+      - item: 3
+        pn: "LGA-5000-100-05"
+        description: "Sensor, Position"
+        qty: 1
+        uom: "EA"
+        category: "rotable"

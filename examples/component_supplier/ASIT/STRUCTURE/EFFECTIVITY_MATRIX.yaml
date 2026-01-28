@@ -1,0 +1,108 @@
+# =============================================================================
+# AeroParts International — Effectivity Matrix
+# =============================================================================
+
+metadata:
+  organization: "AeroParts International"
+  product_family: "LGA-5000"
+  version: "2026-Q1"
+
+# -----------------------------------------------------------------------------
+# Customer Effectivity
+# -----------------------------------------------------------------------------
+customer_effectivity:
+  - customer_code: "OEM-A"
+    customer_name: "Aircraft Manufacturer A"
+    
+    aircraft:
+      - type: "Type-X"
+        msn_range:
+          start: 1
+          end: 500
+          
+        parts:
+          - supplier_pn: "LGA-5000-100"
+            oem_pn: "OEM-A-32-4001"
+            position: "Main Gear (L/R)"
+            qty_per_aircraft: 2
+            
+          - supplier_pn: "LGA-5000-200"
+            oem_pn: "OEM-A-32-4002"
+            position: "Nose Gear"
+            qty_per_aircraft: 1
+            
+  - customer_code: "OEM-B"
+    customer_name: "Aircraft Manufacturer B"
+    
+    aircraft:
+      - type: "Type-Y"
+        msn_range:
+          start: 1
+          end: 300
+          
+        parts:
+          - supplier_pn: "LGA-5000-150"
+            oem_pn: "OEM-B-LG-001"
+            position: "Main Gear (L/R)"
+            qty_per_aircraft: 2
+            
+          - supplier_pn: "LGA-5000-250"
+            oem_pn: "OEM-B-LG-002"
+            position: "Nose Gear"
+            qty_per_aircraft: 1
+
+# -----------------------------------------------------------------------------
+# Serial Number Effectivity (Service Bulletins)
+# -----------------------------------------------------------------------------
+serial_effectivity:
+  - bulletin: "SB-LGA5000-001"
+    title: "Seal Kit Upgrade"
+    
+    affected:
+      - part_number: "LGA-5000-100"
+        serial_range:
+          start: "001"
+          end: "150"
+        status: "mandatory"
+        compliance_date: "2026-06-30"
+        
+      - part_number: "LGA-5000-200"
+        serial_range:
+          start: "001"
+          end: "150"
+        status: "mandatory"
+        compliance_date: "2026-06-30"
+
+# -----------------------------------------------------------------------------
+# Revision Effectivity
+# -----------------------------------------------------------------------------
+revision_effectivity:
+  - part_number: "LGA-5000-100"
+    revisions:
+      - rev: "-"
+        description: "Initial release"
+        serial_range: "001-050"
+        
+      - rev: "A"
+        description: "Improved seal design"
+        serial_range: "051-150"
+        
+      - rev: "B"
+        description: "Position sensor upgrade"
+        serial_range: "151-current"
+
+# -----------------------------------------------------------------------------
+# Interchangeability
+# -----------------------------------------------------------------------------
+interchangeability:
+  - base_pn: "LGA-5000-100"
+    interchangeable_with:
+      - pn: "LGA-5000-100A"
+        condition: "Form, fit, function identical"
+        restriction: "None"
+        
+  - base_pn: "LGA-5000-SEAL-001"
+    interchangeable_with:
+      - pn: "ALT-SEAL-5000"
+        condition: "PMA approved"
+        restriction: "OEM-A aircraft only per approval"

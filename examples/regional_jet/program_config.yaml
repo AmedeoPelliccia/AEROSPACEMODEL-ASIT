@@ -1,0 +1,129 @@
+# =============================================================================
+# Regional Jet Example — Program Configuration
+# =============================================================================
+# Full regional aircraft program demonstrating production-ready setup.
+# =============================================================================
+
+program:
+  name: "RegionalJet-700"
+  model_code: "RJ7"
+  description: "70-seat regional jet aircraft program"
+  
+  organization:
+    name: "Regional Aircraft Corporation"
+    cage_code: "RAC01"
+    country_code: "US"
+    
+  aircraft:
+    type: "Fixed-wing"
+    category: "Transport"
+    passenger_capacity: 70
+    crew: 4
+    engines: 2
+    engine_type: "Turbofan"
+    
+  variants:
+    - code: "RJ7-STD"
+      name: "Standard"
+      description: "Base configuration"
+      
+    - code: "RJ7-ER"
+      name: "Extended Range"
+      description: "Additional center tank, increased MTOW"
+      
+  version:
+    current: "1.0.0"
+    aerospacemodel: "2.0.0"
+
+standards:
+  s1000d:
+    issue: "5.0"
+    brex:
+      base: "S1000D_5.0_DEFAULT"
+      project: "RJ7_brex"
+      
+  language:
+    primary: "en"
+    supported:
+      - "en"
+      - "es"
+      - "pt"
+      
+  country:
+    primary: "US"
+
+asit:
+  governance:
+    baseline_policy: "strict"
+    change_control: true
+    approval_required: true
+    ccb_enabled: true
+    
+  contracts:
+    active_dir: "ASIT/CONTRACTS/active"
+    require_approval: true
+
+asigt:
+  generators:
+    dm_generator:
+      enabled: true
+    pm_generator:
+      enabled: true
+    dml_generator:
+      enabled: true
+    icn_handler:
+      enabled: true
+      formats: ["CGM", "PNG"]
+      
+  validators:
+    brex:
+      enabled: true
+      strict_mode: true
+    schema:
+      enabled: true
+    trace:
+      enabled: true
+      require_complete: true
+      
+  renderers:
+    html:
+      enabled: true
+    pdf:
+      enabled: true
+    ietp:
+      enabled: true
+
+directories:
+  kdb:
+    path: "KDB"
+  idb:
+    path: "IDB"
+  output:
+    path: "output"
+
+publications:
+  enabled:
+    - AMM
+    - IPC
+    - SRM
+    - TSM
+    
+  defaults:
+    issue_info:
+      issue_number: "001"
+      in_work: "00"
+    responsible_partner_company:
+      cage: "RAC01"
+
+traceability:
+  enabled: true
+  requirements:
+    source_system: "DOORS"
+  evidence:
+    generate_matrices: true
+    hash_algorithm: "SHA-256"
+
+environment:
+  mode: "development"
+  logging:
+    level: "INFO"

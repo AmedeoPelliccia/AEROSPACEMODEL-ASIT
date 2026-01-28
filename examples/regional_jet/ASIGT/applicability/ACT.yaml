@@ -1,0 +1,67 @@
+# =============================================================================
+# RegionalJet-700 — Applicability Cross-Reference Table (ACT)
+# =============================================================================
+
+metadata:
+  program: "RegionalJet-700"
+  model_code: "RJ7"
+  version: "1.0.0"
+
+# Product attributes for filtering
+product_attributes:
+  - id: "aircraft_model"
+    name: "Aircraft Model"
+    values:
+      - value: "RJ7-STD"
+        description: "Standard configuration"
+      - value: "RJ7-ER"
+        description: "Extended Range configuration"
+        
+  - id: "engine_variant"
+    name: "Engine Variant"
+    values:
+      - value: "ENG-A"
+        description: "Standard thrust engine"
+      - value: "ENG-B"
+        description: "High thrust engine (ER only)"
+        
+  - id: "avionics_suite"
+    name: "Avionics Suite"
+    values:
+      - value: "AVION-STD"
+        description: "Standard avionics"
+      - value: "AVION-ADV"
+        description: "Advanced avionics package"
+
+# Cross-reference entries
+cross_reference:
+  - applic_id: "APP-RJ7-ALL"
+    description: "All RJ7 variants"
+    conditions:
+      - attribute: "aircraft_model"
+        operator: "in"
+        values: ["RJ7-STD", "RJ7-ER"]
+        
+  - applic_id: "APP-RJ7-STD"
+    description: "Standard variant only"
+    conditions:
+      - attribute: "aircraft_model"
+        operator: "equals"
+        values: ["RJ7-STD"]
+        
+  - applic_id: "APP-RJ7-ER"
+    description: "Extended Range variant only"
+    conditions:
+      - attribute: "aircraft_model"
+        operator: "equals"
+        values: ["RJ7-ER"]
+        
+  - applic_id: "APP-RJ7-ER-CENTER-TANK"
+    description: "ER with center fuel tank"
+    conditions:
+      - attribute: "aircraft_model"
+        operator: "equals"
+        values: ["RJ7-ER"]
+      - attribute: "modification"
+        operator: "installed"
+        values: ["MOD-28-001"]

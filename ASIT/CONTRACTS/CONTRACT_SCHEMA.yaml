@@ -1,0 +1,512 @@
+# Contract Schema Definition
+# ASIT Contract Structure
+# Version: 2.0.0
+
+metadata:
+  schema_version: "2.0.0"
+  last_updated: "2026-01-22"
+  description: "Schema definition for ASIT transformation contracts"
+
+# =============================================================================
+# CONTRACT SCHEMA
+# =============================================================================
+
+schema:
+  # ---------------------------------------------------------------------------
+  # HEADER - Contract identification and metadata
+  # ---------------------------------------------------------------------------
+  header:
+    type: object
+    required: true
+    properties:
+      contract_id:
+        type: string
+        required: true
+        pattern: "^[A-Z0-9]+-CTR-[A-Z]+-[A-Z0-9]+(-[A-Za-z0-9_]+)?$"
+        description: "Unique contract identifier"
+        example: "KITDM-CTR-LM-CSDB_ATA28"
+      
+      version:
+        type: string
+        required: true
+        pattern: "^v\\d+\\.\\d+\\.\\d+$"
+        description: "Semantic version"
+        example: "v1.2.0"
+      
+      title:
+        type: string
+        required: true
+        description: "Human-readable contract title"
+        example: "ATA 28 Fuel System CSDB Generation"
+      
+      description:
+        type: string
+        required: false
+        description: "Detailed contract description"
+      
+      category:
+        type: string
+        required: true
+        enum: ["LM", "OPS", "MRO", "TRN", "CERT"]
+        description: "Contract category"
+      
+      status:
+        type: string
+        required: true
+        enum: ["DRAFT", "REVIEW", "APPROVED", "ACTIVE", "SUPERSEDED", "WITHDRAWN"]
+        description: "Contract lifecycle state"
+      
+      created_date:
+        type: string
+        format: date
+        required: true
+        description: "ISO 8601 creation date"
+      
+      effective_date:
+        type: string
+        format: date
+        required: false
+        description: "ISO 8601 effective date"
+      
+      supersedes:
+        type: string
+        required: false
+        description: "ID of contract this supersedes"
+
+  # ---------------------------------------------------------------------------
+  # AUTHORITY - Governance and approval
+  # ---------------------------------------------------------------------------
+  authority:
+    type: object
+    required: true
+    properties:
+      owner:
+        type: string
+        required: true
+        enum: ["STK_ENG", "STK_CM", "STK_QA", "STK_CERT", "STK_OPS", "STK_MRO"]
+        description: "Contract owner stakeholder"
+      
+      approver:
+        type: string
+        required: true
+        description: "Approving authority"
+      
+      approval_date:
+        type: string
+        format: date
+        required: false
+        description: "ISO 8601 approval date"
+      
+      approval_reference:
+        type: string
+        required: false
+        description: "CCB or ECO reference"
+        example: "CCB-2026-0042"
+
+  # ---------------------------------------------------------------------------
+  # SOURCE - Input specification
+  # ---------------------------------------------------------------------------
+  source:
+    type: object
+    required: true
+    properties:
+      baseline:
+        type: object
+        required: true
+        properties:
+          type:
+            type: string
+            enum: ["FBL", "ABL", "PBL", "OBL"]
+            description: "Baseline type"
+          
+          id:
+            type: string
+            description: "Specific baseline ID (or 'LATEST')"
+            example: "FBL-2026-Q1-003"
+          
+          locked:
+            type: boolean
+            default: true
+            description: "Whether baseline is locked for execution"
+      
+      scope:
+        type: object
+        required: true
+        properties:
+          ata_chapters:
+            type: array
+            items:
+              type: string
+            description: "ATA chapters to include"
+            example: ["28", "28-10", "28-20"]
+          
+          ata_exclude:
+            type: array
+            items:
+              type: string
+            description: "ATA chapters to exclude"
+          
+          artifact_types:
+            type: array
+            items:
+              type: string
+            description: "Source artifact types"
+            example: ["REQUIREMENT", "TASK", "PART"]
+          
+          filters:
+            type: object
+            description: "Additional filtering criteria"
+            properties:
+              effectivity:
+                type: string
+                description: "Effectivity filter"
+              lifecycle_phase:
+                type: array
+                items:
+                  type: string
+                description: "Lifecycle phases to include"
+      
+      paths:
+        type: array
+        items:
+          type: string
+        description: "KDB paths to include"
+        example:
+          - "KDB/REQUIREMENTS/system/"
+          - "KDB/TASKS/maintenance/"
+
+  # ---------------------------------------------------------------------------
+  # TARGET - Output specification
+  # ---------------------------------------------------------------------------
+  target:
+    type: object
+    required: true
+    properties:
+      publication:
+        type: string
+        required: true
+        enum: ["AMM", "SRM", "CMM", "IPC", "FCOM", "TSM", "WDM", "SB", "IETP", "CSDB"]
+        description: "Target publication type"
+      
+      format:
+        type: object
+        required: true
+        properties:
+          standard:
+            type: string
+            enum: ["S1000D_5.0", "S1000D_4.2", "S1000D_4.1"]
+            description: "Output standard"
+          
+          output_types:
+            type: array
+            items:
+              type: string
+              enum: ["DM", "PM", "DML", "ICN", "PDF", "HTML", "IETP"]
+            description: "Output artifact types"
+      
+      destination:
+        type: string
+        description: "IDB output path"
+        example: "IDB/CSDB/AMM/"
+      
+      naming:
+        type: object
+        properties:
+          model_ident_code:
+            type: string
+            description: "S1000D model identification code"
+          
+          system_diff_code:
+            type: string
+            description: "System difference code"
+
+  # ---------------------------------------------------------------------------
+  # TRANSFORMATION - Processing rules
+  # ---------------------------------------------------------------------------
+  transformation:
+    type: object
+    required: true
+    properties:
+      mapping_rules:
+        type: array
+        items:
+          type: object
+          properties:
+            source_type:
+              type: string
+              description: "Source artifact type"
+            target_type:
+              type: string
+              description: "Target DM type"
+            mapping_file:
+              type: string
+              description: "Path to mapping definition"
+        example:
+          - source_type: "REQUIREMENT"
+            target_type: "DM_DESCRIPTIVE"
+            mapping_file: "mapping/requirement_to_dm.yaml"
+          - source_type: "TASK"
+            target_type: "DM_PROCEDURAL"
+            mapping_file: "mapping/task_to_dm.yaml"
+      
+      generators:
+        type: array
+        items:
+          type: string
+        description: "ASIGT generators to invoke"
+        example:
+          - "dm_generator"
+          - "pm_generator"
+          - "dml_generator"
+      
+      options:
+        type: object
+        description: "Generator options"
+        properties:
+          include_graphics:
+            type: boolean
+            default: true
+          
+          generate_toc:
+            type: boolean
+            default: true
+          
+          applicability_filtering:
+            type: boolean
+            default: true
+
+  # ---------------------------------------------------------------------------
+  # VALIDATION - Quality requirements
+  # ---------------------------------------------------------------------------
+  validation:
+    type: object
+    required: true
+    properties:
+      brex:
+        type: object
+        properties:
+          enabled:
+            type: boolean
+            default: true
+          
+          rules_file:
+            type: string
+            description: "BREX rules file"
+            example: "brex/project_brex.yaml"
+          
+          severity_threshold:
+            type: string
+            enum: ["ERROR", "WARNING", "INFO"]
+            default: "ERROR"
+            description: "Minimum severity to fail validation"
+      
+      schema:
+        type: object
+        properties:
+          enabled:
+            type: boolean
+            default: true
+          
+          schema_version:
+            type: string
+            description: "S1000D schema version"
+            example: "5.0"
+      
+      trace:
+        type: object
+        properties:
+          enabled:
+            type: boolean
+            default: true
+          
+          require_complete:
+            type: boolean
+            default: true
+            description: "All outputs must trace to source"
+      
+      custom_rules:
+        type: array
+        items:
+          type: object
+          properties:
+            rule_id:
+              type: string
+            description:
+              type: string
+            validator:
+              type: string
+
+  # ---------------------------------------------------------------------------
+  # EXECUTION - Runtime configuration
+  # ---------------------------------------------------------------------------
+  execution:
+    type: object
+    required: false
+    properties:
+      mode:
+        type: string
+        enum: ["FULL", "INCREMENTAL", "DELTA"]
+        default: "FULL"
+        description: "Execution mode"
+      
+      parallel:
+        type: boolean
+        default: true
+        description: "Enable parallel processing"
+      
+      max_workers:
+        type: integer
+        default: 4
+        description: "Maximum parallel workers"
+      
+      timeout_minutes:
+        type: integer
+        default: 60
+        description: "Execution timeout"
+      
+      on_error:
+        type: string
+        enum: ["STOP", "CONTINUE", "ROLLBACK"]
+        default: "STOP"
+        description: "Error handling behavior"
+      
+      notifications:
+        type: object
+        properties:
+          on_success:
+            type: array
+            items:
+              type: string
+            description: "Notification recipients on success"
+          
+          on_failure:
+            type: array
+            items:
+              type: string
+            description: "Notification recipients on failure"
+
+  # ---------------------------------------------------------------------------
+  # OUTPUTS - Deliverables specification
+  # ---------------------------------------------------------------------------
+  outputs:
+    type: object
+    required: true
+    properties:
+      artifacts:
+        type: array
+        items:
+          type: string
+        description: "Required output artifacts"
+        example:
+          - "DATA_MODULES"
+          - "PUBLICATION_MODULE"
+          - "DATA_MODULE_LIST"
+          - "TRACE_MATRIX"
+          - "VALIDATION_REPORT"
+      
+      archive:
+        type: object
+        properties:
+          enabled:
+            type: boolean
+            default: true
+          
+          retention_days:
+            type: integer
+            default: 365
+          
+          location:
+            type: string
+            description: "Archive location"
+            example: "ASIGT/runs/"
+      
+      metadata:
+        type: object
+        properties:
+          include_provenance:
+            type: boolean
+            default: true
+          
+          include_hashes:
+            type: boolean
+            default: true
+          
+          include_metrics:
+            type: boolean
+            default: true
+
+# =============================================================================
+# VALIDATION RULES
+# =============================================================================
+
+validation_rules:
+  contract_id:
+    - "Must be unique across all contracts"
+    - "Must follow naming convention"
+    - "Must not contain spaces or special characters"
+  
+  version:
+    - "Must follow semantic versioning"
+    - "Must increment for any change"
+  
+  baseline:
+    - "Must reference valid baseline"
+    - "Baseline must be in RELEASED state"
+  
+  authority:
+    - "Approver must have authority per approval matrix"
+    - "Approval reference required for APPROVED status"
+
+# =============================================================================
+# EXAMPLES
+# =============================================================================
+
+examples:
+  minimal:
+    header:
+      contract_id: "KITDM-CTR-LM-CSDB"
+      version: "v1.0.0"
+      title: "CSDB Generation Contract"
+      category: "LM"
+      status: "DRAFT"
+      created_date: "2026-01-22"
+    
+    authority:
+      owner: "STK_CM"
+      approver: "STK_CM"
+    
+    source:
+      baseline:
+        type: "FBL"
+        id: "LATEST"
+      scope:
+        ata_chapters: ["ALL"]
+        artifact_types: ["REQUIREMENT", "TASK"]
+    
+    target:
+      publication: "CSDB"
+      format:
+        standard: "S1000D_5.0"
+        output_types: ["DM"]
+      destination: "IDB/CSDB/"
+    
+    transformation:
+      mapping_rules:
+        - source_type: "REQUIREMENT"
+          target_type: "DM_DESCRIPTIVE"
+          mapping_file: "mapping/requirement_to_dm.yaml"
+      generators:
+        - "dm_generator"
+    
+    validation:
+      brex:
+        enabled: true
+      schema:
+        enabled: true
+      trace:
+        enabled: true
+    
+    outputs:
+      artifacts:
+        - "DATA_MODULES"
+        - "TRACE_MATRIX"

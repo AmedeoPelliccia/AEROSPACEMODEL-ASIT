@@ -1,0 +1,833 @@
+# =============================================================================
+# ATA iSpec 2200 Chapter Definitions
+# Reference Data for AEROSPACEMODEL
+# =============================================================================
+#
+# This file defines the ATA chapter structure per iSpec 2200.
+# Used for validating chapter assignments and organizing publications.
+#
+# Source: ATA iSpec 2200 (Reference structure - obtain full spec from A4A)
+# =============================================================================
+
+metadata:
+  specification: "ATA iSpec 2200"
+  version: "2023"
+  description: "Aircraft Technical Publication Chapter Numbering"
+  source: "Airlines for America (A4A)"
+  note: "This is a reference implementation. Obtain official spec from A4A."
+
+chapters:
+  # ---------------------------------------------------------------------------
+  # GENERAL (Chapters 00-19)
+  # ---------------------------------------------------------------------------
+  - chapter: "00"
+    title: "General"
+    description: "General information applicable to complete aircraft"
+    category: "general"
+    
+  - chapter: "01"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "02"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "03"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "04"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "05"
+    title: "Time Limits/Maintenance Checks"
+    description: "Scheduled maintenance requirements and time limitations"
+    category: "general"
+    publications:
+      - "AMM"
+      - "MPD"
+    
+  - chapter: "06"
+    title: "Dimensions and Areas"
+    description: "Aircraft dimensions, stations, and area definitions"
+    category: "general"
+    publications:
+      - "AMM"
+    
+  - chapter: "07"
+    title: "Lifting and Shoring"
+    description: "Procedures for lifting, jacking, and shoring the aircraft"
+    category: "general"
+    publications:
+      - "AMM"
+    
+  - chapter: "08"
+    title: "Leveling and Weighing"
+    description: "Procedures for leveling and weighing the aircraft"
+    category: "general"
+    publications:
+      - "AMM"
+    
+  - chapter: "09"
+    title: "Towing and Taxiing"
+    description: "Procedures for towing and taxiing the aircraft"
+    category: "general"
+    publications:
+      - "AMM"
+    
+  - chapter: "10"
+    title: "Parking, Mooring, Storage and Return to Service"
+    description: "Procedures for parking, mooring, storage, and return to service"
+    category: "general"
+    publications:
+      - "AMM"
+    
+  - chapter: "11"
+    title: "Placards and Markings"
+    description: "Required placards and markings"
+    category: "general"
+    publications:
+      - "AMM"
+    
+  - chapter: "12"
+    title: "Servicing"
+    description: "Routine servicing requirements and procedures"
+    category: "general"
+    publications:
+      - "AMM"
+    
+  - chapter: "13"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "14"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "15"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "16"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "17"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "18"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "19"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+
+  # ---------------------------------------------------------------------------
+  # AIRFRAME SYSTEMS (Chapters 20-49)
+  # ---------------------------------------------------------------------------
+  - chapter: "20"
+    title: "Standard Practices - Airframe"
+    description: "Standard practices for airframe maintenance"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "SRM"
+    
+  - chapter: "21"
+    title: "Air Conditioning"
+    description: "Heating, cooling, ventilation, pressurization, and air distribution"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "22"
+    title: "Auto Flight"
+    description: "Autopilot, flight director, and related systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "23"
+    title: "Communications"
+    description: "Voice and data communication systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "24"
+    title: "Electrical Power"
+    description: "Generation, distribution, and control of electrical power"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+      - "WDM"
+    
+  - chapter: "25"
+    title: "Equipment/Furnishings"
+    description: "Passenger and crew compartment equipment and furnishings"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "IPC"
+    
+  - chapter: "26"
+    title: "Fire Protection"
+    description: "Fire detection and suppression systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "27"
+    title: "Flight Controls"
+    description: "Primary and secondary flight control systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "28"
+    title: "Fuel"
+    description: "Fuel storage, distribution, and management systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "29"
+    title: "Hydraulic Power"
+    description: "Generation, distribution, and control of hydraulic power"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "30"
+    title: "Ice and Rain Protection"
+    description: "Anti-icing, de-icing, and rain protection systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "31"
+    title: "Indicating/Recording Systems"
+    description: "Instruments, indicating, and recording systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "32"
+    title: "Landing Gear"
+    description: "Main and nose landing gear systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "33"
+    title: "Lights"
+    description: "Interior and exterior lighting systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "34"
+    title: "Navigation"
+    description: "Navigation and guidance systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "35"
+    title: "Oxygen"
+    description: "Crew and passenger oxygen systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "36"
+    title: "Pneumatic"
+    description: "Pneumatic systems (non-engine bleed)"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "37"
+    title: "Vacuum"
+    description: "Vacuum systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "IPC"
+    
+  - chapter: "38"
+    title: "Water/Waste"
+    description: "Potable water and waste disposal systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "IPC"
+    
+  - chapter: "39"
+    title: "Electrical - Electronic Panels and Multipurpose Components"
+    description: "Integrated electronic systems and multipurpose components"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "40"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "41"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "42"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "43"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "44"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "45"
+    title: "Central Maintenance System (CMS)"
+    description: "On-board maintenance system"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+    
+  - chapter: "46"
+    title: "Information Systems"
+    description: "Passenger and crew information and entertainment systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "47"
+    title: "Inert Gas System"
+    description: "Nitrogen generation and fuel tank inerting"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "48"
+    title: "In-Flight Fuel Dispensing"
+    description: "Aerial refueling systems"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "IPC"
+    
+  - chapter: "49"
+    title: "Airborne Auxiliary Power"
+    description: "Auxiliary power unit (APU)"
+    category: "airframe"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+
+  # ---------------------------------------------------------------------------
+  # STRUCTURES (Chapters 50-59)
+  # ---------------------------------------------------------------------------
+  - chapter: "50"
+    title: "Cargo and Accessory Compartments"
+    description: "Cargo compartments and accessory compartments"
+    category: "structures"
+    publications:
+      - "AMM"
+      - "SRM"
+      - "IPC"
+    
+  - chapter: "51"
+    title: "Standard Practices and Structures - General"
+    description: "Standard practices for structural maintenance"
+    category: "structures"
+    publications:
+      - "SRM"
+    
+  - chapter: "52"
+    title: "Doors"
+    description: "Passenger, cargo, service, and emergency doors"
+    category: "structures"
+    publications:
+      - "AMM"
+      - "SRM"
+      - "IPC"
+    
+  - chapter: "53"
+    title: "Fuselage"
+    description: "Fuselage structure"
+    category: "structures"
+    publications:
+      - "AMM"
+      - "SRM"
+      - "IPC"
+    
+  - chapter: "54"
+    title: "Nacelles/Pylons"
+    description: "Engine nacelles and pylons"
+    category: "structures"
+    publications:
+      - "AMM"
+      - "SRM"
+      - "IPC"
+    
+  - chapter: "55"
+    title: "Stabilizers"
+    description: "Horizontal and vertical stabilizers"
+    category: "structures"
+    publications:
+      - "AMM"
+      - "SRM"
+      - "IPC"
+    
+  - chapter: "56"
+    title: "Windows"
+    description: "Cockpit and cabin windows"
+    category: "structures"
+    publications:
+      - "AMM"
+      - "SRM"
+      - "IPC"
+    
+  - chapter: "57"
+    title: "Wings"
+    description: "Wing structure"
+    category: "structures"
+    publications:
+      - "AMM"
+      - "SRM"
+      - "IPC"
+    
+  - chapter: "58"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "59"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+
+  # ---------------------------------------------------------------------------
+  # PROPELLERS/ROTORS (Chapters 60-69)
+  # ---------------------------------------------------------------------------
+  - chapter: "60"
+    title: "Standard Practices - Propeller/Rotor"
+    description: "Standard practices for propeller/rotor maintenance"
+    category: "propeller_rotor"
+    publications:
+      - "AMM"
+    
+  - chapter: "61"
+    title: "Propellers/Propulsors"
+    description: "Propellers and propulsors"
+    category: "propeller_rotor"
+    publications:
+      - "AMM"
+      - "CMM"
+      - "IPC"
+    
+  - chapter: "62"
+    title: "Main Rotor(s)"
+    description: "Main rotor systems (rotorcraft)"
+    category: "propeller_rotor"
+    publications:
+      - "AMM"
+      - "CMM"
+      - "IPC"
+    
+  - chapter: "63"
+    title: "Main Rotor Drive(s)"
+    description: "Main rotor drive systems (rotorcraft)"
+    category: "propeller_rotor"
+    publications:
+      - "AMM"
+      - "CMM"
+      - "IPC"
+    
+  - chapter: "64"
+    title: "Tail Rotor"
+    description: "Tail rotor system (rotorcraft)"
+    category: "propeller_rotor"
+    publications:
+      - "AMM"
+      - "CMM"
+      - "IPC"
+    
+  - chapter: "65"
+    title: "Tail Rotor Drive"
+    description: "Tail rotor drive system (rotorcraft)"
+    category: "propeller_rotor"
+    publications:
+      - "AMM"
+      - "CMM"
+      - "IPC"
+    
+  - chapter: "66"
+    title: "Folding Blades/Pylon"
+    description: "Blade folding and pylon systems"
+    category: "propeller_rotor"
+    publications:
+      - "AMM"
+      - "IPC"
+    
+  - chapter: "67"
+    title: "Rotors Flight Control"
+    description: "Rotor flight control systems (rotorcraft)"
+    category: "propeller_rotor"
+    publications:
+      - "AMM"
+      - "TSM"
+      - "IPC"
+    
+  - chapter: "68"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "69"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "70"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+
+  # ---------------------------------------------------------------------------
+  # POWER PLANT (Chapters 71-89)
+  # ---------------------------------------------------------------------------
+  - chapter: "71"
+    title: "Power Plant - General"
+    description: "General power plant information"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "EMM"
+    
+  - chapter: "72"
+    title: "Engine - Turbine/Turboprop, Ducted Fan/Unducted Fan"
+    description: "Turbine engines"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "EMM"
+      - "IPC"
+    
+  - chapter: "73"
+    title: "Engine Fuel and Control"
+    description: "Engine fuel system and controls"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "EMM"
+      - "IPC"
+    
+  - chapter: "74"
+    title: "Ignition"
+    description: "Engine ignition system"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "EMM"
+      - "IPC"
+    
+  - chapter: "75"
+    title: "Air"
+    description: "Engine bleed air system"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "EMM"
+      - "IPC"
+    
+  - chapter: "76"
+    title: "Engine Controls"
+    description: "Engine control systems"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "EMM"
+      - "IPC"
+    
+  - chapter: "77"
+    title: "Engine Indicating"
+    description: "Engine indicating systems"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "EMM"
+      - "IPC"
+    
+  - chapter: "78"
+    title: "Exhaust"
+    description: "Engine exhaust system"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "EMM"
+      - "IPC"
+    
+  - chapter: "79"
+    title: "Oil"
+    description: "Engine oil system"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "EMM"
+      - "IPC"
+    
+  - chapter: "80"
+    title: "Starting"
+    description: "Engine starting system"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "EMM"
+      - "IPC"
+    
+  - chapter: "81"
+    title: "Turbines"
+    description: "Turbine section"
+    category: "powerplant"
+    publications:
+      - "EMM"
+      - "IPC"
+    
+  - chapter: "82"
+    title: "Water Injection"
+    description: "Engine water injection system"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "EMM"
+      - "IPC"
+    
+  - chapter: "83"
+    title: "Accessory Gearboxes"
+    description: "Engine accessory gearboxes"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "EMM"
+      - "IPC"
+    
+  - chapter: "84"
+    title: "Propulsion Augmentation"
+    description: "Thrust augmentation systems"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "EMM"
+      - "IPC"
+    
+  - chapter: "85"
+    title: "Fuel Cell Systems"
+    description: "Aircraft fuel cell systems"
+    category: "powerplant"
+    publications:
+      - "AMM"
+      - "IPC"
+    
+  - chapter: "86"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "87"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "88"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "89"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+
+  # ---------------------------------------------------------------------------
+  # SPECIAL CHAPTERS (Chapters 90-99)
+  # ---------------------------------------------------------------------------
+  - chapter: "90"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "91"
+    title: "Charts"
+    description: "Wiring diagrams and schematics"
+    category: "special"
+    publications:
+      - "WDM"
+    
+  - chapter: "92"
+    title: "Electrical Installations"
+    description: "Electrical installation details"
+    category: "special"
+    publications:
+      - "WDM"
+    
+  - chapter: "93"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "94"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "95"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "96"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "97"
+    title: "Wiring Reporting"
+    description: "Wiring reporting and analysis"
+    category: "special"
+    publications:
+      - "WDM"
+    
+  - chapter: "98"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+    
+  - chapter: "99"
+    title: "Reserved"
+    description: "Reserved for future use"
+    category: "reserved"
+    status: "reserved"
+
+# -----------------------------------------------------------------------------
+# Chapter Categories Summary
+# -----------------------------------------------------------------------------
+categories:
+  general:
+    range: "00-19"
+    description: "General information and standard practices"
+    
+  airframe:
+    range: "20-49"
+    description: "Airframe systems"
+    
+  structures:
+    range: "50-59"
+    description: "Aircraft structures"
+    
+  propeller_rotor:
+    range: "60-69"
+    description: "Propellers and rotors"
+    
+  powerplant:
+    range: "70-89"
+    description: "Power plant systems"
+    
+  special:
+    range: "90-99"
+    description: "Special chapters (wiring, charts)"
+    
+  reserved:
+    description: "Reserved for future use"

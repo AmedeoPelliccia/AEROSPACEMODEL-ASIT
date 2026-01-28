@@ -1,0 +1,467 @@
+# =============================================================================
+# ASIT Configuration Template
+# Program-level configuration for ASIT-ASIGT framework
+# Version: 2.0.0
+# =============================================================================
+#
+# USAGE:
+#   1. Copy this file to asit_config.yaml
+#   2. Replace all placeholder values (marked with <...>)
+#   3. Validate with: aerospacemodel config validate
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# PROGRAM IDENTIFICATION
+# -----------------------------------------------------------------------------
+program:
+  # Program name (human-readable)
+  name: "<PROGRAM_NAME>"                             # e.g., "HydrogenJet-100"
+  
+  # Model identification code (S1000D compliant, 2-14 chars)
+  model_code: "<MODEL_CODE>"                         # e.g., "HJ1"
+  
+  # Organization
+  organization:
+    name: "<ORGANIZATION_NAME>"                      # e.g., "Green Aviation Inc."
+    cage_code: "<CAGE_CODE>"                         # Commercial and Government Entity code
+    address: "<ADDRESS>"
+    country: "<COUNTRY_CODE>"                        # ISO 3166-1 alpha-2
+  
+  # Program metadata
+  metadata:
+    description: "<Program description>"
+    aircraft_type: "<TYPE>"                          # e.g., "Fixed Wing", "Rotorcraft", "eVTOL"
+    certification_basis: "<BASIS>"                   # e.g., "Part 25", "Part 23", "Part 27"
+    created_date: "<YYYY-MM-DD>"
+    version: "1.0.0"
+
+# -----------------------------------------------------------------------------
+# STANDARDS CONFIGURATION
+# -----------------------------------------------------------------------------
+standards:
+  # S1000D configuration
+  s1000d:
+    issue: "5.0"                                     # 4.1, 4.2, 5.0
+    business_rules: "default"                        # BREX profile
+    schema_path: "schemas/s1000d/5.0/"
+    
+    # Data Module Code configuration
+    dmc:
+      model_ident_code: "<MODEL_CODE>"
+      system_diff_code: "A"                          # Default system difference
+      
+    # Publication Module Code configuration  
+    pmc:
+      model_ident_code: "<MODEL_CODE>"
+      
+    # ICN configuration
+    icn:
+      prefix: "ICN-<MODEL_CODE>"
+  
+  # ATA iSpec 2200
+  ata:
+    version: "iSpec 2200"
+    chapters_enabled: "ALL"                          # or list specific: ["21", "24", "28"]
+    mapping_file: "ASIT/STRUCTURE/ATA_MAPPING.yaml"
+
+# -----------------------------------------------------------------------------
+# PATHS CONFIGURATION
+# -----------------------------------------------------------------------------
+paths:
+  # Root directories
+  asit_root: "ASIT/"
+  asigt_root: "ASIGT/"
+  
+  # Knowledge Database
+  kdb:
+    root: "KDB/"
+    requirements: "KDB/REQUIREMENTS/"
+    design: "KDB/DESIGN/"
+    analysis: "KDB/ANALYSIS/"
+    test: "KDB/TEST/"
+    certification: "KDB/CERTIFICATION/"
+    tasks: "KDB/TASKS/"
+    parts: "KDB/PARTS/"
+    repairs: "KDB/REPAIRS/"
+    faults: "KDB/FAULTS/"
+  
+  # Information Database
+  idb:
+    root: "IDB/"
+    csdb: "IDB/CSDB/"
+    publications: "IDB/PUBLICATIONS/"
+    exports: "IDB/EXPORTS/"
+  
+  # ASIT paths
+  governance: "ASIT/GOVERNANCE/"
+  structure: "ASIT/STRUCTURE/"
+  contracts: "ASIT/CONTRACTS/"
+  index: "ASIT/INDEX/"
+  
+  # ASIGT paths
+  generators: "ASIGT/generators/"
+  validators: "ASIGT/validators/"
+  renderers: "ASIGT/renderers/"
+  brex: "ASIGT/brex/"
+  templates: "ASIGT/s1000d_templates/"
+  mapping: "ASIGT/mapping/"
+  runs: "ASIGT/runs/"
+  
+  # Schema paths
+  schemas:
+    s1000d: "schemas/s1000d/"
+    ata: "schemas/ata/"
+
+# -----------------------------------------------------------------------------
+# GOVERNANCE CONFIGURATION
+# -----------------------------------------------------------------------------
+governance:
+  # Baseline configuration
+  baselines:
+    types_enabled:
+      - "FBL"                                        # Functional Baseline
+      - "ABL"                                        # Allocated Baseline
+      - "PBL"                                        # Product Baseline
+      - "OBL"                                        # Operational Baseline
+    
+    naming:
+      pattern: "{type}-{year}-Q{quarter}-{sequence:03d}"
+      year_format: "%Y"
+    
+    retention:
+      active: "indefinite"
+      superseded_years: 10
+  
+  # Change control
+  change_control:
+    ecr:
+      prefix: "ECR"
+      sequence_start: 1
+      require_impact_assessment: true
+    
+    eco:
+      prefix: "ECO"
+      sequence_start: 1
+      require_approval: true
+    
+    ccb:
+      prefix: "CCB"
+      quorum_required: true
+      meeting_frequency: "weekly"                    # weekly, biweekly, monthly, as-needed
+  
+  # Approval configuration
+  approvals:
+    matrix_file: "ASIT/GOVERNANCE/APPROVALS/APPROVAL_MATRIX.csv"
+    require_signature: true
+    digital_signature: false                         # Enable for production
+  
+  # Release configuration
+  releases:
+    policy_file: "ASIT/GOVERNANCE/RELEASES/RELEASE_POLICY.md"
+    register_file: "ASIT/GOVERNANCE/RELEASES/RELEASE_REGISTER.csv"
+    distribution_tracking: true
+
+# -----------------------------------------------------------------------------
+# STAKEHOLDERS
+# -----------------------------------------------------------------------------
+stakeholders:
+  # Define program stakeholders and their authorities
+  STK_ENG:
+    name: "Engineering"
+    description: "Design and systems engineering"
+    contacts: []                                     # Add email addresses
+    
+  STK_CERT:
+    name: "Certification"
+    description: "Airworthiness and regulatory compliance"
+    contacts: []
+    
+  STK_CM:
+    name: "Configuration Management"
+    description: "Configuration control and baselines"
+    contacts: []
+    
+  STK_QA:
+    name: "Quality Assurance"
+    description: "Quality management and verification"
+    contacts: []
+    
+  STK_MFG:
+    name: "Manufacturing"
+    description: "Production and assembly"
+    contacts: []
+    
+  STK_OPS:
+    name: "Operations"
+    description: "Flight and ground operations"
+    contacts: []
+    
+  STK_MRO:
+    name: "Maintenance, Repair, Overhaul"
+    description: "Maintenance services"
+    contacts: []
+    
+  STK_BUS:
+    name: "Business"
+    description: "Program management and business"
+    contacts: []
+
+# -----------------------------------------------------------------------------
+# CONTRACTS CONFIGURATION
+# -----------------------------------------------------------------------------
+contracts:
+  # Contract ID prefix
+  prefix: "KITDM"                                    # Knowledge Information Transformation Data Module
+  
+  # Default contract settings
+  defaults:
+    validation:
+      brex_enabled: true
+      schema_enabled: true
+      trace_enabled: true
+      severity_threshold: "ERROR"
+    
+    execution:
+      mode: "FULL"
+      parallel: true
+      max_workers: 4
+      timeout_minutes: 60
+      on_error: "STOP"
+    
+    archive:
+      enabled: true
+      retention_days: 365
+  
+  # Templates location
+  templates_path: "ASIT/CONTRACTS/templates/"
+  
+  # Active contracts location
+  active_path: "ASIT/CONTRACTS/active/"
+
+# -----------------------------------------------------------------------------
+# ASIGT CONFIGURATION
+# -----------------------------------------------------------------------------
+asigt:
+  # Generator configuration
+  generators:
+    dm:
+      enabled: true
+      include_applicability: true
+      include_references: true
+      default_language: "en-US"
+      security_classification: "01"                  # Unclassified
+    
+    pm:
+      enabled: true
+      generate_toc: true
+    
+    dml:
+      enabled: true
+    
+    icn:
+      enabled: true
+      supported_formats:
+        - "CGM"
+        - "PNG"
+        - "SVG"
+        - "JPEG"
+  
+  # Validator configuration
+  validators:
+    brex:
+      enabled: true
+      default_rules: "ASIGT/brex/S1000D_5.0_DEFAULT.yaml"
+      project_rules: "ASIGT/brex/project_brex.yaml"
+      severity_levels:
+        - "ERROR"
+        - "WARNING"
+        - "INFO"
+    
+    schema:
+      enabled: true
+      schema_path: "schemas/s1000d/5.0/"
+      strict_mode: true
+    
+    trace:
+      enabled: true
+      require_complete: true
+      require_bidirectional: false
+  
+  # Renderer configuration
+  renderers:
+    pdf:
+      enabled: true
+      page_size: "A4"
+      include_toc: true
+      include_lep: true
+      engine: "weasyprint"                           # weasyprint, reportlab, xslt
+    
+    html:
+      enabled: true
+      responsive: true
+      include_search: true
+      theme: "default"
+    
+    ietp:
+      enabled: true
+      viewer_version: "5.0"
+      offline_capable: true
+  
+  # Run configuration
+  runs:
+    archive_path: "ASIGT/runs/"
+    naming_pattern: "{date}-{time}__{contract_id}"
+    date_format: "%Y%m%d"
+    time_format: "%H%M"
+    
+    artifacts:
+      - "INPUT_MANIFEST.json"
+      - "OUTPUT_MANIFEST.json"
+      - "TRACE_MATRIX.csv"
+      - "VALIDATION_REPORT.json"
+      - "METRICS.json"
+      - "LOG.txt"
+    
+    retention:
+      default_days: 365
+      permanent_types:
+        - "SB"
+        - "AD"
+
+# -----------------------------------------------------------------------------
+# TRACEABILITY CONFIGURATION
+# -----------------------------------------------------------------------------
+traceability:
+  # Master trace file
+  master_file: "ASIT/INDEX/TRACE_MASTER.csv"
+  
+  # ID registry
+  id_registry: "ASIT/INDEX/ID_REGISTRY.csv"
+  
+  # Artifact catalog
+  artifact_catalog: "ASIT/INDEX/ARTIFACT_CATALOG.yaml"
+  
+  # Trace requirements
+  requirements:
+    require_source: true
+    require_target: true
+    require_contract: true
+    require_baseline: true
+    require_hash: true
+  
+  # Hash algorithm
+  hash_algorithm: "sha256"
+
+# -----------------------------------------------------------------------------
+# LOGGING CONFIGURATION
+# -----------------------------------------------------------------------------
+logging:
+  level: "INFO"                                      # DEBUG, INFO, WARNING, ERROR, CRITICAL
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  
+  # File logging
+  file:
+    enabled: true
+    path: "logs/"
+    max_size_mb: 10
+    backup_count: 5
+  
+  # Console logging
+  console:
+    enabled: true
+    colorized: true
+
+# -----------------------------------------------------------------------------
+# NOTIFICATIONS
+# -----------------------------------------------------------------------------
+notifications:
+  enabled: false                                     # Enable for production
+  
+  # Email configuration
+  email:
+    enabled: false
+    smtp_server: "<SMTP_SERVER>"
+    smtp_port: 587
+    use_tls: true
+    from_address: "<FROM_EMAIL>"
+  
+  # Events to notify
+  events:
+    on_baseline_release: true
+    on_contract_execution: true
+    on_validation_failure: true
+    on_error: true
+
+# -----------------------------------------------------------------------------
+# SECURITY
+# -----------------------------------------------------------------------------
+security:
+  # Classification
+  default_classification: "01"                       # Unclassified
+  
+  classifications:
+    "01": "Unclassified"
+    "02": "Restricted"
+    "03": "Confidential"
+    "04": "Secret"
+  
+  # Access control
+  access_control:
+    enabled: false                                   # Enable for production
+    method: "role-based"                             # role-based, attribute-based
+  
+  # Audit
+  audit:
+    enabled: true
+    log_reads: false
+    log_writes: true
+    log_executions: true
+
+# -----------------------------------------------------------------------------
+# INTEGRATIONS
+# -----------------------------------------------------------------------------
+integrations:
+  # PLM integration
+  plm:
+    enabled: false
+    type: null                                       # teamcenter, windchill, 3dexperience
+    connection: null
+  
+  # Requirements management
+  requirements:
+    enabled: false
+    type: null                                       # doors, polarion, jama
+    connection: null
+  
+  # Version control
+  vcs:
+    enabled: true
+    type: "git"
+    auto_commit: false
+
+# -----------------------------------------------------------------------------
+# PERFORMANCE
+# -----------------------------------------------------------------------------
+performance:
+  # Parallel processing
+  parallel:
+    enabled: true
+    max_workers: 4
+    chunk_size: 100
+  
+  # Caching
+  cache:
+    enabled: true
+    path: ".cache/"
+    max_size_mb: 500
+    ttl_hours: 24
+  
+  # Memory limits
+  memory:
+    max_heap_mb: 4096
+    gc_threshold: 0.8
+
+# =============================================================================
+# END OF CONFIGURATION
+# =============================================================================

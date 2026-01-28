@@ -1,0 +1,8 @@
+# Active Contracts Directory
+# Place approved contracts in this directory.
+#
+# Contract files should be copied from templates/ and customized.
+# Only contracts with status: APPROVED or ACTIVE may be executed.
+#
+# Naming convention: <CONTRACT-ID>-v<VERSION>.yaml
+# Example: KITDM-CTR-LM-CSDB_ATA28-v1.0.0.yaml

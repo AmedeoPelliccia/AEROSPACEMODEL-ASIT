@@ -1,0 +1,242 @@
+# =============================================================================
+# ASIT Contract Template: Publication Export
+# Template ID: KITDM-CTR-LM-EXPORT
+# =============================================================================
+# 
+# PURPOSE: Export CSDB content to deliverable formats (PDF, HTML, IETP)
+# 
+# USAGE:
+#   1. Copy this template to active/ directory
+#   2. Replace placeholder values (marked with <...>)
+#   3. Submit for approval
+#   4. Execute with: aerospacemodel run --contract <contract_id>
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# HEADER
+# -----------------------------------------------------------------------------
+header:
+  contract_id: "KITDM-CTR-LM-EXPORT_<PUBLICATION>"   # e.g., KITDM-CTR-LM-EXPORT_AMM
+  version: "v1.0.0"
+  title: "<Publication> Export Contract"
+  description: |
+    Export <publication> content from CSDB to deliverable formats.
+    
+    This contract renders validated S1000D content into customer-deliverable
+    publication formats including PDF, HTML, and IETP packages.
+  
+  category: "LM"
+  status: "DRAFT"
+  
+  created_date: "<YYYY-MM-DD>"
+  effective_date: "<YYYY-MM-DD>"
+  
+  supersedes: ""
+
+# -----------------------------------------------------------------------------
+# AUTHORITY
+# -----------------------------------------------------------------------------
+authority:
+  owner: "STK_CM"
+  approver: "STK_CM"
+  approval_date: ""
+  approval_reference: ""
+
+# -----------------------------------------------------------------------------
+# SOURCE SPECIFICATION
+# -----------------------------------------------------------------------------
+source:
+  # Baseline - for exports, typically OBL
+  baseline:
+    type: "OBL"
+    id: "<BASELINE-ID>"
+    locked: true
+  
+  # Scope - CSDB content to export
+  scope:
+    ata_chapters:
+      - "<ATA>"                                      # Chapters to include
+    
+    artifact_types:
+      - "DM"                                         # Data Modules
+      - "PM"                                         # Publication Modules
+      - "ICN"                                        # Graphics
+    
+    filters:
+      effectivity: "<EFFECTIVITY>"                   # e.g., "MSN001-MSN050"
+      publication: "<PUBLICATION>"                   # e.g., "AMM"
+  
+  # CSDB paths
+  paths:
+    - "IDB/CSDB/<PUBLICATION>/"
+
+# -----------------------------------------------------------------------------
+# TARGET SPECIFICATION
+# -----------------------------------------------------------------------------
+target:
+  publication: "<PUBLICATION>"                       # AMM, SRM, IPC, etc.
+  
+  format:
+    standard: "S1000D_5.0"
+    output_types:
+      - "PDF"                                        # PDF export
+      - "HTML"                                       # HTML export
+      - "IETP"                                       # IETP package
+  
+  destination: "IDB/EXPORTS/<PUBLICATION>/"
+  
+  naming:
+    model_ident_code: "<MODEL>"
+    system_diff_code: "A"
+
+# -----------------------------------------------------------------------------
+# TRANSFORMATION RULES
+# -----------------------------------------------------------------------------
+transformation:
+  # For exports, mapping is rendering configuration
+  mapping_rules:
+    - source_type: "CSDB"
+      target_type: "PDF"
+      mapping_file: "ASIGT/renderers/pdf_config.yaml"
+    
+    - source_type: "CSDB"
+      target_type: "HTML"
+      mapping_file: "ASIGT/renderers/html_config.yaml"
+    
+    - source_type: "CSDB"
+      target_type: "IETP"
+      mapping_file: "ASIGT/renderers/ietp_config.yaml"
+  
+  generators:
+    - "pdf_renderer"
+    - "html_renderer"
+    - "ietp_packager"
+  
+  options:
+    # PDF options
+    pdf_options:
+      page_size: "A4"
+      include_toc: true
+      include_index: true
+      include_lep: true                              # List of Effective Pages
+      watermark: ""                                  # Optional watermark
+      header_footer: true
+    
+    # HTML options
+    html_options:
+      responsive: true
+      include_search: true
+      include_navigation: true
+      theme: "default"
+    
+    # IETP options
+    ietp_options:
+      viewer_version: "5.0"
+      include_viewer: true
+      offline_capable: true
+      compression: "zip"
+
+# -----------------------------------------------------------------------------
+# VALIDATION REQUIREMENTS
+# -----------------------------------------------------------------------------
+validation:
+  brex:
+    enabled: true
+    rules_file: "ASIGT/brex/project_brex.yaml"
+    severity_threshold: "ERROR"
+  
+  schema:
+    enabled: true
+    schema_version: "5.0"
+  
+  trace:
+    enabled: true
+    require_complete: true
+  
+  # Export-specific validation
+  custom_rules:
+    - rule_id: "EXPORT-001"
+      description: "Verify all graphics resolve"
+      validator: "validators/graphics_check.py"
+    
+    - rule_id: "EXPORT-002"
+      description: "Verify all cross-references resolve"
+      validator: "validators/xref_check.py"
+
+# -----------------------------------------------------------------------------
+# EXECUTION CONFIGURATION
+# -----------------------------------------------------------------------------
+execution:
+  mode: "FULL"
+  parallel: true
+  max_workers: 4
+  timeout_minutes: 120                               # Exports may take longer
+  
+  on_error: "STOP"
+  
+  pre_checks:
+    - "baseline_exists"
+    - "csdb_validated"
+    - "renderers_available"
+  
+  post_actions:
+    - "generate_metrics"
+    - "archive_run"
+    - "notify_stakeholders"
+  
+  notifications:
+    on_success:
+      - "STK_CM"
+      - "STK_OPS"
+    on_failure:
+      - "STK_CM"
+
+# -----------------------------------------------------------------------------
+# OUTPUT SPECIFICATION
+# -----------------------------------------------------------------------------
+outputs:
+  artifacts:
+    - "PDF_PUBLICATION"
+    - "HTML_PUBLICATION"
+    - "IETP_PACKAGE"
+    - "TRACE_MATRIX"
+    - "VALIDATION_REPORT"
+    - "METRICS"
+    - "LOG"
+  
+  archive:
+    enabled: true
+    retention_days: 730                              # 2 years for deliverables
+    location: "ASIGT/runs/"
+  
+  metadata:
+    include_provenance: true
+    include_hashes: true
+    include_metrics: true
+    include_contract_copy: true
+  
+  # Delivery configuration
+  delivery:
+    package_format: "zip"
+    include_readme: true
+    include_manifest: true
+
+# -----------------------------------------------------------------------------
+# NOTES
+# -----------------------------------------------------------------------------
+notes: |
+  Export contract notes:
+  
+  - PDF exports include all graphics embedded
+  - HTML exports are self-contained for offline use
+  - IETP packages include viewer runtime
+
+# -----------------------------------------------------------------------------
+# REVISION HISTORY
+# -----------------------------------------------------------------------------
+revision_history:
+  - version: "v1.0.0"
+    date: "<YYYY-MM-DD>"
+    author: "<Author>"
+    description: "Initial contract"

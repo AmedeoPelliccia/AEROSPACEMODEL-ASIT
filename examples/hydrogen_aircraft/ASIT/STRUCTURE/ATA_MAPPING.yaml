@@ -1,0 +1,185 @@
+# =============================================================================
+# HydrogenJet-100 — ATA Chapter Mapping (Hydrogen Adaptation)
+# =============================================================================
+
+metadata:
+  program: "HydrogenJet-100"
+  model_code: "HJ1"
+  specification: "ATA iSpec 2200 (Hydrogen Adapted)"
+  notes: |
+    Traditional ATA chapters adapted for hydrogen-powered aircraft.
+    ATA 28 significantly modified for cryogenic LH2 systems.
+
+systems:
+  # -------------------------------------------------------------------------
+  # General
+  # -------------------------------------------------------------------------
+  - ata_chapter: "05"
+    title: "Time Limits/Maintenance Checks"
+    enabled: true
+    publications: ["AMM"]
+    hydrogen_notes: "Includes H2 system inspection intervals"
+    
+  - ata_chapter: "06"
+    title: "Dimensions and Areas"
+    enabled: true
+    publications: ["AMM"]
+    
+  - ata_chapter: "12"
+    title: "Servicing"
+    enabled: true
+    publications: ["AMM"]
+    hydrogen_notes: "Hydrogen refueling procedures"
+    priority: "critical"
+
+  # -------------------------------------------------------------------------
+  # Electrical Systems
+  # -------------------------------------------------------------------------
+  - ata_chapter: "24"
+    title: "Electrical Power"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC", "CMM"]
+    priority: "critical"
+    safety_critical: true
+    hydrogen_adaptation: "Fuel Cell DC Power Generation"
+    subsystems:
+      - code: "24-00"
+        title: "Electrical Power - General"
+      - code: "24-10"
+        title: "Fuel Cell Power System"
+      - code: "24-20"
+        title: "DC Power Distribution"
+      - code: "24-30"
+        title: "DC-AC Inverters"
+      - code: "24-40"
+        title: "Battery Backup System"
+    special_conditions:
+      - "SC-H2-04"
+
+  # -------------------------------------------------------------------------
+  # Hydrogen Fuel System
+  # -------------------------------------------------------------------------
+  - ata_chapter: "28"
+    title: "Fuel (Hydrogen)"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    priority: "critical"
+    safety_critical: true
+    hydrogen_adaptation: "Cryogenic LH2 Storage & Distribution"
+    subsystems:
+      - code: "28-00"
+        title: "Hydrogen Fuel - General"
+      - code: "28-10"
+        title: "Cryogenic Storage Tanks"
+      - code: "28-20"
+        title: "Hydrogen Distribution"
+      - code: "28-30"
+        title: "Hydrogen Vaporization"
+      - code: "28-40"
+        title: "Hydrogen Quantity Indicating"
+      - code: "28-50"
+        title: "Vent and Relief System"
+      - code: "28-60"
+        title: "Leak Detection System"
+    special_conditions:
+      - "SC-H2-01"
+      - "SC-H2-02"
+      - "SC-H2-03"
+
+  # -------------------------------------------------------------------------
+  # Flight Controls
+  # -------------------------------------------------------------------------
+  - ata_chapter: "27"
+    title: "Flight Controls"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    priority: "high"
+    safety_critical: true
+    
+  - ata_chapter: "32"
+    title: "Landing Gear"
+    enabled: true
+    publications: ["AMM", "TSM", "IPC"]
+    priority: "high"
+
+  # -------------------------------------------------------------------------
+  # Powerplant (Fuel Cell)
+  # -------------------------------------------------------------------------
+  - ata_chapter: "70"
+    title: "Standard Practices - Powerplant"
+    enabled: true
+    publications: ["AMM"]
+    hydrogen_adaptation: "Hydrogen Powerplant Practices"
+    
+  - ata_chapter: "71"
+    title: "Power Plant - General"
+    enabled: true
+    publications: ["AMM"]
+    priority: "critical"
+    safety_critical: true
+    hydrogen_adaptation: "Fuel Cell Propulsion System"
+    subsystems:
+      - code: "71-00"
+        title: "Fuel Cell System - General"
+      - code: "71-10"
+        title: "Fuel Cell Stack Assembly"
+      - code: "71-20"
+        title: "Air Supply System"
+      - code: "71-30"
+        title: "Cooling System"
+      - code: "71-40"
+        title: "Water Management"
+      - code: "71-50"
+        title: "Electric Motor Drive"
+    special_conditions:
+      - "SC-H2-04"
+      
+  - ata_chapter: "73"
+    title: "Fuel Control (Hydrogen)"
+    enabled: true
+    publications: ["AMM", "TSM"]
+    priority: "critical"
+    safety_critical: true
+    hydrogen_adaptation: "Hydrogen Delivery & Control"
+    subsystems:
+      - code: "73-00"
+        title: "H2 Fuel Control - General"
+      - code: "73-10"
+        title: "Hydrogen Flow Control"
+      - code: "73-20"
+        title: "Pressure Regulation"
+      - code: "73-30"
+        title: "Emergency Shutoff"
+    special_conditions:
+      - "SC-H2-01"
+
+  # -------------------------------------------------------------------------
+  # Structures
+  # -------------------------------------------------------------------------
+  - ata_chapter: "53"
+    title: "Fuselage"
+    enabled: true
+    publications: ["AMM", "SRM"]
+    hydrogen_notes: "Tank bay structural requirements"
+    
+  - ata_chapter: "57"
+    title: "Wings"
+    enabled: true
+    publications: ["AMM", "SRM"]
+
+  # -------------------------------------------------------------------------
+  # Environmental
+  # -------------------------------------------------------------------------
+  - ata_chapter: "21"
+    title: "Air Conditioning"
+    enabled: true
+    publications: ["AMM", "TSM"]
+    hydrogen_notes: "Tank bay ventilation critical"
+    
+  - ata_chapter: "26"
+    title: "Fire Protection"
+    enabled: true
+    publications: ["AMM", "TSM"]
+    priority: "critical"
+    safety_critical: true
+    hydrogen_notes: "Hydrogen-specific fire protection"

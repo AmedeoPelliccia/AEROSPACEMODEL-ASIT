@@ -1,0 +1,113 @@
+# =============================================================================
+# SkyLift-200 — Project BREX Rules (eVTOL)
+# =============================================================================
+
+metadata:
+  brex_id: "SL2-BREX-001"
+  title: "SkyLift-200 eVTOL Business Rules"
+  issue_date: "2026-01-15"
+  status: "active"
+  
+  extends:
+    - "S1000D_5.0_DEFAULT"
+    
+  organization:
+    name: "Urban Mobility Systems Inc."
+    cage_code: "UMS01"
+
+dm_code_rules:
+  - rule_id: "SL2-BR-DMC-001"
+    element: "modelIdentCode"
+    description: "Model identification code must be 'SL2'"
+    severity: "error"
+    pattern: "^SL2$"
+    message: "Invalid model identification code. Expected 'SL2'."
+    
+  - rule_id: "SL2-BR-DMC-002"
+    element: "systemCode"
+    description: "System code must be valid for SL2 eVTOL"
+    severity: "error"
+    allowed_values:
+      - "05"
+      - "06"
+      - "12"
+      - "24"
+      - "27"
+      - "31"
+      - "34"
+      - "45"
+      - "52"
+      - "53"
+      - "55"
+      - "70"
+      - "71"
+      - "72"
+    message: "System code not in approved list for SL2."
+
+high_voltage_rules:
+  - rule_id: "SL2-BR-HV-001"
+    element: "//dmAddress[contains(dmIdent/dmCode/@systemCode, '24')]"
+    description: "ATA 24 DMs must include HV warning"
+    severity: "error"
+    required_element: "//warning[@warningType='high-voltage']"
+    message: "High-voltage system DM must include HV warning."
+    
+  - rule_id: "SL2-BR-HV-002"
+    element: "//proceduralStep[contains(., 'battery') or contains(., 'Battery')]"
+    description: "Battery procedures must include PPE requirement"
+    severity: "warning"
+    xpath_check: ".//supportEquipDescr or .//warningAndCautionPara"
+    message: "Battery procedures should specify PPE requirements."
+    
+  - rule_id: "SL2-BR-HV-003"
+    element: "//dmAddress[contains(dmIdent/dmCode/@systemCode, '24')]//proceduralStep"
+    description: "HV procedures must include isolation verification"
+    severity: "warning"
+    message: "Consider adding isolation verification step for HV procedures."
+
+software_rules:
+  - rule_id: "SL2-BR-SW-001"
+    element: "//dmAddress[contains(dmIdent/dmCode/@systemCode, '27') and contains(dmIdent/dmCode/@infoCode, '040')]"
+    description: "FCC DMs must reference software version"
+    severity: "error"
+    xpath_check: ".//softwareIdent or .//applicRefId"
+    message: "Flight Control Computer DMs must include software identification."
+    
+  - rule_id: "SL2-BR-SW-002"
+    element: "//dmAddress[contains(dmIdent/dmCode/@systemCode, '24-60')]"
+    description: "BMS DMs must reference software version"
+    severity: "error"
+    xpath_check: ".//softwareIdent or .//applicRefId"
+    message: "BMS DMs must include software identification."
+
+content_rules:
+  - rule_id: "SL2-BR-CNT-001"
+    element: "//warning"
+    description: "Warnings must have type classification"
+    severity: "error"
+    xpath_check: "@warningType"
+    message: "Warning must specify warningType attribute."
+    
+  - rule_id: "SL2-BR-CNT-002"
+    element: "//figure"
+    description: "Figures must have title"
+    severity: "error"
+    required_child: "title"
+    message: "Figure must include a title element."
+
+propulsion_rules:
+  - rule_id: "SL2-BR-PROP-001"
+    element: "//dmAddress[contains(dmIdent/dmCode/@systemCode, '72')]"
+    description: "Motor DMs must identify motor position"
+    severity: "warning"
+    message: "Motor unit DMs should clearly identify motor position (1-8)."
+
+applicability_rules:
+  - rule_id: "SL2-BR-APP-001"
+    element: "//applic"
+    description: "Applicability must reference valid SL2 variant"
+    severity: "error"
+    allowed_products:
+      - "SL2-P"
+      - "SL2-A"
+    message: "Unknown aircraft variant in applicability."

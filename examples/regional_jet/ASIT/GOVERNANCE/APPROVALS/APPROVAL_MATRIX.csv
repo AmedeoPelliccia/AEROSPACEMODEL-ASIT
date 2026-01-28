@@ -1,0 +1,14 @@
+artifact_type,action,stk_eng,stk_qa,stk_cm,stk_pm,stk_cert,stk_cust,notes
+baseline_dbl,create,required,required,required,informed,informed,informed,Design baseline establishment
+baseline_fbl,create,required,required,required,required,required,informed,Functional baseline - cert involved
+baseline_pbl,create,required,required,required,required,required,informed,Product baseline - cert involved
+contract_amm,execute,required,required,required,,,AMM generation
+contract_ipc,execute,required,required,required,,,IPC generation
+contract_srm,execute,required,required,required,,,SRM generation requires DER review
+dm_publish,approve,required,required,informed,,,Data module publication
+ecr_submit,approve,required,informed,required,optional,,ECR approval
+eco_release,approve,required,required,required,required,optional,ECO implementation
+gate_pdr,pass,required,required,,required,,Preliminary Design Review
+gate_cdr,pass,required,required,,required,required,Critical Design Review
+gate_trr,pass,required,required,,required,required,Test Readiness Review
+gate_prr,pass,required,required,,required,required,required,Production Readiness Review

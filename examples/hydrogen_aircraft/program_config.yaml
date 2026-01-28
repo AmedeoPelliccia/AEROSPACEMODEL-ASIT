@@ -1,0 +1,143 @@
+# =============================================================================
+# Hydrogen Aircraft Example — Program Configuration
+# =============================================================================
+# Hydrogen-powered regional aircraft with fuel cell propulsion.
+# Novel certification with hydrogen-specific Special Conditions.
+# =============================================================================
+
+program:
+  name: "HydrogenJet-100"
+  model_code: "HJ1"
+  description: "100-seat hydrogen fuel cell regional aircraft"
+  
+  organization:
+    name: "Green Aviation Inc."
+    cage_code: "GAI01"
+    country_code: "US"
+    
+  aircraft:
+    type: "Fixed-wing"
+    category: "Transport (Part 25)"
+    passenger_capacity: 100
+    crew: 4
+    
+    propulsion:
+      type: "Hydrogen Fuel Cell"
+      motor_count: 2
+      fuel_cell_stacks: 4
+      power_total_mw: 2.5
+      
+    fuel:
+      type: "Liquid Hydrogen (LH2)"
+      temperature_c: -253
+      tank_count: 2
+      capacity_kg: 800
+      
+    performance:
+      range_nm: 1000
+      cruise_speed_ktas: 350
+      cruise_altitude_ft: 35000
+      
+  variants:
+    - code: "HJ1-FC"
+      name: "Fuel Cell"
+      description: "PEM fuel cell with electric motors"
+      
+    - code: "HJ1-HT"
+      name: "Hydrogen Turbine"
+      description: "Modified turbine for H2 combustion (future)"
+      
+  version:
+    current: "1.0.0"
+    aerospacemodel: "2.0.0"
+
+standards:
+  s1000d:
+    issue: "5.0"
+    brex:
+      base: "S1000D_5.0_DEFAULT"
+      project: "HJ1_brex"
+      
+  language:
+    primary: "en"
+    
+  country:
+    primary: "US"
+
+certification:
+  basis: "14 CFR Part 25"
+  special_conditions:
+    - "SC-H2-01: Hydrogen Fuel System Safety"
+    - "SC-H2-02: Cryogenic System Design"
+    - "SC-H2-03: Hydrogen Leak Detection"
+    - "SC-H2-04: Fuel Cell Installation"
+    - "SC-H2-05: Ground Operations Safety"
+    
+  exemptions:
+    - "Exemption for non-kerosene fuel (FAR 25.1309 equivalent)"
+
+asit:
+  governance:
+    baseline_policy: "strict"
+    change_control: true
+    approval_required: true
+    
+  contracts:
+    active_dir: "ASIT/CONTRACTS/active"
+    require_approval: true
+
+asigt:
+  generators:
+    dm_generator:
+      enabled: true
+    pm_generator:
+      enabled: true
+      
+  validators:
+    brex:
+      enabled: true
+      strict_mode: true
+    schema:
+      enabled: true
+    trace:
+      enabled: true
+      
+  renderers:
+    html:
+      enabled: true
+    pdf:
+      enabled: true
+
+directories:
+  kdb:
+    path: "KDB"
+  idb:
+    path: "IDB"
+  output:
+    path: "output"
+
+publications:
+  enabled:
+    - AMM
+    - CMM
+    - IPC
+    - TSM
+    - FCOM
+    
+  defaults:
+    issue_info:
+      issue_number: "001"
+      in_work: "00"
+    responsible_partner_company:
+      cage: "GAI01"
+
+traceability:
+  enabled: true
+  evidence:
+    generate_matrices: true
+    hash_algorithm: "SHA-256"
+
+environment:
+  mode: "development"
+  logging:
+    level: "INFO"

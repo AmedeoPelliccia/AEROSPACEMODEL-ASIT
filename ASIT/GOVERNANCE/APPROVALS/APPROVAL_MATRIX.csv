@@ -1,0 +1,18 @@
+action_type,artifact_type,stk_eng,stk_cm,stk_qa,stk_cert,stk_ops,notes
+baseline_create,FBL,APPROVE,APPROVE,REVIEW,INFORM,INFORM,Functional baseline requires engineering and CM approval
+baseline_create,ABL,APPROVE,APPROVE,REVIEW,INFORM,INFORM,Allocated baseline requires engineering and CM approval
+baseline_create,PBL,APPROVE,APPROVE,APPROVE,REVIEW,INFORM,Product baseline requires QA approval
+baseline_create,OBL,REVIEW,APPROVE,APPROVE,APPROVE,APPROVE,Operational baseline requires cert and ops approval
+baseline_release,FBL,INFORM,APPROVE,REVIEW,INFORM,INFORM,CM authority to release functional baselines
+baseline_release,ABL,INFORM,APPROVE,REVIEW,INFORM,INFORM,CM authority to release allocated baselines
+baseline_release,PBL,INFORM,APPROVE,APPROVE,REVIEW,INFORM,CM and QA authority to release product baselines
+baseline_release,OBL,INFORM,APPROVE,APPROVE,APPROVE,APPROVE,Multiple authorities for operational baseline release
+ecr_submit,ANY,APPROVE,REVIEW,REVIEW,REVIEW,REVIEW,Engineering initiates ECRs
+ecr_approve,SAFETY,APPROVE,APPROVE,APPROVE,APPROVE,REVIEW,Safety-related ECRs require multiple approvals
+ecr_approve,STANDARD,APPROVE,APPROVE,REVIEW,INFORM,INFORM,Standard ECRs require eng and CM
+eco_approve,ANY,APPROVE,APPROVE,REVIEW,REVIEW,REVIEW,ECOs require engineering and CM approval
+contract_approve,TRANSFORM,REVIEW,APPROVE,REVIEW,REVIEW,INFORM,CM approves transformation contracts
+publication_release,AMM,INFORM,APPROVE,APPROVE,APPROVE,REVIEW,Maintenance publications require cert approval
+publication_release,SRM,INFORM,APPROVE,APPROVE,APPROVE,REVIEW,Structural repair requires cert approval
+publication_release,FCOM,INFORM,APPROVE,APPROVE,APPROVE,APPROVE,Flight crew manuals require ops approval
+publication_release,SB,INFORM,APPROVE,APPROVE,APPROVE,REVIEW,Service bulletins require cert approval

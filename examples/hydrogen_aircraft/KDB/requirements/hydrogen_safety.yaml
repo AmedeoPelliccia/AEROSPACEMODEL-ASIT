@@ -1,0 +1,175 @@
+# =============================================================================
+# HydrogenJet-100 — Hydrogen Safety Requirements
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "requirements"
+  title: "Hydrogen Safety"
+  baseline: "FBL-HJ1-2026-Q1"
+
+requirements:
+  - id: "REQ-HJ1-SAFE-001"
+    type: "descriptive"
+    title: "Hydrogen Safety Overview"
+    ata_code: "28-00-00"
+    info_code: "018"
+    applicability: "APP-HJ1-ALL"
+    safety_critical: true
+    
+    content:
+      summary: |
+        Critical safety information for hydrogen fuel system maintenance.
+        
+      details: |
+        HYDROGEN PROPERTIES:
+        - Colorless, odorless gas
+        - Extremely flammable (4-75% in air)
+        - Invisible flame
+        - Very low ignition energy (0.02 mJ)
+        - Lighter than air (rises rapidly)
+        - Cryogenic liquid at -253°C
+        
+        HAZARDS:
+        - Fire/Explosion: Wide flammability range
+        - Asphyxiation: Displaces oxygen in enclosed spaces
+        - Cold burns: Cryogenic contact injury
+        - Embrittlement: Material damage from H2 exposure
+        - Overpressure: Rapid vaporization hazard
+        
+  - id: "REQ-HJ1-SAFE-002"
+    type: "descriptive"
+    title: "Personal Protective Equipment"
+    ata_code: "28-00-00"
+    info_code: "018"
+    applicability: "APP-HJ1-ALL"
+    
+    content:
+      summary: |
+        Required PPE for hydrogen system maintenance.
+        
+      details: |
+        MINIMUM PPE (All H2 work):
+        - Safety glasses
+        - Flame-resistant clothing
+        - ESD-safe footwear
+        
+        CRYOGENIC PPE (LH2 work):
+        - Full face shield
+        - Cryogenic gloves (loose-fitting)
+        - Cryogenic apron
+        - Safety shoes (no exposed skin)
+        
+        CONFINED SPACE (Tank entry):
+        - Self-Contained Breathing Apparatus (SCBA)
+        - Continuous atmosphere monitoring
+        - Rescue harness
+        - Communication equipment
+        
+  - id: "REQ-HJ1-SAFE-003"
+    type: "procedural"
+    title: "Emergency Response - Hydrogen Leak"
+    ata_code: "28-00-00"
+    info_code: "340"
+    applicability: "APP-HJ1-ALL"
+    safety_critical: true
+    
+    content:
+      summary: "Emergency procedures for hydrogen leak"
+      
+      procedure: |
+        1. EVACUATE area immediately (upwind)
+        2. SOUND alarm / notify emergency services
+        3. ELIMINATE ignition sources
+        4. DO NOT attempt to stop major leak
+        5. ISOLATE hydrogen supply (if safe)
+        6. VENTILATE area
+        7. DO NOT re-enter until H2 < 1%
+        
+    warnings:
+      - type: "hydrogen"
+        text: |
+          HYDROGEN FLAME IS INVISIBLE. Do not assume no fire if no
+          visible flame. Use thermal imaging or broom test.
+          
+  - id: "REQ-HJ1-SAFE-004"
+    type: "procedural"
+    title: "Emergency Response - Hydrogen Fire"
+    ata_code: "28-00-00"
+    info_code: "340"
+    applicability: "APP-HJ1-ALL"
+    safety_critical: true
+    
+    content:
+      summary: "Emergency procedures for hydrogen fire"
+      
+      procedure: |
+        1. EVACUATE area immediately
+        2. SOUND alarm / notify fire services
+        3. SHUT OFF hydrogen supply (if safe)
+        4. ALLOW fire to burn out if supply cannot be stopped
+        5. PROTECT surrounding equipment with water spray
+        6. DO NOT use CO2 or dry chemical on LH2
+        7. DO NOT approach cryogenic fire without full PPE
+        
+    warnings:
+      - type: "fire"
+        text: |
+          DO NOT attempt to extinguish hydrogen fire unless supply
+          can be isolated. Uncontrolled hydrogen release is more
+          dangerous than controlled burn.
+          
+  - id: "REQ-HJ1-SAFE-005"
+    type: "procedural"
+    title: "Emergency Response - Cryogenic Spill"
+    ata_code: "28-10-00"
+    info_code: "340"
+    applicability: "APP-HJ1-ALL"
+    safety_critical: true
+    
+    content:
+      summary: "Emergency procedures for LH2 spill"
+      
+      procedure: |
+        1. EVACUATE area immediately (upwind)
+        2. SOUND alarm / notify emergency services
+        3. STOP source of spill (if safe)
+        4. DO NOT contact liquid or cold surfaces
+        5. VENTILATE area (natural preferred)
+        6. ALLOW to evaporate naturally
+        7. MONITOR for H2 accumulation overhead
+        
+    warnings:
+      - type: "cold-injury"
+        text: |
+          LH2 causes instant frostbite on contact. Do not touch
+          spilled liquid, frost, or cold surfaces. Evaporating
+          hydrogen is extremely cold and flammable.
+          
+  - id: "REQ-HJ1-SAFE-006"
+    type: "descriptive"
+    title: "Exclusion Zones"
+    ata_code: "12-20-00"
+    info_code: "040"
+    applicability: "APP-HJ1-ALL"
+    
+    content:
+      summary: |
+        Exclusion zones for hydrogen operations.
+        
+      details: |
+        REFUELING EXCLUSION ZONE:
+        - Radius: 15 meters from fill connection
+        - No ignition sources
+        - No non-essential personnel
+        - No vehicles (except refueling GSE)
+        
+        MAINTENANCE EXCLUSION ZONE:
+        - Per H2 leak detector readings
+        - Minimum 3 meters if H2 detected
+        - Expand as required by concentration
+        
+        EMERGENCY EXCLUSION ZONE:
+        - Minimum 100 meters for major leak/fire
+        - Upwind direction only
+        - Per emergency responder direction

@@ -1,0 +1,107 @@
+{
+  "$schema": "../schemas/input_manifest.schema.json",
+  "run_id": "20260122-1430__KITDM-CTR-LM-CSDB_ATA28",
+  "contract": {
+    "contract_id": "KITDM-CTR-LM-CSDB_ATA28",
+    "contract_version": "1.2.0",
+    "contract_path": "ASIT/CONTRACTS/active/KITDM-CTR-LM-CSDB_ATA28.yaml"
+  },
+  "baseline": {
+    "baseline_ref": "FBL-2026-Q1-003",
+    "baseline_type": "FBL",
+    "baseline_date": "2026-01-15",
+    "baseline_authority": "CCB-2026-0042"
+  },
+  "execution": {
+    "start_time": "2026-01-22T14:30:00Z",
+    "initiated_by": "STK_CM",
+    "execution_mode": "production",
+    "dry_run": false
+  },
+  "environment": {
+    "asit_version": "2.0.0",
+    "asigt_version": "2.0.0",
+    "s1000d_schema_version": "5.0",
+    "brex_profile": "default",
+    "python_version": "3.11.5",
+    "platform": "linux-x86_64"
+  },
+  "inputs": [
+    {
+      "input_id": "INP-001",
+      "source_id": "REQ-28-001",
+      "source_type": "requirement",
+      "source_subtype": "functional",
+      "source_path": "KDB/SSOT/requirements/ATA28/FR-28-001_fuel_pressurization.yaml",
+      "baseline": "FBL-2026-Q1-003",
+      "hash": {
+        "algorithm": "sha256",
+        "value": "a1b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890"
+      },
+      "size_bytes": 2048,
+      "retrieved_at": "2026-01-22T14:30:01Z",
+      "metadata": {
+        "title": "Fuel System Pressurization",
+        "ata_chapter": "28",
+        "ata_section": "10",
+        "author": "Engineering",
+        "version": "1.3"
+      }
+    },
+    {
+      "input_id": "INP-002",
+      "source_id": "TASK-28-10-001",
+      "source_type": "task",
+      "source_subtype": "removal",
+      "source_path": "KDB/SSOT/tasks/ATA28/TASK-28-10-001_boost_pump_removal.yaml",
+      "baseline": "FBL-2026-Q1-003",
+      "hash": {
+        "algorithm": "sha256",
+        "value": "b2c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890ab"
+      },
+      "size_bytes": 4096,
+      "retrieved_at": "2026-01-22T14:30:02Z",
+      "metadata": {
+        "title": "Fuel Boost Pump Removal",
+        "ata_chapter": "28",
+        "ata_section": "10",
+        "maint_level": "organizational",
+        "man_hours": 2.5
+      }
+    },
+    {
+      "input_id": "INP-003",
+      "source_id": "PARTS-28-10-001",
+      "source_type": "parts_bom",
+      "source_subtype": "assembly",
+      "source_path": "KDB/SSOT/parts/ATA28/BOM-28-10-001_boost_pump_assy.yaml",
+      "baseline": "FBL-2026-Q1-003",
+      "hash": {
+        "algorithm": "sha256",
+        "value": "c3d4e5f67890abcdef1234567890abcdef1234567890abcdef1234567890abcd"
+      },
+      "size_bytes": 8192,
+      "retrieved_at": "2026-01-22T14:30:03Z",
+      "metadata": {
+        "assembly_pn": "HJONE-28-10-001",
+        "part_count": 24,
+        "ata_chapter": "28",
+        "ata_section": "10"
+      }
+    }
+  ],
+  "summary": {
+    "total_inputs": 47,
+    "by_type": {
+      "requirement": 15,
+      "task": 12,
+      "repair": 5,
+      "parts_bom": 15
+    },
+    "combined_hash": {
+      "algorithm": "sha256",
+      "value": "fedcba0987654321fedcba0987654321fedcba0987654321fedcba0987654321"
+    },
+    "total_size_bytes": 245760
+  }
+}

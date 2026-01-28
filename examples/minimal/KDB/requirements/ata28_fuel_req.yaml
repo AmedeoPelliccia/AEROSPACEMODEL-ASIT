@@ -1,0 +1,108 @@
+# =============================================================================
+# Minimal Example — Source Requirements (KDB)
+# =============================================================================
+# Sample engineering requirements for ATA 28 - Fuel System
+# This is the "engineering truth" that ASIGT transforms into publications.
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "requirements"
+  ata_chapter: "28"
+  title: "Fuel System Requirements"
+  baseline: "DBL-DEMO-001"
+  version: "1.0.0"
+
+# -----------------------------------------------------------------------------
+# Requirements
+# -----------------------------------------------------------------------------
+requirements:
+  # System Description Requirement
+  - id: "REQ-FUEL-001"
+    type: "descriptive"
+    title: "Fuel System Description"
+    ata_code: "28-00-00"
+    info_code: "040"  # Description
+    
+    content:
+      summary: |
+        The fuel system provides storage, management, and delivery 
+        of fuel to the aircraft engines.
+        
+      details: |
+        The fuel system consists of the following major components:
+        - Fuel tanks (wing and center)
+        - Fuel pumps (boost and transfer)
+        - Fuel quantity indication system
+        - Fuel distribution manifold
+        - Crossfeed and isolation valves
+        
+      safety_note: |
+        All fuel system maintenance must be performed with appropriate
+        fire safety precautions in place.
+        
+    verification:
+      method: "inspection"
+      status: "verified"
+      
+    traceability:
+      parent: null
+      children: ["REQ-FUEL-002", "REQ-FUEL-003"]
+      
+    metadata:
+      author: "Systems Engineering"
+      created: "2026-01-15"
+      approved: "2026-01-20"
+      classification: "unclassified"
+
+  # Fuel Storage Requirement
+  - id: "REQ-FUEL-002"
+    type: "descriptive"
+    title: "Fuel Storage"
+    ata_code: "28-10-00"
+    info_code: "040"
+    
+    content:
+      summary: |
+        The aircraft fuel is stored in integral wing tanks and a
+        center fuselage tank.
+        
+      details: |
+        Tank configuration:
+        - Left wing tank: 500 gallons
+        - Right wing tank: 500 gallons  
+        - Center tank: 300 gallons
+        - Total capacity: 1,300 gallons
+        
+    traceability:
+      parent: "REQ-FUEL-001"
+      
+    metadata:
+      author: "Systems Engineering"
+      created: "2026-01-15"
+
+  # Fuel Distribution Requirement
+  - id: "REQ-FUEL-003"
+    type: "descriptive"
+    title: "Fuel Distribution"
+    ata_code: "28-20-00"
+    info_code: "040"
+    
+    content:
+      summary: |
+        The fuel distribution system transfers fuel from tanks to
+        engines through a manifold system.
+        
+      details: |
+        Distribution features:
+        - Boost pumps in each tank
+        - Crossfeed capability
+        - Engine isolation valves
+        - Gravity feed backup
+        
+    traceability:
+      parent: "REQ-FUEL-001"
+      
+    metadata:
+      author: "Systems Engineering"
+      created: "2026-01-15"

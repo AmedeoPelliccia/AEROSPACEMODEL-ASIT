@@ -1,0 +1,197 @@
+# =============================================================================
+# HydrogenJet-100 — Novel Hydrogen Systems Definition
+# =============================================================================
+
+metadata:
+  program: "HydrogenJet-100"
+  model_code: "HJ1"
+  description: "Novel system definitions for hydrogen-powered aircraft"
+
+# -----------------------------------------------------------------------------
+# Liquid Hydrogen Storage System
+# -----------------------------------------------------------------------------
+lh2_storage_system:
+  designation: "Liquid Hydrogen Storage System"
+  ata_mapping: "28-10"
+  
+  architecture:
+    tank_type: "Vacuum-insulated cryogenic"
+    tank_count: 2
+    total_capacity_kg: 800
+    
+  tanks:
+    - id: "LH2-TANK-FWD"
+      location: "Forward fuselage (aft of cockpit)"
+      capacity_kg: 350
+      material: "Aluminum alloy with MLI"
+      
+    - id: "LH2-TANK-AFT"
+      location: "Aft fuselage"
+      capacity_kg: 450
+      material: "Aluminum alloy with MLI"
+      
+  specifications:
+    operating_pressure_bar: 3.5
+    max_pressure_bar: 5.0
+    relief_pressure_bar: 5.5
+    boil_off_rate_percent_day: 0.8
+    min_fill_level_percent: 5
+    
+  insulation:
+    type: "Multi-Layer Insulation (MLI)"
+    vacuum_level_mbar: 0.001
+    layers: 40
+    outer_jacket: "Stainless steel"
+    
+  safety_features:
+    - "Dual relief valves"
+    - "Burst disc backup"
+    - "Vacuum loss detection"
+    - "Level sensing (capacitance)"
+    - "Pressure monitoring"
+    - "Temperature monitoring"
+
+# -----------------------------------------------------------------------------
+# Hydrogen Distribution System
+# -----------------------------------------------------------------------------
+h2_distribution:
+  designation: "Hydrogen Distribution System"
+  ata_mapping: "28-20/28-30"
+  
+  components:
+    vaporizers:
+      - id: "VAP-1"
+        type: "Heat exchanger (fuel cell waste heat)"
+        capacity_kg_hr: 50
+        
+      - id: "VAP-2"
+        type: "Electric backup"
+        capacity_kg_hr: 25
+        
+    isolation_valves:
+      count: 8
+      type: "Pneumatic, fail-closed"
+      
+    pressure_regulators:
+      - stage: "Primary"
+        inlet_bar: 3.5
+        outlet_bar: 1.5
+        
+      - stage: "Secondary"
+        inlet_bar: 1.5
+        outlet_bar: 0.3
+        
+  piping:
+    material: "316L stainless steel"
+    insulation: "Vacuum-jacketed for LH2 sections"
+    
+# -----------------------------------------------------------------------------
+# Hydrogen Leak Detection System
+# -----------------------------------------------------------------------------
+leak_detection:
+  designation: "Hydrogen Leak Detection System"
+  ata_mapping: "28-60"
+  
+  sensors:
+    type: "Catalytic bead"
+    total_count: 14
+    
+    locations:
+      - zone: "Forward tank bay"
+        count: 4
+        
+      - zone: "Aft tank bay"
+        count: 4
+        
+      - zone: "Fuel cell compartment"
+        count: 4
+        
+      - zone: "Distribution bay"
+        count: 2
+        
+  specifications:
+    detection_threshold_percent: 1.0  # 25% of LEL
+    alarm_threshold_percent: 2.0      # 50% of LEL
+    response_time_seconds: 3
+    self_test_interval_hours: 1
+    
+  responses:
+    warning:
+      trigger: "1% H2 concentration"
+      actions:
+        - "Crew warning light"
+        - "EICAS message"
+        
+    caution:
+      trigger: "2% H2 concentration"
+      actions:
+        - "Crew warning light"
+        - "EICAS message"
+        - "Auto vent activation"
+        - "Isolation valve closure"
+
+# -----------------------------------------------------------------------------
+# Fuel Cell Power System
+# -----------------------------------------------------------------------------
+fuel_cell_system:
+  designation: "PEM Fuel Cell Power System"
+  ata_mapping: "24-10 / 71-10"
+  
+  architecture:
+    type: "PEM (Proton Exchange Membrane)"
+    stack_count: 4
+    total_power_kw: 2500
+    
+  stacks:
+    - id: "FC-STACK-1"
+      power_kw: 625
+      location: "Port nacelle"
+      
+    - id: "FC-STACK-2"
+      power_kw: 625
+      location: "Port nacelle"
+      
+    - id: "FC-STACK-3"
+      power_kw: 625
+      location: "Starboard nacelle"
+      
+    - id: "FC-STACK-4"
+      power_kw: 625
+      location: "Starboard nacelle"
+      
+  specifications:
+    operating_voltage_vdc: 400-600
+    operating_temp_c: 80
+    efficiency_percent: 55
+    air_supply: "Turbo-compressor"
+    
+  balance_of_plant:
+    - "Air compressor system"
+    - "Hydrogen humidifier"
+    - "Coolant circulation pump"
+    - "Water separator"
+    - "DC-DC converter"
+
+# -----------------------------------------------------------------------------
+# Electric Propulsion Motors
+# -----------------------------------------------------------------------------
+propulsion_motors:
+  designation: "Electric Propulsion Motor System"
+  ata_mapping: "71-50"
+  
+  motors:
+    - id: "PROP-MTR-L"
+      location: "Port nacelle"
+      type: "Permanent Magnet Synchronous"
+      power_kw: 1250
+      
+    - id: "PROP-MTR-R"
+      location: "Starboard nacelle"
+      type: "Permanent Magnet Synchronous"
+      power_kw: 1250
+      
+  specifications:
+    voltage_vdc: 540
+    rpm_max: 5000
+    gear_ratio: 8.5
+    propeller: "6-blade variable pitch"

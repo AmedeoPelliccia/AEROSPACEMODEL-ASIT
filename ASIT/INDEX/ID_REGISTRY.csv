@@ -1,0 +1,35 @@
+id,id_type,description,created_date,created_by,status,superseded_by,baseline_ref,notes
+# =============================================================================
+# ID REGISTRY
+# Central registry of all assigned identifiers
+# =============================================================================
+#
+# COLUMNS:
+#   id              - The assigned identifier
+#   id_type         - Type of ID (BASELINE, ECR, ECO, CONTRACT, DMC, PMC, ICN, KDB, etc.)
+#   description     - Brief description
+#   created_date    - ISO 8601 creation date
+#   created_by      - Creator stakeholder code
+#   status          - ACTIVE, SUPERSEDED, WITHDRAWN, RESERVED
+#   superseded_by   - Replacement ID if superseded
+#   baseline_ref    - Associated baseline (if applicable)
+#   notes           - Additional notes
+#
+# ID TYPE PATTERNS:
+#   BASELINE:  FBL-YYYY-QN-NNN, ABL-YYYY-QN-NNN, PBL-YYYY-QN-NNN, OBL-YYYY-QN-NNN
+#   ECR:       ECR-YYYY-NNNN
+#   ECO:       ECO-YYYY-NNNN
+#   CCB:       CCB-YYYY-NNNN
+#   CONTRACT:  <PREFIX>-CTR-<CAT>-<TARGET>[-<SCOPE>][-vX.Y.Z]
+#   DMC:       <MODEL>-<DIFF>-<SYS>-<SUBSYS>-<SUBSUBSYS>-<ASSY>-<DISASSY>-<INFO>-<LOC>
+#   PMC:       <MODEL>-<PMIC>-<ISSUE>-<LANG>
+#   ICN:       ICN-<MODEL>-<TYPE>-<SEQ>-<VAR>-<ISSUE>
+#   KDB:       KDB-<CAT>-<TYPE>-NNNN
+#   RUN:       YYYYMMDD-HHMM__<CONTRACT-ID>
+#
+# EXAMPLE ENTRIES:
+# FBL-2026-Q1-001,BASELINE,Initial functional baseline,2026-01-15,STK_CM,ACTIVE,,,First program baseline
+# ECR-2026-0001,ECR,Fuel system requirement update,2026-01-18,STK_ENG,ACTIVE,,FBL-2026-Q1-001,
+# KITDM-CTR-LM-CSDB_ATA28-v1.0.0,CONTRACT,ATA 28 CSDB generation,2026-01-20,STK_CM,ACTIVE,,FBL-2026-Q1-001,
+# KDB-REQ-SYS-0001,KDB,Top-level fuel system requirement,2026-01-10,STK_ENG,ACTIVE,,FBL-2026-Q1-001,
+#

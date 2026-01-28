@@ -1,0 +1,8 @@
+# IDB — Information Database
+
+Generated S1000D content for LGA-5000 will appear here.
+
+Run:
+```bash
+python run_example.py --all
+```

@@ -1,0 +1,209 @@
+================================================================================
+ASIGT EXECUTION LOG
+================================================================================
+Run ID:      20260122-1430__KITDM-CTR-LM-CSDB_ATA28
+Contract:    KITDM-CTR-LM-CSDB_ATA28
+Baseline:    FBL-2026-Q1-003
+Started:     2026-01-22T14:30:00Z
+ASIT Ver:    2.0.0
+ASIGT Ver:   2.0.0
+================================================================================
+
+[2026-01-22T14:30:00.000Z] INFO  ============================================
+[2026-01-22T14:30:00.001Z] INFO  ASIGT Execution Starting
+[2026-01-22T14:30:00.002Z] INFO  ============================================
+
+[2026-01-22T14:30:00.010Z] INFO  Phase: INITIALIZATION
+[2026-01-22T14:30:00.015Z] INFO  Loading ASIGT configuration
+[2026-01-22T14:30:00.025Z] INFO  Configuration loaded successfully
+[2026-01-22T14:30:00.030Z] INFO  Loading contract: KITDM-CTR-LM-CSDB_ATA28
+[2026-01-22T14:30:00.150Z] INFO  Contract path: ASIT/CONTRACTS/active/KITDM-CTR-LM-CSDB_ATA28.yaml
+[2026-01-22T14:30:00.200Z] INFO  Contract version: 1.2.0
+[2026-01-22T14:30:00.250Z] INFO  Validating contract structure
+[2026-01-22T14:30:00.500Z] INFO  Contract validated successfully
+[2026-01-22T14:30:00.510Z] INFO  Contract scope: ATA 28 (Fuel System)
+[2026-01-22T14:30:00.520Z] INFO  Target publication: AMM/IPC
+[2026-01-22T14:30:00.530Z] INFO  Initialization complete (0.53s)
+
+[2026-01-22T14:30:01.000Z] INFO  Phase: INPUT LOADING
+[2026-01-22T14:30:01.010Z] INFO  Loading baseline: FBL-2026-Q1-003
+[2026-01-22T14:30:01.100Z] INFO  Baseline date: 2026-01-15
+[2026-01-22T14:30:01.110Z] INFO  Baseline authority: CCB-2026-0042
+[2026-01-22T14:30:01.200Z] INFO  Baseline verified against ASIT registry
+[2026-01-22T14:30:01.300Z] INFO  Loading source artifacts from KDB
+[2026-01-22T14:30:02.000Z] INFO  Loading requirements: 15 items
+[2026-01-22T14:30:03.500Z] INFO  Loading tasks: 12 items
+[2026-01-22T14:30:05.000Z] INFO  Loading repairs: 5 items
+[2026-01-22T14:30:07.000Z] INFO  Loading parts BOM: 15 items
+[2026-01-22T14:30:10.000Z] INFO  Loading ICN sources: 12 items
+[2026-01-22T14:30:14.000Z] INFO  Computing input hashes
+[2026-01-22T14:30:15.000Z] INFO  Input manifest created
+[2026-01-22T14:30:15.100Z] INFO  Total inputs loaded: 47
+[2026-01-22T14:30:15.200Z] INFO  Combined input hash: sha256:fedcba09...
+[2026-01-22T14:30:15.300Z] INFO  Input loading complete (14.30s)
+
+[2026-01-22T14:30:16.000Z] INFO  Phase: TRANSFORMATION
+[2026-01-22T14:30:16.010Z] INFO  Loading transformation mappings
+[2026-01-22T14:30:16.100Z] INFO  Loaded: requirement_to_dm.yaml
+[2026-01-22T14:30:16.150Z] INFO  Loaded: task_to_dm.yaml
+[2026-01-22T14:30:16.200Z] INFO  Loaded: repair_to_dm.yaml
+[2026-01-22T14:30:16.250Z] INFO  Loaded: parts_to_ipd.yaml
+[2026-01-22T14:30:16.300Z] INFO  Loading S1000D templates
+[2026-01-22T14:30:16.500Z] INFO  Templates loaded: 6
+
+[2026-01-22T14:30:17.000Z] INFO  --- Processing Requirements ---
+[2026-01-22T14:30:17.100Z] INFO  Processing: REQ-28-001 (Fuel Pressurization)
+[2026-01-22T14:30:17.350Z] INFO  Generated: DMC-HJONE-A-28-10-00-00A-040A-D
+[2026-01-22T14:30:17.500Z] INFO  Processing: REQ-28-002 (Fuel Transfer)
+[2026-01-22T14:30:17.750Z] INFO  Generated: DMC-HJONE-A-28-20-00-00A-040A-D
+[2026-01-22T14:30:18.000Z] INFO  Processing: REQ-28-003 (Safety Requirements)
+[2026-01-22T14:30:18.300Z] INFO  Generated: DMC-HJONE-A-28-00-00-00A-040A-D
+[2026-01-22T14:30:20.000Z] INFO  ... (12 more requirements processed)
+[2026-01-22T14:31:15.000Z] INFO  Requirements processing complete: 8 descriptive DMs generated
+
+[2026-01-22T14:31:16.000Z] INFO  --- Processing Tasks ---
+[2026-01-22T14:31:16.100Z] INFO  Processing: TASK-28-10-001 (Boost Pump Removal)
+[2026-01-22T14:31:16.600Z] INFO  Generated: DMC-HJONE-A-28-10-00-01A-510A-D
+[2026-01-22T14:31:16.800Z] INFO  Processing: TASK-28-10-002 (Boost Pump Installation)
+[2026-01-22T14:31:17.400Z] INFO  Generated: DMC-HJONE-A-28-10-00-01A-520A-D
+[2026-01-22T14:31:18.000Z] INFO  Processing: TASK-28-10-003 (Boost Pump Servicing)
+[2026-01-22T14:31:18.500Z] INFO  Generated: DMC-HJONE-A-28-10-00-01A-200A-D
+[2026-01-22T14:32:00.000Z] INFO  ... (9 more tasks processed)
+[2026-01-22T14:33:45.000Z] INFO  Tasks processing complete: 6 procedural DMs generated
+
+[2026-01-22T14:33:46.000Z] INFO  --- Processing Repairs ---
+[2026-01-22T14:33:46.100Z] INFO  Processing: REP-28-10-001 (Pump Seal Repair)
+[2026-01-22T14:33:47.000Z] INFO  Generated: DMC-HJONE-A-28-10-00-01A-600A-D
+[2026-01-22T14:33:48.000Z] INFO  Processing: REP-28-20-001 (Tank Repair)
+[2026-01-22T14:33:49.500Z] INFO  Generated: DMC-HJONE-A-28-20-00-01A-600A-D
+[2026-01-22T14:34:30.000Z] INFO  ... (3 more repairs processed)
+[2026-01-22T14:35:22.000Z] INFO  Repairs processing complete: 2 fault isolation DMs generated
+
+[2026-01-22T14:35:23.000Z] INFO  --- Processing Parts ---
+[2026-01-22T14:35:23.100Z] INFO  Processing: PARTS-28-10-001 (Boost Pump Assembly)
+[2026-01-22T14:35:25.000Z] INFO  Generated: DMC-HJONE-A-28-10-00-01A-941A-D
+[2026-01-22T14:35:25.500Z] INFO  Processing ICNs for parts figures
+[2026-01-22T14:36:00.000Z] INFO  Generated: 12 ICN files
+[2026-01-22T14:37:00.000Z] INFO  ... (14 more parts entries processed)
+[2026-01-22T14:38:45.000Z] INFO  Parts processing complete: 2 IPD DMs generated
+
+[2026-01-22T14:38:46.000Z] INFO  --- Generating Publication Modules ---
+[2026-01-22T14:38:46.100Z] INFO  Building PM structure for ATA 28
+[2026-01-22T14:39:00.000Z] INFO  Assembling DM references
+[2026-01-22T14:39:30.000Z] INFO  Generated: PMC-HJONE-A-28-00-00-00-00A-D (AMM)
+[2026-01-22T14:40:00.000Z] INFO  Generated: PMC-HJONE-A-28-00-00-00-01A-D (IPC)
+[2026-01-22T14:40:12.000Z] INFO  PM generation complete: 2 PMs generated
+
+[2026-01-22T14:40:13.000Z] INFO  --- Generating DML ---
+[2026-01-22T14:40:13.100Z] INFO  Collecting DM/PM/ICN references
+[2026-01-22T14:40:30.000Z] INFO  Building DML structure
+[2026-01-22T14:40:45.000Z] INFO  Generated: DML-HJONE-A-28-00-00-00-00A-D
+[2026-01-22T14:40:45.500Z] INFO  DML generation complete: 1 DML generated
+
+[2026-01-22T14:40:46.000Z] INFO  Transformation phase complete (540.00s)
+[2026-01-22T14:40:46.100Z] INFO  Total artifacts generated: 23
+
+[2026-01-22T14:40:47.000Z] INFO  Phase: VALIDATION
+[2026-01-22T14:40:47.010Z] INFO  Loading BREX rules
+[2026-01-22T14:40:47.100Z] INFO  BREX file: S1000D_5.0_DEFAULT.yaml
+[2026-01-22T14:40:47.150Z] INFO  Project BREX: project_brex.yaml
+[2026-01-22T14:40:47.200Z] INFO  Profile: default
+[2026-01-22T14:40:47.300Z] INFO  Total rules: 42
+
+[2026-01-22T14:40:48.000Z] INFO  --- BREX Validation ---
+[2026-01-22T14:40:48.100Z] INFO  Validating identification rules...
+[2026-01-22T14:41:00.000Z] INFO  BREX-ID-001: PASS (18/18)
+[2026-01-22T14:41:00.500Z] INFO  BREX-ID-002: PASS (18/18)
+[2026-01-22T14:41:10.000Z] INFO  Validating structure rules...
+[2026-01-22T14:41:20.000Z] INFO  BREX-STR-001: PASS (6/6)
+[2026-01-22T14:41:30.000Z] INFO  Validating content rules...
+[2026-01-22T14:41:45.000Z] WARN  BREX-CON-003: 3 warnings (paragraph length)
+[2026-01-22T14:41:45.100Z] WARN    - DMC-HJONE-A-28-10-00-00A-040A-D: para[3] (520 chars)
+[2026-01-22T14:41:45.200Z] WARN    - DMC-HJONE-A-28-10-00-00A-041A-D: para[1] (512 chars)
+[2026-01-22T14:41:45.300Z] WARN    - DMC-HJONE-A-28-10-00-01A-510A-D: step[5] (508 chars)
+[2026-01-22T14:41:50.000Z] INFO  Validating reference rules...
+[2026-01-22T14:42:00.000Z] INFO  BREX-REF-001: PASS (87/87)
+[2026-01-22T14:42:00.500Z] INFO  BREX validation complete: 42 rules, 0 errors, 3 warnings
+
+[2026-01-22T14:42:01.000Z] INFO  --- Schema Validation ---
+[2026-01-22T14:42:01.100Z] INFO  Schema version: S1000D Issue 5.0
+[2026-01-22T14:42:01.200Z] INFO  Validating 23 documents...
+[2026-01-22T14:42:15.000Z] INFO  DMC-HJONE-A-28-10-00-00A-040A-D: VALID
+[2026-01-22T14:42:28.000Z] INFO  DMC-HJONE-A-28-10-00-01A-510A-D: VALID
+[2026-01-22T14:42:45.000Z] INFO  DMC-HJONE-A-28-10-00-01A-941A-D: VALID
+[2026-01-22T14:43:02.000Z] INFO  PMC-HJONE-A-28-00-00-00-00A-D: VALID
+[2026-01-22T14:43:20.000Z] INFO  ... (19 more documents validated)
+[2026-01-22T14:43:30.000Z] INFO  Schema validation complete: 23/23 valid
+
+[2026-01-22T14:43:31.000Z] INFO  --- Trace Validation ---
+[2026-01-22T14:43:31.100Z] INFO  Verifying traceability completeness
+[2026-01-22T14:43:45.000Z] INFO  Input coverage: 47/47 (100%)
+[2026-01-22T14:43:55.000Z] INFO  Output coverage: 23/23 (100%)
+[2026-01-22T14:44:00.000Z] INFO  Bidirectional traces: 156 verified
+[2026-01-22T14:44:00.500Z] INFO  Trace validation complete: PASS
+
+[2026-01-22T14:44:01.000Z] INFO  Validation phase complete (180.00s)
+[2026-01-22T14:44:01.100Z] INFO  Overall validation status: PASS
+
+[2026-01-22T14:44:02.000Z] INFO  Phase: OUTPUT WRITING
+[2026-01-22T14:44:02.100Z] INFO  Writing DMs to IDB/CSDB/DM/
+[2026-01-22T14:44:30.000Z] INFO  Writing PMs to IDB/CSDB/PM/
+[2026-01-22T14:44:45.000Z] INFO  Writing DML to IDB/CSDB/DML/
+[2026-01-22T14:45:00.000Z] INFO  Writing ICNs to IDB/CSDB/ICN/
+[2026-01-22T14:45:10.000Z] INFO  Computing output hashes
+[2026-01-22T14:45:15.000Z] INFO  Output manifest created
+[2026-01-22T14:45:18.000Z] INFO  Combined output hash: sha256:01234567...
+[2026-01-22T14:45:20.000Z] INFO  Output writing complete (78.00s)
+
+[2026-01-22T14:45:21.000Z] INFO  Phase: FINALIZATION
+[2026-01-22T14:45:21.100Z] INFO  Building trace matrix
+[2026-01-22T14:45:21.500Z] INFO  Trace matrix: 156 entries
+[2026-01-22T14:45:22.000Z] INFO  Writing validation report
+[2026-01-22T14:45:22.200Z] INFO  Writing metrics
+[2026-01-22T14:45:22.500Z] INFO  Archiving run artifacts
+[2026-01-22T14:45:23.000Z] INFO  Run directory: ASIGT/runs/20260122-1430__KITDM-CTR-LM-CSDB_ATA28/
+
+[2026-01-22T14:45:23.100Z] INFO  ============================================
+[2026-01-22T14:45:23.200Z] INFO  ASIGT Execution Complete
+[2026-01-22T14:45:23.300Z] INFO  ============================================
+
+================================================================================
+SUMMARY
+================================================================================
+Status:              SUCCESS
+Exit Code:           0
+Duration:            15m 23s (923 seconds)
+
+Inputs:
+  - Requirements:    15
+  - Tasks:           12
+  - Repairs:         5
+  - Parts BOM:       15
+  - Total:           47
+
+Outputs:
+  - DM Descriptive:  8
+  - DM Procedural:   6
+  - DM Fault Isol:   2
+  - DM IPD:          2
+  - PM:              2
+  - DML:             1
+  - ICN:             12
+  - Total:           33 (23 XML + 10 graphics)
+
+Traceability:
+  - Traces Created:  156
+  - Input Coverage:  100%
+  - Output Coverage: 100%
+
+Validation:
+  - BREX:            PASS (42/42 rules, 3 warnings)
+  - Schema:          PASS (23/23 valid)
+  - Traceability:    PASS (156/156 complete)
+
+Contract:            KITDM-CTR-LM-CSDB_ATA28 v1.2.0
+Baseline:            FBL-2026-Q1-003
+Authority:           CCB-2026-0042
+================================================================================
+END OF LOG
+================================================================================

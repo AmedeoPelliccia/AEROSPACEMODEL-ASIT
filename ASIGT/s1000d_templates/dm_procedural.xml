@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+=============================================================================
+S1000D Data Module Template - Procedural
+ASIGT S1000D Templates
+Version: 2.0.0
+Issue: 5.0
+
+Purpose: Template for procedural data modules containing maintenance tasks,
+         operational procedures, servicing, removal/installation, and tests.
+
+Info Codes: 100, 200, 300, 500, 510, 520, 600, 700, 720, 800, 900
+
+Usage: This template is populated by ASIGT generators under ASIT contract
+       authority. Placeholder tokens (${...}) are replaced during generation.
+=============================================================================
+-->
+<dmodule xmlns="http://www.s1000d.org/S1000D_5-0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://www.s1000d.org/S1000D_5-0 S1000D_5-0/xml_schema_flat/proced.xsd">
+  
+  <!-- ===================================================================== -->
+  <!-- IDENTIFICATION AND STATUS SECTION                                     -->
+  <!-- ===================================================================== -->
+  <identAndStatusSection>
+    
+    <!-- Data Module Address -->
+    <dmAddress>
+      <dmIdent>
+        <!-- Data Module Code -->
+        <dmCode 
+          modelIdentCode="${MODEL_IDENT_CODE}"
+          systemDiffCode="${SYSTEM_DIFF_CODE}"
+          systemCode="${SYSTEM_CODE}"
+          subSystemCode="${SUBSYSTEM_CODE}"
+          subSubSystemCode="${SUB_SUBSYSTEM_CODE}"
+          assyCode="${ASSY_CODE}"
+          disassyCode="${DISASSY_CODE}"
+          disassyCodeVariant="${DISASSY_CODE_VARIANT}"
+          infoCode="${INFO_CODE}"
+          infoCodeVariant="${INFO_CODE_VARIANT}"
+          itemLocationCode="${ITEM_LOCATION_CODE}"/>
+        
+        <!-- Language -->
+        <language languageIsoCode="${LANGUAGE_CODE}" countryIsoCode="${COUNTRY_CODE}"/>
+        
+        <!-- Issue Information -->
+        <issueInfo issueNumber="${ISSUE_NUMBER}" inWork="${IN_WORK}"/>
+      </dmIdent>
+      
+      <!-- Data Module Address Items -->
+      <dmAddressItems>
+        <issueDate year="${ISSUE_YEAR}" month="${ISSUE_MONTH}" day="${ISSUE_DAY}"/>
+        <dmTitle>
+          <techName>${TECH_NAME}</techName>
+          <infoName>${INFO_NAME}</infoName>
+        </dmTitle>
+      </dmAddressItems>
+    </dmAddress>
+    
+    <!-- Data Module Status -->
+    <dmStatus issueType="${ISSUE_TYPE}">
+      <security securityClassification="${SECURITY_CLASSIFICATION}"/>
+      
+      <!-- Responsible Partner Company -->
+      <responsiblePartnerCompany>
+        <enterpriseName>${RESPONSIBLE_COMPANY}</enterpriseName>
+      </responsiblePartnerCompany>
+      
+      <!-- Originator -->
+      <originator>
+        <enterpriseName>${ORIGINATOR_NAME}</enterpriseName>
+        <enterpriseIdent>${ORIGINATOR_CAGE}</enterpriseIdent>
+      </originator>
+      
+      <!-- Applicability -->
+      <applic>
+        <displayText>
+          <simplePara>${APPLICABILITY_TEXT}</simplePara>
+        </displayText>
+      </applic>
+      
+      <!-- BREX Reference -->
+      <brexDmRef>
+        <dmRef>
+          <dmRefIdent>
+            <dmCode 
+              modelIdentCode="${BREX_MODEL_IDENT}"
+              systemDiffCode="A"
+              systemCode="00"
+              subSystemCode="0"
+              subSubSystemCode="0"
+              assyCode="00"
+              disassyCode="00"
+              disassyCodeVariant="A"
+              infoCode="022"
+              infoCodeVariant="A"
+              itemLocationCode="D"/>
+          </dmRefIdent>
+        </dmRef>
+      </brexDmRef>
+      
+      <!-- Quality Assurance -->
+      <qualityAssurance>
+        <unverified/>
+      </qualityAssurance>
+    </dmStatus>
+  </identAndStatusSection>
+  
+  <!-- ===================================================================== -->
+  <!-- CONTENT SECTION - PROCEDURAL                                          -->
+  <!-- ===================================================================== -->
+  <content>
+    <procedure>
+      
+      <!-- ================================================================= -->
+      <!-- PRELIMINARY REQUIREMENTS                                          -->
+      <!-- ================================================================= -->
+      <preliminaryRqmts>
+        
+        <!-- Production Maintainability Info -->
+        <productionMaintData>
+          <maintLevel>${MAINT_LEVEL}</maintLevel>
+          <taskDuration>${TASK_DURATION}</taskDuration>
+        </productionMaintData>
+        
+        <!-- Required Conditions -->
+        <reqCondGroup>
+          <reqCondDm>
+            <reqCond>${REQUIRED_CONDITION}</reqCond>
+            <!--
+            <dmRef>
+              <dmRefIdent>
+                <dmCode 
+                  modelIdentCode="${REF_MODEL_IDENT}"
+                  systemDiffCode="${REF_SYSTEM_DIFF}"
+                  systemCode="${REF_SYSTEM_CODE}"
+                  subSystemCode="${REF_SUBSYSTEM}"
+                  subSubSystemCode="${REF_SUB_SUBSYSTEM}"
+                  assyCode="${REF_ASSY}"
+                  disassyCode="${REF_DISASSY}"
+                  disassyCodeVariant="${REF_DISASSY_VAR}"
+                  infoCode="${REF_INFO}"
+                  infoCodeVariant="${REF_INFO_VAR}"
+                  itemLocationCode="${REF_LOCATION}"/>
+              </dmRefIdent>
+            </dmRef>
+            -->
+          </reqCondDm>
+        </reqCondGroup>
+        
+        <!-- Required Support Equipment -->
+        <reqSupportEquips>
+          <supportEquipDescrGroup>
+            <!--
+            <supportEquipDescr id="seq-001">
+              <name>${SUPPORT_EQUIP_NAME}</name>
+              <shortName>${SUPPORT_EQUIP_SHORT}</shortName>
+              <identNumber>
+                <manufacturerCode>${MANUFACTURER_CODE}</manufacturerCode>
+                <partAndSerialNumber>
+                  <partNumber>${PART_NUMBER}</partNumber>
+                </partAndSerialNumber>
+              </identNumber>
+              <reqQuantity>${QUANTITY}</reqQuantity>
+            </supportEquipDescr>
+            -->
+            <noSupportEquips/>
+          </supportEquipDescrGroup>
+        </reqSupportEquips>
+        
+        <!-- Required Supplies -->
+        <reqSupplies>
+          <supplyDescrGroup>
+            <!--
+            <supplyDescr id="sup-001">
+              <name>${SUPPLY_NAME}</name>
+              <identNumber>
+                <manufacturerCode>${MANUFACTURER_CODE}</manufacturerCode>
+                <partAndSerialNumber>
+                  <partNumber>${SUPPLY_PART_NUMBER}</partNumber>
+                </partAndSerialNumber>
+              </identNumber>
+              <reqQuantity>${SUPPLY_QUANTITY}</reqQuantity>
+            </supplyDescr>
+            -->
+            <noSupplies/>
+          </supplyDescrGroup>
+        </reqSupplies>
+        
+        <!-- Required Spares -->
+        <reqSpares>
+          <spareDescrGroup>
+            <!--
+            <spareDescr id="spr-001">
+              <name>${SPARE_NAME}</name>
+              <identNumber>
+                <manufacturerCode>${MANUFACTURER_CODE}</manufacturerCode>
+                <partAndSerialNumber>
+                  <partNumber>${SPARE_PART_NUMBER}</partNumber>
+                </partAndSerialNumber>
+              </identNumber>
+              <reqQuantity>${SPARE_QUANTITY}</reqQuantity>
+            </spareDescr>
+            -->
+            <noSpares/>
+          </spareDescrGroup>
+        </reqSpares>
+        
+        <!-- Safety Conditions -->
+        <reqSafety>
+          <!--
+          <safetyRqmts>
+            <warning id="wrn-prelim-001">
+              <warningAndCautionPara>${SAFETY_WARNING}</warningAndCautionPara>
+            </warning>
+            <caution id="ctn-prelim-001">
+              <warningAndCautionPara>${SAFETY_CAUTION}</warningAndCautionPara>
+            </caution>
+          </safetyRqmts>
+          -->
+          <noSafety/>
+        </reqSafety>
+        
+      </preliminaryRqmts>
+      
+      <!-- ================================================================= -->
+      <!-- MAIN PROCEDURE                                                    -->
+      <!-- ================================================================= -->
+      <mainProcedure>
+        
+        <!-- Procedure Step 1 -->
+        <proceduralStep id="step-001">
+          <!-- Warnings must come first -->
+          <!--
+          <warning id="wrn-001">
+            <warningAndCautionPara>${WARNING_TEXT}</warningAndCautionPara>
+          </warning>
+          -->
+          
+          <!-- Cautions come after warnings -->
+          <!--
+          <caution id="ctn-001">
+            <warningAndCautionPara>${CAUTION_TEXT}</warningAndCautionPara>
+          </caution>
+          -->
+          
+          <!-- Notes come after cautions -->
+          <!--
+          <note id="note-001">
+            <notePara>${NOTE_TEXT}</notePara>
+          </note>
+          -->
+          
+          <!-- Step content -->
+          <para>${STEP_1_INSTRUCTION}</para>
+          
+          <!-- Sub-steps if needed -->
+          <!--
+          <proceduralStep id="step-001-01">
+            <para>${SUBSTEP_INSTRUCTION}</para>
+          </proceduralStep>
+          -->
+        </proceduralStep>
+        
+        <!-- Procedure Step 2 -->
+        <proceduralStep id="step-002">
+          <para>${STEP_2_INSTRUCTION}</para>
+        </proceduralStep>
+        
+        <!-- Procedure Step 3 -->
+        <proceduralStep id="step-003">
+          <para>${STEP_3_INSTRUCTION}</para>
+        </proceduralStep>
+        
+        <!-- Additional steps as needed -->
+        <!--
+        <proceduralStep id="step-NNN">
+          <para>${STEP_N_INSTRUCTION}</para>
+        </proceduralStep>
+        -->
+        
+      </mainProcedure>
+      
+      <!-- ================================================================= -->
+      <!-- CLOSE-UP REQUIREMENTS                                             -->
+      <!-- ================================================================= -->
+      <closeRqmts>
+        <reqCondGroup>
+          <reqCondDm>
+            <reqCond>${CLOSEUP_REQUIREMENT}</reqCond>
+          </reqCondDm>
+        </reqCondGroup>
+      </closeRqmts>
+      
+    </procedure>
+  </content>
+  
+</dmodule>

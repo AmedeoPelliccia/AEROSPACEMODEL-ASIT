@@ -1,0 +1,264 @@
+# =============================================================================
+# ASIT Contract Template: CSDB Generation
+# Template ID: KITDM-CTR-LM-CSDB
+# =============================================================================
+# 
+# PURPOSE: Generate S1000D Common Source Database content from KDB sources
+# 
+# USAGE:
+#   1. Copy this template to active/ directory
+#   2. Replace placeholder values (marked with <...>)
+#   3. Submit for approval
+#   4. Execute with: aerospacemodel run --contract <contract_id>
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# HEADER
+# -----------------------------------------------------------------------------
+header:
+  contract_id: "KITDM-CTR-LM-CSDB_<SCOPE>"           # e.g., KITDM-CTR-LM-CSDB_ATA28
+  version: "v1.0.0"
+  title: "<Title describing the transformation scope>"
+  description: |
+    Generate S1000D Data Modules for <scope description>.
+    
+    This contract transforms validated engineering knowledge from the KDB
+    into S1000D-compliant Data Modules for inclusion in the CSDB.
+  
+  category: "LM"                                     # Lifecycle Management
+  status: "DRAFT"                                    # DRAFT | REVIEW | APPROVED | ACTIVE
+  
+  created_date: "<YYYY-MM-DD>"
+  effective_date: "<YYYY-MM-DD>"                     # When contract becomes executable
+  
+  supersedes: ""                                     # Previous contract ID if applicable
+
+# -----------------------------------------------------------------------------
+# AUTHORITY
+# -----------------------------------------------------------------------------
+authority:
+  owner: "STK_CM"                                    # Contract owner
+  approver: "STK_CM"                                 # Approving authority
+  approval_date: ""                                  # Filled on approval
+  approval_reference: ""                             # CCB reference, e.g., CCB-2026-0042
+
+# -----------------------------------------------------------------------------
+# SOURCE SPECIFICATION
+# -----------------------------------------------------------------------------
+source:
+  # Baseline configuration
+  baseline:
+    type: "FBL"                                      # FBL | ABL | PBL | OBL
+    id: "<BASELINE-ID>"                              # e.g., FBL-2026-Q1-003 or "LATEST"
+    locked: true                                     # Lock baseline during execution
+  
+  # Scope definition
+  scope:
+    # ATA chapters to include
+    ata_chapters:
+      - "<ATA>"                                      # e.g., "28" for Fuel
+      # - "<ATA-SECTION>"                            # e.g., "28-10" for Fuel Storage
+    
+    # ATA chapters to exclude (optional)
+    ata_exclude: []
+    
+    # Source artifact types
+    artifact_types:
+      - "REQUIREMENT"                                # System requirements
+      - "TASK"                                       # Maintenance tasks
+      - "PART"                                       # Parts data
+      # - "REPAIR"                                   # Repair procedures
+      # - "FAULT"                                    # Fault isolation data
+    
+    # Additional filters
+    filters:
+      effectivity: ""                                # e.g., "MSN001-MSN100"
+      lifecycle_phase:
+        - "LC09"                                     # Operations
+        - "LC10"                                     # Maintenance
+  
+  # KDB paths to include
+  paths:
+    - "KDB/REQUIREMENTS/system/<ata>/"
+    - "KDB/TASKS/maintenance/<ata>/"
+    # - "KDB/PARTS/<ata>/"
+
+# -----------------------------------------------------------------------------
+# TARGET SPECIFICATION
+# -----------------------------------------------------------------------------
+target:
+  # Publication type
+  publication: "CSDB"                                # Target publication
+  
+  # Output format
+  format:
+    standard: "S1000D_5.0"                           # S1000D version
+    output_types:
+      - "DM"                                         # Data Modules
+      - "DML"                                        # Data Module List
+      # - "PM"                                       # Publication Module
+      # - "ICN"                                      # Graphics
+  
+  # Output destination
+  destination: "IDB/CSDB/<ATA>/"                     # Output path
+  
+  # S1000D naming
+  naming:
+    model_ident_code: "<MODEL>"                      # e.g., "HJ1"
+    system_diff_code: "A"                            # Default system difference
+
+# -----------------------------------------------------------------------------
+# TRANSFORMATION RULES
+# -----------------------------------------------------------------------------
+transformation:
+  # Mapping rules (source type → target type)
+  mapping_rules:
+    - source_type: "REQUIREMENT"
+      target_type: "DM_DESCRIPTIVE"
+      mapping_file: "ASIGT/mapping/requirement_to_dm.yaml"
+    
+    - source_type: "TASK"
+      target_type: "DM_PROCEDURAL"
+      mapping_file: "ASIGT/mapping/task_to_dm.yaml"
+    
+    - source_type: "PART"
+      target_type: "DM_IPD"
+      mapping_file: "ASIGT/mapping/parts_to_ipd.yaml"
+    
+    # - source_type: "REPAIR"
+    #   target_type: "DM_PROCEDURAL"
+    #   mapping_file: "ASIGT/mapping/repair_to_dm.yaml"
+    
+    # - source_type: "FAULT"
+    #   target_type: "DM_FAULT"
+    #   mapping_file: "ASIGT/mapping/fault_to_dm.yaml"
+  
+  # ASIGT generators to invoke
+  generators:
+    - "dm_generator"
+    - "dml_generator"
+    # - "pm_generator"
+    # - "icn_handler"
+  
+  # Generator options
+  options:
+    include_graphics: true
+    generate_toc: true
+    applicability_filtering: true
+    
+    # DM generation options
+    dm_options:
+      include_applicability: true
+      include_references: true
+      include_warnings: true
+      language: "en-US"
+      
+    # Security classification
+    security:
+      classification: "01"                           # Unclassified
+      caveats: []
+
+# -----------------------------------------------------------------------------
+# VALIDATION REQUIREMENTS
+# -----------------------------------------------------------------------------
+validation:
+  # BREX validation
+  brex:
+    enabled: true
+    rules_file: "ASIGT/brex/project_brex.yaml"
+    severity_threshold: "ERROR"                      # ERROR | WARNING | INFO
+  
+  # Schema validation
+  schema:
+    enabled: true
+    schema_version: "5.0"
+    strict_mode: true
+  
+  # Traceability validation
+  trace:
+    enabled: true
+    require_complete: true                           # All outputs must trace
+    require_bidirectional: false                     # Require reverse trace
+  
+  # Custom validation rules
+  custom_rules: []
+    # - rule_id: "CUSTOM-001"
+    #   description: "Custom validation rule"
+    #   validator: "validators/custom_rule.py"
+
+# -----------------------------------------------------------------------------
+# EXECUTION CONFIGURATION
+# -----------------------------------------------------------------------------
+execution:
+  mode: "FULL"                                       # FULL | INCREMENTAL | DELTA
+  parallel: true
+  max_workers: 4
+  timeout_minutes: 60
+  
+  on_error: "STOP"                                   # STOP | CONTINUE | ROLLBACK
+  
+  # Pre-execution checks
+  pre_checks:
+    - "baseline_exists"
+    - "sources_available"
+    - "generators_available"
+  
+  # Post-execution actions
+  post_actions:
+    - "generate_metrics"
+    - "archive_run"
+    - "notify_stakeholders"
+  
+  # Notifications
+  notifications:
+    on_success:
+      - "STK_CM"
+    on_failure:
+      - "STK_CM"
+      - "STK_ENG"
+
+# -----------------------------------------------------------------------------
+# OUTPUT SPECIFICATION
+# -----------------------------------------------------------------------------
+outputs:
+  # Required artifacts
+  artifacts:
+    - "DATA_MODULES"                                 # Generated DMs
+    - "DATA_MODULE_LIST"                             # DML
+    - "TRACE_MATRIX"                                 # Source-to-target trace
+    - "VALIDATION_REPORT"                            # Validation results
+    - "METRICS"                                      # Execution metrics
+    - "LOG"                                          # Execution log
+  
+  # Archive configuration
+  archive:
+    enabled: true
+    retention_days: 365
+    location: "ASIGT/runs/"
+  
+  # Metadata inclusion
+  metadata:
+    include_provenance: true                         # Source baseline, authority
+    include_hashes: true                             # SHA-256 checksums
+    include_metrics: true                            # Counts, timing
+    include_contract_copy: true                      # Copy of executed contract
+
+# -----------------------------------------------------------------------------
+# NOTES
+# -----------------------------------------------------------------------------
+notes: |
+  Additional notes for this contract:
+  
+  - <Add implementation notes>
+  - <Add scope clarifications>
+  - <Add known limitations>
+
+# -----------------------------------------------------------------------------
+# REVISION HISTORY
+# -----------------------------------------------------------------------------
+revision_history:
+  - version: "v1.0.0"
+    date: "<YYYY-MM-DD>"
+    author: "<Author>"
+    description: "Initial contract"

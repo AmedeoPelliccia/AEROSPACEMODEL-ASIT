@@ -1,0 +1,103 @@
+# =============================================================================
+# SkyLift-200 — CMM Generation Contract (Battery Pack)
+# =============================================================================
+
+contract:
+  id: "SL2-CTR-CMM-001"
+  version: "1.0.0"
+  type: "KDB_TO_CSDB"
+  
+  metadata:
+    title: "Component Maintenance Manual - Battery Pack"
+    description: "Generate CMM for HV battery pack assembly"
+    created_date: "2026-01-18"
+    created_by: "Configuration Management"
+    
+  status: "active"
+
+source:
+  baseline:
+    type: "FBL"
+    id: "FBL-SL2-2026-Q1"
+    
+  scope:
+    components:
+      - part_number: "SL2-24-0001"
+        description: "Battery Pack Assembly"
+    ata_chapters:
+      - "24"
+    content_types:
+      - "requirements"
+      - "tasks"
+      
+  location:
+    path: "KDB/"
+
+target:
+  publication:
+    type: "CMM"
+    pm_code: "PMC-SL2-UMS01-00010-00"
+    title: "Battery Pack Assembly Component Maintenance Manual"
+    
+  output:
+    format: "S1000D"
+    issue: "5.0"
+    
+  location:
+    path: "IDB/csdb/"
+
+transformation:
+  generators:
+    - type: "dm"
+      enabled: true
+      mappings:
+        - "requirement_to_dm"
+        - "task_to_dm"
+        
+  options:
+    include_graphics: true
+    generate_dml: true
+    include_warnings: true
+    high_voltage_warnings: true
+    include_special_tools: true
+
+validation:
+  brex:
+    enabled: true
+    rules: "SL2_brex"
+    strict: true
+    
+  schema:
+    enabled: true
+    
+  trace:
+    enabled: true
+    
+  # Battery-specific validation
+  additional:
+    - type: "battery_safety"
+      thermal_runaway_procedures: true
+    - type: "hazmat"
+      lithium_battery: true
+
+approval:
+  required: true
+  
+  authority:
+    role: "STK_CM"
+    name: "K. Chen"
+    date: "2026-01-18"
+    
+  reviewers:
+    - role: "STK_ENG"
+      name: "R. Davis"
+      specialty: "Battery Systems"
+      date: "2026-01-17"
+    - role: "STK_SAFETY"
+      name: "L. Williams"
+      date: "2026-01-17"
+
+execution:
+  pipeline: "cmm_pipeline"
+  schedule:
+    type: "manual"

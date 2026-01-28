@@ -1,0 +1,20 @@
+# =============================================================================
+# Minimal Example — ATA Chapter Mapping
+# =============================================================================
+# Simplified mapping for demo purposes.
+# =============================================================================
+
+metadata:
+  program: "Demo Aircraft"
+  model_code: "DEMO"
+
+systems:
+  - ata_chapter: "28"
+    title: "Fuel"
+    enabled: true
+    publications:
+      - AMM
+    subsystems:
+      - "28-00"  # General
+      - "28-10"  # Storage
+      - "28-20"  # Distribution

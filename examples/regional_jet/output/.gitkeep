@@ -1,0 +1,10 @@
+# Output Directory
+
+Rendered publications will appear here:
+
+```
+output/
+├── amm/        # Aircraft Maintenance Manual
+├── ipc/        # Illustrated Parts Catalog
+└── srm/        # Structural Repair Manual
+```

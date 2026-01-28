@@ -1,0 +1,106 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aerospacemodel"
+version = "2.0.0"
+description = "ASIT + ASIGT: Aircraft Systems Information Transponders for governed aerospace technical publications"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "AEROSPACEMODEL Contributors", email = "dev@aerospacemodel.io"}
+]
+keywords = [
+    "aerospace",
+    "aviation",
+    "s1000d",
+    "technical-publications",
+    "aircraft",
+    "maintenance-manual",
+    "amm",
+    "srm",
+    "cmm",
+    "ipc",
+    "ata",
+    "certification",
+    "traceability",
+    "governance"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Manufacturing",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering",
+    "Typing :: Typed"
+]
+requires-python = ">=3.9"
+dependencies = [
+    "lxml>=4.9.0",
+    "pyyaml>=6.0",
+    "click>=8.0",
+    "rich>=13.0",
+    "pydantic>=2.0",
+    "jinja2>=3.0",
+    "jsonschema>=4.0",
+    "pandas>=2.0",
+    "xmlschema>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "black>=23.0",
+    "isort>=5.0",
+    "mypy>=1.0",
+    "ruff>=0.1",
+    "pre-commit>=3.0",
+]
+docs = [
+    "mkdocs>=1.5",
+    "mkdocs-material>=9.0",
+]
+export = [
+    "weasyprint>=60.0",
+]
+all = [
+    "aerospacemodel[dev,docs,export]"
+]
+
+[project.scripts]
+aerospacemodel = "aerospacemodel.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/AEROSPACEMODEL/ASIT-ASIGT"
+Documentation = "https://docs.aerospacemodel.io"
+Repository = "https://github.com/AEROSPACEMODEL/ASIT-ASIGT.git"
+Issues = "https://github.com/AEROSPACEMODEL/ASIT-ASIGT/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 100
+target-version = ['py39', 'py310', 'py311', 'py312']
+
+[tool.isort]
+profile = "black"
+line_length = 100
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+disallow_untyped_defs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = ["-v", "--strict-markers"]

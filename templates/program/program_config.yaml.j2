@@ -1,0 +1,230 @@
+# =============================================================================
+# {{ program_name }} — Program Configuration
+# =============================================================================
+# Master configuration file for AEROSPACEMODEL program instance.
+# This file defines program identity, standards compliance, and layer settings.
+#
+# Generated: {{ created_date }}
+# Generator: AEROSPACEMODEL {{ aerospacemodel_version }}
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Program Identity
+# -----------------------------------------------------------------------------
+program:
+  name: "{{ program_name }}"
+  model_code: "{{ model_code }}"
+  description: "{{ program_description | default('Aircraft program managed by AEROSPACEMODEL') }}"
+  
+  organization:
+    name: "{{ organization }}"
+    cage_code: "{{ cage_code }}"
+    country_code: "{{ country_code }}"
+    
+  identifiers:
+    program_id: "{{ program_id | default(model_code ~ '-PROG-001') }}"
+    project_code: "{{ project_code | default(model_code) }}"
+    
+  created:
+    date: "{{ created_date }}"
+    by: "{{ created_by }}"
+    
+  version:
+    current: "1.0.0"
+    aerospacemodel: "{{ aerospacemodel_version }}"
+
+# -----------------------------------------------------------------------------
+# Standards Configuration
+# -----------------------------------------------------------------------------
+standards:
+  s1000d:
+    issue: "{{ s1000d_issue }}"
+    namespace: "http://www.s1000d.org/S1000D_{{ s1000d_issue | replace('.', '-') }}"
+    brex:
+      base: "S1000D_{{ s1000d_issue }}_DEFAULT"
+      project: "{{ model_code }}_BREX"
+      
+  ata:
+    specification: "iSpec 2200"
+    version: "2023"
+    
+  language:
+    primary: "{{ language_code }}"
+    supported:
+      - "{{ language_code }}"
+      
+  country:
+    primary: "{{ country_code }}"
+
+# -----------------------------------------------------------------------------
+# ASIT Layer Configuration
+# -----------------------------------------------------------------------------
+asit:
+  config_file: "ASIT/asit_config.yaml"
+  
+  governance:
+    baseline_policy: "strict"  # strict | relaxed
+    change_control: true
+    approval_required: true
+    ccb_enabled: true
+    
+  structure:
+    ata_mapping: "ASIT/STRUCTURE/ATA_MAPPING.yaml"
+    lifecycle_phases: "ASIT/STRUCTURE/LIFECYCLE_PHASES.yaml"
+    naming_convention: "S1000D"  # S1000D | ATA | Custom
+    
+  contracts:
+    templates_dir: "ASIT/CONTRACTS/templates"
+    active_dir: "ASIT/CONTRACTS/active"
+    require_approval: true
+    
+  index:
+    ssot_index: "ASIT/INDEX/SSOT_INDEX.yaml"
+    trace_master: "ASIT/INDEX/TRACE_MASTER.csv"
+
+# -----------------------------------------------------------------------------
+# ASIGT Layer Configuration
+# -----------------------------------------------------------------------------
+asigt:
+  config_file: "ASIGT/asigt_config.yaml"
+  
+  generators:
+    dm_generator:
+      enabled: true
+      template_dir: "ASIGT/s1000d_templates"
+    pm_generator:
+      enabled: true
+    dml_generator:
+      enabled: true
+    icn_handler:
+      enabled: true
+      formats:
+        - "CGM"
+        - "PNG"
+        - "SVG"
+        
+  validators:
+    brex:
+      enabled: true
+      strict_mode: true
+      rules_file: "ASIGT/brex/{{ model_code }}_brex.yaml"
+    schema:
+      enabled: true
+      schema_dir: "schemas/s1000d/{{ s1000d_issue }}"
+    trace:
+      enabled: true
+      require_complete: true
+      
+  renderers:
+    pdf:
+      enabled: true
+      stylesheet: "default"
+    html:
+      enabled: true
+      stylesheet: "default"
+    ietp:
+      enabled: true
+      package_format: "SCORM"
+      
+  runs:
+    directory: "ASIGT/runs"
+    retention_days: 365
+    archive_completed: true
+
+# -----------------------------------------------------------------------------
+# Data Directories
+# -----------------------------------------------------------------------------
+directories:
+  kdb:
+    path: "KDB"
+    description: "Knowledge Database — Engineering source data"
+    
+  idb:
+    path: "IDB"
+    description: "Information Database — Generated publications"
+    
+  output:
+    path: "output"
+    description: "Rendered publication outputs"
+    
+  schemas:
+    path: "schemas"
+    description: "Industry standard schemas"
+
+# -----------------------------------------------------------------------------
+# Publication Configuration
+# -----------------------------------------------------------------------------
+publications:
+  enabled:
+    - AMM   # Aircraft Maintenance Manual
+    - CMM   # Component Maintenance Manual
+    - IPC   # Illustrated Parts Catalog
+    - SRM   # Structural Repair Manual
+    # - TSM   # Troubleshooting Manual (enable as needed)
+    # - WDM   # Wiring Diagram Manual (enable as needed)
+    # - FCOM  # Flight Crew Operating Manual (enable as needed)
+    
+  defaults:
+    issue_info:
+      issue_number: "001"
+      in_work: "00"
+    security_classification: "01"  # Unclassified
+    responsible_partner_company:
+      cage: "{{ cage_code }}"
+      
+  naming:
+    dm_code_prefix: "{{ model_code }}"
+    pm_code_prefix: "PMC-{{ model_code }}"
+
+# -----------------------------------------------------------------------------
+# Traceability Configuration
+# -----------------------------------------------------------------------------
+traceability:
+  enabled: true
+  
+  requirements:
+    source_system: "DOORS"  # DOORS | Polarion | Jama | Custom
+    link_prefix: "REQ"
+    
+  evidence:
+    generate_matrices: true
+    hash_algorithm: "SHA-256"
+    archive_inputs: true
+    
+  audit:
+    log_all_operations: true
+    retention_years: 10
+
+# -----------------------------------------------------------------------------
+# Integration Configuration
+# -----------------------------------------------------------------------------
+integrations:
+  plm:
+    enabled: false
+    system: null  # Teamcenter | Windchill | 3DEXPERIENCE
+    connection: null
+    
+  csdb:
+    enabled: false
+    system: null  # Arbortext | Corena | Custom
+    connection: null
+    
+  requirements:
+    enabled: false
+    system: null
+    connection: null
+
+# -----------------------------------------------------------------------------
+# Environment Configuration
+# -----------------------------------------------------------------------------
+environment:
+  mode: "development"  # development | staging | production
+  
+  logging:
+    level: "INFO"  # DEBUG | INFO | WARNING | ERROR
+    file: "logs/{{ model_code }}.log"
+    
+  validation:
+    strict_mode: true
+    fail_fast: false
+    report_warnings: true

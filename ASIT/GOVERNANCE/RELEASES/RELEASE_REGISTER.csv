@@ -1,0 +1,4 @@
+release_id,baseline_id,release_type,release_date,authority,distribution_date,recipients,status,notes
+# Example entries - replace with actual program releases
+# FBL-2026-Q1-001-R1,FBL-2026-Q1-001,STANDARD,2026-01-20,STK_CM,2026-01-21,INTERNAL,ACTIVE,Initial functional baseline release
+# PBL-2026-Q2-003-R1,PBL-2026-Q2-003,STANDARD,2026-04-15,STK_CM,2026-04-16,CUSTOMER,ACTIVE,Product baseline for certification

@@ -1,0 +1,114 @@
+# =============================================================================
+# AeroParts International — LGA-5000 Assembly Requirements
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "components"
+  product_family: "LGA-5000"
+  baseline: "CBL-LGA5000-2026-Q1"
+
+requirements:
+  - id: "REQ-LGA-001"
+    type: "descriptive"
+    title: "Landing Gear Actuator Description"
+    ata_code: "32-00-00"
+    info_code: "040"
+    applicability: "APP-ALL"
+    
+    content:
+      summary: |
+        The LGA-5000 series landing gear actuators are hydraulic linear
+        actuators designed for aircraft landing gear extension/retraction.
+        
+      details: |
+        The LGA-5000 series includes:
+        - Main gear actuators (LGA-5000-100, LGA-5000-150)
+        - Nose gear actuators (LGA-5000-200, LGA-5000-250)
+        
+        All variants feature:
+        - Double-acting hydraulic cylinder
+        - Internal position sensing
+        - Corrosion-resistant materials
+        - Integral rod end bearings
+        
+    traceability:
+      parent: "SPEC-LGA5000-001"
+      
+  - id: "REQ-LGA-002"
+    type: "descriptive"
+    title: "Main Gear Actuator Assembly"
+    ata_code: "32-31-01"
+    info_code: "040"
+    applicability: "APP-MAIN-GEAR"
+    
+    content:
+      summary: |
+        Main landing gear actuator assembly description.
+        
+      details: |
+        The main gear actuator (LGA-5000-100/150) provides:
+        - Extension force: 85-90 kN
+        - Retraction force: 60 kN
+        - Stroke: 450-480 mm
+        - Operating pressure: 210 bar (3000 psi)
+        
+        Major assemblies:
+        - Cylinder housing with mounting provisions
+        - Piston and rod assembly
+        - Seal package (static and dynamic)
+        - Position sensor assembly
+        - Rod end bearings (2x)
+        
+  - id: "REQ-LGA-003"
+    type: "descriptive"
+    title: "Nose Gear Actuator Assembly"
+    ata_code: "32-21-01"
+    info_code: "040"
+    applicability: "APP-NOSE-GEAR"
+    
+    content:
+      summary: |
+        Nose landing gear actuator assembly description.
+        
+      details: |
+        The nose gear actuator (LGA-5000-200/250) provides:
+        - Extension force: 45-50 kN
+        - Retraction force: 35 kN
+        - Stroke: 320-340 mm
+        - Operating pressure: 210 bar (3000 psi)
+        
+  - id: "REQ-LGA-004"
+    type: "descriptive"
+    title: "Actuator Specifications"
+    ata_code: "32-00-00"
+    info_code: "040"
+    applicability: "APP-ALL"
+    
+    content:
+      summary: |
+        General specifications for LGA-5000 series.
+        
+      details: |
+        HYDRAULIC:
+        - System pressure: 210 bar (3000 psi)
+        - Proof pressure: 315 bar (4500 psi)
+        - Burst pressure: 420 bar (6000 psi)
+        - Fluid: MIL-PRF-83282 or MIL-PRF-5606
+        
+        ENVIRONMENTAL:
+        - Operating temp: -54°C to +85°C
+        - Storage temp: -62°C to +93°C
+        - Humidity: 0-100% RH
+        - Salt spray: Per MIL-STD-810
+        
+        LIFE LIMITS:
+        - Overhaul interval: 10,000 cycles or 10 years
+        - Seal life: 5,000 cycles or 5 years
+        
+    warnings:
+      - type: "hydraulic"
+        text: |
+          HYDRAULIC PRESSURE HAZARD. System operates at 210 bar
+          (3000 psi). Relieve all pressure before disconnecting
+          hydraulic lines.

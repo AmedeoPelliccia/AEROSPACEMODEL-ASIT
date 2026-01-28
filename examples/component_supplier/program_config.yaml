@@ -1,0 +1,127 @@
+# =============================================================================
+# Component Supplier Example — Program Configuration
+# =============================================================================
+# Tier-1 aerospace supplier producing CMM/IPC for landing gear actuators.
+# Multi-customer scenario with effectivity management.
+# =============================================================================
+
+program:
+  name: "AeroParts LGA-5000 Program"
+  model_code: "LGA5K"
+  description: "Landing Gear Actuator documentation program"
+  
+  organization:
+    name: "AeroParts International"
+    cage_code: "API01"
+    country_code: "US"
+    type: "Tier-1 Supplier"
+    
+  certifications:
+    - "AS9100D"
+    - "FAA-PMA"
+    - "EASA Part 21G"
+    - "FAA Repair Station"
+    
+  product:
+    family: "LGA-5000"
+    description: "Landing Gear Actuator Series"
+    ata_chapter: "32"
+    
+  customers:
+    - code: "OEM-A"
+      name: "Aircraft Manufacturer A"
+      aircraft: "Type-X"
+      
+    - code: "OEM-B"
+      name: "Aircraft Manufacturer B"
+      aircraft: "Type-Y"
+      
+  version:
+    current: "1.0.0"
+    aerospacemodel: "2.0.0"
+
+standards:
+  s1000d:
+    issue: "5.0"
+    brex:
+      base: "S1000D_5.0_DEFAULT"
+      project: "API_brex"
+      
+  language:
+    primary: "en"
+    
+  country:
+    primary: "US"
+
+asit:
+  governance:
+    baseline_policy: "strict"
+    change_control: true
+    approval_required: true
+    customer_notification: true
+    
+  contracts:
+    active_dir: "ASIT/CONTRACTS/active"
+    require_approval: true
+
+asigt:
+  generators:
+    dm_generator:
+      enabled: true
+    pm_generator:
+      enabled: true
+      
+  validators:
+    brex:
+      enabled: true
+      strict_mode: true
+    schema:
+      enabled: true
+    trace:
+      enabled: true
+      
+  renderers:
+    html:
+      enabled: true
+    pdf:
+      enabled: true
+
+directories:
+  kdb:
+    path: "KDB"
+  idb:
+    path: "IDB"
+  output:
+    path: "output"
+
+publications:
+  enabled:
+    - CMM
+    - IPC
+    - SB
+    
+  defaults:
+    issue_info:
+      issue_number: "001"
+      in_work: "00"
+    responsible_partner_company:
+      cage: "API01"
+
+traceability:
+  enabled: true
+  evidence:
+    generate_matrices: true
+    hash_algorithm: "SHA-256"
+    as9100_compliance: true
+
+quality:
+  as9100:
+    enabled: true
+    first_article: true
+    serialization: true
+    nonconformance_trace: true
+
+environment:
+  mode: "development"
+  logging:
+    level: "INFO"

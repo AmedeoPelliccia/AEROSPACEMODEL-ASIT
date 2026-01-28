@@ -1,0 +1,102 @@
+# {{ program_name }} — Baseline Management
+
+## Overview
+
+This document defines the baseline management policies for the **{{ program_name }}** program.
+
+## Baseline Types
+
+| Code | Name | Description | Approval |
+|------|------|-------------|----------|
+| **DBL** | Design Baseline | Engineering design freeze point | CCB Required |
+| **FBL** | Functional Baseline | Requirements allocation freeze | CCB Required |
+| **PBL** | Product Baseline | Production configuration freeze | CCB Required |
+| **OBL** | Operational Baseline | In-service configuration | CCB Required |
+
+## Baseline Lifecycle
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                                                                     │
+│   DBL (Design) → FBL (Functional) → PBL (Product) → OBL (Ops)       │
+│                                                                     │
+│   LC01-LC02      LC03-LC04          LC05-LC06       LC07-LC08       │
+│   Concept        Development        Production      In-Service      │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+## Baseline Naming Convention
+
+**Pattern:** `{type}-{year}-Q{quarter}-{sequence}`
+
+**Examples:**
+- `DBL-2026-Q1-001` — First design baseline of Q1 2026
+- `FBL-2026-Q2-003` — Third functional baseline of Q2 2026
+
+## Baseline Creation Process
+
+### 1. Request
+
+- Submit baseline request to Configuration Management
+- Include scope, content, and justification
+
+### 2. Review
+
+- Engineering review of content completeness
+- Quality review of validation status
+
+### 3. CCB Approval
+
+- Present to Configuration Control Board
+- Obtain required approvals per matrix
+
+### 4. Establishment
+
+- Create baseline snapshot
+- Generate baseline identifier
+- Archive all artifacts
+
+### 5. Communication
+
+- Distribute baseline notification
+- Update BASELINE_REGISTER.csv
+
+## Baseline Content
+
+Each baseline contains:
+
+| Artifact | Location |
+|----------|----------|
+| Requirements | KDB/requirements/ |
+| Design Data | KDB/design/ |
+| Data Modules | IDB/csdb/ |
+| Trace Matrix | INDEX/TRACE_MASTER.csv |
+| Validation Reports | ASIGT/runs/ |
+
+## Change After Baseline
+
+Changes to baselined content require:
+
+1. Engineering Change Request (ECR)
+2. CCB Review and Approval
+3. Engineering Change Order (ECO)
+4. Implementation and Verification
+5. Baseline Update or New Baseline
+
+## Baseline Register
+
+Active baselines are tracked in:
+- `GOVERNANCE/BASELINE_REGISTER.csv`
+
+## References
+
+- ASIT Governance Configuration: `asit_config.yaml`
+- Change Control Process: `CHANGE_CONTROL/`
+- Approval Matrix: `APPROVALS/APPROVAL_MATRIX.csv`
+
+---
+
+**Program:** {{ program_name }} ({{ model_code }})  
+**Organization:** {{ organization }}  
+**Created:** {{ created_date }}

@@ -1,0 +1,65 @@
+# =============================================================================
+# HydrogenJet-100 — Applicability Cross-Reference Table (ACT)
+# =============================================================================
+
+metadata:
+  program: "HydrogenJet-100"
+  model_code: "HJ1"
+  version: "1.0.0"
+
+product_attributes:
+  - id: "aircraft_variant"
+    name: "Aircraft Variant"
+    values:
+      - value: "HJ1-FC"
+        description: "Fuel Cell propulsion variant"
+      - value: "HJ1-HT"
+        description: "Hydrogen Turbine variant (future)"
+        
+  - id: "tank_configuration"
+    name: "Tank Configuration"
+    values:
+      - value: "TANK-STD"
+        description: "Standard dual tank (800 kg)"
+      - value: "TANK-EXT"
+        description: "Extended range tank (future)"
+        
+  - id: "fuel_cell_type"
+    name: "Fuel Cell Stack Type"
+    values:
+      - value: "FC-GEN1"
+        description: "Generation 1 PEM stack"
+      - value: "FC-GEN2"
+        description: "Generation 2 PEM stack (future)"
+
+cross_reference:
+  - applic_id: "APP-HJ1-ALL"
+    description: "All HJ1 variants"
+    conditions:
+      - attribute: "aircraft_variant"
+        operator: "in"
+        values: ["HJ1-FC", "HJ1-HT"]
+        
+  - applic_id: "APP-HJ1-FC"
+    description: "Fuel Cell variant only"
+    conditions:
+      - attribute: "aircraft_variant"
+        operator: "equals"
+        values: ["HJ1-FC"]
+        
+  - applic_id: "APP-HJ1-HT"
+    description: "Hydrogen Turbine variant only (future)"
+    conditions:
+      - attribute: "aircraft_variant"
+        operator: "equals"
+        values: ["HJ1-HT"]
+        
+  - applic_id: "APP-HJ1-FC-GEN1"
+    description: "Fuel Cell with Gen1 stacks"
+    conditions:
+      - attribute: "aircraft_variant"
+        operator: "equals"
+        values: ["HJ1-FC"]
+      - attribute: "fuel_cell_type"
+        operator: "equals"
+        values: ["FC-GEN1"]

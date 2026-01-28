@@ -1,0 +1,90 @@
+# =============================================================================
+# RegionalJet-700 — Structural Repair Data
+# =============================================================================
+
+metadata:
+  source: "KDB"
+  domain: "repairs"
+  baseline: "FBL-RJ7-2026-Q1"
+  title: "RJ7 Structural Repairs"
+
+repairs:
+  # ATA 53 - Fuselage Repairs
+  - repair_id: "REP-RJ7-53-001"
+    title: "Fuselage Skin Repair - Minor Dent"
+    ata_chapter: "53"
+    ata_section: "53-30"
+    zone: "200"
+    repair_type: "standard"
+    info_code: "600"
+    applicability: "APP-RJ7-ALL"
+    
+    description: |
+      Standard repair for minor dents in pressurized fuselage skin
+      that do not exceed allowable damage limits.
+      
+    applicability_limits:
+      max_depth: "0.10 inch"
+      max_area: "6.0 sq inch"
+      not_on_frame: true
+      not_on_stringer: true
+      
+    materials:
+      - material_id: "MAT-2024-T3"
+        description: "Aluminum sheet 2024-T3"
+      - material_id: "MAT-SEAL-01"
+        description: "Polysulfide sealant"
+        
+    traceability:
+      parent: "SRM-REQ-53-001"
+      der_approval: "DER-2026-001"
+      
+  - repair_id: "REP-RJ7-53-002"
+    title: "Fuselage Skin Doubler Installation"
+    ata_chapter: "53"
+    ata_section: "53-30"
+    zone: "200"
+    repair_type: "standard"
+    info_code: "600"
+    applicability: "APP-RJ7-ALL"
+    
+    description: |
+      External doubler repair for fuselage skin damage exceeding
+      minor dent limits but within doubler repair limits.
+      
+  # ATA 57 - Wing Repairs
+  - repair_id: "REP-RJ7-57-001"
+    title: "Wing Skin Minor Damage Repair"
+    ata_chapter: "57"
+    ata_section: "57-20"
+    zone: "500"
+    repair_type: "standard"
+    info_code: "600"
+    applicability: "APP-RJ7-ALL"
+    safety_critical: true
+    
+    description: |
+      Standard repair for minor damage to wing lower skin panels.
+      
+  # Allowable Damage
+  - damage_id: "ADL-RJ7-53-001"
+    title: "Fuselage Skin Allowable Damage"
+    ata_chapter: "53"
+    ata_section: "53-30"
+    zone: "200"
+    info_code: "041"
+    applicability: "APP-RJ7-ALL"
+    
+    limits:
+      dents:
+        max_depth: "0.10 inch"
+        max_diameter: "3.0 inch"
+        min_spacing: "12.0 inch"
+        
+      scratches:
+        max_depth: "0.005 inch"
+        max_length: "6.0 inch"
+        
+      corrosion:
+        max_depth: "10% of skin thickness"
+        max_area: "1.0 sq inch"

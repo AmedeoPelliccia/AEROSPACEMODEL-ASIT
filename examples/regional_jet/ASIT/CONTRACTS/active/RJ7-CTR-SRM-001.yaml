@@ -1,0 +1,98 @@
+# =============================================================================
+# RegionalJet-700 — SRM Generation Contract
+# =============================================================================
+
+contract:
+  id: "RJ7-CTR-SRM-001"
+  version: "1.0.0"
+  type: "KDB_TO_CSDB"
+  
+  metadata:
+    title: "Structural Repair Manual Generation"
+    description: "Generate SRM for RJ7 airframe structures"
+    created_date: "2026-01-20"
+    created_by: "Configuration Management"
+    
+  status: "active"
+
+source:
+  baseline:
+    type: "FBL"
+    id: "FBL-RJ7-2026-Q1"
+    
+  scope:
+    ata_chapters:
+      - "51"  # Standard Practices
+      - "52"  # Doors
+      - "53"  # Fuselage
+      - "55"  # Stabilizers
+      - "57"  # Wings
+    content_types:
+      - "repairs"
+      - "requirements"
+      
+  location:
+    path: "KDB/repairs/"
+
+target:
+  publication:
+    type: "SRM"
+    pm_code: "PMC-RJ7-RAC01-00003-00"
+    title: "RegionalJet-700 Structural Repair Manual"
+    
+  output:
+    format: "S1000D"
+    issue: "5.0"
+    
+  location:
+    path: "IDB/csdb/"
+
+transformation:
+  generators:
+    - type: "dm"
+      enabled: true
+      mappings:
+        - "repair_to_dm"
+        
+  options:
+    include_graphics: true
+    generate_dml: true
+    include_allowable_damage: true
+
+validation:
+  brex:
+    enabled: true
+    rules: "RJ7_brex"
+    strict: true
+    
+  schema:
+    enabled: true
+    
+  trace:
+    enabled: true
+    require_complete: true
+    
+  # SRM requires DER review for structural repairs
+  additional:
+    - type: "engineering_review"
+      authority: "DER"
+      required: true
+
+approval:
+  required: true
+  
+  authority:
+    role: "STK_CM"
+    name: "J. Smith"
+    date: "2026-01-20"
+    
+  reviewers:
+    - role: "STK_ENG"
+      name: "R. Davis"
+      specialty: "Structures"
+      date: "2026-01-19"
+
+execution:
+  pipeline: "srm_pipeline"
+  schedule:
+    type: "manual"

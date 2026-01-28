@@ -1,0 +1,109 @@
+# =============================================================================
+# HydrogenJet-100 — AMM Generation Contract
+# =============================================================================
+
+contract:
+  id: "HJ1-CTR-AMM-001"
+  version: "1.0.0"
+  type: "KDB_TO_CSDB"
+  
+  metadata:
+    title: "Aircraft Maintenance Manual Generation"
+    description: "Generate AMM for HydrogenJet-100 hydrogen aircraft"
+    created_date: "2026-01-15"
+    created_by: "Configuration Management"
+    
+  status: "active"
+
+source:
+  baseline:
+    type: "FBL"
+    id: "FBL-HJ1-2026-Q1"
+    
+  scope:
+    ata_chapters:
+      - "05"  # Time Limits
+      - "12"  # Servicing (H2 Refueling)
+      - "21"  # Air Conditioning (Ventilation)
+      - "24"  # Electrical (Fuel Cell)
+      - "26"  # Fire Protection
+      - "27"  # Flight Controls
+      - "28"  # Fuel (Hydrogen)
+      - "70"  # Powerplant Practices
+      - "71"  # Power Plant (Fuel Cell)
+      - "73"  # Fuel Control (H2)
+    content_types:
+      - "requirements"
+      - "tasks"
+      
+  location:
+    path: "KDB/"
+
+target:
+  publication:
+    type: "AMM"
+    pm_code: "PMC-HJ1-GAI01-00001-00"
+    title: "HydrogenJet-100 Aircraft Maintenance Manual"
+    
+  output:
+    format: "S1000D"
+    issue: "5.0"
+    
+  location:
+    path: "IDB/csdb/"
+
+transformation:
+  generators:
+    - type: "dm"
+      enabled: true
+      mappings:
+        - "requirement_to_dm"
+        - "task_to_dm"
+        
+  options:
+    include_graphics: true
+    generate_dml: true
+    include_warnings: true
+    hydrogen_warnings: true
+    cryogenic_warnings: true
+
+validation:
+  brex:
+    enabled: true
+    rules: "HJ1_brex"
+    strict: true
+    
+  schema:
+    enabled: true
+    
+  trace:
+    enabled: true
+    require_complete: true
+    
+  # Hydrogen-specific validation
+  additional:
+    - type: "hydrogen_safety"
+      enabled: true
+    - type: "cryogenic_safety"
+      enabled: true
+
+approval:
+  required: true
+  
+  authority:
+    role: "STK_CM"
+    name: "J. Green"
+    date: "2026-01-15"
+    
+  reviewers:
+    - role: "STK_ENG"
+      name: "A. Thompson"
+      date: "2026-01-14"
+    - role: "STK_SAFETY"
+      name: "M. Chen"
+      date: "2026-01-14"
+
+execution:
+  pipeline: "amm_pipeline"
+  schedule:
+    type: "manual"
