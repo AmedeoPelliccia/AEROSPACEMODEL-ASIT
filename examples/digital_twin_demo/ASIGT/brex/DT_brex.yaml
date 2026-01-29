@@ -1,0 +1,301 @@
+# =============================================================================
+# Digital Twin Demo — BREX Rules
+# =============================================================================
+# Business Rules Exchange (BREX) for Digital Twin documentation.
+# Extends S1000D 5.0 default rules with digital twin specific constraints.
+# =============================================================================
+
+brex:
+  metadata:
+    brex_id: "BREX-DT-DEMO-001"
+    name: "Digital Twin Demo BREX"
+    description: |
+      Business rules for Digital Twin Integrated Documentation Pipeline.
+      Includes rules for condition-based, event-driven, and certification
+      documentation with digital twin data provenance.
+    version: "1.0.0"
+    s1000d_issue: "5.0"
+    
+    base_brex: "S1000D_5.0_DEFAULT"
+    
+    created: "2026-01-22"
+    last_modified: "2026-01-22"
+    
+    owner: "Digital Twin Integration"
+    
+  # ---------------------------------------------------------------------------
+  # IDENTIFICATION RULES
+  # ---------------------------------------------------------------------------
+  identification_rules:
+    - rule_id: "DT-BR-ID-001"
+      name: "Model Identification Code"
+      description: "Model identification code must be DTDEMO"
+      element: "dmIdent/dmCode/@modelIdentCode"
+      pattern: "^DTDEMO$"
+      severity: "error"
+      
+    - rule_id: "DT-BR-ID-002"
+      name: "Valid ATA Chapters"
+      description: "System code must be valid ATA chapter (01-99)"
+      element: "dmIdent/dmCode/@systemCode"
+      pattern: "^(0[1-9]|[1-9][0-9])$"
+      severity: "error"
+      
+    - rule_id: "DT-BR-ID-003"
+      name: "Language Code"
+      description: "Language must be English (en)"
+      element: "dmIdent/language/@languageIsoCode"
+      pattern: "^en$"
+      severity: "warning"
+
+  # ---------------------------------------------------------------------------
+  # DIGITAL TWIN METADATA RULES
+  # ---------------------------------------------------------------------------
+  digital_twin_rules:
+    - rule_id: "DT-BR-DT-001"
+      name: "Digital Twin Source Reference Required"
+      description: "Content generated from digital twin must reference source"
+      context: "//dmContent[ancestor::dmodule[@dtSource='true']]"
+      assertion: "//dtSourceRef"
+      severity: "error"
+      applies_to:
+        - "condition_based"
+        - "event_driven"
+        
+    - rule_id: "DT-BR-DT-002"
+      name: "Condition Trigger Metadata"
+      description: "Condition-triggered content must include condition details"
+      context: "//dmodule[@triggerType='condition']"
+      assertion: "//conditionTrigger"
+      required_elements:
+        - "conditionId"
+        - "parameter"
+        - "threshold"
+        - "measuredValue"
+        - "timestamp"
+      severity: "error"
+      applies_to:
+        - "condition_based"
+        
+    - rule_id: "DT-BR-DT-003"
+      name: "Event Reference Metadata"
+      description: "Event-triggered content must include event details"
+      context: "//dmodule[@triggerType='event']"
+      assertion: "//eventReference"
+      required_elements:
+        - "eventId"
+        - "eventType"
+        - "eventCode"
+        - "timestamp"
+      severity: "error"
+      applies_to:
+        - "event_driven"
+        
+    - rule_id: "DT-BR-DT-004"
+      name: "Data Provenance Required"
+      description: "Digital twin data must include provenance metadata"
+      context: "//dtData"
+      assertion: "//dataProvenance"
+      required_elements:
+        - "sourceSystem"
+        - "acquisitionTimestamp"
+        - "dataIntegrityHash"
+      severity: "warning"
+
+  # ---------------------------------------------------------------------------
+  # CERTIFICATION RULES
+  # ---------------------------------------------------------------------------
+  certification_rules:
+    - rule_id: "DT-BR-CERT-001"
+      name: "Regulatory Reference Required"
+      description: "Certification content must reference regulatory requirement"
+      context: "//dmodule[@docType='certification']"
+      assertion: "//regulatoryRef"
+      severity: "error"
+      applies_to:
+        - "certification"
+        
+    - rule_id: "DT-BR-CERT-002"
+      name: "Compliance Status Required"
+      description: "Certification content must include compliance status"
+      context: "//complianceItem"
+      assertion: "@status"
+      allowed_values:
+        - "compliant"
+        - "partially_compliant"
+        - "non_compliant"
+        - "not_applicable"
+        - "pending_verification"
+      severity: "error"
+      applies_to:
+        - "certification"
+        
+    - rule_id: "DT-BR-CERT-003"
+      name: "Evidence Link Required"
+      description: "Compliance claims must link to supporting evidence"
+      context: "//complianceItem[@status='compliant']"
+      assertion: "//evidenceRef"
+      severity: "error"
+      applies_to:
+        - "certification"
+        
+    - rule_id: "DT-BR-CERT-004"
+      name: "Traceability Chain"
+      description: "Certification evidence must maintain complete traceability"
+      context: "//evidenceItem"
+      assertion: "//traceLink"
+      required_elements:
+        - "sourceRequirement"
+        - "designElement"
+        - "verificationMethod"
+      severity: "warning"
+      applies_to:
+        - "certification"
+
+  # ---------------------------------------------------------------------------
+  # CONTENT RULES
+  # ---------------------------------------------------------------------------
+  content_rules:
+    - rule_id: "DT-BR-CONT-001"
+      name: "Procedural Step Numbering"
+      description: "Procedural steps must be sequentially numbered"
+      context: "//proceduralStep"
+      assertion: "@sequenceNumber"
+      pattern: "^[0-9]+$"
+      severity: "warning"
+      
+    - rule_id: "DT-BR-CONT-002"
+      name: "Warning/Caution Before Action"
+      description: "Warnings and cautions must precede associated action"
+      context: "//proceduralStep[.//warning or .//caution]"
+      assertion: "position(.//warning | .//caution) < position(.//para[not(ancestor::warning or ancestor::caution)])"
+      severity: "error"
+      
+    - rule_id: "DT-BR-CONT-003"
+      name: "Part Number Format"
+      description: "Part numbers must follow standard format"
+      element: "//partNumber"
+      pattern: "^[A-Z0-9]{2,}-[A-Z0-9]{3,}-[A-Z0-9]{2,}$"
+      severity: "warning"
+      
+    - rule_id: "DT-BR-CONT-004"
+      name: "Fault Code Format"
+      description: "Fault codes must follow ATA/MSG-3 format"
+      element: "//faultCode"
+      pattern: "^[A-Z]{3}-[A-Z0-9]{4,}(-[A-Z0-9]+)?$"
+      severity: "warning"
+      applies_to:
+        - "event_driven"
+
+  # ---------------------------------------------------------------------------
+  # TRACEABILITY RULES
+  # ---------------------------------------------------------------------------
+  traceability_rules:
+    - rule_id: "DT-BR-TRACE-001"
+      name: "Source Traceability Required"
+      description: "All generated content must trace to source"
+      context: "//dmodule"
+      assertion: "//sourceTrace"
+      severity: "error"
+      
+    - rule_id: "DT-BR-TRACE-002"
+      name: "Contract Reference Required"
+      description: "Generated content must reference authorizing contract"
+      context: "//dmodule"
+      assertion: "//contractRef"
+      severity: "error"
+      
+    - rule_id: "DT-BR-TRACE-003"
+      name: "Baseline Reference Required"
+      description: "Generated content must reference source baseline"
+      context: "//dmodule"
+      assertion: "//baselineRef"
+      severity: "error"
+      
+    - rule_id: "DT-BR-TRACE-004"
+      name: "Generation Timestamp"
+      description: "Generated content must include generation timestamp"
+      context: "//dmodule"
+      assertion: "//generationInfo/timestamp"
+      severity: "warning"
+
+  # ---------------------------------------------------------------------------
+  # NOTATION RULES
+  # ---------------------------------------------------------------------------
+  notation_rules:
+    - rule_id: "DT-BR-NOT-001"
+      name: "SI Units Required"
+      description: "Measurements must use SI units with conversion where needed"
+      context: "//quantity"
+      assertion: "@siValue"
+      severity: "warning"
+      
+    - rule_id: "DT-BR-NOT-002"
+      name: "Threshold Value Format"
+      description: "Threshold values must include units and precision"
+      context: "//threshold"
+      required_attributes:
+        - "value"
+        - "unit"
+        - "precision"
+      severity: "warning"
+      applies_to:
+        - "condition_based"
+
+  # ---------------------------------------------------------------------------
+  # SECURITY RULES
+  # ---------------------------------------------------------------------------
+  security_rules:
+    - rule_id: "DT-BR-SEC-001"
+      name: "Security Classification"
+      description: "All documents must have security classification"
+      context: "//dmStatus"
+      assertion: "//security/@securityClassification"
+      allowed_values:
+        - "01"  # Unclassified
+        - "02"  # Restricted
+        - "03"  # Confidential
+      severity: "error"
+      
+    - rule_id: "DT-BR-SEC-002"
+      name: "Data Handling Marking"
+      description: "Digital twin data must have handling instructions"
+      context: "//dtData"
+      assertion: "//dataHandling"
+      severity: "warning"
+
+  # ---------------------------------------------------------------------------
+  # RULE PROFILES
+  # ---------------------------------------------------------------------------
+  profiles:
+    condition_based:
+      description: "Rules for condition-based documentation"
+      active_rules:
+        - "DT-BR-ID-*"
+        - "DT-BR-DT-001"
+        - "DT-BR-DT-002"
+        - "DT-BR-DT-004"
+        - "DT-BR-CONT-*"
+        - "DT-BR-TRACE-*"
+        - "DT-BR-NOT-*"
+        - "DT-BR-SEC-*"
+        
+    event_driven:
+      description: "Rules for event-driven documentation"
+      active_rules:
+        - "DT-BR-ID-*"
+        - "DT-BR-DT-001"
+        - "DT-BR-DT-003"
+        - "DT-BR-DT-004"
+        - "DT-BR-CONT-*"
+        - "DT-BR-TRACE-*"
+        - "DT-BR-SEC-*"
+        
+    certification:
+      description: "Rules for certification documentation"
+      active_rules:
+        - "DT-BR-ID-*"
+        - "DT-BR-DT-004"
+        - "DT-BR-CERT-*"
+        - "DT-BR-TRACE-*"
+        - "DT-BR-SEC-*"

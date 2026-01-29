@@ -1,0 +1,218 @@
+# =============================================================================
+# Digital Twin Demo — Component Health Data
+# =============================================================================
+# Simulated digital twin sensor data for component health monitoring.
+# This represents real-time data that would be received from aircraft sensors.
+# =============================================================================
+
+component_health:
+  metadata:
+    source: "digital_twin_simulator"
+    snapshot_timestamp: "2026-01-22T10:00:00Z"
+    aircraft_id: "DTDEMO-001"
+    flight_hours: 4523.5
+    cycles: 2847
+    
+  components:
+    # ATA 28 - Fuel System Components
+    - component_id: "FUEL-PUMP-1"
+      component_type: "pump"
+      ata_chapter: "28"
+      location: "Left Wing Tank"
+      part_number: "FP-28-001-A"
+      serial_number: "SN-FP-12345"
+      install_date: "2024-06-15"
+      health_status: "warning"
+      parameters:
+        wear_percentage:
+          value: 82.5
+          unit: "percent"
+          threshold_warning: 70.0
+          threshold_critical: 90.0
+          status: "exceeded_warning"
+        pressure_output:
+          value: 18.2
+          unit: "psi"
+          nominal: 20.0
+          status: "degraded"
+        vibration_level:
+          value: 0.65
+          unit: "in/sec"
+          threshold_warning: 0.8
+          status: "normal"
+        motor_current:
+          value: 4.8
+          unit: "amps"
+          nominal: 4.5
+          status: "elevated"
+      predicted_remaining_life:
+        hours: 450
+        cycles: 280
+        confidence: 0.85
+      recommended_action: "Schedule inspection within 100 flight hours"
+      
+    - component_id: "FUEL-PUMP-2"
+      component_type: "pump"
+      ata_chapter: "28"
+      location: "Right Wing Tank"
+      part_number: "FP-28-001-A"
+      serial_number: "SN-FP-12346"
+      install_date: "2024-06-15"
+      health_status: "normal"
+      parameters:
+        wear_percentage:
+          value: 45.2
+          unit: "percent"
+          threshold_warning: 70.0
+          threshold_critical: 90.0
+          status: "normal"
+        pressure_output:
+          value: 19.8
+          unit: "psi"
+          nominal: 20.0
+          status: "normal"
+        vibration_level:
+          value: 0.35
+          unit: "in/sec"
+          threshold_warning: 0.8
+          status: "normal"
+      predicted_remaining_life:
+        hours: 2200
+        cycles: 1400
+        confidence: 0.90
+      recommended_action: "Continue normal monitoring"
+      
+    # ATA 29 - Hydraulic System Components
+    - component_id: "HYD-PUMP-1"
+      component_type: "pump"
+      ata_chapter: "29"
+      location: "Left Engine Driven"
+      part_number: "HP-29-001-B"
+      serial_number: "SN-HP-54321"
+      install_date: "2023-11-20"
+      health_status: "caution"
+      parameters:
+        wear_percentage:
+          value: 78.3
+          unit: "percent"
+          threshold_warning: 70.0
+          threshold_critical: 90.0
+          status: "exceeded_warning"
+        system_pressure:
+          value: 2950
+          unit: "psi"
+          nominal: 3000
+          status: "slightly_low"
+        fluid_temperature:
+          value: 165
+          unit: "fahrenheit"
+          max_limit: 200
+          status: "normal"
+        case_drain_flow:
+          value: 0.42
+          unit: "gpm"
+          max_limit: 0.5
+          status: "elevated"
+      predicted_remaining_life:
+        hours: 380
+        cycles: 240
+        confidence: 0.82
+      recommended_action: "Schedule replacement within 200 flight hours"
+      
+    - component_id: "HYD-PUMP-2"
+      component_type: "pump"
+      ata_chapter: "29"
+      location: "Right Engine Driven"
+      part_number: "HP-29-001-B"
+      serial_number: "SN-HP-54322"
+      install_date: "2025-03-10"
+      health_status: "normal"
+      parameters:
+        wear_percentage:
+          value: 22.1
+          unit: "percent"
+          threshold_warning: 70.0
+          threshold_critical: 90.0
+          status: "normal"
+        system_pressure:
+          value: 2995
+          unit: "psi"
+          nominal: 3000
+          status: "normal"
+      predicted_remaining_life:
+        hours: 4500
+        cycles: 2800
+        confidence: 0.92
+      recommended_action: "Continue normal monitoring"
+      
+    # ATA 32 - Landing Gear Components
+    - component_id: "LG-MAIN-L"
+      component_type: "strut"
+      ata_chapter: "32"
+      location: "Left Main Landing Gear"
+      part_number: "MLG-32-001-C"
+      serial_number: "SN-MLG-98765"
+      install_date: "2022-01-15"
+      health_status: "normal"
+      parameters:
+        cycles_count:
+          value: 2847
+          unit: "cycles"
+          limit: 15000
+          status: "normal"
+        cycles_remaining_percent:
+          value: 81.0
+          unit: "percent"
+          threshold_warning: 30.0
+          status: "normal"
+        strut_extension:
+          value: 3.1
+          unit: "inches"
+          nominal: 3.0
+          tolerance: 0.5
+          status: "normal"
+        wear_percentage:
+          value: 19.0
+          unit: "percent"
+          threshold_warning: 70.0
+          status: "normal"
+      predicted_remaining_life:
+        cycles: 12153
+        confidence: 0.95
+      recommended_action: "Continue normal monitoring"
+      
+    - component_id: "BRAKE-L1"
+      component_type: "brake"
+      ata_chapter: "32"
+      location: "Left Main Gear - Inboard"
+      part_number: "BRK-32-001-D"
+      serial_number: "SN-BRK-11111"
+      install_date: "2025-08-20"
+      health_status: "warning"
+      parameters:
+        wear_percentage:
+          value: 72.5
+          unit: "percent"
+          threshold_warning: 70.0
+          threshold_critical: 90.0
+          status: "exceeded_warning"
+        brake_temperature:
+          value: 185
+          unit: "fahrenheit"
+          max_limit: 400
+          status: "normal"
+      predicted_remaining_life:
+        cycles: 450
+        confidence: 0.88
+      recommended_action: "Plan brake replacement within next C-check"
+
+  # Summary Statistics
+  summary:
+    total_components_monitored: 8
+    components_normal: 4
+    components_warning: 3
+    components_caution: 1
+    components_critical: 0
+    
+    maintenance_actions_recommended: 3
+    urgent_actions: 0

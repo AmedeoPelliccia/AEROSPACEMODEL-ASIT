@@ -1,0 +1,193 @@
+# =============================================================================
+# Digital Twin Demo — Program Configuration
+# =============================================================================
+# Configuration for Digital Twin Integrated Documentation Pipeline demonstration.
+# =============================================================================
+
+program:
+  name: "Digital Twin Demo Aircraft"
+  model_code: "DTDEMO"
+  description: "Demonstration of Digital Twin Integrated Documentation Pipeline"
+  
+  organization:
+    name: "AEROSPACEMODEL Examples"
+    cage_code: "DTDEM"
+    country_code: "US"
+    
+  version:
+    current: "1.0.0"
+    aerospacemodel: "2.0.0"
+
+standards:
+  s1000d:
+    issue: "5.0"
+    brex:
+      base: "S1000D_5.0_DEFAULT"
+      project: "DT_brex"
+      
+  language:
+    primary: "en"
+    
+  country:
+    primary: "US"
+
+# Digital Twin Integration Configuration
+digital_twin:
+  enabled: true
+  
+  # Data source configuration
+  data_sources:
+    condition_data:
+      path: "KDB/system_data/component_health.yaml"
+      refresh_interval: 300  # seconds
+      
+    event_data:
+      path: "KDB/events/operational_events.yaml"
+      buffer_size: 1000
+      
+    configuration_data:
+      path: "KDB/system_data/configuration.yaml"
+      
+  # Trigger thresholds
+  thresholds:
+    wear_warning: 70.0      # Percentage
+    wear_critical: 90.0     # Percentage
+    cycles_warning: 80.0    # Percentage of limit
+    hours_warning: 85.0     # Percentage of limit
+    
+  # Pipeline selection rules
+  pipeline_rules:
+    condition_triggers:
+      - parameter: "wear_percentage"
+        condition: "exceeds_threshold"
+        pipeline: "condition_based_pipeline"
+        
+      - parameter: "cycles_remaining"
+        condition: "below_minimum"
+        pipeline: "condition_based_pipeline"
+        
+    event_triggers:
+      - event_type: "fault"
+        pipeline: "event_driven_pipeline"
+        
+      - event_type: "configuration_change"
+        pipeline: "event_driven_pipeline"
+        
+      - event_type: "limit_exceedance"
+        pipeline: "event_driven_pipeline"
+        
+    certification_triggers:
+      - request_type: "compliance_evidence"
+        pipeline: "certification_pipeline"
+        
+      - request_type: "airworthiness_directive"
+        pipeline: "certification_pipeline"
+
+asit:
+  governance:
+    baseline_policy: "standard"
+    change_control: true
+    approval_required: true
+    
+    # Digital twin specific governance
+    dt_governance:
+      auto_generation_allowed: true
+      human_review_required: true
+      evidence_retention_years: 10
+      
+  contracts:
+    active_dir: "ASIT/CONTRACTS/active"
+    
+  # Baseline management for digital twin data
+  baselines:
+    register: "ASIT/GOVERNANCE/BASELINE_REGISTER.csv"
+    policy:
+      snapshot_interval: "daily"
+      retention_policy: "7_years"
+
+asigt:
+  generators:
+    dm_generator:
+      enabled: true
+      
+    # Digital twin specific generators
+    condition_dm_generator:
+      enabled: true
+      templates:
+        inspection: "templates/dm_inspection.xml"
+        task_card: "templates/dm_task_card.xml"
+        
+    event_dm_generator:
+      enabled: true
+      templates:
+        fault_isolation: "templates/dm_fault_isolation.xml"
+        troubleshooting: "templates/dm_troubleshooting.xml"
+        
+    certification_generator:
+      enabled: true
+      templates:
+        compliance_matrix: "templates/compliance_matrix.xml"
+        evidence_package: "templates/evidence_package.xml"
+      
+  validators:
+    brex:
+      enabled: true
+      strict_mode: false
+    schema:
+      enabled: true
+    trace:
+      enabled: true
+      require_bidirectional: true
+      
+  renderers:
+    html:
+      enabled: true
+    pdf:
+      enabled: true
+    json:
+      enabled: true  # For digital twin system integration
+
+directories:
+  kdb:
+    path: "KDB"
+  idb:
+    path: "IDB"
+  output:
+    path: "output"
+
+publications:
+  enabled:
+    - AMM   # Aircraft Maintenance Manual
+    - FIM   # Fault Isolation Manual
+    - TSM   # Troubleshooting Manual
+    
+  defaults:
+    issue_info:
+      issue_number: "001"
+      in_work: "00"
+
+# Pipeline configurations
+pipelines:
+  condition_based:
+    definition: "ASIGT/pipelines/condition_based_pipeline.yaml"
+    schedule: "on_demand"
+    
+  event_driven:
+    definition: "ASIGT/pipelines/event_driven_pipeline.yaml"
+    schedule: "real_time"
+    
+  certification:
+    definition: "ASIGT/pipelines/certification_pipeline.yaml"
+    schedule: "on_request"
+
+environment:
+  mode: "demonstration"
+  logging:
+    level: "INFO"
+    include_timestamps: true
+    
+  # Demo-specific settings
+  demo:
+    simulate_digital_twin: true
+    use_sample_data: true
+    skip_external_validation: true

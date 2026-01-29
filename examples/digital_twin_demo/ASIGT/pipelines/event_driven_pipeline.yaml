@@ -1,0 +1,375 @@
+# =============================================================================
+# Event-Driven Documentation Pipeline
+# Digital Twin Integration — Operational Event Response
+# Version: 1.0.0
+# =============================================================================
+#
+# This pipeline generates documentation in response to operational events
+# captured by digital twin monitoring systems.
+#
+# Event Types:
+#   - Fault code activation
+#   - Configuration changes
+#   - Operational limit exceedances
+#   - System warnings/cautions
+#
+# Output Types:
+#   - Fault isolation procedures
+#   - Troubleshooting guides
+#   - Corrective action procedures
+#   - Service bulletins
+#
+# =============================================================================
+
+pipeline:
+  metadata:
+    pipeline_id: "PIPELINE-DT-EVENT-001"
+    name: "Event-Driven Documentation Pipeline"
+    description: |
+      Generates technical documentation in response to operational
+      events detected by digital twin systems. Produces troubleshooting
+      and fault isolation content based on event context.
+    version: "1.0.0"
+    publication_type: "FIM"
+    s1000d_issue: "5.0"
+    
+    owner: "Digital Twin Integration"
+    maintainer: "Publication Engineering"
+    
+    created: "2026-01-22"
+    last_modified: "2026-01-22"
+    
+    tags:
+      - "digital-twin"
+      - "event-driven"
+      - "troubleshooting"
+      - "fault-isolation"
+
+  # ---------------------------------------------------------------------------
+  # TRIGGER CONFIGURATION
+  # ---------------------------------------------------------------------------
+  triggers:
+    type: "event"
+    
+    sources:
+      - name: "operational_events"
+        path: "KDB/events/operational_events.yaml"
+        
+    event_types:
+      - event_type: "FAULT"
+        name: "Fault Code Activation"
+        priority: "high"
+        response_time: "immediate"
+        
+      - event_type: "WARNING"
+        name: "System Warning"
+        priority: "medium"
+        response_time: "4_hours"
+        
+      - event_type: "CAUTION"
+        name: "System Caution"
+        priority: "low"
+        response_time: "24_hours"
+        
+      - event_type: "CONFIG_CHANGE"
+        name: "Configuration Change"
+        priority: "medium"
+        response_time: "immediate"
+        
+      - event_type: "LIMIT_EXCEEDANCE"
+        name: "Operational Limit Exceedance"
+        priority: "high"
+        response_time: "immediate"
+
+  # ---------------------------------------------------------------------------
+  # CONTRACT BINDING
+  # ---------------------------------------------------------------------------
+  contract:
+    template: "ASIT/CONTRACTS/templates/DT-CTR-EVENT.template.yaml"
+    
+    required_fields:
+      - "contract_id"
+      - "baseline_ref"
+      - "event_filter"
+      - "scope.ata_chapters"
+      - "authority.approved_by"
+    
+    validation:
+      check_baseline_exists: true
+      check_authority_valid: true
+      check_event_mapping: true
+
+  # ---------------------------------------------------------------------------
+  # PIPELINE STAGES
+  # ---------------------------------------------------------------------------
+  stages:
+    # -------------------------------------------------------------------------
+    # STAGE 1: EVENT PROCESSING
+    # -------------------------------------------------------------------------
+    - stage: "event_processing"
+      name: "Process Event Data"
+      description: "Parse and classify incoming operational events"
+      order: 1
+      
+      steps:
+        - step: "load_events"
+          name: "Load Event Data"
+          action: "dt.load_events"
+          inputs:
+            source_path: "KDB/events/operational_events.yaml"
+          outputs:
+            - "event_data"
+          on_failure: "abort"
+          
+        - step: "classify_events"
+          name: "Classify Events"
+          action: "dt.classify_events"
+          inputs:
+            event_data: "${event_data}"
+            event_types: "${pipeline.triggers.event_types}"
+          outputs:
+            - "classified_events"
+            - "event_priorities"
+          on_failure: "abort"
+          
+        - step: "map_events_to_systems"
+          name: "Map Events to Aircraft Systems"
+          action: "dt.map_events_to_systems"
+          inputs:
+            classified_events: "${classified_events}"
+            ata_mapping: "ASIT/STRUCTURE/DIGITAL_TWIN_MAPPING.yaml"
+          outputs:
+            - "system_events"
+            - "affected_ata_chapters"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 2: SOURCE LOADING
+    # -------------------------------------------------------------------------
+    - stage: "source_loading"
+      name: "Load Troubleshooting Sources"
+      description: "Load fault isolation and troubleshooting source data"
+      order: 2
+      depends_on: ["event_processing"]
+      
+      steps:
+        - step: "load_fault_data"
+          name: "Load Fault Isolation Data"
+          action: "source.load"
+          inputs:
+            source_type: "fault_isolation"
+            source_paths:
+              - "KDB/troubleshooting"
+          outputs:
+            - "fault_data"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${affected_ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "load_procedures"
+          name: "Load Corrective Procedures"
+          action: "source.load"
+          inputs:
+            source_type: "task"
+            source_paths:
+              - "KDB/tasks"
+          outputs:
+            - "corrective_procedures"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${affected_ata_chapters}"
+            - field: "task_type"
+              values: ["corrective", "troubleshooting", "reset"]
+          on_failure: "warn"
+          
+        - step: "load_event_mappings"
+          name: "Load Event-to-Procedure Mappings"
+          action: "source.load"
+          inputs:
+            source_type: "mapping"
+            source_paths:
+              - "KDB/mappings/event_procedure_map.yaml"
+          outputs:
+            - "event_mappings"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 3: CONTENT GENERATION
+    # -------------------------------------------------------------------------
+    - stage: "content_generation"
+      name: "Generate Event Documentation"
+      description: "Generate fault isolation and troubleshooting content"
+      order: 3
+      depends_on: ["source_loading"]
+      
+      steps:
+        - step: "generate_fault_isolation_dm"
+          name: "Generate Fault Isolation Procedures"
+          action: "generator.dm_fault_isolation"
+          inputs:
+            sources: "${fault_data}"
+            event_context: "${system_events}"
+            template: "templates/dm_fault_isolation.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "700"  # Fault reports/isolation
+              include_isolation_tree: true
+              include_probable_causes: true
+          outputs:
+            - "dm_fault_isolation"
+          on_failure: "continue"
+          
+        - step: "generate_troubleshooting_dm"
+          name: "Generate Troubleshooting Guides"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${corrective_procedures}"
+            event_context: "${system_events}"
+            template: "templates/dm_troubleshooting.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "710"  # Troubleshooting procedure
+          outputs:
+            - "dm_troubleshooting"
+          on_failure: "continue"
+          
+        - step: "generate_corrective_action_dm"
+          name: "Generate Corrective Action Procedures"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${corrective_procedures}"
+            event_context: "${system_events}"
+            template: "templates/dm_corrective.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "720"  # Corrective action
+          outputs:
+            - "dm_corrective"
+          filters:
+            - field: "task_type"
+              values: ["corrective", "reset"]
+          on_failure: "continue"
+          
+        - step: "add_event_metadata"
+          name: "Add Event Context Metadata"
+          action: "dt.add_event_metadata"
+          inputs:
+            data_modules:
+              - "${dm_fault_isolation}"
+              - "${dm_troubleshooting}"
+              - "${dm_corrective}"
+            events: "${system_events}"
+            event_priorities: "${event_priorities}"
+          outputs:
+            - "dm_with_event_metadata"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 4: VALIDATION
+    # -------------------------------------------------------------------------
+    - stage: "validation"
+      name: "Content Validation"
+      description: "Validate generated troubleshooting content"
+      order: 4
+      depends_on: ["content_generation"]
+      
+      steps:
+        - step: "brex_validation"
+          name: "BREX Rule Validation"
+          action: "validator.brex"
+          inputs:
+            data_modules: "${dm_with_event_metadata}"
+            brex_file: "ASIGT/brex/DT_brex.yaml"
+          outputs:
+            - "brex_results"
+          on_failure: "warn"
+          
+        - step: "event_coverage_check"
+          name: "Event Coverage Validation"
+          action: "validator.event_coverage"
+          inputs:
+            events: "${system_events}"
+            generated_docs: "${dm_with_event_metadata}"
+          outputs:
+            - "coverage_results"
+          config:
+            require_fault_coverage: true
+            require_corrective_coverage: true
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 5: FINALIZATION
+    # -------------------------------------------------------------------------
+    - stage: "finalization"
+      name: "Finalize Output"
+      description: "Package and finalize generated documentation"
+      order: 5
+      depends_on: ["validation"]
+      always_run: true
+      
+      steps:
+        - step: "assemble_package"
+          name: "Assemble Output Package"
+          action: "package.csdb"
+          inputs:
+            data_modules: "${dm_with_event_metadata}"
+            output_path: "IDB/csdb/dms"
+          outputs:
+            - "csdb_package"
+          on_failure: "warn"
+          
+        - step: "generate_event_report"
+          name: "Generate Event Response Report"
+          action: "report.event_response"
+          inputs:
+            events: "${system_events}"
+            generated_docs: "${dm_with_event_metadata}"
+            coverage_results: "${coverage_results}"
+            output_path: "output/reports/EVENT_RESPONSE_REPORT.json"
+          outputs:
+            - "event_report"
+          on_failure: "warn"
+          
+        - step: "generate_trace_matrix"
+          name: "Generate Trace Matrix"
+          action: "trace.export"
+          inputs:
+            sources:
+              events: "${system_events}"
+              fault_data: "${fault_data}"
+              procedures: "${corrective_procedures}"
+            outputs:
+              data_modules: "${dm_with_event_metadata}"
+            output_path: "output/TRACE_MATRIX_EVENTS.csv"
+          outputs:
+            - "trace_matrix_file"
+          on_failure: "warn"
+
+  # ---------------------------------------------------------------------------
+  # OUTPUTS
+  # ---------------------------------------------------------------------------
+  outputs:
+    primary:
+      - name: "Fault Isolation Procedures"
+        path: "IDB/csdb/dms"
+        type: "dm_fault_isolation"
+        
+      - name: "Troubleshooting Guides"
+        path: "IDB/csdb/dms"
+        type: "dm_procedural"
+        
+      - name: "Corrective Action Procedures"
+        path: "IDB/csdb/dms"
+        type: "dm_procedural"
+        
+    artifacts:
+      - name: "Event Response Report"
+        path: "output/reports/EVENT_RESPONSE_REPORT.json"
+        type: "report"
+        
+      - name: "Trace Matrix"
+        path: "output/TRACE_MATRIX_EVENTS.csv"
+        type: "traceability"

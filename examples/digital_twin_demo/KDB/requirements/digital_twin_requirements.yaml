@@ -1,0 +1,108 @@
+# =============================================================================
+# Digital Twin Demo — Requirements
+# =============================================================================
+# Sample requirements for Digital Twin documentation demo.
+# =============================================================================
+
+requirements:
+  metadata:
+    baseline: "DBL-DT-DEMO-001"
+    created: "2026-01-22"
+    
+  items:
+    # ATA 28 - Fuel System Requirements
+    - requirement_id: "REQ-FUEL-001"
+      title: "Fuel System Description"
+      ata_chapter: "28"
+      type: "functional"
+      certification_relevant: true
+      content: |
+        The fuel system shall provide controlled fuel storage, management,
+        and delivery to aircraft engines under all operating conditions.
+      verification_method: "analysis"
+      traces_to:
+        - "CS-25.951"
+        - "CS-25.952"
+        
+    - requirement_id: "REQ-FUEL-002"
+      title: "Fuel Pump Redundancy"
+      ata_chapter: "28"
+      type: "safety"
+      certification_relevant: true
+      content: |
+        Each fuel tank shall have at least two independent fuel pumps
+        capable of supplying fuel to the engines.
+      verification_method: "test"
+      traces_to:
+        - "CS-25.954"
+        
+    - requirement_id: "REQ-FUEL-003"
+      title: "Fuel Quantity Indication"
+      ata_chapter: "28"
+      type: "functional"
+      certification_relevant: true
+      content: |
+        The fuel quantity indication system shall provide accurate fuel
+        quantity measurement with an accuracy of ±3% across all conditions.
+      verification_method: "test"
+      traces_to:
+        - "CS-25.1553"
+        
+    # ATA 29 - Hydraulic System Requirements
+    - requirement_id: "REQ-HYD-001"
+      title: "Hydraulic System Description"
+      ata_chapter: "29"
+      type: "functional"
+      certification_relevant: true
+      content: |
+        The hydraulic system shall provide pressurized hydraulic fluid
+        to operate flight controls, landing gear, and other systems.
+      verification_method: "analysis"
+      traces_to:
+        - "CS-25.1435"
+        
+    - requirement_id: "REQ-HYD-002"
+      title: "Hydraulic Pump Wear Monitoring"
+      ata_chapter: "29"
+      type: "functional"
+      certification_relevant: false
+      content: |
+        The digital twin shall monitor hydraulic pump wear and predict
+        maintenance requirements based on degradation trends.
+      verification_method: "test"
+      digital_twin_integration: true
+      
+    - requirement_id: "REQ-HYD-003"
+      title: "Hydraulic Fluid Contamination"
+      ata_chapter: "29"
+      type: "maintenance"
+      certification_relevant: false
+      content: |
+        Hydraulic fluid contamination levels shall be monitored and
+        documented for maintenance planning purposes.
+      verification_method: "inspection"
+      digital_twin_integration: true
+      
+    # ATA 32 - Landing Gear Requirements
+    - requirement_id: "REQ-LG-001"
+      title: "Landing Gear Description"
+      ata_chapter: "32"
+      type: "functional"
+      certification_relevant: true
+      content: |
+        The landing gear system shall provide safe ground operation
+        including takeoff, landing, and ground maneuvering.
+      verification_method: "analysis"
+      traces_to:
+        - "CS-25.721"
+        
+    - requirement_id: "REQ-LG-002"
+      title: "Landing Gear Cycle Tracking"
+      ata_chapter: "32"
+      type: "maintenance"
+      certification_relevant: false
+      content: |
+        Landing gear extension/retraction cycles shall be tracked
+        for life-limited component management.
+      verification_method: "inspection"
+      digital_twin_integration: true

@@ -1,0 +1,14 @@
+trace_id,source_type,source_id,target_type,target_id,relationship,baseline,verified
+TRACE-DT-001,requirement,REQ-FUEL-001,task,TASK-FUEL-PUMP-INSP-001,satisfies,DBL-DT-DEMO-001,true
+TRACE-DT-002,requirement,REQ-FUEL-002,task,TASK-FUEL-PUMP-INSP-001,satisfies,DBL-DT-DEMO-001,true
+TRACE-DT-003,requirement,REQ-FUEL-002,task,TASK-FUEL-PUMP-REPL-001,satisfies,DBL-DT-DEMO-001,true
+TRACE-DT-004,requirement,REQ-HYD-001,task,TASK-HYD-PUMP-REPL-001,satisfies,DBL-DT-DEMO-001,true
+TRACE-DT-005,requirement,REQ-HYD-002,task,TASK-HYD-PUMP-INSP-001,satisfies,DBL-DT-DEMO-001,true
+TRACE-DT-006,requirement,REQ-HYD-002,task,TASK-HYD-PUMP-REPL-001,satisfies,DBL-DT-DEMO-001,true
+TRACE-DT-007,requirement,REQ-LG-001,task,TASK-LG-STRUT-INSP-001,satisfies,DBL-DT-DEMO-001,true
+TRACE-DT-008,requirement,REQ-LG-002,task,TASK-LG-STRUT-INSP-001,satisfies,DBL-DT-DEMO-001,true
+TRACE-DT-009,requirement,REQ-HYD-001,task,TASK-HYD-TS-001,satisfies,DBL-DT-DEMO-001,true
+TRACE-DT-010,condition,COND-WEAR-THRESHOLD,task,TASK-HYD-PUMP-INSP-001,triggers,DBL-DT-DEMO-001,true
+TRACE-DT-011,condition,COND-WEAR-THRESHOLD,task,TASK-FUEL-PUMP-INSP-001,triggers,DBL-DT-DEMO-001,true
+TRACE-DT-012,event,HYD-PRESS-LOW,task,TASK-HYD-TS-001,triggers,DBL-DT-DEMO-001,true
+TRACE-DT-013,event,ENG-VIBRATION-HIGH,task,TASK-ENG-TS-001,triggers,DBL-DT-DEMO-001,true

@@ -1,0 +1,175 @@
+# =============================================================================
+# Digital Twin Demo — Operational Events
+# =============================================================================
+# Simulated operational events captured by digital twin monitoring.
+# These represent faults, warnings, and other events requiring documentation.
+# =============================================================================
+
+operational_events:
+  metadata:
+    source: "digital_twin_event_log"
+    aircraft_id: "DTDEMO-001"
+    log_period:
+      start: "2026-01-15T00:00:00Z"
+      end: "2026-01-22T23:59:59Z"
+      
+  events:
+    # High Priority Fault Events
+    - event_id: "EVT-2026-001234"
+      timestamp: "2026-01-22T14:30:00Z"
+      event_type: "FAULT"
+      priority: "high"
+      fault_code: "HYD-PRESS-LOW"
+      description: "Hydraulic system 1 pressure below minimum"
+      ata_chapter: "29"
+      component_id: "HYD-PUMP-1"
+      parameters:
+        measured_pressure:
+          value: 2750
+          unit: "psi"
+          threshold: 2800
+        system_affected: "HYD-SYS-1"
+      flight_phase: "cruise"
+      flight_number: "DT1234"
+      crew_action: "Standby hydraulic system selected"
+      requires_documentation: true
+      documentation_type: "fault_isolation"
+      status: "open"
+      
+    - event_id: "EVT-2026-001198"
+      timestamp: "2026-01-20T09:15:00Z"
+      event_type: "FAULT"
+      priority: "high"
+      fault_code: "ENG-VIBRATION-HIGH"
+      description: "Engine #1 vibration exceeds normal limits"
+      ata_chapter: "72"
+      component_id: "ENG-1"
+      parameters:
+        vibration_level:
+          value: 1.25
+          unit: "in/sec"
+          threshold: 1.0
+        n1_speed:
+          value: 92.5
+          unit: "percent"
+        n2_speed:
+          value: 88.3
+          unit: "percent"
+      flight_phase: "climb"
+      flight_number: "DT1198"
+      crew_action: "Reduced thrust, continued to destination"
+      requires_documentation: true
+      documentation_type: "troubleshooting"
+      status: "investigating"
+      
+    # Warning Events
+    - event_id: "EVT-2026-001156"
+      timestamp: "2026-01-18T16:45:00Z"
+      event_type: "WARNING"
+      priority: "medium"
+      warning_code: "FUEL-QTY-DISAGREE"
+      description: "Fuel quantity indication disagreement between sensors"
+      ata_chapter: "28"
+      component_id: "FUEL-QTY-SYS"
+      parameters:
+        sensor_1_reading:
+          value: 8450
+          unit: "lbs"
+        sensor_2_reading:
+          value: 8320
+          unit: "lbs"
+        disagreement:
+          value: 130
+          unit: "lbs"
+          threshold: 100
+      flight_phase: "ground"
+      flight_number: "DT1156"
+      crew_action: "Cross-checked with drip stick measurement"
+      requires_documentation: true
+      documentation_type: "troubleshooting"
+      status: "resolved"
+      resolution: "Sensor 2 recalibrated"
+      
+    - event_id: "EVT-2026-001089"
+      timestamp: "2026-01-16T11:20:00Z"
+      event_type: "WARNING"
+      priority: "medium"
+      warning_code: "BRAKE-TEMP-HIGH"
+      description: "Left main gear brake temperature elevated"
+      ata_chapter: "32"
+      component_id: "BRAKE-L1"
+      parameters:
+        brake_temperature:
+          value: 380
+          unit: "fahrenheit"
+          threshold: 350
+        ambient_temperature:
+          value: 85
+          unit: "fahrenheit"
+      flight_phase: "taxi_in"
+      flight_number: "DT1089"
+      crew_action: "Delayed next departure for brake cool-down"
+      requires_documentation: false
+      documentation_type: null
+      status: "closed"
+      resolution: "Normal operation after cool-down"
+      
+    # Limit Exceedance Events
+    - event_id: "EVT-2026-001045"
+      timestamp: "2026-01-15T08:30:00Z"
+      event_type: "LIMIT_EXCEEDANCE"
+      priority: "high"
+      exceedance_code: "HARD-LANDING"
+      description: "Landing gear vertical load exceeded normal limits"
+      ata_chapter: "32"
+      component_id: "LG-MAIN-L"
+      parameters:
+        vertical_acceleration:
+          value: 2.1
+          unit: "g"
+          normal_limit: 1.8
+          ultimate_limit: 2.5
+        sink_rate:
+          value: 720
+          unit: "fpm"
+          normal_limit: 600
+      flight_phase: "landing"
+      flight_number: "DT1045"
+      crew_action: "Reported to maintenance"
+      requires_documentation: true
+      documentation_type: "inspection"
+      status: "inspected"
+      resolution: "Inspection satisfactory - aircraft returned to service"
+      
+    # Configuration Change Events
+    - event_id: "EVT-2026-001012"
+      timestamp: "2026-01-15T06:00:00Z"
+      event_type: "CONFIG_CHANGE"
+      priority: "low"
+      change_code: "SB-COMPLIANCE"
+      description: "Service Bulletin SB-28-0045 incorporated"
+      ata_chapter: "28"
+      component_id: "FUEL-PUMP-APU"
+      parameters:
+        old_part_number: "FP-APU-001-A"
+        new_part_number: "FP-APU-001-B"
+        service_bulletin: "SB-28-0045"
+      performed_by: "MX-TECH-001"
+      requires_documentation: true
+      documentation_type: "configuration"
+      status: "completed"
+
+  # Event Summary
+  summary:
+    total_events: 6
+    events_by_type:
+      FAULT: 2
+      WARNING: 2
+      LIMIT_EXCEEDANCE: 1
+      CONFIG_CHANGE: 1
+    events_by_priority:
+      high: 3
+      medium: 2
+      low: 1
+    events_requiring_documentation: 5
+    open_events: 2

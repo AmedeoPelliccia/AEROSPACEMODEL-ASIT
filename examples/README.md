@@ -9,6 +9,7 @@ This directory contains complete, runnable examples demonstrating different use 
 | Example | Description | Complexity |
 |---------|-------------|------------|
 | [minimal/](minimal/) | Bare minimum setup for learning | ⭐ |
+| [digital_twin_demo/](digital_twin_demo/) | Digital Twin documentation pipeline | ⭐⭐ |
 | [regional_jet/](regional_jet/) | Regional aircraft program | ⭐⭐⭐ |
 | [evtol/](evtol/) | Electric vertical takeoff (eVTOL/UAM) | ⭐⭐ |
 | [hydrogen_aircraft/](hydrogen_aircraft/) | Hydrogen-powered aircraft | ⭐⭐⭐ |
@@ -114,6 +115,13 @@ Learn advanced patterns:
 - OEM interface contracts
 - Supplier-specific BREX
 - Part number management
+
+### digital_twin_demo/
+- Digital Twin integration patterns
+- Three pipeline modes (Condition, Event, Certification)
+- Health monitoring triggers
+- Fault isolation documentation
+- Certification evidence packages
 
 ## Customizing Examples
 
