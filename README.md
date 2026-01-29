@@ -25,10 +25,23 @@
 </p>
 
 ---
-
 ## Overview
 
-**AEROSPACEMODEL-ASIT-ASIGT** is a **standards-native aerospace information framework** that transforms **validated engineering knowledge** into **operational, certifiable digital information**.
+**AEROSPACEMODEL** is a **standards-native aerospace information framework** grounded on a dual AI architecture (**ASIT–ASIGT**) that transforms **validated engineering knowledge** into **operational, certifiable digital information**. 
+
+The model enables **secure integration of generative AI** into aerospace production environments through:
+
+| Layer | Function |
+|-------|----------|
+| **ASIT** (Aerospace Standards Information Transformer) | Deterministic transformation of knowledge artifacts into standard-compliant information products |
+| **ASIGT** (Aerospace Standards Information Generative Transformer) | Governed generative AI augmentation with human-in-the-loop validation gates |
+
+### Design Principles
+
+- **Certification-Grade Provenance** — Full traceability from source knowledge to published output
+- **Standards Compliance** — Native alignment with S1000D, ATA iSpec 2200, and aerospace data exchange standards
+- **Controlled Generation** — AI outputs are bounded by validated knowledge domains and explicit transformation contracts
+- **Audit-Ready Governance** — Every AI-assisted transformation is logged, attributable, and reversible
 
 It is composed of two strictly separated but tightly integrated layers:
 
