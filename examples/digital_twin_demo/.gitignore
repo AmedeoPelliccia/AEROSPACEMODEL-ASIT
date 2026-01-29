@@ -1,0 +1,13 @@
+# Generated output directories
+output/condition_based/
+output/event_driven/
+output/certification/
+output/reports/
+
+# Generated IDB content
+IDB/csdb/dms/*.xml
+IDB/certification/
+
+# Python cache
+__pycache__/
+*.py[cod]

@@ -1,0 +1,107 @@
+# =============================================================================
+# Event-Driven Documentation Contract
+# Digital Twin Integration Demo
+# =============================================================================
+# Contract authorizing generation of documentation in response to operational
+# events captured by digital twin monitoring.
+# =============================================================================
+
+contract:
+  # Contract Identification
+  contract_id: "DT-CTR-EVENT-001"
+  title: "Digital Twin Event-Driven Documentation"
+  version: "1.0.0"
+  
+  # Contract Status
+  status: "active"
+  created: "2026-01-22"
+  effective_from: "2026-01-22"
+  effective_to: "2027-01-22"
+  
+  # Authority
+  authority:
+    requested_by: "Digital Twin Integration Team"
+    approved_by: "DT_CM"
+    approval_date: "2026-01-22"
+    
+  # Source Definition
+  source:
+    baseline: "DBL-DT-DEMO-001"
+    
+    # Digital twin event sources
+    digital_twin_sources:
+      - source_type: "operational_events"
+        path: "KDB/events/operational_events.yaml"
+        
+    # Knowledge database sources
+    kdb_sources:
+      - source_type: "fault_isolation"
+        path: "KDB/troubleshooting/"
+      - source_type: "tasks"
+        path: "KDB/tasks/"
+        
+  # Scope Definition
+  scope:
+    # ATA chapters covered
+    ata_chapters:
+      - "28"  # Fuel
+      - "29"  # Hydraulic Power
+      - "72"  # Engine
+      
+    # Event filters
+    event_filter:
+      event_types:
+        - "FAULT"
+        - "WARNING"
+        - "LIMIT_EXCEEDANCE"
+        
+      priority_minimum: "medium"
+      
+    # Task types to generate
+    task_types:
+      - "troubleshooting"
+      - "fault_isolation"
+      - "corrective"
+      - "reset"
+      
+    # Publication types
+    publication_types:
+      - "FIM"
+      - "TSM"
+      
+  # Target Definition
+  target:
+    publication: "FIM"
+    output_path: "IDB/csdb/dms"
+    
+    # Data module types
+    dm_types:
+      - type: "fault_isolation"
+        info_codes: ["700", "710"]
+      - type: "procedural"
+        info_codes: ["720", "730"]
+        
+  # Pipeline Reference
+  pipeline:
+    pipeline_id: "PIPELINE-DT-EVENT-001"
+    definition: "ASIGT/pipelines/event_driven_pipeline.yaml"
+    
+  # Validation Requirements
+  validation:
+    brex_required: true
+    brex_profile: "event_driven"
+    trace_required: true
+    event_coverage_required: true
+    
+  # Metadata
+  metadata:
+    description: |
+      This contract authorizes the generation of troubleshooting and fault
+      isolation documentation in response to operational events detected
+      by digital twin monitoring systems. Documentation includes fault
+      isolation procedures, troubleshooting guides, and corrective actions.
+    tags:
+      - "digital-twin"
+      - "event-driven"
+      - "troubleshooting"
+      - "demo"

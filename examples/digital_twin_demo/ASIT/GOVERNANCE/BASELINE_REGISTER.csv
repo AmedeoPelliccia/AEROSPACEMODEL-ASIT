@@ -1,0 +1,3 @@
+baseline_id,name,status,created_date,approved_by,description,frozen_date
+DBL-DT-DEMO-001,Digital Twin Demo Initial,active,2026-01-22,DT_CM,Initial baseline for Digital Twin documentation demo,2026-01-22
+DBL-DT-DEMO-002,Digital Twin Demo Update,draft,2026-01-22,DT_CM,Updated baseline with additional system data,

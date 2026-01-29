@@ -1,0 +1,198 @@
+# =============================================================================
+# Digital Twin to Aircraft System Mapping
+# =============================================================================
+# Maps digital twin sensor data and events to ATA chapter structure.
+# =============================================================================
+
+mapping:
+  metadata:
+    name: "Digital Twin System Mapping"
+    version: "1.0.0"
+    created: "2026-01-22"
+    
+  # ---------------------------------------------------------------------------
+  # COMPONENT TO ATA CHAPTER MAPPING
+  # ---------------------------------------------------------------------------
+  component_mapping:
+    # ATA 21 - Air Conditioning
+    - ata_chapter: "21"
+      system_name: "Air Conditioning"
+      digital_twin_components:
+        - component_type: "pack"
+          sensor_ids: ["AC-PACK-L", "AC-PACK-R"]
+          parameters:
+            - "outlet_temperature"
+            - "pack_valve_position"
+            - "compressor_speed"
+            
+    # ATA 24 - Electrical Power
+    - ata_chapter: "24"
+      system_name: "Electrical Power"
+      digital_twin_components:
+        - component_type: "generator"
+          sensor_ids: ["GEN-1", "GEN-2", "APU-GEN"]
+          parameters:
+            - "voltage_output"
+            - "current_load"
+            - "frequency"
+            - "temperature"
+            
+    # ATA 27 - Flight Controls
+    - ata_chapter: "27"
+      system_name: "Flight Controls"
+      digital_twin_components:
+        - component_type: "actuator"
+          sensor_ids: ["ACT-AILERON-L", "ACT-AILERON-R", "ACT-ELEVATOR", "ACT-RUDDER"]
+          parameters:
+            - "position"
+            - "hydraulic_pressure"
+            - "response_time"
+            - "wear_percentage"
+            
+    # ATA 28 - Fuel
+    - ata_chapter: "28"
+      system_name: "Fuel"
+      digital_twin_components:
+        - component_type: "pump"
+          sensor_ids: ["FUEL-PUMP-1", "FUEL-PUMP-2", "FUEL-PUMP-APU"]
+          parameters:
+            - "pressure_output"
+            - "flow_rate"
+            - "motor_current"
+            - "vibration_level"
+        - component_type: "tank"
+          sensor_ids: ["TANK-L", "TANK-R", "TANK-CTR"]
+          parameters:
+            - "fuel_quantity"
+            - "fuel_temperature"
+            - "water_content"
+            
+    # ATA 29 - Hydraulic Power
+    - ata_chapter: "29"
+      system_name: "Hydraulic Power"
+      digital_twin_components:
+        - component_type: "pump"
+          sensor_ids: ["HYD-PUMP-1", "HYD-PUMP-2", "HYD-PUMP-3"]
+          parameters:
+            - "system_pressure"
+            - "fluid_level"
+            - "fluid_temperature"
+            - "wear_percentage"
+        - component_type: "reservoir"
+          sensor_ids: ["HYD-RES-1", "HYD-RES-2", "HYD-RES-3"]
+          parameters:
+            - "fluid_level"
+            - "contamination_level"
+            
+    # ATA 32 - Landing Gear
+    - ata_chapter: "32"
+      system_name: "Landing Gear"
+      digital_twin_components:
+        - component_type: "strut"
+          sensor_ids: ["LG-NOSE", "LG-MAIN-L", "LG-MAIN-R"]
+          parameters:
+            - "strut_pressure"
+            - "extension_position"
+            - "cycles_count"
+            - "wear_percentage"
+        - component_type: "brake"
+          sensor_ids: ["BRAKE-L1", "BRAKE-L2", "BRAKE-R1", "BRAKE-R2"]
+          parameters:
+            - "wear_percentage"
+            - "temperature"
+            - "pressure"
+            
+    # ATA 72 - Engine
+    - ata_chapter: "72"
+      system_name: "Engine"
+      digital_twin_components:
+        - component_type: "engine"
+          sensor_ids: ["ENG-1", "ENG-2"]
+          parameters:
+            - "n1_speed"
+            - "n2_speed"
+            - "egt"
+            - "fuel_flow"
+            - "oil_pressure"
+            - "oil_temperature"
+            - "vibration_level"
+
+  # ---------------------------------------------------------------------------
+  # EVENT TYPE MAPPING
+  # ---------------------------------------------------------------------------
+  event_mapping:
+    fault_codes:
+      - event_prefix: "ENG-"
+        ata_chapter: "72"
+        priority: "high"
+        
+      - event_prefix: "HYD-"
+        ata_chapter: "29"
+        priority: "high"
+        
+      - event_prefix: "FUEL-"
+        ata_chapter: "28"
+        priority: "high"
+        
+      - event_prefix: "ELEC-"
+        ata_chapter: "24"
+        priority: "medium"
+        
+      - event_prefix: "FLT-"
+        ata_chapter: "27"
+        priority: "high"
+        
+      - event_prefix: "LG-"
+        ata_chapter: "32"
+        priority: "high"
+        
+      - event_prefix: "AC-"
+        ata_chapter: "21"
+        priority: "low"
+        
+    warning_categories:
+      - category: "MASTER_CAUTION"
+        priority: "high"
+        response_time: "immediate"
+        
+      - category: "MASTER_WARNING"
+        priority: "critical"
+        response_time: "immediate"
+        
+      - category: "ADVISORY"
+        priority: "low"
+        response_time: "scheduled"
+
+  # ---------------------------------------------------------------------------
+  # THRESHOLD DEFINITIONS
+  # ---------------------------------------------------------------------------
+  thresholds:
+    wear_percentage:
+      warning: 70.0
+      caution: 80.0
+      critical: 90.0
+      
+    cycles_remaining_percent:
+      warning: 30.0
+      caution: 20.0
+      critical: 10.0
+      
+    hours_remaining_percent:
+      warning: 25.0
+      caution: 15.0
+      critical: 5.0
+      
+    efficiency_rating:
+      warning: 0.90
+      caution: 0.85
+      critical: 0.75
+      
+    vibration_level:
+      warning: 0.8  # in/sec
+      caution: 1.2
+      critical: 1.5
+      
+    temperature_deviation:
+      warning: 10  # percent over nominal
+      caution: 15
+      critical: 20

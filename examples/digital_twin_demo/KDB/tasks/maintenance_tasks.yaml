@@ -1,0 +1,210 @@
+# =============================================================================
+# Digital Twin Demo — Maintenance Tasks
+# =============================================================================
+# Sample maintenance tasks for Digital Twin documentation demo.
+# =============================================================================
+
+tasks:
+  metadata:
+    baseline: "DBL-DT-DEMO-001"
+    created: "2026-01-22"
+    
+  items:
+    # ATA 28 - Fuel System Tasks
+    - task_id: "TASK-FUEL-PUMP-INSP-001"
+      title: "Fuel Boost Pump Inspection"
+      ata_chapter: "28"
+      task_type: "inspection"
+      publication: "AMM"
+      interval:
+        type: "flight_hours"
+        value: 500
+      condition_trigger:
+        parameter: "vibration_level"
+        threshold: 0.8
+      procedure:
+        - step: 1
+          action: "Ensure aircraft power is OFF"
+          warning: "Residual fuel vapors may be present"
+        - step: 2
+          action: "Open fuel boost pump access panel (Panel 28-11)"
+        - step: 3
+          action: "Visually inspect pump housing for leaks or damage"
+        - step: 4
+          action: "Check electrical connections for security"
+        - step: 5
+          action: "Close access panel and secure"
+      traces_to:
+        - "REQ-FUEL-002"
+        
+    - task_id: "TASK-FUEL-PUMP-REPL-001"
+      title: "Fuel Boost Pump Replacement"
+      ata_chapter: "28"
+      task_type: "removal"
+      publication: "AMM"
+      condition_trigger:
+        parameter: "wear_percentage"
+        threshold: 90.0
+      procedure:
+        - step: 1
+          action: "De-fuel aircraft per AMM 12-00-00"
+          caution: "Follow fuel handling procedures"
+        - step: 2
+          action: "Disconnect electrical power to pump"
+        - step: 3
+          action: "Disconnect fuel lines from pump"
+          warning: "Residual fuel will drain - have drip pan ready"
+        - step: 4
+          action: "Remove pump mounting bolts (4x)"
+        - step: 5
+          action: "Remove pump from fuel tank bay"
+        - step: 6
+          action: "Install new pump with new seals"
+        - step: 7
+          action: "Torque mounting bolts to 25 in-lb"
+        - step: 8
+          action: "Connect fuel lines"
+        - step: 9
+          action: "Connect electrical power"
+        - step: 10
+          action: "Perform leak check per AMM 28-10-00"
+      traces_to:
+        - "REQ-FUEL-002"
+        
+    # ATA 29 - Hydraulic System Tasks
+    - task_id: "TASK-HYD-PUMP-INSP-001"
+      title: "Hydraulic Pump Wear Inspection"
+      ata_chapter: "29"
+      task_type: "inspection"
+      publication: "AMM"
+      condition_trigger:
+        parameter: "wear_percentage"
+        threshold: 70.0
+      procedure:
+        - step: 1
+          action: "Depressurize hydraulic system"
+          warning: "High pressure hazard - ensure system is depressurized"
+        - step: 2
+          action: "Access hydraulic pump compartment"
+        - step: 3
+          action: "Check pump case drain flow (max 0.5 GPM)"
+        - step: 4
+          action: "Inspect pump for external leaks"
+        - step: 5
+          action: "Record digital twin wear reading"
+        - step: 6
+          action: "If wear > 80%, schedule replacement"
+      traces_to:
+        - "REQ-HYD-002"
+        
+    - task_id: "TASK-HYD-PUMP-REPL-001"
+      title: "Hydraulic Pump Replacement"
+      ata_chapter: "29"
+      task_type: "removal"
+      publication: "AMM"
+      condition_trigger:
+        parameter: "wear_percentage"
+        threshold: 90.0
+      procedure:
+        - step: 1
+          action: "Depressurize and drain hydraulic system"
+          warning: "High pressure hazard"
+        - step: 2
+          action: "Disconnect hydraulic lines from pump"
+          caution: "Cap all open lines immediately"
+        - step: 3
+          action: "Disconnect electrical connections"
+        - step: 4
+          action: "Remove pump mounting hardware"
+        - step: 5
+          action: "Remove pump assembly"
+        - step: 6
+          action: "Install new pump with new seals"
+        - step: 7
+          action: "Connect hydraulic lines - torque per IPC"
+        - step: 8
+          action: "Connect electrical connections"
+        - step: 9
+          action: "Fill and bleed hydraulic system"
+        - step: 10
+          action: "Perform operational check"
+      traces_to:
+        - "REQ-HYD-001"
+        - "REQ-HYD-002"
+        
+    # ATA 32 - Landing Gear Tasks
+    - task_id: "TASK-LG-STRUT-INSP-001"
+      title: "Main Landing Gear Strut Inspection"
+      ata_chapter: "32"
+      task_type: "inspection"
+      publication: "AMM"
+      interval:
+        type: "cycles"
+        value: 100
+      condition_trigger:
+        parameter: "cycles_remaining_percent"
+        threshold: 20.0
+      procedure:
+        - step: 1
+          action: "Jack aircraft per AMM 07-00-00"
+          warning: "Follow jacking safety procedures"
+        - step: 2
+          action: "Inspect strut chrome surface for corrosion or damage"
+        - step: 3
+          action: "Check strut extension (3.0 ± 0.5 inches)"
+        - step: 4
+          action: "Inspect strut seals for leakage"
+        - step: 5
+          action: "Service strut if extension is low"
+        - step: 6
+          action: "Record inspection in maintenance log"
+      traces_to:
+        - "REQ-LG-001"
+        - "REQ-LG-002"
+        
+    # Troubleshooting Tasks
+    - task_id: "TASK-HYD-TS-001"
+      title: "Hydraulic System Pressure Low - Troubleshooting"
+      ata_chapter: "29"
+      task_type: "troubleshooting"
+      publication: "AMM"
+      event_trigger:
+        event_type: "FAULT"
+        fault_code: "HYD-PRESS-LOW"
+      procedure:
+        - step: 1
+          action: "Check hydraulic fluid level"
+          result_if_low: "Add fluid and recheck"
+        - step: 2
+          action: "Check for external leaks"
+          result_if_found: "Repair leak source"
+        - step: 3
+          action: "Check pump output pressure"
+          result_if_low: "Replace pump per TASK-HYD-PUMP-REPL-001"
+        - step: 4
+          action: "Check pressure relief valve"
+          result_if_stuck: "Replace relief valve"
+      traces_to:
+        - "REQ-HYD-001"
+        
+    - task_id: "TASK-ENG-TS-001"
+      title: "Engine High Vibration - Troubleshooting"
+      ata_chapter: "72"
+      task_type: "troubleshooting"
+      publication: "AMM"
+      event_trigger:
+        event_type: "FAULT"
+        fault_code: "ENG-VIBRATION-HIGH"
+      procedure:
+        - step: 1
+          action: "Review digital twin vibration data"
+          action_details: "Identify vibration frequency and amplitude"
+        - step: 2
+          action: "Check fan blade condition"
+          result_if_damaged: "Replace blade per CMM"
+        - step: 3
+          action: "Check engine mounts"
+          result_if_worn: "Replace mounts per AMM 71-00-00"
+        - step: 4
+          action: "Perform engine ground run"
+          result_check: "Verify vibration within limits"

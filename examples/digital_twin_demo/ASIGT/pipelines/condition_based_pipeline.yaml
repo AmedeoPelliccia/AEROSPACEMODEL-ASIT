@@ -1,0 +1,346 @@
+# =============================================================================
+# Condition-Based Documentation Pipeline
+# Digital Twin Integration — Health-Triggered Generation
+# Version: 1.0.0
+# =============================================================================
+#
+# This pipeline generates maintenance documentation when digital twin sensor
+# data indicates component conditions requiring attention.
+#
+# Trigger Types:
+#   - Wear threshold exceeded
+#   - Scheduled maintenance interval reached
+#   - Performance degradation detected
+#   - Environmental exposure limits approached
+#
+# Output Types:
+#   - Inspection procedures
+#   - Maintenance task cards
+#   - Part replacement procedures
+#   - Servicing procedures
+#
+# =============================================================================
+
+pipeline:
+  metadata:
+    pipeline_id: "PIPELINE-DT-CONDITION-001"
+    name: "Condition-Based Documentation Pipeline"
+    description: |
+      Generates maintenance documentation triggered by digital twin
+      health monitoring data. Produces inspection and maintenance
+      procedures based on component condition thresholds.
+    version: "1.0.0"
+    publication_type: "AMM"
+    s1000d_issue: "5.0"
+    
+    owner: "Digital Twin Integration"
+    maintainer: "Publication Engineering"
+    
+    created: "2026-01-22"
+    last_modified: "2026-01-22"
+    
+    tags:
+      - "digital-twin"
+      - "condition-based"
+      - "maintenance"
+      - "health-monitoring"
+
+  # ---------------------------------------------------------------------------
+  # TRIGGER CONFIGURATION
+  # ---------------------------------------------------------------------------
+  triggers:
+    type: "condition"
+    
+    sources:
+      - name: "component_health"
+        path: "KDB/system_data/component_health.yaml"
+        
+    conditions:
+      - condition_id: "COND-WEAR-THRESHOLD"
+        name: "Wear Threshold Exceeded"
+        parameter: "wear_percentage"
+        operator: "greater_than"
+        threshold: 80.0
+        priority: "high"
+        
+      - condition_id: "COND-CYCLES-LOW"
+        name: "Remaining Cycles Below Minimum"
+        parameter: "cycles_remaining_percent"
+        operator: "less_than"
+        threshold: 20.0
+        priority: "high"
+        
+      - condition_id: "COND-HOURS-LOW"
+        name: "Remaining Hours Below Minimum"
+        parameter: "hours_remaining_percent"
+        operator: "less_than"
+        threshold: 15.0
+        priority: "medium"
+        
+      - condition_id: "COND-PERFORMANCE-DEGRADED"
+        name: "Performance Degradation Detected"
+        parameter: "efficiency_rating"
+        operator: "less_than"
+        threshold: 0.85
+        priority: "medium"
+
+  # ---------------------------------------------------------------------------
+  # CONTRACT BINDING
+  # ---------------------------------------------------------------------------
+  contract:
+    template: "ASIT/CONTRACTS/templates/DT-CTR-CONDITION.template.yaml"
+    
+    required_fields:
+      - "contract_id"
+      - "baseline_ref"
+      - "trigger_condition"
+      - "scope.ata_chapters"
+      - "authority.approved_by"
+    
+    validation:
+      check_baseline_exists: true
+      check_authority_valid: true
+      check_trigger_valid: true
+
+  # ---------------------------------------------------------------------------
+  # PIPELINE STAGES
+  # ---------------------------------------------------------------------------
+  stages:
+    # -------------------------------------------------------------------------
+    # STAGE 1: CONDITION EVALUATION
+    # -------------------------------------------------------------------------
+    - stage: "condition_evaluation"
+      name: "Evaluate Trigger Conditions"
+      description: "Process digital twin data and identify triggered conditions"
+      order: 1
+      
+      steps:
+        - step: "load_health_data"
+          name: "Load Component Health Data"
+          action: "dt.load_health_data"
+          inputs:
+            source_path: "KDB/system_data/component_health.yaml"
+          outputs:
+            - "health_data"
+          on_failure: "abort"
+          
+        - step: "evaluate_conditions"
+          name: "Evaluate Condition Thresholds"
+          action: "dt.evaluate_conditions"
+          inputs:
+            health_data: "${health_data}"
+            conditions: "${pipeline.triggers.conditions}"
+          outputs:
+            - "triggered_conditions"
+            - "affected_components"
+          on_failure: "abort"
+          
+        - step: "determine_scope"
+          name: "Determine Documentation Scope"
+          action: "dt.determine_scope"
+          inputs:
+            triggered_conditions: "${triggered_conditions}"
+            affected_components: "${affected_components}"
+          outputs:
+            - "documentation_scope"
+            - "ata_chapters"
+            - "task_types"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 2: SOURCE LOADING
+    # -------------------------------------------------------------------------
+    - stage: "source_loading"
+      name: "Load Source Content"
+      description: "Load relevant source data for triggered conditions"
+      order: 2
+      depends_on: ["condition_evaluation"]
+      
+      steps:
+        - step: "load_maintenance_tasks"
+          name: "Load Maintenance Tasks"
+          action: "source.load"
+          inputs:
+            source_type: "task"
+            source_paths:
+              - "KDB/tasks"
+          outputs:
+            - "maintenance_tasks"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${ata_chapters}"
+            - field: "task_type"
+              operator: "in"
+              values: "${task_types}"
+          on_failure: "warn"
+          
+        - step: "load_requirements"
+          name: "Load Requirements"
+          action: "source.load"
+          inputs:
+            source_type: "requirement"
+            source_paths:
+              - "KDB/requirements"
+          outputs:
+            - "requirements"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${ata_chapters}"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 3: CONTENT GENERATION
+    # -------------------------------------------------------------------------
+    - stage: "content_generation"
+      name: "Generate Documentation"
+      description: "Generate condition-specific documentation"
+      order: 3
+      depends_on: ["source_loading"]
+      
+      steps:
+        - step: "generate_inspection_dm"
+          name: "Generate Inspection Procedures"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${maintenance_tasks}"
+            condition_context: "${triggered_conditions}"
+            template: "templates/dm_inspection.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "300"  # Inspection/check procedure
+          outputs:
+            - "dm_inspection"
+          filters:
+            - field: "task_type"
+              values: ["inspection", "operational_check"]
+          on_failure: "continue"
+          
+        - step: "generate_maintenance_dm"
+          name: "Generate Maintenance Task Cards"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${maintenance_tasks}"
+            condition_context: "${triggered_conditions}"
+            template: "templates/dm_task_card.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              info_code: "520"  # Removal/installation procedure
+          outputs:
+            - "dm_maintenance"
+          filters:
+            - field: "task_type"
+              values: ["removal", "installation", "servicing"]
+          on_failure: "continue"
+          
+        - step: "add_condition_metadata"
+          name: "Add Digital Twin Metadata"
+          action: "dt.add_condition_metadata"
+          inputs:
+            data_modules:
+              - "${dm_inspection}"
+              - "${dm_maintenance}"
+            triggered_conditions: "${triggered_conditions}"
+            health_data: "${health_data}"
+          outputs:
+            - "dm_with_dt_metadata"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 4: VALIDATION
+    # -------------------------------------------------------------------------
+    - stage: "validation"
+      name: "Content Validation"
+      description: "Validate generated content"
+      order: 4
+      depends_on: ["content_generation"]
+      
+      steps:
+        - step: "brex_validation"
+          name: "BREX Rule Validation"
+          action: "validator.brex"
+          inputs:
+            data_modules: "${dm_with_dt_metadata}"
+            brex_file: "ASIGT/brex/DT_brex.yaml"
+          outputs:
+            - "brex_results"
+          on_failure: "warn"
+          
+        - step: "trace_validation"
+          name: "Traceability Validation"
+          action: "validator.trace"
+          inputs:
+            sources:
+              requirements: "${requirements}"
+              tasks: "${maintenance_tasks}"
+              conditions: "${triggered_conditions}"
+            outputs:
+              data_modules: "${dm_with_dt_metadata}"
+          outputs:
+            - "trace_results"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 5: FINALIZATION
+    # -------------------------------------------------------------------------
+    - stage: "finalization"
+      name: "Finalize Output"
+      description: "Package and finalize generated documentation"
+      order: 5
+      depends_on: ["validation"]
+      always_run: true
+      
+      steps:
+        - step: "assemble_package"
+          name: "Assemble Output Package"
+          action: "package.csdb"
+          inputs:
+            data_modules: "${dm_with_dt_metadata}"
+            output_path: "IDB/csdb/dms"
+          outputs:
+            - "csdb_package"
+          on_failure: "warn"
+          
+        - step: "generate_trace_matrix"
+          name: "Generate Trace Matrix"
+          action: "trace.export"
+          inputs:
+            trace_results: "${trace_results}"
+            output_path: "output/TRACE_MATRIX.csv"
+          outputs:
+            - "trace_matrix_file"
+          on_failure: "warn"
+          
+        - step: "generate_condition_report"
+          name: "Generate Condition Report"
+          action: "report.condition"
+          inputs:
+            triggered_conditions: "${triggered_conditions}"
+            generated_docs: "${dm_with_dt_metadata}"
+            output_path: "output/reports/CONDITION_REPORT.json"
+          outputs:
+            - "condition_report"
+          on_failure: "warn"
+
+  # ---------------------------------------------------------------------------
+  # OUTPUTS
+  # ---------------------------------------------------------------------------
+  outputs:
+    primary:
+      - name: "Inspection Procedures"
+        path: "IDB/csdb/dms"
+        type: "dm_procedural"
+        
+      - name: "Maintenance Task Cards"
+        path: "IDB/csdb/dms"
+        type: "dm_procedural"
+        
+    artifacts:
+      - name: "Trace Matrix"
+        path: "output/TRACE_MATRIX.csv"
+        type: "traceability"
+        
+      - name: "Condition Report"
+        path: "output/reports/CONDITION_REPORT.json"
+        type: "report"

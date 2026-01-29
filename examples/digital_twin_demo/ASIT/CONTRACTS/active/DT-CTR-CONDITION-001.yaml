@@ -1,0 +1,105 @@
+# =============================================================================
+# Condition-Based Documentation Contract
+# Digital Twin Integration Demo
+# =============================================================================
+# Contract authorizing generation of documentation triggered by digital twin
+# health monitoring conditions.
+# =============================================================================
+
+contract:
+  # Contract Identification
+  contract_id: "DT-CTR-CONDITION-001"
+  title: "Digital Twin Condition-Based Documentation"
+  version: "1.0.0"
+  
+  # Contract Status
+  status: "active"
+  created: "2026-01-22"
+  effective_from: "2026-01-22"
+  effective_to: "2027-01-22"
+  
+  # Authority
+  authority:
+    requested_by: "Digital Twin Integration Team"
+    approved_by: "DT_CM"
+    approval_date: "2026-01-22"
+    
+  # Source Definition
+  source:
+    baseline: "DBL-DT-DEMO-001"
+    
+    # Digital twin data sources
+    digital_twin_sources:
+      - source_type: "component_health"
+        path: "KDB/system_data/component_health.yaml"
+        
+    # Knowledge database sources
+    kdb_sources:
+      - source_type: "requirements"
+        path: "KDB/requirements/"
+      - source_type: "tasks"
+        path: "KDB/tasks/"
+        
+  # Scope Definition
+  scope:
+    # ATA chapters covered
+    ata_chapters:
+      - "28"  # Fuel
+      - "29"  # Hydraulic Power
+      - "32"  # Landing Gear
+      
+    # Condition triggers
+    condition_triggers:
+      - trigger_type: "wear_threshold"
+        description: "Component wear exceeds threshold"
+        
+      - trigger_type: "cycles_remaining"
+        description: "Remaining cycles below minimum"
+        
+      - trigger_type: "performance_degradation"
+        description: "Performance degradation detected"
+        
+    # Task types to generate
+    task_types:
+      - "inspection"
+      - "removal"
+      - "installation"
+      - "servicing"
+      
+    # Publication types
+    publication_types:
+      - "AMM"
+      
+  # Target Definition
+  target:
+    publication: "AMM"
+    output_path: "IDB/csdb/dms"
+    
+    # Data module types
+    dm_types:
+      - type: "procedural"
+        info_codes: ["300", "520", "600"]
+        
+  # Pipeline Reference
+  pipeline:
+    pipeline_id: "PIPELINE-DT-CONDITION-001"
+    definition: "ASIGT/pipelines/condition_based_pipeline.yaml"
+    
+  # Validation Requirements
+  validation:
+    brex_required: true
+    brex_profile: "condition_based"
+    trace_required: true
+    
+  # Metadata
+  metadata:
+    description: |
+      This contract authorizes the generation of maintenance documentation
+      when digital twin sensor data indicates component conditions requiring
+      attention. Documentation is generated automatically based on configured
+      thresholds and condition triggers.
+    tags:
+      - "digital-twin"
+      - "condition-based"
+      - "maintenance"
+      - "demo"
