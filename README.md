@@ -227,7 +227,7 @@ What operations consume is a **direct, governed projection of validated engineer
 
 ## License
 
-Apache License 2.0
+
 
 ---
 
