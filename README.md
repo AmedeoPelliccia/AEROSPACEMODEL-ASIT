@@ -27,14 +27,29 @@
 ---
 ## Overview
 
-**AEROSPACEMODEL** is a **standards-native aerospace information framework** grounded on a dual AI architecture (**ASIT–ASIGT**) that transforms **validated engineering knowledge** into **operational, certifiable digital information**. 
+**AEROSPACEMODEL** adds an **aircraft intelligence layer** to aerospace systems through a **standards-native information framework** powered by a dual AI architecture (**ASIT–ASIGT**).
 
-The model enables **secure integration of generative AI** into aerospace production environments through:
+The framework transforms **validated engineering knowledge** into **operational, certifiable digital information**, enabling **secure integration of generative AI** into aerospace production environments.
 
-| Layer | Function |
-|-------|----------|
-| **ASIT** (Aerospace Standards Information Transformer) | Deterministic transformation of knowledge artifacts into standard-compliant information products |
-| **ASIGT** (Aerospace Standards Information Generative Transformer) | Governed generative AI augmentation with human-in-the-loop validation gates |
+### Core Architecture
+
+| Component | Role |
+|-----------|------|
+| **ASIT** | Aerospace Standards Information Transformer — deterministic, contract-bound transformation of knowledge into standard-compliant information products |
+| **ASIGT** | Aerospace Standards Information Generative Transformer — governed generative AI with human-in-the-loop validation and certification gates |
+
+### Key Capabilities
+
+| Capability | Description |
+|------------|-------------|
+| **Knowledge → Information** | Explicit transformation contracts from engineering truth (KDB) to consumable publications (IDB) |
+| **Standards-Native** | Native compliance with S1000D, ATA iSpec 2200, and aerospace data exchange protocols |
+| **Certification-Grade** | Full provenance, auditability, and traceability for airworthiness evidence |
+| **Secure AI Integration** | Bounded generative outputs validated against authoritative knowledge domains |
+
+### Integration with AMPEL360
+
+AEROSPACEMODEL serves as the **transformation and intelligence engine** for the [AMPEL360-Q100](https://github.com/AmedeoPelliccia/AMPEL360-Q100) Full Digital Information Twin Architecture (FIDITA):
 
 ### Design Principles
 
