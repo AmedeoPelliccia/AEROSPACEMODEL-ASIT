@@ -219,6 +219,44 @@ AEROSPACEMODEL-ASIT-ASIGT/
 
 ---
 
+## Pipelines
+
+ASIT-controlled pipelines define complete transformation workflows for generating S1000D-compliant documentation:
+
+| Pipeline | Description | Publication Type |
+|----------|-------------|------------------|
+| **AMM Pipeline** | Aircraft Maintenance Manual generation including system descriptions, maintenance procedures, and troubleshooting | AMM |
+| **SRM Pipeline** | Structural Repair Manual generation including damage limits, repair procedures, and NDT requirements | SRM |
+| **CMM Pipeline** | Component Maintenance Manual generation for Tier-1 suppliers and component-level documentation | CMM |
+| **IPC Pipeline** | Illustrated Parts Catalog generation with exploded views, parts lists, and vendor information | IPC |
+| **DT Documentation Pipeline** | Digital Twin integrated documentation with condition-based, event-driven, and certification workflows | DT_DOC |
+
+### Digital Twin Documentation Pipeline
+
+The **DT Documentation Pipeline** (`pipelines/dt_documentation_pipeline.yaml`) integrates Digital Twin capabilities with documentation generation, supporting:
+
+**Condition-Based Documentation**
+- Dynamic Maintenance Tasks — Maintenance procedures generated based on real-time health status
+- Adaptive Inspection Intervals — Inspection schedules adjusted based on component condition
+- Predictive Maintenance Advisories — Proactive maintenance recommendations from DT analysis
+- Real-Time Troubleshooting Guides — Fault isolation procedures informed by current system state
+
+**Event-Driven Documentation**
+- Service Bulletins (SB) — Triggered by DT events and configuration changes
+- Airworthiness Directives (AD) Compliance — AD tracking and compliance documentation
+- Engineering Orders (EO) — Change implementation and status tracking
+- Incident Reports — Event-triggered incident documentation with root cause analysis
+
+**Certification Documentation**
+- Type Certificate Data Sheets — Aircraft certification data
+- Compliance Evidence — Regulatory compliance documentation
+- Test Reports — Qualification, acceptance, and conformity test documentation
+- Safety Analysis Documents — FHA, FMEA, FTA, SSA, PSSA, ASA documentation
+
+All outputs maintain full traceability between the Digital Twin state, engineering baseline, and generated documentation.
+
+---
+
 ## Who This Is For
 
 * Aircraft OEMs (new or derivative programs)

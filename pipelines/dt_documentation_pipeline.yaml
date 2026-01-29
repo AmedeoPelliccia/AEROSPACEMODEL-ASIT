@@ -1,4 +1,34 @@
 # =============================================================================
+# DT Documentation Pipeline (Digital Twin Integrated Documentation)
+# ASIT-Controlled Execution Pipeline
+# Version: 2.0.0
+# =============================================================================
+#
+# This pipeline defines the complete transformation workflow for generating
+# S1000D-compliant documentation integrated with Digital Twin capabilities.
+#
+# Publication scope:
+#   - Condition-Based Documentation
+#     - Dynamic Maintenance Tasks (based on health status)
+#     - Adaptive Inspection Intervals
+#     - Predictive Maintenance Advisories
+#     - Real-Time Troubleshooting Guides
+#   - Event-Driven Documentation
+#     - Service Bulletins (SB)
+#     - Airworthiness Directives (AD) Compliance
+#     - Engineering Orders (EO)
+#     - Incident Reports
+#   - Certification Documentation
+#     - Type Certificate Data Sheets
+#     - Compliance Evidence
+#     - Test Reports
+#     - Safety Analysis Documents
+#
+# Digital Twin integration provides:
+#   - Real-time health status from DT state
+#   - Condition-based documentation generation
+#   - Event-driven publication triggers
+#   - Traceability between DT state and documentation
 # DT Documentation (Digital Twin Documentation) Pipeline
 # ASIT-Controlled Execution Pipeline
 # Version: 1.0.0
@@ -34,6 +64,18 @@ pipeline:
   # ---------------------------------------------------------------------------
   metadata:
     pipeline_id: "PIPELINE-DT-DOC-001"
+    name: "Digital Twin Integrated Documentation Pipeline"
+    description: |
+      End-to-end transformation pipeline for generating S1000D-compliant
+      documentation integrated with Digital Twin capabilities. Supports
+      condition-based, event-driven, and certification documentation workflows
+      with real-time DT state synchronization.
+    version: "2.0.0"
+    publication_type: "DT_DOC"
+    s1000d_issue: "5.0"
+    
+    # Pipeline ownership
+    owner: "STK_ENG"
     name: "Digital Twin Documentation Pipeline"
     description: |
       End-to-end transformation pipeline for generating S1000D Digital Twin
@@ -54,6 +96,12 @@ pipeline:
     # Classification
     tags:
       - "digital-twin"
+      - "dt"
+      - "condition-based"
+      - "event-driven"
+      - "certification"
+      - "predictive-maintenance"
+      - "s1000d"
       - "dt-documentation"
       - "predictive-maintenance"
       - "condition-based"
@@ -73,6 +121,9 @@ pipeline:
     required_fields:
       - "contract_id"
       - "baseline_ref"
+      - "scope.ata_chapters"
+      - "scope.effectivity"
+      - "authority.approved_by"
       - "scope.dt_connection"
       - "scope.health_monitoring_systems"
       - "scope.effectivity"
@@ -83,6 +134,44 @@ pipeline:
     validation:
       check_baseline_exists: true
       check_authority_valid: true
+      check_scope_coverage: true
+
+  # ---------------------------------------------------------------------------
+  # DIGITAL TWIN CONFIGURATION
+  # ---------------------------------------------------------------------------
+  digital_twin:
+    # DT connection settings
+    connection:
+      endpoint: "${config.dt_endpoint}"
+      protocol: "REST"
+      authentication: "oauth2"
+      timeout_seconds: 30
+      retry_attempts: 3
+      
+    # Health status thresholds
+    health_thresholds:
+      critical: 0.3
+      warning: 0.6
+      normal: 0.8
+      
+    # State synchronization
+    synchronization:
+      enabled: true
+      interval_seconds: 60
+      on_change_trigger: true
+      
+    # Event subscriptions
+    event_subscriptions:
+      - event_type: "health_status_change"
+        trigger_action: "condition_based_update"
+      - event_type: "component_failure"
+        trigger_action: "incident_report_generation"
+      - event_type: "maintenance_due"
+        trigger_action: "maintenance_advisory"
+      - event_type: "ad_compliance_required"
+        trigger_action: "ad_compliance_update"
+
+  # ---------------------------------------------------------------------------
       check_dt_connectivity: true
       check_scope_coverage: true
 
@@ -95,7 +184,7 @@ pipeline:
     # -------------------------------------------------------------------------
     - stage: "initialization"
       name: "Pipeline Initialization"
-      description: "Initialize pipeline environment and establish Digital Twin connection"
+      description: "Initialize pipeline environment and validate prerequisites establish Digital Twin connection"
       order: 1
       
       steps:
@@ -129,6 +218,30 @@ pipeline:
             - "baseline_status"
           on_failure: "abort"
           
+        - step: "initialize_dt_connection"
+          name: "Initialize Digital Twin Connection"
+          action: "dt.connect"
+          inputs:
+            endpoint: "${pipeline.digital_twin.connection.endpoint}"
+            protocol: "${pipeline.digital_twin.connection.protocol}"
+            authentication: "${pipeline.digital_twin.connection.authentication}"
+            timeout_seconds: "${pipeline.digital_twin.connection.timeout_seconds}"
+          outputs:
+            - "dt_connection"
+            - "dt_session_id"
+          on_failure: "abort"
+          
+        - step: "sync_dt_state"
+          name: "Synchronize Digital Twin State"
+          action: "dt.sync_state"
+          inputs:
+            dt_connection: "${dt_connection}"
+            scope: "${scope}"
+          outputs:
+            - "dt_state"
+            - "dt_health_status"
+            - "dt_event_queue"
+          on_failure: "warn"
         - step: "establish_dt_connection"
           name: "Establish Digital Twin Connection"
           action: "dt.connect"
@@ -162,6 +275,26 @@ pipeline:
             - "run_directory"
             - "run_id"
           on_failure: "abort"
+          
+        - step: "initialize_manifests"
+          name: "Initialize Manifests"
+          action: "manifest.initialize"
+          inputs:
+            run_directory: "${run_directory}"
+            contract: "${contract}"
+            baseline: "${baseline}"
+            dt_state: "${dt_state}"
+          outputs:
+            - "input_manifest"
+            - "output_manifest"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 2: SOURCE LOADING
+    # -------------------------------------------------------------------------
+    - stage: "source_loading"
+      name: "Source Loading"
+      description: "Load source artifacts from KDB baseline and DT state"
 
     # -------------------------------------------------------------------------
     # STAGE 2: DYNAMIC MAINTENANCE TASKS
@@ -173,6 +306,460 @@ pipeline:
       depends_on: ["initialization"]
       
       steps:
+        - step: "load_maintenance_tasks"
+          name: "Load Maintenance Tasks"
+          action: "source.load"
+          inputs:
+            source_type: "task"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/tasks"
+              - "KDB/SSOT/maintenance"
+          outputs:
+            - "maintenance_tasks"
+          filters:
+            - field: "task_type"
+              values: ["scheduled", "unscheduled", "condition", "predictive"]
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "load_inspection_data"
+          name: "Load Inspection Data"
+          action: "source.load"
+          inputs:
+            source_type: "inspection"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/inspections"
+          outputs:
+            - "inspection_data"
+          filters:
+            - field: "inspection_type"
+              values: ["visual", "ndt", "functional", "operational"]
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "load_troubleshooting_data"
+          name: "Load Troubleshooting Data"
+          action: "source.load"
+          inputs:
+            source_type: "fault_isolation"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/troubleshooting"
+              - "KDB/SSOT/fault_trees"
+          outputs:
+            - "troubleshooting_data"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "load_service_bulletins"
+          name: "Load Service Bulletin Data"
+          action: "source.load"
+          inputs:
+            source_type: "service_bulletin"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/service_bulletins"
+          outputs:
+            - "service_bulletins"
+          filters:
+            - field: "status"
+              values: ["active", "pending", "mandatory"]
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+          on_failure: "warn"
+          
+        - step: "load_airworthiness_directives"
+          name: "Load Airworthiness Directives"
+          action: "source.load"
+          inputs:
+            source_type: "airworthiness_directive"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/airworthiness_directives"
+          outputs:
+            - "airworthiness_directives"
+          filters:
+            - field: "status"
+              values: ["active", "pending"]
+            - field: "applicability"
+              operator: "matches"
+              values: "${scope.effectivity}"
+          on_failure: "warn"
+          
+        - step: "load_engineering_orders"
+          name: "Load Engineering Orders"
+          action: "source.load"
+          inputs:
+            source_type: "engineering_order"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/engineering_orders"
+          outputs:
+            - "engineering_orders"
+          filters:
+            - field: "status"
+              values: ["open", "in_progress", "pending_approval"]
+          on_failure: "warn"
+          
+        - step: "load_incident_reports"
+          name: "Load Incident Reports"
+          action: "source.load"
+          inputs:
+            source_type: "incident_report"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/incidents"
+          outputs:
+            - "incident_reports"
+          filters:
+            - field: "status"
+              values: ["open", "under_investigation", "corrective_action"]
+          on_failure: "warn"
+          
+        - step: "load_certification_data"
+          name: "Load Certification Data"
+          action: "source.load"
+          inputs:
+            source_type: "certification"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/certification"
+              - "KDB/SSOT/type_certificates"
+          outputs:
+            - "certification_data"
+          filters:
+            - field: "document_type"
+              values: ["tcds", "stc", "pma", "tso"]
+          on_failure: "warn"
+          
+        - step: "load_compliance_evidence"
+          name: "Load Compliance Evidence"
+          action: "source.load"
+          inputs:
+            source_type: "compliance"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/compliance"
+          outputs:
+            - "compliance_evidence"
+          filters:
+            - field: "regulation"
+              values: ["14CFR", "CS", "EASA", "FAA"]
+          on_failure: "warn"
+          
+        - step: "load_test_reports"
+          name: "Load Test Reports"
+          action: "source.load"
+          inputs:
+            source_type: "test_report"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/test_reports"
+          outputs:
+            - "test_reports"
+          filters:
+            - field: "test_type"
+              values: ["qualification", "acceptance", "conformity", "flight"]
+          on_failure: "warn"
+          
+        - step: "load_safety_analysis"
+          name: "Load Safety Analysis Documents"
+          action: "source.load"
+          inputs:
+            source_type: "safety_analysis"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/safety"
+          outputs:
+            - "safety_analysis"
+          filters:
+            - field: "analysis_type"
+              values: ["fha", "fmea", "fta", "ssa", "pssa", "asa"]
+          on_failure: "warn"
+          
+        - step: "load_graphics"
+          name: "Load Graphics (ICN Sources)"
+          action: "source.load"
+          inputs:
+            source_type: "graphic"
+            baseline: "${baseline}"
+            scope: "${scope}"
+            source_paths:
+              - "KDB/SSOT/graphics"
+          outputs:
+            - "graphics"
+          filters:
+            - field: "ata_chapter"
+              operator: "in"
+              values: "${scope.ata_chapters}"
+            - field: "format"
+              values: ["CGM", "PNG", "SVG", "JPEG"]
+          on_failure: "warn"
+          
+        - step: "compute_input_hashes"
+          name: "Compute Input Hashes"
+          action: "hash.compute"
+          inputs:
+            artifacts:
+              - "${maintenance_tasks}"
+              - "${inspection_data}"
+              - "${troubleshooting_data}"
+              - "${service_bulletins}"
+              - "${airworthiness_directives}"
+              - "${engineering_orders}"
+              - "${incident_reports}"
+              - "${certification_data}"
+              - "${compliance_evidence}"
+              - "${test_reports}"
+              - "${safety_analysis}"
+              - "${graphics}"
+            algorithm: "sha256"
+          outputs:
+            - "input_hashes"
+            - "combined_input_hash"
+          on_failure: "abort"
+          
+        - step: "update_input_manifest"
+          name: "Update Input Manifest"
+          action: "manifest.update"
+          inputs:
+            manifest: "${input_manifest}"
+            artifacts:
+              maintenance_tasks: "${maintenance_tasks}"
+              inspection_data: "${inspection_data}"
+              troubleshooting_data: "${troubleshooting_data}"
+              service_bulletins: "${service_bulletins}"
+              airworthiness_directives: "${airworthiness_directives}"
+              engineering_orders: "${engineering_orders}"
+              incident_reports: "${incident_reports}"
+              certification_data: "${certification_data}"
+              compliance_evidence: "${compliance_evidence}"
+              test_reports: "${test_reports}"
+              safety_analysis: "${safety_analysis}"
+              graphics: "${graphics}"
+            hashes: "${input_hashes}"
+            dt_state: "${dt_state}"
+          outputs:
+            - "input_manifest"
+          on_failure: "abort"
+
+    # -------------------------------------------------------------------------
+    # STAGE 3: CONDITION-BASED DOCUMENTATION
+    # -------------------------------------------------------------------------
+    - stage: "condition_based_documentation"
+      name: "Condition-Based Documentation Generation"
+      description: "Generate documentation based on Digital Twin health status"
+      order: 3
+      depends_on: ["source_loading"]
+      
+      steps:
+        - step: "evaluate_health_status"
+          name: "Evaluate Component Health Status"
+          action: "dt.evaluate_health"
+          inputs:
+            dt_state: "${dt_state}"
+            dt_health_status: "${dt_health_status}"
+            thresholds: "${pipeline.digital_twin.health_thresholds}"
+          outputs:
+            - "health_evaluation"
+            - "components_requiring_attention"
+            - "recommended_actions"
+          on_failure: "warn"
+          
+        - step: "generate_dynamic_maintenance_dms"
+          name: "Generate Dynamic Maintenance Data Modules"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${maintenance_tasks}"
+            health_evaluation: "${health_evaluation}"
+            components_requiring_attention: "${components_requiring_attention}"
+            mapping: "ASIGT/mapping/task_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_procedural.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              system_diff_code: "${config.system_diff_code}"
+              language: "${config.language}"
+              issue_number: "${config.issue_number}"
+              include_wcnp: true
+              dt_enabled: true
+          outputs:
+            - "dm_dynamic_maintenance"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "calculate_adaptive_intervals"
+          name: "Calculate Adaptive Inspection Intervals"
+          action: "dt.calculate_intervals"
+          inputs:
+            inspection_data: "${inspection_data}"
+            dt_state: "${dt_state}"
+            health_evaluation: "${health_evaluation}"
+            base_intervals: "${config.base_inspection_intervals}"
+          outputs:
+            - "adaptive_intervals"
+            - "interval_adjustments"
+          on_failure: "warn"
+          
+        - step: "generate_adaptive_inspection_dms"
+          name: "Generate Adaptive Inspection Data Modules"
+          action: "generator.dm_procedural"
+          inputs:
+            sources: "${inspection_data}"
+            adaptive_intervals: "${adaptive_intervals}"
+            mapping: "ASIGT/mapping/inspection_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_inspection.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              system_diff_code: "${config.system_diff_code}"
+              language: "${config.language}"
+              issue_number: "${config.issue_number}"
+              dt_enabled: true
+          outputs:
+            - "dm_adaptive_inspection"
+          parallel: true
+          batch_size: 10
+          on_failure: "continue"
+          
+        - step: "generate_predictive_advisories"
+          name: "Generate Predictive Maintenance Advisories"
+          action: "generator.dm_advisory"
+          inputs:
+            dt_state: "${dt_state}"
+            health_evaluation: "${health_evaluation}"
+            recommended_actions: "${recommended_actions}"
+            maintenance_tasks: "${maintenance_tasks}"
+            template: "ASIGT/s1000d_templates/dm_advisory.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              advisory_type: "predictive_maintenance"
+              include_rul_data: true
+          outputs:
+            - "dm_predictive_advisories"
+          on_failure: "continue"
+          
+        - step: "generate_realtime_troubleshooting"
+          name: "Generate Real-Time Troubleshooting Guides"
+          action: "generator.dm_fault_isolation"
+          inputs:
+            sources: "${troubleshooting_data}"
+            dt_state: "${dt_state}"
+            health_evaluation: "${health_evaluation}"
+            mapping: "ASIGT/mapping/fault_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_fault_isolation.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              include_isolation_trees: true
+              realtime_data_enabled: true
+          outputs:
+            - "dm_realtime_troubleshooting"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+
+    # -------------------------------------------------------------------------
+    # STAGE 4: EVENT-DRIVEN DOCUMENTATION
+    # -------------------------------------------------------------------------
+    - stage: "event_driven_documentation"
+      name: "Event-Driven Documentation Generation"
+      description: "Generate documentation triggered by events from Digital Twin"
+      order: 4
+      depends_on: ["condition_based_documentation"]
+      
+      steps:
+        - step: "process_event_queue"
+          name: "Process Digital Twin Event Queue"
+          action: "dt.process_events"
+          inputs:
+            dt_event_queue: "${dt_event_queue}"
+            event_filters:
+              - "service_bulletin_trigger"
+              - "ad_compliance_trigger"
+              - "engineering_order_trigger"
+              - "incident_trigger"
+          outputs:
+            - "processed_events"
+            - "triggered_actions"
+          on_failure: "warn"
+          
+        - step: "generate_service_bulletin_dms"
+          name: "Generate Service Bulletin Data Modules"
+          action: "generator.dm_sb"
+          inputs:
+            sources: "${service_bulletins}"
+            processed_events: "${processed_events}"
+            mapping: "ASIGT/mapping/sb_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_service_bulletin.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              system_diff_code: "${config.system_diff_code}"
+              language: "${config.language}"
+              issue_number: "${config.issue_number}"
+              sb_classification: true
+          outputs:
+            - "dm_service_bulletins"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_ad_compliance_dms"
+          name: "Generate Airworthiness Directive Compliance Data Modules"
+          action: "generator.dm_ad"
+          inputs:
+            sources: "${airworthiness_directives}"
+            processed_events: "${processed_events}"
+            dt_state: "${dt_state}"
+            mapping: "ASIGT/mapping/ad_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_ad_compliance.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              compliance_tracking: true
+              due_date_calculation: true
+          outputs:
+            - "dm_ad_compliance"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
+        - step: "generate_engineering_order_dms"
+          name: "Generate Engineering Order Data Modules"
+          action: "generator.dm_eo"
+          inputs:
+            sources: "${engineering_orders}"
+            processed_events: "${processed_events}"
+            mapping: "ASIGT/mapping/eo_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_engineering_order.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              include_effectivity: true
+              include_implementation_status: true
+          outputs:
+            - "dm_engineering_orders"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+          
         - step: "query_component_health"
           name: "Query Component Health Status from DT"
           action: "dt.query_health"
@@ -572,6 +1159,47 @@ pipeline:
           name: "Generate Incident Report Data Modules"
           action: "generator.dm_incident"
           inputs:
+            sources: "${incident_reports}"
+            processed_events: "${processed_events}"
+            dt_state: "${dt_state}"
+            mapping: "ASIGT/mapping/incident_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_incident.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              include_root_cause: true
+              include_corrective_actions: true
+              safety_impact_assessment: true
+          outputs:
+            - "dm_incident_reports"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+
+    # -------------------------------------------------------------------------
+    # STAGE 5: CERTIFICATION DOCUMENTATION
+    # -------------------------------------------------------------------------
+    - stage: "certification_documentation"
+      name: "Certification Documentation Generation"
+      description: "Generate certification and compliance documentation"
+      order: 5
+      depends_on: ["event_driven_documentation"]
+      
+      steps:
+        - step: "generate_tcds_dms"
+          name: "Generate Type Certificate Data Sheet Data Modules"
+          action: "generator.dm_tcds"
+          inputs:
+            sources: "${certification_data}"
+            baseline: "${baseline}"
+            mapping: "ASIGT/mapping/certification_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_tcds.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              include_limitations: true
+              include_approved_data: true
+          outputs:
+            - "dm_tcds"
+          on_failure: "continue"
             sources: "${correlated_incidents}"
             template: "${config.templates.dm_incident}"
             config:
@@ -686,6 +1314,21 @@ pipeline:
           name: "Generate Compliance Evidence Data Modules"
           action: "generator.dm_compliance"
           inputs:
+            sources: "${compliance_evidence}"
+            airworthiness_directives: "${airworthiness_directives}"
+            baseline: "${baseline}"
+            dt_state: "${dt_state}"
+            mapping: "ASIGT/mapping/compliance_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_compliance.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              regulation_mapping: true
+              evidence_chain: true
+          outputs:
+            - "dm_compliance_evidence"
+          parallel: true
+          batch_size: 10
+          on_failure: "continue"
             sources: "${evidence_mapping}"
             template: "ASIGT/s1000d_templates/dm_descriptive.xml"
             config:
@@ -732,6 +1375,81 @@ pipeline:
           action: "generator.dm_test_report"
           inputs:
             sources: "${test_reports}"
+            baseline: "${baseline}"
+            mapping: "ASIGT/mapping/test_report_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_test_report.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              include_test_results: true
+              include_pass_fail_criteria: true
+              traceability_to_requirements: true
+          outputs:
+            - "dm_test_reports"
+          parallel: true
+          batch_size: 10
+          on_failure: "continue"
+          
+        - step: "generate_safety_analysis_dms"
+          name: "Generate Safety Analysis Data Modules"
+          action: "generator.dm_safety"
+          inputs:
+            sources: "${safety_analysis}"
+            baseline: "${baseline}"
+            dt_state: "${dt_state}"
+            mapping: "ASIGT/mapping/safety_to_dm.yaml"
+            template: "ASIGT/s1000d_templates/dm_safety_analysis.xml"
+            config:
+              model_ident_code: "${config.model_ident_code}"
+              analysis_types:
+                - "fha"
+                - "fmea"
+                - "fta"
+                - "ssa"
+                - "pssa"
+                - "asa"
+              include_hazard_classification: true
+              include_mitigation_measures: true
+          outputs:
+            - "dm_safety_analysis"
+          parallel: true
+          batch_size: 5
+          on_failure: "continue"
+
+    # -------------------------------------------------------------------------
+    # STAGE 6: TRANSFORMATION AND INTEGRATION
+    # -------------------------------------------------------------------------
+    - stage: "transformation"
+      name: "Content Transformation and Integration"
+      description: "Integrate all generated content and apply DT state linkage"
+      order: 6
+      depends_on: ["certification_documentation"]
+      
+      steps:
+        - step: "process_graphics"
+          name: "Process Graphics to ICN"
+          action: "generator.icn"
+          inputs:
+            sources: "${graphics}"
+            config:
+              output_format: "CGM"
+              resolution: 300
+              color_mode: "RGB"
+              include_hotspots: true
+          outputs:
+            - "icn_files"
+          parallel: true
+          batch_size: 20
+          on_failure: "continue"
+          
+        - step: "link_icn_references"
+          name: "Link ICN References in DMs"
+          action: "generator.link_icn"
+          inputs:
+            data_modules:
+              - "${dm_dynamic_maintenance}"
+              - "${dm_adaptive_inspection}"
+              - "${dm_predictive_advisories}"
+              - "${dm_realtime_troubleshooting}"
             validation_status: "${test_validation_status}"
             template: "ASIGT/s1000d_templates/dm_descriptive.xml"
             config:
@@ -833,6 +1551,50 @@ pipeline:
               - "${dm_tcds}"
               - "${dm_compliance_evidence}"
               - "${dm_test_reports}"
+              - "${dm_safety_analysis}"
+            icn_files: "${icn_files}"
+          outputs:
+            - "dm_with_icn"
+          on_failure: "warn"
+          
+        - step: "apply_dt_state_linkage"
+          name: "Apply Digital Twin State Linkage"
+          action: "dt.link_state"
+          inputs:
+            data_modules: "${dm_with_icn}"
+            dt_state: "${dt_state}"
+            dt_session_id: "${dt_session_id}"
+            config:
+              include_state_reference: true
+              include_timestamp: true
+              include_health_snapshot: true
+          outputs:
+            - "dm_with_dt_linkage"
+          on_failure: "warn"
+          
+        - step: "apply_applicability"
+          name: "Apply Applicability Filtering"
+          action: "applicability.apply"
+          inputs:
+            data_modules: "${dm_with_dt_linkage}"
+            act_file: "${config.act_file}"
+            pct_file: "${config.pct_file}"
+            cct_file: "${config.cct_file}"
+            effectivity: "${scope.effectivity}"
+          outputs:
+            - "dm_filtered"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 7: VALIDATION
+    # -------------------------------------------------------------------------
+    - stage: "validation"
+      name: "Content Validation"
+      description: "Validate generated content against BREX and schema"
+      order: 7
+      depends_on: ["transformation"]
+      
+      steps:
               - "${dm_safety_analyses}"
           outputs:
             - "all_data_modules"
@@ -842,6 +1604,7 @@ pipeline:
           name: "BREX Rule Validation"
           action: "validator.brex"
           inputs:
+            data_modules: "${dm_filtered}"
             data_modules: "${all_data_modules}"
             brex_file: "ASIGT/brex/S1000D_5.0_DEFAULT.yaml"
             project_brex: "ASIGT/brex/project_brex.yaml"
@@ -858,6 +1621,8 @@ pipeline:
           name: "XML Schema Validation"
           action: "validator.schema"
           inputs:
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
             data_modules: "${all_data_modules}"
             schema_path: "schemas/s1000d/${config.s1000d_issue}/"
           outputs:
@@ -867,6 +1632,138 @@ pipeline:
             generate_report: true
           on_failure: "abort"
           
+        - step: "reference_validation"
+          name: "Cross-Reference Validation"
+          action: "validator.references"
+          inputs:
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+          outputs:
+            - "reference_results"
+          config:
+            check_dm_refs: true
+            check_icn_refs: true
+            check_external_refs: true
+            check_dt_refs: true
+          on_failure: "warn"
+          
+        - step: "dt_state_validation"
+          name: "Digital Twin State Validation"
+          action: "validator.dt_state"
+          inputs:
+            data_modules: "${dm_filtered}"
+            dt_state: "${dt_state}"
+            dt_session_id: "${dt_session_id}"
+          outputs:
+            - "dt_validation_results"
+          config:
+            check_state_consistency: true
+            check_timestamp_validity: true
+          on_failure: "warn"
+          
+        - step: "completeness_check"
+          name: "Content Completeness Check"
+          action: "validator.completeness"
+          inputs:
+            data_modules: "${dm_filtered}"
+            scope: "${scope}"
+            expected_coverage:
+              - type: "condition_based"
+                categories:
+                  - "dynamic_maintenance"
+                  - "adaptive_inspection"
+                  - "predictive_advisory"
+                  - "realtime_troubleshooting"
+              - type: "event_driven"
+                categories:
+                  - "service_bulletin"
+                  - "ad_compliance"
+                  - "engineering_order"
+                  - "incident_report"
+              - type: "certification"
+                categories:
+                  - "tcds"
+                  - "compliance_evidence"
+                  - "test_report"
+                  - "safety_analysis"
+          outputs:
+            - "completeness_results"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 8: TRACEABILITY
+    # -------------------------------------------------------------------------
+    - stage: "traceability"
+      name: "Traceability Generation"
+      description: "Build source-to-output traceability matrix with DT linkage"
+      order: 8
+      depends_on: ["validation"]
+      
+      steps:
+        - step: "build_trace_matrix"
+          name: "Build Trace Matrix"
+          action: "trace.build_matrix"
+          inputs:
+            sources:
+              maintenance_tasks: "${maintenance_tasks}"
+              inspection_data: "${inspection_data}"
+              troubleshooting_data: "${troubleshooting_data}"
+              service_bulletins: "${service_bulletins}"
+              airworthiness_directives: "${airworthiness_directives}"
+              engineering_orders: "${engineering_orders}"
+              incident_reports: "${incident_reports}"
+              certification_data: "${certification_data}"
+              compliance_evidence: "${compliance_evidence}"
+              test_reports: "${test_reports}"
+              safety_analysis: "${safety_analysis}"
+              graphics: "${graphics}"
+            outputs:
+              dm_dynamic_maintenance: "${dm_dynamic_maintenance}"
+              dm_adaptive_inspection: "${dm_adaptive_inspection}"
+              dm_predictive_advisories: "${dm_predictive_advisories}"
+              dm_realtime_troubleshooting: "${dm_realtime_troubleshooting}"
+              dm_service_bulletins: "${dm_service_bulletins}"
+              dm_ad_compliance: "${dm_ad_compliance}"
+              dm_engineering_orders: "${dm_engineering_orders}"
+              dm_incident_reports: "${dm_incident_reports}"
+              dm_tcds: "${dm_tcds}"
+              dm_compliance_evidence: "${dm_compliance_evidence}"
+              dm_test_reports: "${dm_test_reports}"
+              dm_safety_analysis: "${dm_safety_analysis}"
+              icn_files: "${icn_files}"
+            input_hashes: "${input_hashes}"
+            dt_state: "${dt_state}"
+          outputs:
+            - "trace_matrix"
+          on_failure: "abort"
+          
+        - step: "build_dt_trace"
+          name: "Build Digital Twin Traceability"
+          action: "trace.build_dt_trace"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            dt_state: "${dt_state}"
+            dt_session_id: "${dt_session_id}"
+            health_evaluation: "${health_evaluation}"
+            processed_events: "${processed_events}"
+          outputs:
+            - "dt_trace_matrix"
+          on_failure: "warn"
+          
+        - step: "validate_traceability"
+          name: "Validate Traceability Completeness"
+          action: "validator.trace"
+          inputs:
+            trace_matrix: "${trace_matrix}"
+            dt_trace_matrix: "${dt_trace_matrix}"
+            requirements:
+              input_coverage: 1.0
+              output_coverage: 1.0
+              bidirectional: true
+              dt_linkage: true
+          outputs:
+            - "trace_validation_results"
+          on_failure: "warn"
         - step: "dt_link_validation"
           name: "Digital Twin Link Validation"
           action: "validator.dt_links"
@@ -937,6 +1834,89 @@ pipeline:
           name: "Export Trace Matrix"
           action: "trace.export"
           inputs:
+            trace_matrix: "${trace_matrix}"
+            output_path: "${run_directory}/TRACE_MATRIX.csv"
+            format: "csv"
+          outputs:
+            - "trace_matrix_file"
+          on_failure: "warn"
+          
+        - step: "export_dt_trace_matrix"
+          name: "Export Digital Twin Trace Matrix"
+          action: "trace.export"
+          inputs:
+            trace_matrix: "${dt_trace_matrix}"
+            output_path: "${run_directory}/DT_TRACE_MATRIX.csv"
+            format: "csv"
+          outputs:
+            - "dt_trace_matrix_file"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 9: PUBLICATION ASSEMBLY
+    # -------------------------------------------------------------------------
+    - stage: "publication_assembly"
+      name: "Publication Assembly"
+      description: "Assemble data modules into publication structure"
+      order: 9
+      depends_on: ["traceability"]
+      
+      steps:
+        - step: "generate_pm_condition_based"
+          name: "Generate Condition-Based Publication Module"
+          action: "generator.pm"
+          inputs:
+            data_modules:
+              - "${dm_dynamic_maintenance}"
+              - "${dm_adaptive_inspection}"
+              - "${dm_predictive_advisories}"
+              - "${dm_realtime_troubleshooting}"
+            template: "ASIGT/s1000d_templates/pm_structure.xml"
+            config:
+              publication_type: "DT_CONDITION"
+              model_ident_code: "${config.model_ident_code}"
+              pm_title: "${config.program_name} Condition-Based Documentation"
+              ata_structure: true
+          outputs:
+            - "pm_condition_based"
+          on_failure: "abort"
+          
+        - step: "generate_pm_event_driven"
+          name: "Generate Event-Driven Publication Module"
+          action: "generator.pm"
+          inputs:
+            data_modules:
+              - "${dm_service_bulletins}"
+              - "${dm_ad_compliance}"
+              - "${dm_engineering_orders}"
+              - "${dm_incident_reports}"
+            template: "ASIGT/s1000d_templates/pm_structure.xml"
+            config:
+              publication_type: "DT_EVENT"
+              model_ident_code: "${config.model_ident_code}"
+              pm_title: "${config.program_name} Event-Driven Documentation"
+              ata_structure: true
+          outputs:
+            - "pm_event_driven"
+          on_failure: "abort"
+          
+        - step: "generate_pm_certification"
+          name: "Generate Certification Publication Module"
+          action: "generator.pm"
+          inputs:
+            data_modules:
+              - "${dm_tcds}"
+              - "${dm_compliance_evidence}"
+              - "${dm_test_reports}"
+              - "${dm_safety_analysis}"
+            template: "ASIGT/s1000d_templates/pm_structure.xml"
+            config:
+              publication_type: "DT_CERT"
+              model_ident_code: "${config.model_ident_code}"
+              pm_title: "${config.program_name} Certification Documentation"
+              ata_structure: false
+          outputs:
+            - "pm_certification"
             trace_matrix: "${dt_trace_matrix}"
             output_path: "${run_directory}/DT_TRACE_MATRIX.csv"
             format: "csv"
@@ -974,6 +1954,15 @@ pipeline:
           name: "Generate Data Module List"
           action: "generator.dml"
           inputs:
+            data_modules: "${dm_filtered}"
+            publication_modules:
+              - "${pm_condition_based}"
+              - "${pm_event_driven}"
+              - "${pm_certification}"
+            icn_files: "${icn_files}"
+            template: "ASIGT/s1000d_templates/dml_structure.xml"
+            config:
+              dml_type: "CSDB"
             data_modules: "${all_data_modules}"
             publication_module: "${pm_dt_doc}"
             template: "ASIGT/s1000d_templates/dml_structure.xml"
@@ -988,6 +1977,14 @@ pipeline:
           name: "Assemble CSDB Package"
           action: "package.csdb"
           inputs:
+            data_modules: "${dm_filtered}"
+            publication_modules:
+              - "${pm_condition_based}"
+              - "${pm_event_driven}"
+              - "${pm_certification}"
+            dml: "${dml}"
+            icn_files: "${icn_files}"
+            output_path: "IDB/CSDB/DT_DOC"
             data_modules: "${all_data_modules}"
             publication_module: "${pm_dt_doc}"
             dml: "${dml}"
@@ -997,6 +1994,84 @@ pipeline:
           on_failure: "abort"
 
     # -------------------------------------------------------------------------
+    # STAGE 10: OUTPUT RENDERING (OPTIONAL)
+    # -------------------------------------------------------------------------
+    - stage: "rendering"
+      name: "Output Rendering"
+      description: "Render publication to delivery formats"
+      order: 10
+      depends_on: ["publication_assembly"]
+      condition: "${config.render_outputs}"
+      
+      steps:
+        - step: "render_pdf"
+          name: "Render PDF Output"
+          action: "renderer.pdf"
+          inputs:
+            publication_modules:
+              - "${pm_condition_based}"
+              - "${pm_event_driven}"
+              - "${pm_certification}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            config:
+              page_size: "A4"
+              include_toc: true
+              include_lep: true
+              include_highlights: true
+          outputs:
+            - "pdf_output"
+          condition: "${config.render_pdf}"
+          on_failure: "warn"
+          
+        - step: "render_html"
+          name: "Render HTML Output"
+          action: "renderer.html"
+          inputs:
+            publication_modules:
+              - "${pm_condition_based}"
+              - "${pm_event_driven}"
+              - "${pm_certification}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            config:
+              responsive: true
+              dark_mode: true
+              include_search: true
+              include_navigation: true
+              dt_dashboard_enabled: true
+          outputs:
+            - "html_output"
+          condition: "${config.render_html}"
+          on_failure: "warn"
+          
+        - step: "package_ietp"
+          name: "Package IETP"
+          action: "renderer.ietp"
+          inputs:
+            publication_modules:
+              - "${pm_condition_based}"
+              - "${pm_event_driven}"
+              - "${pm_certification}"
+            data_modules: "${dm_filtered}"
+            icn_files: "${icn_files}"
+            config:
+              format: "scorm"
+              include_viewer: true
+              dt_integration: true
+          outputs:
+            - "ietp_package"
+          condition: "${config.package_ietp}"
+          on_failure: "warn"
+
+    # -------------------------------------------------------------------------
+    # STAGE 11: FINALIZATION
+    # -------------------------------------------------------------------------
+    - stage: "finalization"
+      name: "Pipeline Finalization"
+      description: "Finalize run artifacts and generate reports"
+      order: 11
+      depends_on: ["rendering"]
     # STAGE 17: DIGITAL TWIN SYNCHRONIZATION
     # -------------------------------------------------------------------------
     - stage: "dt_synchronization"
@@ -1056,6 +2131,12 @@ pipeline:
           action: "hash.compute"
           inputs:
             artifacts:
+              - "${dm_filtered}"
+              - "${pm_condition_based}"
+              - "${pm_event_driven}"
+              - "${pm_certification}"
+              - "${dml}"
+              - "${icn_files}"
               - "${all_data_modules}"
               - "${pm_dt_doc}"
               - "${dml}"
@@ -1065,6 +2146,102 @@ pipeline:
             - "combined_output_hash"
           on_failure: "warn"
           
+        - step: "finalize_output_manifest"
+          name: "Finalize Output Manifest"
+          action: "manifest.finalize"
+          inputs:
+            manifest: "${output_manifest}"
+            outputs:
+              dm_condition_based:
+                dm_dynamic_maintenance: "${dm_dynamic_maintenance}"
+                dm_adaptive_inspection: "${dm_adaptive_inspection}"
+                dm_predictive_advisories: "${dm_predictive_advisories}"
+                dm_realtime_troubleshooting: "${dm_realtime_troubleshooting}"
+              dm_event_driven:
+                dm_service_bulletins: "${dm_service_bulletins}"
+                dm_ad_compliance: "${dm_ad_compliance}"
+                dm_engineering_orders: "${dm_engineering_orders}"
+                dm_incident_reports: "${dm_incident_reports}"
+              dm_certification:
+                dm_tcds: "${dm_tcds}"
+                dm_compliance_evidence: "${dm_compliance_evidence}"
+                dm_test_reports: "${dm_test_reports}"
+                dm_safety_analysis: "${dm_safety_analysis}"
+              pm:
+                condition_based: "${pm_condition_based}"
+                event_driven: "${pm_event_driven}"
+                certification: "${pm_certification}"
+              dml: "${dml}"
+              icn: "${icn_files}"
+            hashes: "${output_hashes}"
+            validation_results:
+              brex: "${brex_results}"
+              schema: "${schema_results}"
+              dt_state: "${dt_validation_results}"
+            dt_state: "${dt_state}"
+          outputs:
+            - "output_manifest"
+          on_failure: "warn"
+          
+        - step: "update_dt_state"
+          name: "Update Digital Twin State"
+          action: "dt.update_state"
+          inputs:
+            dt_connection: "${dt_connection}"
+            dt_session_id: "${dt_session_id}"
+            run_id: "${run_id}"
+            output_manifest: "${output_manifest}"
+            trace_matrix: "${trace_matrix}"
+          outputs:
+            - "dt_state_update_status"
+          on_failure: "warn"
+          
+        - step: "close_dt_connection"
+          name: "Close Digital Twin Connection"
+          action: "dt.disconnect"
+          inputs:
+            dt_connection: "${dt_connection}"
+            dt_session_id: "${dt_session_id}"
+          outputs:
+            - "dt_disconnect_status"
+          on_failure: "warn"
+          
+        - step: "generate_validation_report"
+          name: "Generate Validation Report"
+          action: "report.validation"
+          inputs:
+            brex_results: "${brex_results}"
+            schema_results: "${schema_results}"
+            reference_results: "${reference_results}"
+            dt_validation_results: "${dt_validation_results}"
+            trace_results: "${trace_validation_results}"
+            output_path: "${run_directory}/VALIDATION_REPORT.json"
+          outputs:
+            - "validation_report"
+          on_failure: "warn"
+          
+        - step: "generate_metrics"
+          name: "Generate Metrics Report"
+          action: "report.metrics"
+          inputs:
+            run_id: "${run_id}"
+            stages: "${pipeline_stages}"
+            input_manifest: "${input_manifest}"
+            output_manifest: "${output_manifest}"
+            dt_state: "${dt_state}"
+            output_path: "${run_directory}/METRICS.json"
+          outputs:
+            - "metrics_report"
+          on_failure: "warn"
+          
+        - step: "finalize_log"
+          name: "Finalize Execution Log"
+          action: "log.finalize"
+          inputs:
+            run_directory: "${run_directory}"
+            status: "${pipeline_status}"
+          outputs:
+            - "log_file"
         - step: "generate_comprehensive_report"
           name: "Generate Comprehensive Report"
           action: "report.comprehensive"
@@ -1110,6 +2287,17 @@ pipeline:
     # Execution settings
     execution:
       parallel_enabled: true
+      max_parallel_steps: 4
+      timeout_minutes: 90
+      retry_failed_steps: false
+      max_retries: 2
+      
+    # Digital Twin settings
+    digital_twin:
+      sync_interval_seconds: 60
+      health_check_enabled: true
+      event_processing_enabled: true
+      state_persistence: true
       max_parallel_steps: 6
       timeout_minutes: 120
       retry_failed_steps: false
@@ -1137,6 +2325,12 @@ pipeline:
       on_success: true
       on_failure: true
       on_warning: true
+      on_dt_event: true
+      channels:
+        - type: "email"
+          recipients: ["dt-engineering@example.com"]
+        - type: "slack"
+          channel: "#asigt-dt-runs"
       on_ad_deadline: true
       on_critical_health: true
       channels:
@@ -1149,6 +2343,7 @@ pipeline:
     cleanup:
       remove_temp_files: true
       compress_outputs: false
+      retention_days: 90
       retention_days: 180
 
   # ---------------------------------------------------------------------------
@@ -1161,6 +2356,7 @@ pipeline:
         action: "pipeline.abort"
         cleanup: true
         notify: true
+        close_dt_connection: true
         close_dt_session: true
         
       continue:
@@ -1188,6 +2384,40 @@ pipeline:
   outputs:
     primary:
       - name: "CSDB Package"
+        path: "IDB/CSDB/DT_DOC"
+        type: "csdb"
+        
+      - name: "Condition-Based Publication Module"
+        path: "IDB/CSDB/DT_DOC/PM/CONDITION"
+        type: "pm"
+        
+      - name: "Event-Driven Publication Module"
+        path: "IDB/CSDB/DT_DOC/PM/EVENT"
+        type: "pm"
+        
+      - name: "Certification Publication Module"
+        path: "IDB/CSDB/DT_DOC/PM/CERT"
+        type: "pm"
+        
+      - name: "Data Module List"
+        path: "IDB/CSDB/DT_DOC/DML"
+        type: "dml"
+        
+    secondary:
+      - name: "PDF Output"
+        path: "IDB/EXPORTS/DT_DOC/PDF"
+        type: "pdf"
+        condition: "${config.render_pdf}"
+        
+      - name: "HTML Output"
+        path: "IDB/EXPORTS/DT_DOC/HTML"
+        type: "html"
+        condition: "${config.render_html}"
+        
+      - name: "IETP Package"
+        path: "IDB/EXPORTS/DT_DOC/IETP"
+        type: "ietp"
+        condition: "${config.package_ietp}"
         path: "IDB/CSDB/DT-DOC"
         type: "csdb"
         description: "Complete S1000D CSDB package with Digital Twin documentation"
@@ -1197,6 +2427,12 @@ pipeline:
         path: "ASIGT/runs/${run_id}"
         type: "run_artifacts"
         contents:
+          - "INPUT_MANIFEST.json"
+          - "OUTPUT_MANIFEST.json"
+          - "TRACE_MATRIX.csv"
+          - "DT_TRACE_MATRIX.csv"
+          - "VALIDATION_REPORT.json"
+          - "METRICS.json"
           - "DT_TRACE_MATRIX.csv"
           - "DT_DOC_REPORT.json"
           - "VALIDATION_REPORT.json"
