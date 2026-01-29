@@ -25,10 +25,38 @@
 </p>
 
 ---
-
 ## Overview
 
-**AEROSPACEMODEL-ASIT-ASIGT** is a **standards-native aerospace information framework** that transforms **validated engineering knowledge** into **operational, certifiable digital information**.
+**AEROSPACEMODEL** adds an **aircraft intelligence layer** to aerospace systems through a **standards-native information framework** powered by a dual AI architecture (**ASIT–ASIGT**).
+
+The framework transforms **validated engineering knowledge** into **operational, certifiable digital information**, enabling **secure integration of generative AI** into aerospace production environments.
+
+### Core Architecture
+
+| Component | Role |
+|-----------|------|
+| **ASIT** | Aerospace Standards Information Transformer — deterministic, contract-bound transformation of knowledge into standard-compliant information products |
+| **ASIGT** | Aerospace Standards Information Generative Transformer — governed generative AI with human-in-the-loop validation and certification gates |
+
+### Key Capabilities
+
+| Capability | Description |
+|------------|-------------|
+| **Knowledge → Information** | Explicit transformation contracts from engineering truth (KDB) to consumable publications (IDB) |
+| **Standards-Native** | Native compliance with S1000D, ATA iSpec 2200, and aerospace data exchange protocols |
+| **Certification-Grade** | Full provenance, auditability, and traceability for airworthiness evidence |
+| **Secure AI Integration** | Bounded generative outputs validated against authoritative knowledge domains |
+
+### Integration with AMPEL360
+
+AEROSPACEMODEL serves as the **transformation and intelligence engine** for the [AMPEL360-Q100](https://github.com/AmedeoPelliccia/AMPEL360-Q100) Full Digital Information Twin Architecture (FIDITA):
+
+### Design Principles
+
+- **Certification-Grade Provenance** — Full traceability from source knowledge to published output
+- **Standards Compliance** — Native alignment with S1000D, ATA iSpec 2200, and aerospace data exchange standards
+- **Controlled Generation** — AI outputs are bounded by validated knowledge domains and explicit transformation contracts
+- **Audit-Ready Governance** — Every AI-assisted transformation is logged, attributable, and reversible
 
 It is composed of two strictly separated but tightly integrated layers:
 
@@ -252,7 +280,7 @@ What operations consume is a **direct, governed projection of validated engineer
 
 ## License
 
-Apache License 2.0
+
 
 ---
 
