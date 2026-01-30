@@ -55,7 +55,7 @@ class FormatOptions:
     date_format: str = "%Y-%m-%d"
     datetime_format: str = "%Y-%m-%dT%H:%M:%S"
     encoding: str = "utf-8"
-    line_ending: str = "\\n"
+    line_ending: str = "\n"
 
 
 class BaseFormat(ABC):
@@ -187,7 +187,7 @@ class TSVFormat(BaseFormat):
     
     def __init__(self, options: Optional[FormatOptions] = None) -> None:
         super().__init__(options)
-        self.delimiter = "\\t"
+        self.delimiter = "\t"
     
     def serialize(
         self,

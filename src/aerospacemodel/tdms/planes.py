@@ -459,7 +459,17 @@ class MachinePlane:
         """
         handler = TSVFormat()
         
-        source_path = Path(source) if not isinstance(source, str) or "\\t" not in source else None
+        # Check if source is a Path object or a path string that exists
+        source_path = None
+        if isinstance(source, Path):
+            source_path = source
+        elif isinstance(source, str):
+            try:
+                potential_path = Path(source)
+                if potential_path.exists():
+                    source_path = potential_path
+            except (OSError, ValueError):
+                pass  # Not a valid path
         
         if source_path and source_path.exists():
             records = handler.read(source_path)
@@ -482,7 +492,17 @@ class MachinePlane:
         """Load from CSV file or string."""
         handler = CSVFormat()
         
-        source_path = Path(source) if not isinstance(source, str) or "," not in source else None
+        # Check if source is a Path object or a path string that exists
+        source_path = None
+        if isinstance(source, Path):
+            source_path = source
+        elif isinstance(source, str):
+            try:
+                potential_path = Path(source)
+                if potential_path.exists():
+                    source_path = potential_path
+            except (OSError, ValueError):
+                pass  # Not a valid path
         
         if source_path and source_path.exists():
             records = handler.read(source_path)
@@ -505,7 +525,17 @@ class MachinePlane:
         """Load from line protocol file or string."""
         handler = LineProtocolFormat()
         
-        source_path = Path(source) if not isinstance(source, str) else None
+        # Check if source is a Path object or a path string that exists
+        source_path = None
+        if isinstance(source, Path):
+            source_path = source
+        elif isinstance(source, str):
+            try:
+                potential_path = Path(source)
+                if potential_path.exists():
+                    source_path = potential_path
+            except (OSError, ValueError):
+                pass  # Not a valid path
         
         if source_path and source_path.exists():
             records = handler.read(source_path)
@@ -542,13 +572,14 @@ class MachinePlane:
                 ("baseline_type", DictionaryType.BASELINE),
                 ("stakeholder", DictionaryType.STAKEHOLDER),
             ]:
-                if field_name in resolved:
+                if field_name in resolved and resolved[field_name]:
                     try:
-                        resolved[field_name] = self.dictionary_registry.resolve(
-                            resolved[field_name], dict_type
-                        )
-                    except Exception:
-                        pass  # Keep original if resolution fails
+                        dictionary = self.dictionary_registry.get(dict_type)
+                        if dictionary and dictionary.has_id(str(resolved[field_name])):
+                            resolved[field_name] = dictionary.get_value(str(resolved[field_name]))
+                    except Exception as e:
+                        # Log at debug level to aid troubleshooting without crashing
+                        logger.debug(f"Could not resolve ID '{resolved[field_name]}' for field '{field_name}': {e}")
             resolved_records.append(resolved)
         
         return MachinePlane(
@@ -561,18 +592,23 @@ class MachinePlane:
         """
         Estimate token count for LLM context.
         
-        Rough estimate: ~4 characters per token for technical content.
+        This is a rough approximation using ~4 characters per token,
+        which works reasonably well for technical English content.
+        Actual token counts may vary based on tokenizer and content.
         
         Returns:
             Estimated token count
         """
         content = self.to_tsv()
-        # Rough estimate: 4 chars per token
+        # Rough estimate: 4 chars per token for technical content
         return len(content) // 4
     
-    def validate_against_source(self, source_hash: str) -> bool:
+    def matches_source_hash(self, source_hash: str) -> bool:
         """
-        Validate this derived plane against source hash.
+        Check if this derived plane's hash matches a source hash.
+        
+        Use this to verify that a MachinePlane was derived from
+        a specific HumanPlane without modification.
         
         Args:
             source_hash: Hash of the source HumanPlane

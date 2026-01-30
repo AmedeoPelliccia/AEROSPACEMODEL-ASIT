@@ -34,14 +34,17 @@ Usage:
     >>> human = HumanPlane.load("contracts/my_contract.yaml")
     >>> 
     >>> # Convert to token-efficient format for AI agents
-    >>> machine = TDMSConverter.to_machine_plane(human)
+    >>> converter = TDMSConverter()
+    >>> machine = converter.to_machine_plane(human)
     >>> 
     >>> # Export compact representation
     >>> machine.to_tsv("contract_compact.tsv")
     >>> 
     >>> # After AI processing, convert back (with validation)
     >>> modified = MachinePlane.from_tsv("agent_output.tsv")
-    >>> human_modified = TDMSConverter.to_human_plane(modified, validate=True)
+    >>> result = converter.to_human_plane(modified, validate=True)
+    >>> if result.success:
+    ...     result.human_plane.save("contract_updated.yaml")
 
 Copyright:
     2024-2026 AEROSPACEMODEL Contributors
