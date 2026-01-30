@@ -1,0 +1,724 @@
+# =============================================================================
+# MASTER BREX AUTHORITY FILE
+# ASIT Governance - Authoritative BREX Decision Rules
+# Version: 2.0.0
+# =============================================================================
+#
+# This file defines the AUTHORITATIVE BREX decision rules that govern all
+# AEROSPACEMODEL Agent reasoning. Every decision path is validated against
+# these rules. No free-form autonomy exists.
+#
+# Authority: ASIT (Aircraft Systems Information Transponder)
+# Compliance: S1000D Issue 4.x / 5.0, DO-178C, ARP4754A
+#
+# The AEROSPACEMODEL Agent's reasoning must be:
+#   - Constrained: Limited to approved decision paths
+#   - Guided: Directed by BREX rules
+#   - Explainable: Every step logged and auditable
+#   - Deterministic: Same inputs produce same outputs
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# METADATA
+# -----------------------------------------------------------------------------
+metadata:
+  authority_id: "ASIT-BREX-MASTER-001"
+  title: "Master BREX Authority for AEROSPACEMODEL"
+  version: "2.0.0"
+  status: "NORMATIVE"
+  classification: "Framework Specification"
+  
+  effective_date: "2026-01-01"
+  next_review: "2027-01-01"
+  
+  author: "ASIT Configuration Management"
+  approved_by: "CCB"
+  approval_reference: "CCB-2026-MASTER-001"
+  
+  compliance:
+    - "S1000D Issue 5.0"
+    - "S1000D Issue 4.2"
+    - "DO-178C Level A"
+    - "ARP4754A DAL A"
+    - "ARP4761"
+    - "AS9100 Rev D"
+  
+  determinism_level: "strict"
+  audit_required: true
+  replay_capable: true
+
+# -----------------------------------------------------------------------------
+# TIER DEFINITIONS
+# -----------------------------------------------------------------------------
+# Instruction system tiers (merged into single effective ruleset):
+#   TIER 1 — Repository instructions (lowest priority)
+#   TIER 2 — Local developer instructions
+#   TIER 3 — Environment instructions
+#   TIER 4 — ASIT master instructions (highest priority, authoritative)
+# -----------------------------------------------------------------------------
+tiers:
+  - tier: 1
+    name: "Repository Instructions"
+    source: ".github/**/.instructions.md"
+    priority: 100
+    description: "Project-level instructions from repository"
+    
+  - tier: 2
+    name: "Local Developer Instructions"
+    source: "$HOME/.aerospacemodel/*.instructions.md"
+    priority: 200
+    description: "Developer-specific instructions"
+    
+  - tier: 3
+    name: "Environment Instructions"
+    source: "$COPILOT_CUSTOM_INSTRUCTIONS_DIRS/**/*.instructions.md"
+    priority: 300
+    description: "Environment-specific instructions"
+    
+  - tier: 4
+    name: "ASIT Master Instructions"
+    source: "ASIT/GOVERNANCE/master_brex_authority.yaml"
+    priority: 1000
+    description: "Authoritative ASIT governance rules"
+    authoritative: true
+
+# -----------------------------------------------------------------------------
+# BREX DECISION RULES
+# -----------------------------------------------------------------------------
+# Format:
+#   IF <condition> AND <authority> AND <baseline> THEN <permitted_action>
+#   ELSE <deterministic failure mode>
+#
+# Mandatory Properties:
+#   - Every path is finite
+#   - No branching without rules
+#   - No generative freedom outside defined rule branches
+#   - All decisions logged with timestamps
+# -----------------------------------------------------------------------------
+
+brex_decision_rules:
+  # ===========================================================================
+  # CONTRACT RULES (CTR-xxx)
+  # ===========================================================================
+  
+  - rule_id: "CTR-001"
+    name: "Contract Required for Generation"
+    description: |
+      All content generation MUST operate under an approved ASIT contract.
+      ASIGT cannot execute without ASIT authorization.
+    conditions:
+      - condition_type: "contract_required"
+        parameter: "contract_id"
+      - condition_type: "custom"
+        parameter: "contract_status"
+        custom_validator: "validate_contract_status"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "critical"
+    message: "Content generation requires approved ASIT contract"
+    enforcement: "block_generation"
+    
+  - rule_id: "CTR-002"
+    name: "Contract Version Control"
+    description: |
+      Contract version must be current and not superseded.
+    conditions:
+      - condition_type: "custom"
+        parameter: "contract_version"
+        custom_validator: "validate_contract_version_current"
+    action_if_true: "allow"
+    action_if_false: "escalate"
+    escalation_target: "STK_CM"
+    severity: "error"
+    message: "Contract version validation"
+    
+  - rule_id: "CTR-003"
+    name: "Contract Scope Compliance"
+    description: |
+      Operations must be within the contract's defined scope.
+    conditions:
+      - condition_type: "custom"
+        parameter: "operation_scope"
+        custom_validator: "validate_within_contract_scope"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "Operation must be within contract scope"
+
+  # ===========================================================================
+  # BASELINE RULES (BL-xxx)
+  # ===========================================================================
+  
+  - rule_id: "BL-001"
+    name: "Baseline Required"
+    description: |
+      Content generation requires an established baseline reference.
+    conditions:
+      - condition_type: "baseline_required"
+        parameter: "baseline_id"
+      - condition_type: "custom"
+        parameter: "baseline_status"
+        custom_validator: "validate_baseline_established"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "critical"
+    message: "Established baseline required"
+    
+  - rule_id: "BL-002"
+    name: "Baseline Freeze Respect"
+    description: |
+      Cannot modify artifacts in frozen baselines without ECR/ECO.
+    conditions:
+      - condition_type: "custom"
+        parameter: "baseline_frozen"
+        custom_validator: "validate_baseline_not_frozen_or_ecr_exists"
+    action_if_true: "allow"
+    action_if_false: "escalate"
+    escalation_target: "CCB"
+    severity: "critical"
+    message: "Frozen baseline modification requires ECR/ECO"
+    
+  - rule_id: "BL-003"
+    name: "Baseline Effectivity Valid"
+    description: |
+      Operations must be within baseline effectivity dates.
+    conditions:
+      - condition_type: "custom"
+        parameter: "baseline_effectivity"
+        custom_validator: "validate_baseline_effectivity_current"
+    action_if_true: "allow"
+    action_if_false: "warn"
+    severity: "warning"
+    message: "Baseline effectivity validation"
+
+  # ===========================================================================
+  # STRUCTURE RULES (STRUCT-xxx)
+  # ===========================================================================
+  
+  - rule_id: "STRUCT-001"
+    name: "ATA Domain Must Exist"
+    description: |
+      All content must be associated with a valid ATA domain.
+    conditions:
+      - condition_type: "ata_domain_valid"
+        parameter: "ata_domain"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "ATA domain required for content classification"
+    enforcement: "require_ata_domain"
+    
+  - rule_id: "STRUCT-002"
+    name: "ATA Chapter Scope"
+    description: |
+      ATA chapter must be within contract scope.
+    conditions:
+      - condition_type: "custom"
+        parameter: "ata_chapter"
+        custom_validator: "validate_ata_chapter_scope"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "ATA chapter must be within contract scope"
+    
+  - rule_id: "STRUCT-003"
+    name: "DMC Format Valid"
+    description: |
+      Data Module Code must follow S1000D format.
+    conditions:
+      - condition_type: "custom"
+        parameter: "dm_code"
+        custom_validator: "validate_dmc_format"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "DMC format validation (S1000D)"
+    
+  - rule_id: "STRUCT-004"
+    name: "Model Identification Code"
+    description: |
+      Model identification code must be project-approved.
+    conditions:
+      - condition_type: "custom"
+        parameter: "model_ident_code"
+        custom_validator: "validate_model_ident_code"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "Model identification code must be project-approved"
+
+  # ===========================================================================
+  # AUTHORITY RULES (AUTHOR-xxx)
+  # ===========================================================================
+  
+  - rule_id: "AUTHOR-001"
+    name: "ASIT Authority Required"
+    description: |
+      All content operations require ASIT authority.
+    conditions:
+      - condition_type: "authority_valid"
+        parameter: "authority"
+        expected_value: "ASIT"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "critical"
+    message: "ASIT authority required for content operations"
+    
+  - rule_id: "AUTHOR-002"
+    name: "Contract Authority for Generation"
+    description: |
+      Content generation requires ASIT-approved contract.
+    conditions:
+      - condition_type: "contract_required"
+        parameter: "contract_id"
+      - condition_type: "custom"
+        parameter: "contract_status"
+        custom_validator: "validate_contract_status"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "critical"
+    message: "ASIT-approved contract required for generation"
+    enforcement: "require_contract"
+    
+  - rule_id: "AUTHOR-003"
+    name: "CCB Approval for Major Changes"
+    description: |
+      Major changes require CCB approval.
+    conditions:
+      - condition_type: "custom"
+        parameter: "change_classification"
+        custom_validator: "validate_ccb_approval_for_major"
+    action_if_true: "allow"
+    action_if_false: "escalate"
+    escalation_target: "CCB"
+    severity: "error"
+    message: "Major changes require CCB approval"
+
+  # ===========================================================================
+  # SAFETY RULES (SAFETY-xxx)
+  # ===========================================================================
+  
+  - rule_id: "SAFETY-001"
+    name: "Safety Classification Required"
+    description: |
+      All content must have safety classification.
+    conditions:
+      - condition_type: "custom"
+        parameter: "safety_classification"
+        custom_validator: "validate_safety_classification_exists"
+    action_if_true: "allow"
+    action_if_false: "warn"
+    severity: "warning"
+    message: "Safety classification should be specified"
+    
+  - rule_id: "SAFETY-002"
+    name: "Safety Impact Requires Human Approval"
+    description: |
+      Safety-impacting changes MUST have human approval.
+    conditions:
+      - condition_type: "safety_impact"
+        parameter: "safety_impact"
+    action_if_true: "escalate"
+    action_if_false: "allow"
+    escalation_target: "STK_SAF"
+    severity: "critical"
+    message: "Safety impact detected - human approval required"
+    enforcement: "require_human_approval"
+    
+  - rule_id: "SAFETY-003"
+    name: "ARP4761 Compliance"
+    description: |
+      Safety-critical content must comply with ARP4761.
+    conditions:
+      - condition_type: "custom"
+        parameter: "arp4761_compliance"
+        custom_validator: "validate_arp4761_compliance"
+    action_if_true: "allow"
+    action_if_false: "escalate"
+    escalation_target: "STK_SAF"
+    severity: "critical"
+    message: "ARP4761 compliance required for safety-critical content"
+    
+  - rule_id: "SAFETY-004"
+    name: "Warning/Caution Content Review"
+    description: |
+      Warning and caution content requires safety review.
+    conditions:
+      - condition_type: "custom"
+        parameter: "contains_warning_caution"
+        custom_validator: "validate_warning_caution_reviewed"
+    action_if_true: "allow"
+    action_if_false: "escalate"
+    escalation_target: "STK_SAF"
+    severity: "error"
+    message: "Warning/Caution content requires safety review"
+
+  # ===========================================================================
+  # LIFECYCLE RULES (LC-xxx)
+  # ===========================================================================
+  
+  - rule_id: "LC-001"
+    name: "Lifecycle State Valid"
+    description: |
+      Content must be in valid lifecycle state.
+    conditions:
+      - condition_type: "lifecycle_state_valid"
+        parameter: "lifecycle_state"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "Invalid lifecycle state"
+    
+  - rule_id: "LC-002"
+    name: "Lifecycle Transition Authorized"
+    description: |
+      Lifecycle state transitions must be authorized.
+    conditions:
+      - condition_type: "custom"
+        parameter: "lifecycle_transition"
+        custom_validator: "validate_lifecycle_transition"
+    action_if_true: "allow"
+    action_if_false: "escalate"
+    escalation_target: "STK_CM"
+    severity: "error"
+    message: "Lifecycle transition requires authorization"
+    enforcement: "bypass_lifecycle_states"
+    
+  - rule_id: "LC-003"
+    name: "In-Work Content Restricted"
+    description: |
+      In-work content cannot be published without review.
+    conditions:
+      - condition_type: "custom"
+        parameter: "inwork_status"
+        custom_validator: "validate_not_inwork_for_publication"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "In-work content cannot be published"
+
+  # ===========================================================================
+  # TRACEABILITY RULES (TRACE-xxx)
+  # ===========================================================================
+  
+  - rule_id: "TRACE-001"
+    name: "Trace Coverage Required"
+    description: |
+      Output must maintain required trace coverage.
+    conditions:
+      - condition_type: "trace_complete"
+        parameter: "trace_coverage"
+        expected_value: 100
+    action_if_true: "allow"
+    action_if_false: "warn"
+    severity: "warning"
+    message: "Trace coverage validation"
+    
+  - rule_id: "TRACE-002"
+    name: "Trace Link Type Valid"
+    description: |
+      Trace links must use valid link types.
+    conditions:
+      - condition_type: "custom"
+        parameter: "trace_link_types"
+        custom_validator: "validate_trace_link_types"
+    action_if_true: "allow"
+    action_if_false: "warn"
+    severity: "warning"
+    message: "Trace link type validation"
+    
+  - rule_id: "TRACE-003"
+    name: "DO-178C Traceability"
+    description: |
+      Certification-relevant content requires DO-178C traceability.
+    conditions:
+      - condition_type: "custom"
+        parameter: "certification_relevant"
+        custom_validator: "validate_do178c_traceability"
+    action_if_true: "allow"
+    action_if_false: "escalate"
+    escalation_target: "STK_CERT"
+    severity: "error"
+    message: "DO-178C traceability required"
+
+  # ===========================================================================
+  # BREX COMPLIANCE RULES (BREX-xxx)
+  # ===========================================================================
+  
+  - rule_id: "BREX-001"
+    name: "BREX Validation Required"
+    description: |
+      Content must pass BREX validation.
+    conditions:
+      - condition_type: "brex_compliant"
+        parameter: "brex_status"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "BREX validation required"
+    
+  - rule_id: "BREX-002"
+    name: "BREX Profile Compliance"
+    description: |
+      Content must comply with project BREX profile.
+    conditions:
+      - condition_type: "custom"
+        parameter: "brex_profile"
+        custom_validator: "validate_brex_profile_compliance"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "BREX profile compliance required"
+    
+  - rule_id: "BREX-003"
+    name: "Schema Validation"
+    description: |
+      Content must pass S1000D schema validation.
+    conditions:
+      - condition_type: "custom"
+        parameter: "schema_status"
+        custom_validator: "validate_s1000d_schema"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "S1000D schema validation required"
+
+  # ===========================================================================
+  # PIPELINE RULES (PIPELINE-xxx)
+  # ===========================================================================
+  
+  - rule_id: "PIPELINE-001"
+    name: "Pipeline Authorized"
+    description: |
+      Transformation pipeline must be authorized by contract.
+    conditions:
+      - condition_type: "custom"
+        parameter: "pipeline_id"
+        custom_validator: "validate_pipeline_authorized"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "Pipeline must be authorized by contract"
+    
+  - rule_id: "PIPELINE-002"
+    name: "Input Manifest Valid"
+    description: |
+      Input manifest must be valid and complete.
+    conditions:
+      - condition_type: "custom"
+        parameter: "input_manifest"
+        custom_validator: "validate_input_manifest"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "Input manifest validation"
+    
+  - rule_id: "PIPELINE-003"
+    name: "Output Target Valid"
+    description: |
+      Output target must be within IDB structure.
+    conditions:
+      - condition_type: "custom"
+        parameter: "output_target"
+        custom_validator: "validate_output_target"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "Output target must be within IDB structure"
+    
+  - rule_id: "PIPELINE-004"
+    name: "Transformation Approved"
+    description: |
+      Content transformation must be contract-approved.
+    conditions:
+      - condition_type: "content_approved"
+        parameter: "transformation_approved"
+    action_if_true: "allow"
+    action_if_false: "block"
+    severity: "error"
+    message: "Content transformation requires contract approval"
+    enforcement: "transform_content_if"
+
+# -----------------------------------------------------------------------------
+# ALLOWED OPERATIONS (BREX-driven)
+# -----------------------------------------------------------------------------
+allowed_operations:
+  - operation: "generate_dm_if"
+    brex_rules: ["AUTHOR-002", "STRUCT-001", "CTR-001"]
+    description: "Generate Data Module if contract and structure rules pass"
+    
+  - operation: "produce_publication_if"
+    brex_rules: ["STRUCT-001", "BREX-001", "LC-003"]
+    description: "Produce publication if structure and compliance rules pass"
+    
+  - operation: "transform_content_if"
+    brex_rules: ["PIPELINE-004", "CTR-001", "TRACE-001"]
+    description: "Transform content if pipeline and traceability rules pass"
+    
+  - operation: "modify_baseline_if"
+    brex_rules: ["BL-002", "AUTHOR-003"]
+    description: "Modify baseline if change control rules pass"
+    
+  - operation: "publish_content_if"
+    brex_rules: ["BREX-001", "LC-003", "SAFETY-002"]
+    description: "Publish content if compliance and safety rules pass"
+
+# -----------------------------------------------------------------------------
+# PROHIBITED OPERATIONS
+# -----------------------------------------------------------------------------
+prohibited_operations:
+  - operation: "generate_content_without_contract"
+    description: "Cannot generate content without ASIT contract"
+    violation_action: "block"
+    
+  - operation: "create_structure_without_ata_domain"
+    description: "Cannot create structure without ATA domain"
+    violation_action: "block"
+    
+  - operation: "bypass_lifecycle_states"
+    description: "Cannot bypass lifecycle state transitions"
+    violation_action: "block"
+    
+  - operation: "modify_frozen_baseline"
+    description: "Cannot modify frozen baseline without ECR/ECO"
+    violation_action: "escalate"
+    escalation_target: "CCB"
+    
+  - operation: "publish_inwork_content"
+    description: "Cannot publish in-work content"
+    violation_action: "block"
+    
+  - operation: "ignore_safety_warnings"
+    description: "Cannot ignore safety warnings"
+    violation_action: "escalate"
+    escalation_target: "STK_SAF"
+    
+  - operation: "auto_invent_content"
+    description: "ASIGT cannot auto-invent content outside approved decision paths"
+    violation_action: "block"
+
+# -----------------------------------------------------------------------------
+# UNDEFINED CONDITION HANDLING
+# -----------------------------------------------------------------------------
+undefined_condition_policy:
+  action: "halt"
+  message: "BREX Undefined Condition Violation"
+  
+  handling:
+    - step: 1
+      action: "Log the undefined condition"
+      
+    - step: 2
+      action: "Raise BREX Undefined Condition Violation"
+      
+    - step: 3
+      action: "Halt all processing"
+      
+    - step: 4
+      action: "Escalate to human operator"
+      escalation_target: "STK_CM"
+      
+  documentation: |
+    When the BREX Decision Engine encounters a situation not covered
+    by any defined rule, it MUST:
+      1. HALT - Stop all processing immediately
+      2. LOG - Record the undefined condition with full context
+      3. ESCALATE - Notify human operator for resolution
+      4. WAIT - Do not proceed until rule is defined
+
+# -----------------------------------------------------------------------------
+# DETERMINISM GUARANTEE
+# -----------------------------------------------------------------------------
+determinism_guarantee:
+  statement: |
+    The BREX Decision Engine enforces:
+      - No unconstrained LLM freedom
+      - No hallucination
+      - Full reproducibility
+      - All outputs explainable and validated
+      - Only contract-approved transformations
+      
+  properties:
+    reproducible: true
+    deterministic: true
+    auditable: true
+    certifiable: true
+    
+  verification:
+    method: "replay"
+    description: |
+      Any decision cascade can be replayed with identical inputs
+      to produce identical outputs, enabling:
+        - Certification audits
+        - Debugging
+        - Compliance verification
+
+# -----------------------------------------------------------------------------
+# AUDIT LOG FORMAT
+# -----------------------------------------------------------------------------
+audit_log_format:
+  timestamp_format: "ISO8601"  # e.g., 2026-01-29T10:35:00Z
+  
+  entry_format: |
+    {timestamp} | RULE {rule_id} | {rule_name} | {status} | {context}
+    
+  example_entries:
+    - "2026-01-29T10:35:00Z | RULE CTR-001 | Contract Required | OK | contract: ASIT-ENG-2026-001"
+    - "2026-01-29T10:35:01Z | RULE STRUCT-007 | ATA Domain Valid | OK | ATA 27"
+    - "2026-01-29T10:35:02Z | RULE SAFETY-002 | Safety Impact | ESCALATION | pending human approval"
+    - "2026-01-29T10:35:03Z | ACTION BLOCKED | pending human approval"
+    
+  required_fields:
+    - timestamp
+    - rule_id
+    - rule_name
+    - status
+    - context
+    
+  optional_fields:
+    - evidence
+    - escalation_target
+    - blocking_reason
+
+# -----------------------------------------------------------------------------
+# STAKEHOLDER ESCALATION TARGETS
+# -----------------------------------------------------------------------------
+escalation_targets:
+  CCB:
+    name: "Configuration Control Board"
+    description: "Authorizes major changes and baseline modifications"
+    escalation_conditions:
+      - "Major change classification"
+      - "Baseline modification"
+      - "Contract scope change"
+      
+  STK_CM:
+    name: "Configuration Manager"
+    description: "Manages configuration and lifecycle states"
+    escalation_conditions:
+      - "Lifecycle transitions"
+      - "Version control issues"
+      - "Undefined conditions"
+      
+  STK_SAF:
+    name: "Safety Engineer"
+    description: "Reviews safety-impacting changes"
+    escalation_conditions:
+      - "Safety impact detected"
+      - "Warning/Caution content"
+      - "ARP4761 compliance"
+      
+  STK_SE:
+    name: "Systems Engineer"
+    description: "Technical authority for system changes"
+    escalation_conditions:
+      - "Technical changes"
+      - "Interface modifications"
+      
+  STK_CERT:
+    name: "Certification Engineer"
+    description: "Ensures compliance with certification requirements"
+    escalation_conditions:
+      - "DO-178C traceability"
+      - "Certification-relevant changes"
