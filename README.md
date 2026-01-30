@@ -201,6 +201,7 @@ AEROSPACEMODEL-ASIT-ASIGT/
 │
 ├── ASIT/                 # Governance, structure, lifecycle authority
 │   ├── GOVERNANCE/
+│   │   └── master_brex_authority.yaml   # BREX decision rules (authoritative)
 │   ├── INDEX/
 │   ├── CONTRACTS/
 │   └── ASIT_CORE.md
@@ -208,8 +209,25 @@ AEROSPACEMODEL-ASIT-ASIGT/
 ├── ASIGT/                # Content generation layer (invoked by ASIT)
 │   ├── generators/
 │   ├── brex/
+│   │   ├── S1000D_5.0_DEFAULT.yaml      # S1000D default BREX
+│   │   ├── project_brex.template.yaml   # Project BREX template
+│   │   ├── brex_decision_engine.py      # BREX Decision Engine
+│   │   ├── BREX_REASONING_FLOWCHART.md  # Reasoning documentation
+│   │   └── __init__.py
 │   ├── s1000d_templates/
 │   └── ASIGT_CORE.md
+│
+├── .github/
+│   └── instructions/     # BREX-driven instruction files
+│       ├── ata27_flight_controls.instructions.md
+│       └── ata28_fuel.instructions.md
+│
+├── src/aerospacemodel/   # Python package
+│   ├── asit/             # ASIT module
+│   ├── asigt/            # ASIGT module with BREX governance
+│   │   ├── brex_governance.py  # BREX-governed validator
+│   │   └── ...
+│   └── cli.py
 │
 ├── pipelines/            # ASIT-controlled pipelines invoking ASIGT
 ├── schemas/              # S1000D / ATA references
@@ -254,6 +272,123 @@ The **DT Documentation Pipeline** (`pipelines/dt_documentation_pipeline.yaml`) i
 - Safety Analysis Documents — FHA, FMEA, FTA, SSA, PSSA, ASA documentation
 
 All outputs maintain full traceability between the Digital Twin state, engineering baseline, and generated documentation.
+
+---
+
+## BREX-Driven Instruction System
+
+**Version 2.0.0** introduces the **BREX-Driven Instruction System** for guided reasoning and deterministic content generation.
+
+### Core Concept
+
+> **The AEROSPACEMODEL Agent's reasoning must be constrained, guided, and explainable through a BREX ruleset. Every step is a validated decision node. No free-form autonomy exists.**
+
+This creates a **deterministic agent** whose reasoning can be:
+- **Audited** — Complete decision trail
+- **Replayed** — Same inputs produce same outputs
+- **Certified** — Evidence generation for DO-178C/ARP4754A
+
+### BREX Decision Cascade
+
+Every operation passes through a cascading decision tree:
+
+```text
+OPERATION START
+      │
+      ▼
+┌─────────────────────────────────┐
+│ CTR-001: Contract Required?     │
+│ ───────────────────────────     │
+│ Check: contract_id EXISTS       │
+│ Check: contract_status=APPROVED │
+└────────────────┬────────────────┘
+           ┌─────┴─────┐
+          FALSE       TRUE
+           │           │
+           ▼           ▼
+      ┌─────────┐  ┌─────────────────────────┐
+      │  BLOCK  │  │ BL-001: Baseline Req?   │
+      └─────────┘  └────────────┬────────────┘
+                               ▼
+                    (continue cascade...)
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │   ALLOW / BLOCK /   │
+                    │     ESCALATE        │
+                    └─────────────────────┘
+```
+
+### Decision Actions
+
+| Action | Behavior |
+|--------|----------|
+| **ALLOW** | Operation proceeds under BREX governance |
+| **BLOCK** | Operation halts immediately |
+| **ESCALATE** | Human approval required (STK_SAF, CCB, etc.) |
+| **WARN** | Proceed with warning logged |
+| **UNDEFINED** | Halt — BREX Undefined Condition Violation |
+
+### Audit Log Format
+
+```text
+2026-01-29T10:35:00Z | RULE CTR-001 | Contract Required | OK | contract: ASIT-ENG-2026-001
+2026-01-29T10:35:01Z | RULE STRUCT-007 | ATA Domain Valid | OK | ATA 28
+2026-01-29T10:35:02Z | RULE SAFETY-002 | Safety Impact | ESCALATION | pending human approval
+2026-01-29T10:35:03Z | ACTION BLOCKED | pending human approval
+```
+
+### Key Components
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| **BREX Decision Engine** | `ASIGT/brex/brex_decision_engine.py` | Core reasoning engine |
+| **Master BREX Authority** | `ASIT/GOVERNANCE/master_brex_authority.yaml` | Authoritative rules |
+| **Instruction Files** | `.github/instructions/*.instructions.md` | ATA-specific governance |
+| **Reasoning Flowchart** | `ASIGT/brex/BREX_REASONING_FLOWCHART.md` | Decision architecture |
+
+### Usage Example
+
+```python
+from aerospacemodel.asigt import BREXGovernedValidator, OperationContext
+
+# Create validator with contract context
+validator = BREXGovernedValidator(
+    contract_id="KITDM-CTR-LM-CSDB_ATA28",
+    baseline_id="FBL-2026-Q1-003"
+)
+
+# Validate a generate operation
+result = validator.validate_operation(
+    operation="generate_dm",
+    context=OperationContext(
+        contract_id="KITDM-CTR-LM-CSDB_ATA28",
+        ata_domain="ATA 28",
+        safety_impact=False
+    )
+)
+
+if result.allowed:
+    print("Operation permitted - proceed with generation")
+elif result.escalation_required:
+    print(f"Escalation required to: {result.escalation_target}")
+else:
+    print(f"Operation blocked by: {result.blocked_by}")
+```
+
+### Determinism Guarantee
+
+The BREX Decision Engine enforces:
+
+- ✅ **No unconstrained LLM freedom**
+- ✅ **No hallucination**
+- ✅ **Full reproducibility**
+- ✅ **All outputs explainable and validated**
+- ✅ **Only contract-approved transformations**
+
+If the agent reaches an unruled situation:
+→ **It halts**
+→ **Raises a BREX Undefined Condition Violation**
 
 ---
 
