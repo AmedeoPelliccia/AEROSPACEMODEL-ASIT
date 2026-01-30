@@ -452,6 +452,7 @@ def tdms_convert(ctx: click.Context, input_path: Path, output_path: Path, output
     ))
     
     from aerospacemodel.tdms import HumanPlane, MachinePlane, TDMSConverter
+    from aerospacemodel.tdms.converter import ConversionConfig
     
     # Determine formats
     input_ext = input_path.suffix.lower()
@@ -460,7 +461,9 @@ def tdms_convert(ctx: click.Context, input_path: Path, output_path: Path, output
     human_formats = [".yaml", ".yml", ".json"]
     machine_formats = [".tsv", ".csv"]
     
-    converter = TDMSConverter()
+    # Apply the compact flag to converter configuration
+    config = ConversionConfig(compact_ids=compact)
+    converter = TDMSConverter(config=config)
     
     try:
         # Human → Machine conversion
@@ -468,6 +471,7 @@ def tdms_convert(ctx: click.Context, input_path: Path, output_path: Path, output
             console.print(f"[dim]Direction: Human Plane → Machine Plane[/dim]")
             console.print(f"[dim]Input: {input_path}[/dim]")
             console.print(f"[dim]Output: {output_path}[/dim]")
+            console.print(f"[dim]Compact IDs: {compact}[/dim]")
             console.print()
             
             human = HumanPlane.load(input_path)

@@ -30,22 +30,17 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Optional, Set, Tuple, Type, Union
+from typing import Any, Dict, Iterator, List, Optional, Union
 
 import yaml
 
-from aerospacemodel.tdms.exceptions import TDMSError, ValidationError
+from aerospacemodel.tdms.exceptions import TDMSError
 from aerospacemodel.tdms.formats import (
-    BaseFormat,
-    FormatType,
-    FormatOptions,
     TSVFormat,
     CSVFormat,
     LineProtocolFormat,
-    get_format_handler,
 )
 from aerospacemodel.tdms.dictionary import (
-    TDMSDictionary,
     DictionaryRegistry,
     DictionaryType,
 )
@@ -226,6 +221,9 @@ class HumanPlane:
             
         Returns:
             Loaded HumanPlane instance
+            
+        Raises:
+            TDMSError: If file format is unsupported or content is not a mapping
         """
         path = Path(path)
         
@@ -236,6 +234,13 @@ class HumanPlane:
                 data = json.load(f)
             else:
                 raise TDMSError(f"Unsupported file format: {path.suffix}")
+        
+        # Ensure the loaded document has a mapping/object at the root level.
+        if not isinstance(data, dict):
+            raise TDMSError(
+                f"Invalid TDMS document structure in {path}: "
+                f"root element must be a mapping/object, got {type(data).__name__}."
+            )
         
         instance = cls(data=data)
         instance.metadata.derived_from = str(path)

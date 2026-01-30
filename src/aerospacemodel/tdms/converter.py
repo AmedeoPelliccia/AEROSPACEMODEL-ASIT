@@ -31,20 +31,16 @@ Example:
 
 from __future__ import annotations
 
-import hashlib
 import json
 import logging
 import re
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, Iterator, List, Optional, Set, Tuple, Type, Union
+from typing import Any, Dict, List, Optional, Set, Union
 
-from aerospacemodel.tdms.exceptions import ConversionError, ValidationError
 from aerospacemodel.tdms.planes import HumanPlane, MachinePlane, PlaneMetadata, PlaneType
 from aerospacemodel.tdms.dictionary import (
-    TDMSDictionary,
     DictionaryRegistry,
     DictionaryType,
 )
@@ -195,7 +191,6 @@ class TDMSConverter:
     def to_machine_plane(
         self,
         human: HumanPlane,
-        format_type: FormatType = FormatType.TSV,
         record_type: Optional[str] = None,
     ) -> MachinePlane:
         """
@@ -205,7 +200,6 @@ class TDMSConverter:
         
         Args:
             human: Source HumanPlane
-            format_type: Target format type
             record_type: Optional record type identifier
             
         Returns:
@@ -232,9 +226,9 @@ class TDMSConverter:
             dictionary_registry=self.dictionary_registry,
         )
         
-        # Track provenance
+        # Track provenance: keep MachinePlane's own source_hash as its content hash
+        # and store the human hash in derived_from
         machine.metadata.derived_from = human.metadata.source_hash
-        machine.metadata.source_hash = human.metadata.source_hash
         
         logger.info(f"Converted HumanPlane to MachinePlane: {len(flat)} fields")
         return machine
@@ -294,13 +288,19 @@ class TDMSConverter:
             # Validate if requested
             if validate:
                 errors = human.validate()
-                for error in errors:
-                    result.add_warning("validation", error)
+                if errors:
+                    if self.config.strict_validation:
+                        for error in errors:
+                            result.add_error(f"Validation failed: {error}")
+                        result.status = ConversionStatus.FAILED
+                    else:
+                        for error in errors:
+                            result.add_warning("validation", error)
             
             result.human_plane = human
             result.target_hash = human.metadata.source_hash
             
-            if result.warnings and self.config.strict_validation:
+            if result.warnings and result.status == ConversionStatus.SUCCESS:
                 result.status = ConversionStatus.PARTIAL
             
             logger.info(f"Converted MachinePlane to HumanPlane: {len(nested)} top-level keys")

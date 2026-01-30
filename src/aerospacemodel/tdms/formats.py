@@ -22,16 +22,15 @@ Example TSV output:
 from __future__ import annotations
 
 import csv
-import hashlib
 import io
 import json
 import logging
 from abc import ABC, abstractmethod
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Optional, Set, Tuple, Type, Union
+from typing import Any, Dict, List, Optional, Union
 
 from aerospacemodel.tdms.exceptions import FormatError
 
@@ -51,7 +50,8 @@ class FormatOptions:
     include_header: bool = True
     include_metadata: bool = False
     quote_strings: bool = False
-    null_value: str = ""
+    null_value: str = "∅"
+    preserve_leading_zeros: bool = True
     date_format: str = "%Y-%m-%d"
     datetime_format: str = "%Y-%m-%dT%H:%M:%S"
     encoding: str = "utf-8"
@@ -156,13 +156,15 @@ class BaseFormat(ABC):
                 return json.loads(value)
             except json.JSONDecodeError:
                 pass
-        # Try numeric conversion
-        try:
-            if "." in value:
-                return float(value)
-            return int(value)
-        except ValueError:
-            pass
+        # Try numeric conversion only if preserve_leading_zeros is False
+        # or the value doesn't have leading zeros
+        if not self.options.preserve_leading_zeros or not (value.startswith("0") and len(value) > 1 and value[1:].isdigit()):
+            try:
+                if "." in value:
+                    return float(value)
+                return int(value)
+            except ValueError:
+                pass
         return value
 
 
@@ -398,10 +400,16 @@ class LineProtocolFormat(BaseFormat):
                 if key in (self.type_field, self.id_field, self.timestamp_field):
                     continue
                 if value is not None:
-                    formatted = self._format_value(value)
-                    # Quote strings containing spaces or commas
-                    if isinstance(value, str) and (" " in value or "," in value):
-                        formatted = f'"{formatted}"'
+                    # Handle strings specially to ensure safe line protocol encoding
+                    if isinstance(value, str):
+                        # Escape backslashes and double quotes
+                        escaped = value.replace("\\", "\\\\").replace('"', '\\"')
+                        formatted = escaped
+                        # Quote strings containing spaces, commas, quotes, or backslashes
+                        if any(ch in value for ch in (" ", ",", '"', "\\")):
+                            formatted = f'"{escaped}"'
+                    else:
+                        formatted = self._format_value(value)
                     pairs.append(f"{key}={formatted}")
             
             # Build line
@@ -460,23 +468,49 @@ class LineProtocolFormat(BaseFormat):
         return records
     
     def _parse_pairs(self, pairs_str: str) -> Dict[str, Any]:
-        """Parse key=value pairs handling quoted strings."""
-        pairs = {}
-        current = ""
+        """Parse key=value pairs handling quoted strings and escaped characters."""
+        pairs: Dict[str, Any] = {}
+        current = []
         in_quotes = False
-        
+        escape_next = False
+
+        # Append a sentinel comma to flush the last pair
         for char in pairs_str + ",":
+            if escape_next:
+                # Current character is escaped; add as-is
+                current.append(char)
+                escape_next = False
+                continue
+
+            if char == "\\":
+                # Next character (including quote or comma) should be treated literally
+                escape_next = True
+                continue
+
             if char == '"':
+                # Toggle quote state only for unescaped quotes
                 in_quotes = not in_quotes
+                current.append(char)
             elif char == "," and not in_quotes:
-                if "=" in current:
-                    key, value = current.split("=", 1)
-                    # Remove quotes from value
-                    value = value.strip('"')
-                    pairs[key.strip()] = self._parse_value(value)
-                current = ""
+                segment = "".join(current).strip()
+                if segment and "=" in segment:
+                    key, value = segment.split("=", 1)
+                    key = key.strip()
+                    value_str = value.strip()
+
+                    # If value is a quoted string, use JSON decoding to handle escapes
+                    if len(value_str) >= 2 and value_str[0] == '"' and value_str[-1] == '"':
+                        try:
+                            decoded_value = json.loads(value_str)
+                        except json.JSONDecodeError:
+                            # Fallback: strip outer quotes only
+                            decoded_value = value_str[1:-1]
+                        pairs[key] = self._parse_value(decoded_value) if not isinstance(decoded_value, str) else decoded_value
+                    else:
+                        pairs[key] = self._parse_value(value_str)
+                current = []
             else:
-                current += char
+                current.append(char)
         
         return pairs
 
