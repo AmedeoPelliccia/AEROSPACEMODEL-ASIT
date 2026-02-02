@@ -1,204 +1,189 @@
-# Abstract
-**author**: Amedeo Pelliccia
+# Abstract  
+**Author:** Amedeo Pelliccia
 
-Prior to the availability of generative artificial intelligence, system-level understanding depended on explicit hardware physics models and deterministic software execution. In such environments, embedding was equivalent to execution, and intelligence emerged only through tightly coupled runtime behavior. The introduction of loosely integrated, multi-system AI architectures—often characterized by disconnected networks and fragmented identity layers—has increased structural and operational complexity without delivering proportional near-term performance gains, frequently achieving compliance without measurable functional improvement.
+Prior to the availability of generative artificial intelligence, system-level understanding depended on explicit physics-based hardware models, mathematically grounded software execution, and tightly controlled data pipelines. In such environments, embedding was equivalent to execution: intelligence emerged only through tightly coupled runtime behavior, where every state transition was explicit and traceable. Traditional aerospace systems operated within deterministic boundaries, and any deviation required human intervention or formal change control.
 
-This work proposes a post–generative AI operational framework centered on Top-Level Instructions (TLI) as the primary control and governance mechanism. Domain-licensed, serviced, and context-specific knowledge pathways are tuned to enable automation through pre-gated decision points, where deterministic processes are explicitly identified and executed. Inference is applied only when irreducible ambiguity is encountered, at which point a defined non-inference boundary triggers a Human-in-the-Loop (HITL) escalation. This approach makes system limitations explicit while preserving auditability, safety, and operational determinism within state-of-the-art implementable technology stacks.
+The rapid adoption of loosely integrated, multi-system artificial intelligence architectures—often characterized by disconnected knowledge meshes, fragmented identity layers, and high-latency synchronization points—has introduced significant structural and operational complexity. These systems frequently achieve regulatory compliance without delivering measurable improvements in functional performance, reliability, or lifecycle efficiency. The result is increased verification burden, inconsistent traceability, and fragile operational handoffs that degrade overall system integrity.
 
-A Work Breakdown Structure (WBS) is formalized as a computable ontology and used to configure development environments that deliver contractible capabilities via ontological code sources encompassing engineering mathematics and physics. Truth is defined through versioned data-to-knowledge baselines, while AutoML graph structures support audience-customizable user interfaces without altering authoritative constraints. Transformation logic binds these layers into an operational context, enabling a persistent supersystemic identity layer capable of managing contextual state, decision provenance, and execution boundaries. The resulting architecture provides a scalable foundation for advanced automation in safety-critical and industrial domains, approaching a coherent, system-level awareness without reliance on unconstrained inference.
+This work proposes a post–generative AI operational framework centered on **Top-Level Instructions (TLI)** as the foundation for control, governance, and lifecycle orchestration. TLIs are domain-licensed, context-specific decision boundaries that define authorization scopes and deterministic behavior envelopes. Within this framework, knowledge pathways are modularized and serviced, enabling automation through **pre-gated decision points** where deterministic processes are explicitly identified and executed. **Inference** is applied only when irreducible ambiguity is encountered; at that point, a formally defined **non-inference boundary** triggers a **Human-in-the-Loop (HITL)** escalation. By structurally limiting inference and exposing system assumptions, this approach preserves auditability, safety, and operational determinism within state-of-the-art implementable stacks.
 
-Below is a logical, end-to-end glossary that defines each enabling technology and concept introduced in this conversation, ordered from foundational primitives → execution mechanisms → system-of-systems behavior.
-The intent is conceptual clarity, not marketing. Each term is defined by what problem it solves and what role it plays in the whole.
+A **Work Breakdown Structure (WBS)** is formalized as a computable ontology and used to configure development environments that deliver contractible capabilities via ontological code sources encompassing engineering mathematics, physics constraints, and domain semantics. Within this framework, **truth** is defined through versioned data-to-knowledge baselines with explicit effectivity and configuration semantics, and **AutoML graph structures** support audience-customizable user interfaces without altering authoritative constraints. Transformation logic binds these layers into an operational context, enabling a persistent supersystemic identity layer capable of managing contextual state, decision provenance, and execution boundaries. The resulting architecture provides a scalable foundation for advanced automation in safety-critical and industrial domains, approaching a coherent, system-level awareness that refrains from reliance on unconstrained inference.
 
-⸻
+> **📚 For complete EASA/FAA regulatory mappings of these terms, see [EASA/FAA Vocabulary Mapping](docs/EASA_FAA_VOCABULARY_MAPPING.md)**  
+> **📊 For visual ontology diagrams, see [Ontology Diagram](docs/ONTOLOGY_DIAGRAM.md)**
+
+---
 
 # Logical Glossary of Enabling Concepts
 
----
-
-## 1. Digital Continuity
-**Definition**  
-The ability to preserve identity, configuration, authority, semantics, and evidence of aircraft data across all lifecycle stages (design, certification, production, operation, sustainment).
-
-**Purpose**  
-Prevents loss of traceability when data crosses tools, organizations, and lifecycle phases.
+This glossary defines each enabling technology and concept introduced in this work, ordered from **foundational primitives** to **execution mechanisms** and **system-of-systems behavior**. Each term includes a concise problem statement and the specific role it plays within the broader architectural framework.
 
 ---
 
-## 2. Broken Bridge / Broken Link
-**Definition**  
-A structural discontinuity at a process or tool interface where identity, configuration, semantics, authority, or evidence is lost or degraded.
+## 1. Digital Continuity  
+**Definition:**  
+The capability to preserve identity, configuration, authority, semantics, and evidence of aircraft data across all lifecycle stages—spanning design, certification, production, operation, sustainment, and feedback integration.
 
-**Impact**  
-Computers replicate broken assumptions deterministically and at scale, producing systemic failure modes.
-
----
-
-## 3. Transformation Contract
-**Definition**  
-A formal specification governing how information is transformed between lifecycle contexts.
-
-**Includes**
-- Identity mapping  
-- Configuration and effectivity rules  
-- Semantic constraints (ATA, units, taxonomies)  
-- Authority (master vs derived)  
-- Evidence and provenance requirements  
+**Role:**  
+Prevents loss of traceability when information transits between tools, organizational boundaries, or lifecycle phases.
 
 ---
 
-## 4. Top-Level Instruction (TLI)
-**Definition**  
-A domain-licensed instruction defining what actions are authorized on data.
+## 2. Broken Bridge / Broken Link  
+**Definition:**  
+A structural discontinuity at a process or tool interface where one or more core invariants—identity, configuration, semantics, authority, evidence—are lost, degraded, or inconsistently interpreted.
 
-**Key Rule**  
-If a TLI does not authorize an action, the action must not occur.
-
----
-
-## 5. SPCA – Software Programming Chain Application
-**Definition**  
-The executable programming chain that enforces transformation contracts across heterogeneous software ecosystems.
-
-**Role**
-- Executes transformations
-- Applies validation gates
-- Logs provenance
-- Enforces non-inference boundaries
+**Impact:**  
+Computational pipelines deterministically replicate broken assumptions, turning local disruptions into system-wide integrity failures.
 
 ---
 
-## 6. Non-Inference Boundary
-**Definition**  
-A formally defined point where automation must stop because ambiguity cannot be resolved deterministically.
+## 3. Transformation Contract  
+**Definition:**  
+A formal, machine-actionable specification governing how information is to be transformed between lifecycle contexts or domains.
 
-**Behavior**
-- Execution halts
-- State remains uncollapsed
-- Human-in-the-Loop is triggered
-
----
-
-## 7. Human-in-the-Loop (HITL)
-**Definition**  
-Explicit, auditable human intervention at predefined non-inference boundaries.
+**Core Components:**  
+- Identity mapping rules  
+- Configuration and effectivity constraints  
+- Semantic constraints (taxonomies, units, roles)  
+- Authority attribution (master vs derived)  
+- Evidence and provenance requirements
 
 ---
 
-## 8. Multiagent Domino
-**Definition**  
-A cascading failure pattern where locally valid agent outputs propagate upstream errors into systemic lifecycle corruption.
+## 4. Top-Level Instruction (TLI)  
+**Definition:**  
+A domain-licensed, authorized instruction that specifies what actions on data are permitted, constrained, or prohibited.
 
-**Root Cause**  
-Missing contract gates between agents.
-
----
-
-## 9. ABDB – Aircraft Blended Digital Body
-**Definition**  
-A System of Systems representing the twin process of the aircraft lifecycle.
-
-**Blends**
-- Engineering intent
-- Configuration baselines
-- Certification evidence
-- Operational artifacts
-- In-service feedback
+**Key Rule:**  
+If a TLI does not explicitly authorize an action or transformation, the action must not occur within the governed execution environment.
 
 ---
 
-## 10. Twin Process
-**Definition**  
-A digital construct mirroring how the aircraft is designed, certified, operated, and evolved.
+## 5. SPCA – Software Programming Chain Application  
+**Definition:**  
+The executable chain responsible for enforcing transformation contracts across heterogeneous software ecosystems (PLM, CAD, publication, ERP, MRO, etc.).
+
+**Responsibilities:**  
+- Executes transformation steps according to contract constraints  
+- Validates identity, configuration, semantic, authority invariants  
+- Logs provenance, decision boundaries, and context  
+- Stops execution at non-inference boundaries and triggers HITL
 
 ---
 
-## 11. System of Systems (SoS)
-**Definition**  
-An architecture where independently managed systems are orchestrated to produce lifecycle coherence without replacing them.
+## 6. Non-Inference Boundary  
+**Definition:**  
+A formally defined execution boundary where automation terminates because ambiguity cannot be resolved deterministically.
+
+**Behavior:**  
+Execution halts, state remains uncollapsed, and Human-in-the-Loop escalation is required.
 
 ---
 
-## 12. ATA-Level Structuring
-**Definition**  
-Decomposition of transformation logic according to ATA chapters.
-
-**Benefits**
-- Clear domain boundaries
-- Certification compatibility
-- Incremental deployment
+## 7. Human-in-the-Loop (HITL)  
+**Definition:**  
+An explicit, auditable human decision point invoked at predefined non-inference boundaries where deterministic computation is insufficient.
 
 ---
 
-## 13. ASIT – Aircraft/System Information Transformer
-**Definition**  
-A deterministic transformation component applying rule-based conversions where no inference is required.
+## 8. Multiagent Domino  
+**Definition:**  
+A cascading failure pattern in which locally valid outputs from chained agents propagate upstream errors into global lifecycle inconsistency.
+
+**Root Cause:**  
+Absence of explicit contract gates between agents.
 
 ---
 
-## 14. ASIGT – Aircraft/System Information Generative Transformer
-**Definition**  
-A contract-governed generative transformer/transponder that produces and re-emits lifecycle artifacts within ATA-scoped boundaries.
+## 9. ABDB – Aircraft Blended Digital Body  
+**Definition:**  
+A System of Systems representing the twin process of the aircraft lifecycle—not geometric alone, but procedural, semantic, and authoritative.
 
-**Characteristics**
-- Derivative, not creative
-- Authority-preserving
-- Fully traceable
+**Scope:**  
+Engineering intent, configuration baselines, certification evidence, operational artifacts, in-service feedback, all bound into a unified digital body.
 
 ---
 
-## 15. Generative (Regulator-Safe Meaning)
-**Definition**  
-Constrained, contract-bound generation that is reproducible and auditable.
-
-**Forbidden**
-- Guessing
-- Inventing facts
-- Filling authority gaps
+## 10. Twin Process  
+**Definition:**  
+A digital construct that mirrors how the aircraft is designed, certified, operated, sustained, and evolved.
 
 ---
 
-## 16. Quantum-Circuit–Inspired Logic
-**Definition**  
-A control-theoretic execution model where transformations are explicit gates rather than implicit data flows.
+## 11. System of Systems (SoS)  
+**Definition:**  
+An architecture in which independently managed systems are orchestrated through governance mechanisms to produce holistic lifecycle capabilities.
 
 ---
 
-## 17. CNOT – Control Neural Origin Transaction
-**Definition**  
-A transformation gate that executes only if the authoritative control state is valid.
-
-**If control fails**
-The gate does not fire.
+## 12. ATA-Level Structuring  
+**Definition:**  
+Decomposition of transformation logic and contracts according to ATA chapters, enabling domain-aligned governance, certification compatibility, and incremental deployment.
 
 ---
 
-## 18. State Collapse
-**Definition**  
-The explicit resolution of lifecycle ambiguity into a concrete artifact.
-
-**Rule**
-Collapse must be authorized and traceable.
+## 13. ASIT – Aircraft/System Information Transformer  
+**Definition:**  
+A deterministic component that applies rule-based conversions where inference is unnecessary, fully governed and reproducible.
 
 ---
 
-## 19. Provenance Vector
-**Definition**  
-A machine-readable record linking outputs to sources, contracts, execution context, and human decisions.
+## 14. ASIGT – Aircraft/System Information Generative Transformer  
+**Definition:**  
+A contract-governed generative transformer and transponder that produces and re-emits lifecycle artifacts within ATA-scoped boundaries.
+
+**Properties:**  
+- Derivative, not creative  
+- Authority-preserving  
+- Traceability ensured
 
 ---
 
-## 20. Revolution Without Disruption
-**Definition**  
-Lifecycle transformation achieved through governed integration without replacing certified tools or invalidating approvals.
+## 15. Generative (Regulator-Safe Meaning)  
+**Definition:**  
+Constrained, contract-bound generation that is reproducible, auditable, and non-speculative.
+
+**Forbidden:**  
+Guessing, inventing facts, or filling authority gaps.
 
 ---
 
-## Final Synthesis
-All concepts together define a governed, quantum-gated, contract-driven digital continuity architecture in which ABDB provides system-level coherence, SPCA executes transformations, ASIT/ASIGT act as ATA-scoped gates, and no information state is generated, propagated, or collapsed without authority, traceability, and explicit control.
+## 16. Quantum-Circuit–Inspired Logic  
+**Definition:**  
+A control-theoretic execution model in which lifecycle transformations behave like explicit gates rather than implicit data flows.
 
-# AEROSPACEMODEL
-## ASIT Aircraft Systems Information Transponder + ASIGT Aircraft Systems Information Generative Transponder
+---
+
+## 17. CNOT – Control Neural Origin Transaction  
+**Definition:**  
+A transformation gate that executes only when the authoritative control state is valid and authorized.
+
+**Principle:**  
+If control assertions fail, the gate does not fire.
+
+---
+
+## 18. State Collapse  
+**Definition:**  
+The explicit, authorized resolution of lifecycle ambiguity into a concrete artifact.
+
+---
+
+## 19. Provenance Vector  
+**Definition:**  
+A machine-readable record linking outputs to sources, transformation contracts, execution context, and human decisions.
+
+---
+
+## 20. Revolution Without Disruption  
+**Definition:**  
+Lifecycle transformation achieved through governed integration rather than replacement of certified tools, preserving program stability and regulatory approvals.
+
+---
+
+## Final Synthesis  
+These concepts define a governed, contract-driven digital continuity architecture in which the **Aircraft Blended Digital Body (ABDB)** provides system-level coherence, the **SPCA** executes governed transformations, **ASIT** and **ASIGT** function as ATA-scoped transformer gates, and no information state is generated, propagated, or collapsed without explicit authority, traceability, and execution control.
 
 <p align="center">
   <img src="https://img.shields.io/badge/Version-2.0.0-blue.svg" alt="Version">
@@ -208,43 +193,6 @@ All concepts together define a governed, quantum-gated, contract-driven digital 
   <img src="https://img.shields.io/badge/Traceability-Evidence%20Ready-green" alt="Traceability Evidence Ready">
 </p>
 
-<p align="center">
-  <strong>Organization-agnostic framework for transforming governed aerospace engineering knowledge into industry-standard technical publications and operational projections.</strong>
-</p>
-
-<p align="center">
-  <a href="#why-asit">Why ASIT</a> •
-  <a href="#key-principles">Key Principles</a> •
-  <a href="#quick-start">Quick Start</a> •
-  <a href="#architecture">Architecture</a> •
-  <a href="#configuration">Configuration</a> •
-  <a href="#contracts">Contracts</a> •
-  <a href="#pipelines">Pipelines</a> •
-  <a href="#examples">Examples</a>
-</p>
-
----
-## Overview
-
-**AEROSPACEMODEL** adds an **aircraft intelligence layer** to aerospace systems through a **standards-native information framework** powered by a dual AI architecture (**ASIT–ASIGT**).
-
-The framework transforms **validated engineering knowledge** into **operational, certifiable digital information**, enabling **secure integration of generative AI** into aerospace production environments.
-
-### Core Architecture
-
-| Component | Role |
-|-----------|------|
-| **ASIT** | Aerospace Standards Information Transformer — deterministic, contract-bound transformation of knowledge into standard-compliant information products |
-| **ASIGT** | Aerospace Standards Information Generative Transformer — governed generative AI with human-in-the-loop validation and certification gates |
-
-### Key Capabilities
-
-| Capability | Description |
-|------------|-------------|
-| **Knowledge → Information** | Explicit transformation contracts from engineering truth (KDB) to consumable publications (IDB) |
-| **Standards-Native** | Native compliance with S1000D, ATA iSpec 2200, and aerospace data exchange protocols |
-| **Certification-Grade** | Full provenance, auditability, and traceability for airworthiness evidence |
-| **Secure AI Integration** | Bounded generative outputs validated against authoritative knowledge domains |
 
 ### Integration with AMPEL360
 
@@ -268,7 +216,7 @@ It is composed of two strictly separated but tightly integrated layers:
 > **ASIT defines the information universe.  
 > ASIGT generates content inside it.**
 
----
+---gh
 
 ## What Problem It Solves
 
@@ -704,7 +652,11 @@ print(f"Optimal configurations: {len(quantum_result.best_solution)}")
 
 ### Documentation
 
-For complete architecture documentation, see: [`docs/HPC_QUANTUM_AGENTIC_ARCHITECTURE.md`](docs/HPC_QUANTUM_AGENTIC_ARCHITECTURE.md)
+| Document | Description |
+|----------|-------------|
+| [`docs/HPC_QUANTUM_AGENTIC_ARCHITECTURE.md`](docs/HPC_QUANTUM_AGENTIC_ARCHITECTURE.md) | HPC, Quantum, and Multi-Agent MDO Architecture |
+| [`docs/EASA_FAA_VOCABULARY_MAPPING.md`](docs/EASA_FAA_VOCABULARY_MAPPING.md) | Complete mapping of AEROSPACEMODEL terms to EASA/FAA regulatory vocabulary |
+| [`docs/ONTOLOGY_DIAGRAM.md`](docs/ONTOLOGY_DIAGRAM.md) | Visual ontology diagrams showing system architecture and regulatory alignment |
 
 ---
 
