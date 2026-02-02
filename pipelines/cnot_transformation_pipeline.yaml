@@ -1,0 +1,264 @@
+# =============================================================================
+# CNOT-Governed Transformation Pipeline
+# =============================================================================
+#
+# This pipeline demonstrates CNOT (Control Neural Origin Transaction) gates
+# for explicit, gate-controlled transformations.
+#
+# From README.md Section 17:
+#   "CNOT – Control Neural Origin Transaction: A transformation gate that
+#   executes only when the authoritative control state is valid and authorized.
+#   If control assertions fail, the gate does not fire."
+#
+# Key Principles:
+#   - No transformation proceeds without gate validation
+#   - State collapse only occurs when all gates pass
+#   - Full provenance tracking for audit trail
+#   - Deterministic, replayable execution
+#
+# =============================================================================
+
+pipeline:
+  id: "CNOT-TRANSFORMATION-001"
+  name: "CNOT-Governed Transformation Pipeline"
+  version: "1.0.0"
+  description: |
+    Transformation pipeline with explicit CNOT gate control.
+    No transformation proceeds without gate validation.
+    
+    This pipeline implements quantum-circuit-inspired control where
+    lifecycle transformations behave like explicit gates rather than
+    implicit data flows.
+
+  # Metadata
+  metadata:
+    author: "AEROSPACEMODEL"
+    created: "2026-02-02"
+    compliance:
+      - "S1000D Issue 5.0"
+      - "DO-178C traceability"
+      - "ARP4754A lifecycle"
+    deterministic: true
+    replayable: true
+
+  # CNOT Gate Chain Configuration
+  cnot_chain:
+    chain_id: "STANDARD-TRANSFORMATION-CHAIN"
+    provenance_enabled: true
+    
+    # Gates executed in sequence
+    # Execution stops at first failing gate
+    gates:
+      # Gate 1: Contract Validation
+      - gate_type: "ContractGate"
+        gate_id: "CONTRACT-001"
+        description: "Validates transformation contract is APPROVED/ACTIVE"
+        config:
+          require_approved: true
+        control_condition: "Contract status must be APPROVED or ACTIVE"
+        
+      # Gate 2: Baseline Validation
+      - gate_type: "BaselineGate"
+        gate_id: "BASELINE-001"
+        description: "Validates baseline is ESTABLISHED"
+        config:
+          require_established: true
+        control_condition: "Baseline state must be APPROVED or RELEASED"
+        
+      # Gate 3: Authority Validation
+      - gate_type: "AuthorityGate"
+        gate_id: "AUTHORITY-001"
+        description: "Validates execution authority"
+        config:
+          required_authority: "STK_CM"
+        control_condition: "Execution authority must meet required level"
+        
+      # Gate 4: BREX Compliance
+      - gate_type: "BREXGate"
+        gate_id: "BREX-001"
+        description: "Validates BREX compliance"
+        config:
+          cascade_all: true
+        control_condition: "All BREX rules must pass"
+        
+      # Gate 5: Traceability Check
+      - gate_type: "TraceGate"
+        gate_id: "TRACE-001"
+        description: "Validates traceability completeness"
+        config:
+          coverage_threshold: 100
+        control_condition: "Trace coverage must be 100%"
+        
+      # Gate 6: Safety Assessment
+      - gate_type: "SafetyGate"
+        gate_id: "SAFETY-001"
+        description: "Escalates safety-critical operations"
+        config:
+          escalation_target: "STK_SAF"
+        control_condition: "Safety-critical operations require approval"
+
+  # Source Configuration
+  source:
+    type: "KDB"
+    description: "Knowledge Database (engineering source data)"
+    location: "KDB/CSDB"
+    artifacts:
+      - data_modules
+      - engineering_data
+      - configuration_data
+
+  # Target Configuration
+  target:
+    type: "IDB"
+    description: "Information Database (publication output)"
+    location: "IDB/PUB"
+    publication_type: "AMM"  # Aircraft Maintenance Manual
+    s1000d_version: "S1000D_5.0"
+    
+  # Transformation Steps
+  # These execute ONLY if all CNOT gates pass
+  transformation_steps:
+    
+    - step_id: "STEP-001"
+      name: "Load Source Data"
+      description: "Load engineering data from KDB"
+      gate_prerequisite: "All gates must pass before execution"
+      actions:
+        - load_data_modules
+        - validate_source_schema
+        - extract_metadata
+      
+    - step_id: "STEP-002"
+      name: "Apply Transformation Contract"
+      description: "Execute contract-governed transformation"
+      gate_prerequisite: "ContractGate must have passed"
+      actions:
+        - apply_identity_mapping
+        - apply_configuration_rules
+        - apply_semantic_constraints
+        - preserve_authority
+      
+    - step_id: "STEP-003"
+      name: "Generate S1000D Output"
+      description: "Generate S1000D-compliant data modules"
+      gate_prerequisite: "BREXGate must have passed"
+      actions:
+        - generate_data_modules
+        - apply_brex_rules
+        - validate_s1000d_schema
+      
+    - step_id: "STEP-004"
+      name: "Create Publication"
+      description: "Assemble publication from data modules"
+      gate_prerequisite: "TraceGate must have passed"
+      actions:
+        - assemble_publication
+        - generate_publication_module
+        - create_data_module_list
+        - package_ietp
+      
+    - step_id: "STEP-005"
+      name: "Generate Provenance Vector"
+      description: "Create complete audit trail"
+      gate_prerequisite: "All gates completed"
+      actions:
+        - collect_gate_decisions
+        - record_transformation_evidence
+        - link_source_to_output
+        - generate_audit_log
+
+  # State Collapse Configuration
+  state_collapse:
+    enabled: true
+    description: |
+      From README.md Section 18: "State Collapse - The explicit, authorized
+      resolution of lifecycle ambiguity into a concrete artifact."
+    
+    collapse_condition: "All CNOT gates pass"
+    uncollapsed_action: "Halt execution, maintain quantum state"
+    blocked_action: "Stop execution, report blocking gate"
+    escalation_action: "Suspend execution, await HITL decision"
+
+  # Provenance Configuration
+  provenance:
+    enabled: true
+    description: |
+      From README.md Section 19: "Provenance Vector - A machine-readable
+      record linking outputs to sources, transformation contracts, execution
+      context, and human decisions."
+    
+    tracked_elements:
+      - source_artifacts
+      - transformation_contract
+      - execution_context
+      - gate_decisions
+      - human_decisions
+      - collapsed_artifact
+    
+    audit_log_format: "{timestamp} | GATE {gate_id} | {gate_name} | {status} | {message}"
+    retention_period: "7 years minimum (certification requirement)"
+
+  # Error Handling
+  error_handling:
+    gate_failure: "STOP"  # Stop on first gate failure
+    execution_error: "ROLLBACK"  # Rollback on execution error
+    partial_execution: "NOT_ALLOWED"  # No partial transformations
+    
+  # Execution Guarantees
+  guarantees:
+    deterministic: true
+    replayable: true
+    auditable: true
+    traceable: true
+    contract_governed: true
+    description: |
+      This pipeline guarantees:
+        ✓ Deterministic execution (same inputs → same outputs)
+        ✓ Full replay capability for certification
+        ✓ Complete audit trail with provenance vectors
+        ✓ 100% traceability from source to output
+        ✓ Contract-governed transformations only
+
+  # Integration Points
+  integration:
+    brex_engine: "ASIGT/brex/brex_decision_engine.py"
+    contract_manager: "src/aerospacemodel/asit/contracts.py"
+    governance_controller: "src/aerospacemodel/asit/governance.py"
+    cnot_chain: "src/aerospacemodel/cnot/chain.py"
+
+# =============================================================================
+# Example Usage
+# =============================================================================
+#
+# from aerospacemodel.cnot import CNOTChain, ContractGate, BaselineGate, BREXGate
+# from aerospacemodel.cnot.integration import create_standard_transformation_chain
+#
+# # Create chain from this pipeline definition
+# chain = create_standard_transformation_chain(
+#     contract_id="KITDM-CTR-LM-CSDB_ATA28",
+#     baseline_id="FBL-2026-Q1-003",
+#     required_authority="STK_CM"
+# )
+#
+# # Prepare context
+# context = {
+#     "contract": {"contract_id": "KITDM-CTR-LM-CSDB_ATA28", "status": "ACTIVE"},
+#     "baseline": {"baseline_id": "FBL-2026-Q1-003", "state": "APPROVED"},
+#     "execution_authority": "STK_CM",
+#     "brex_result": {"success": True, "final_action": "ALLOW"},
+#     "trace_data": {"total_required": 100, "total_linked": 100},
+#     "safety_impact": {"is_safety_critical": False, "safety_level": "NONE"}
+# }
+#
+# # Execute chain
+# result = chain.execute(context)
+#
+# if result.collapsed:
+#     print(f"✓ State collapsed: {result.collapsed_state.artifact_id}")
+#     print(f"✓ All {len(result.gate_results)} gates passed")
+#     # Proceed with transformation
+# else:
+#     print(f"✗ Blocked by gate: {result.blocked_by}")
+#     # Handle failure
+#
+# =============================================================================
