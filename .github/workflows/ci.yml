@@ -202,7 +202,7 @@ jobs:
             echo "Schemas directory found"
             find schemas -name "*.xsd" -o -name "*.dtd" | head -10
           else
-            echo "⚠ No schemas directory - skipping schema validation"
+            echo "⚠ No schemas directory - call for human in tbe loop to provide schema validation"
           fi
       
       - name: Verify ATA chapter alignment in templates
