@@ -1,5 +1,5 @@
 # Abstract
-Abstract (Improved)
+author: Amedeo Pelliccia
 
 Prior to the availability of generative artificial intelligence, system-level understanding depended on explicit hardware physics models and deterministic software execution. In such environments, embedding was equivalent to execution, and intelligence emerged only through tightly coupled runtime behavior. The introduction of loosely integrated, multi-system AI architectures—often characterized by disconnected networks and fragmented identity layers—has increased structural and operational complexity without delivering proportional near-term performance gains, frequently achieving compliance without measurable functional improvement.
 
