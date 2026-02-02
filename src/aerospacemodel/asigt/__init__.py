@@ -9,10 +9,15 @@ CONSTRAINT:
 
 ASIGT performs:
     - S1000D artifact generation (DM, PM, DML)
-    - BREX validation
+    - BREX validation (including BREX Decision Engine governance)
     - Schema validation
     - Trace matrix creation
     - Output rendering (PDF, HTML, IETP)
+
+BREX-Driven Reasoning:
+    The AEROSPACEMODEL Agent's reasoning is constrained, guided, and explainable
+    through a BREX ruleset. Every step is a validated decision node.
+    No free-form autonomy exists.
 """
 
 from __future__ import annotations
@@ -73,6 +78,16 @@ from .engine import (
     
     # Helpers
     create_execution_context,
+)
+
+# Import BREX governance components
+from .brex_governance import (
+    OperationContext,
+    GovernedValidationResult,
+    BREXGovernedValidator,
+    validate_governed_operation,
+    is_operation_allowed,
+    OPERATION_RULES,
 )
 
 # Conditional imports to avoid circular dependencies
@@ -340,4 +355,12 @@ __all__ = [
     
     # Helpers
     "create_execution_context",
+    
+    # BREX Governance (Guided Reasoning)
+    "OperationContext",
+    "GovernedValidationResult",
+    "BREXGovernedValidator",
+    "validate_governed_operation",
+    "is_operation_allowed",
+    "OPERATION_RULES",
 ]

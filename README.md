@@ -210,6 +210,7 @@ AEROSPACEMODEL-ASIT-ASIGT/
 │
 ├── ASIT/                 # Governance, structure, lifecycle authority
 │   ├── GOVERNANCE/
+│   │   └── master_brex_authority.yaml   # BREX decision rules (authoritative)
 │   ├── INDEX/
 │   ├── CONTRACTS/
 │   └── ASIT_CORE.md
@@ -217,8 +218,25 @@ AEROSPACEMODEL-ASIT-ASIGT/
 ├── ASIGT/                # Content generation layer (invoked by ASIT)
 │   ├── generators/
 │   ├── brex/
+│   │   ├── S1000D_5.0_DEFAULT.yaml      # S1000D default BREX
+│   │   ├── project_brex.template.yaml   # Project BREX template
+│   │   ├── brex_decision_engine.py      # BREX Decision Engine
+│   │   ├── BREX_REASONING_FLOWCHART.md  # Reasoning documentation
+│   │   └── __init__.py
 │   ├── s1000d_templates/
 │   └── ASIGT_CORE.md
+│
+├── .github/
+│   └── instructions/     # BREX-driven instruction files
+│       ├── ata27_flight_controls.instructions.md
+│       └── ata28_fuel.instructions.md
+│
+├── src/aerospacemodel/   # Python package
+│   ├── asit/             # ASIT module
+│   ├── asigt/            # ASIGT module with BREX governance
+│   │   ├── brex_governance.py  # BREX-governed validator
+│   │   └── ...
+│   └── cli.py
 │
 ├── pipelines/            # ASIT-controlled pipelines invoking ASIGT
 ├── schemas/              # S1000D / ATA references
@@ -263,6 +281,240 @@ The **DT Documentation Pipeline** (`pipelines/dt_documentation_pipeline.yaml`) i
 - Safety Analysis Documents — FHA, FMEA, FTA, SSA, PSSA, ASA documentation
 
 All outputs maintain full traceability between the Digital Twin state, engineering baseline, and generated documentation.
+
+---
+
+## BREX-Driven Instruction System
+
+**Version 2.0.0** introduces the **BREX-Driven Instruction System** for guided reasoning and deterministic content generation.
+
+### Core Concept
+
+> **The AEROSPACEMODEL Agent's reasoning must be constrained, guided, and explainable through a BREX ruleset. Every step is a validated decision node. No free-form autonomy exists.**
+
+This creates a **deterministic agent** whose reasoning can be:
+- **Audited** — Complete decision trail
+- **Replayed** — Same inputs produce same outputs
+- **Certified** — Evidence generation for DO-178C/ARP4754A
+
+### BREX Decision Cascade
+
+Every operation passes through a cascading decision tree:
+
+```text
+OPERATION START
+      │
+      ▼
+┌─────────────────────────────────┐
+│ CTR-001: Contract Required?     │
+│ ───────────────────────────     │
+│ Check: contract_id EXISTS       │
+│ Check: contract_status=APPROVED │
+└────────────────┬────────────────┘
+           ┌─────┴─────┐
+          FALSE       TRUE
+           │           │
+           ▼           ▼
+      ┌─────────┐  ┌─────────────────────────┐
+      │  BLOCK  │  │ BL-001: Baseline Req?   │
+      └─────────┘  └────────────┬────────────┘
+                               ▼
+                    (continue cascade...)
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │   ALLOW / BLOCK /   │
+                    │     ESCALATE        │
+                    └─────────────────────┘
+```
+
+### Decision Actions
+
+| Action | Behavior |
+|--------|----------|
+| **ALLOW** | Operation proceeds under BREX governance |
+| **BLOCK** | Operation halts immediately |
+| **ESCALATE** | Human approval required (STK_SAF, CCB, etc.) |
+| **WARN** | Proceed with warning logged |
+| **UNDEFINED** | Halt — BREX Undefined Condition Violation |
+
+### Audit Log Format
+
+```text
+2026-01-29T10:35:00Z | RULE CTR-001 | Contract Required | OK | contract: ASIT-ENG-2026-001
+2026-01-29T10:35:01Z | RULE STRUCT-007 | ATA Domain Valid | OK | ATA 28
+2026-01-29T10:35:02Z | RULE SAFETY-002 | Safety Impact | ESCALATION | pending human approval
+2026-01-29T10:35:03Z | ACTION BLOCKED | pending human approval
+```
+
+### Key Components
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| **BREX Decision Engine** | `ASIGT/brex/brex_decision_engine.py` | Core reasoning engine |
+| **Master BREX Authority** | `ASIT/GOVERNANCE/master_brex_authority.yaml` | Authoritative rules |
+| **Instruction Files** | `.github/instructions/*.instructions.md` | ATA-specific governance |
+| **Reasoning Flowchart** | `ASIGT/brex/BREX_REASONING_FLOWCHART.md` | Decision architecture |
+
+### Usage Example
+
+```python
+from aerospacemodel.asigt import BREXGovernedValidator, OperationContext
+
+# Create validator with contract context
+validator = BREXGovernedValidator(
+    contract_id="KITDM-CTR-LM-CSDB_ATA28",
+    baseline_id="FBL-2026-Q1-003"
+)
+
+# Validate a generate operation
+result = validator.validate_operation(
+    operation="generate_dm",
+    context=OperationContext(
+        contract_id="KITDM-CTR-LM-CSDB_ATA28",
+        ata_domain="ATA 28",
+        safety_impact=False
+    )
+)
+
+if result.allowed:
+    print("Operation permitted - proceed with generation")
+elif result.escalation_required:
+    print(f"Escalation required to: {result.escalation_target}")
+else:
+    print(f"Operation blocked by: {result.blocked_by}")
+```
+
+### Determinism Guarantee
+
+The BREX Decision Engine enforces:
+
+- ✅ **No unconstrained LLM freedom**
+- ✅ **No hallucination**
+- ✅ **Full reproducibility**
+- ✅ **All outputs explainable and validated**
+- ✅ **Only contract-approved transformations**
+
+If the agent reaches an unruled situation:
+→ **It halts**
+→ **Raises a BREX Undefined Condition Violation**
+
+---
+
+## HPC + Quantum + Agentic Aerospace Design Architecture
+
+**Version 2.0.0** introduces the **HPC + Quantum + Agentic Architecture** for massive simultaneous integrated aerospace design optimization.
+
+### Overview
+
+A **multi-agent ASIT-governed aerospace design intelligence system** running on HPC clusters with hybrid classical-quantum acceleration, capable of evaluating **millions of aircraft configurations in parallel** under strict deterministic **BREX decision rules**.
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           ASIT GOVERNANCE LAYER                             │
+│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
+│  │  Contracts  │  │  Baselines  │  │ BREX Rules  │  │   Safety    │        │
+│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘        │
+└───────────────────────────────────────┬─────────────────────────────────────┘
+                                        │
+┌───────────────────────────────────────▼─────────────────────────────────────┐
+│                     MULTI-AGENT MDO ORCHESTRATION                           │
+│           Aerodynamics | Structures | Propulsion | Economics                │
+│                     ↓ Pareto Front Construction ↓                           │
+└───────────────────────────────────────┬─────────────────────────────────────┘
+                                        │
+┌───────────────────────────────────────▼─────────────────────────────────────┐
+│                          HPC COMPUTE LAYER                                  │
+│  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐                │
+│  │  CPU Cluster   │  │  GPU Cluster   │  │    Quantum     │                │
+│  │  (CFD, FEM)    │  │  (AI/ML)       │  │  (QAOA, VQE)   │                │
+│  └────────────────┘  └────────────────┘  └────────────────┘                │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+### Key Capabilities
+
+| Capability | Description |
+|------------|-------------|
+| **Agentic HPC** | AI-powered job scheduling with memory prediction and resource optimization |
+| **Multi-Agent MDO** | Swarm of specialized agents (Aero, Struct, Prop, Econ) exploring design trade-spaces |
+| **Quantum Acceleration** | QAOA, VQE for global optimization and configuration selection |
+| **BREX Governance** | Deterministic, auditable reasoning at every decision point |
+| **Certification-Ready** | Full traceability for DO-178C/ARP4754A compliance |
+
+### Multi-Agent MDO Swarm
+
+Specialized agents collaborate to optimize aircraft design:
+
+| Agent | Specialization | Objectives |
+|-------|----------------|------------|
+| **Aerodynamics** | CFD analysis, L/D optimization | Max L/D, Min drag |
+| **Structures** | FEM analysis, weight estimation | Min weight, safety margins |
+| **Propulsion** | Engine sizing, efficiency | Min SFC, emissions |
+| **Economics** | DOC, ROI analysis | Min operating cost |
+| **Synthesizer** | Multi-objective optimization | Pareto front construction |
+
+### Quantum Algorithms
+
+| Algorithm | Use Case | Quantum Advantage |
+|-----------|----------|-------------------|
+| **QAOA** | Configuration selection, MaxCut | Polynomial speedup |
+| **VQE** | Ground state, continuous opt | Potential exponential |
+| **QML** | Surrogate models | Enhanced learning |
+
+### Usage Example
+
+```python
+from ASIGT.hpc import create_aerospace_hpc_cluster
+from ASIGT.agents import create_aircraft_mdo_swarm, OptimizationObjective
+from ASIGT.quantum import create_aerospace_quantum_optimizer
+
+# Initialize HPC cluster
+cluster = create_aerospace_hpc_cluster(
+    cluster_id="AEROSPACE-HPC-01",
+    cpu_nodes=100,
+    gpu_nodes=20,
+    quantum_qubits=127
+)
+
+# Create MDO agent swarm
+swarm = create_aircraft_mdo_swarm(
+    swarm_id="MDO-SWARM-001",
+    contract_id="KITDM-CTR-MDO-001",
+    baseline_id="FBL-2026-Q1-003"
+)
+
+# Run optimization
+result = swarm.run_optimization(
+    objectives=[
+        OptimizationObjective.MAXIMIZE_L_D,
+        OptimizationObjective.MINIMIZE_WEIGHT,
+        OptimizationObjective.MINIMIZE_FUEL_BURN
+    ],
+    constraints=[],
+    generations=100
+)
+
+# Quantum refinement on Pareto front
+quantum = create_aerospace_quantum_optimizer(contract_id="KITDM-CTR-MDO-001")
+quantum_result = quantum.hybrid_optimize(result["pareto_front"])
+
+print(f"Optimal configurations: {len(quantum_result.best_solution)}")
+```
+
+### HPC Components
+
+| Component | Location | Purpose |
+|-----------|----------|---------|
+| **HPC Compute Architecture** | `ASIGT/hpc/hpc_compute_architecture.py` | Cluster management, agentic scheduling |
+| **MDO Agent Swarm** | `ASIGT/agents/mdo_agent_swarm.py` | Multi-agent optimization |
+| **Quantum Optimizer** | `ASIGT/quantum/quantum_optimizer.py` | QAOA, VQE implementations |
+| **HPC MDO Pipeline** | `pipelines/hpc_mdo_pipeline.yaml` | Complete MDO workflow definition |
+| **HPC Agentic BREX** | `ASIT/GOVERNANCE/hpc_agentic_brex.yaml` | BREX rules for HPC operations |
+
+### Documentation
+
+For complete architecture documentation, see: [`docs/HPC_QUANTUM_AGENTIC_ARCHITECTURE.md`](docs/HPC_QUANTUM_AGENTIC_ARCHITECTURE.md)
 
 ---
 
