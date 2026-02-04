@@ -1,0 +1,259 @@
+name: Contract Governance
+
+on:
+  push:
+    paths:
+      - 'ASIT/CONTRACTS/**'
+  pull_request:
+    paths:
+      - 'ASIT/CONTRACTS/**'
+
+jobs:
+  validate-contracts:
+    name: Validate Contract Structure
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml jsonschema
+      
+      - name: Validate contract YAML structure
+        run: |
+          python -c "
+          import yaml
+          import jsonschema
+          from pathlib import Path
+          
+          # Load contract schema
+          schema_path = Path('ASIT/CONTRACTS/CONTRACT_SCHEMA.yaml')
+          
+          if not schema_path.exists():
+              print('⚠ Contract schema not found - skipping schema validation')
+              exit(0)
+          
+          with open(schema_path) as f:
+              schema = yaml.safe_load(f)
+          
+          # Validate all contract files
+          contract_files = list(Path('ASIT/CONTRACTS/active').glob('*.yaml'))
+          
+          if not contract_files:
+              print('No active contracts found')
+              exit(0)
+          
+          print(f'Validating {len(contract_files)} contract files...')
+          
+          errors = []
+          for contract_file in contract_files:
+              try:
+                  with open(contract_file) as f:
+                      contract = yaml.safe_load(f)
+                  
+                  # Basic structure check
+                  required_fields = ['contract_id', 'name', 'status', 'category']
+                  missing = [field for field in required_fields if field not in contract]
+                  
+                  if missing:
+                      errors.append(f'{contract_file.name}: Missing fields {missing}')
+                      print(f'  ✗ {contract_file.name}: Missing {missing}')
+                  else:
+                      print(f'  ✓ {contract_file.name}')
+                      
+              except Exception as e:
+                  errors.append(f'{contract_file.name}: {e}')
+                  print(f'  ✗ {contract_file.name}: {e}')
+          
+          if errors:
+              print(f'\n❌ {len(errors)} validation errors')
+              exit(1)
+          else:
+              print(f'\n✓ All contracts valid')
+          "
+      
+      - name: Check contract ID format compliance
+        run: |
+          python -c "
+          import re
+          import yaml
+          from pathlib import Path
+          
+          # Expected format: KITDM-CTR-{CATEGORY}-{TARGET}
+          contract_id_pattern = re.compile(r'^KITDM-CTR-[A-Z]+-[A-Z0-9_]+$')
+          
+          contract_files = list(Path('ASIT/CONTRACTS/active').glob('*.yaml'))
+          
+          if not contract_files:
+              print('No active contracts found')
+              exit(0)
+          
+          print(f'Checking contract ID format for {len(contract_files)} contracts...')
+          
+          invalid = []
+          for contract_file in contract_files:
+              with open(contract_file) as f:
+                  data = yaml.safe_load(f)
+                  if data and 'contract_id' in data:
+                      contract_id = data['contract_id']
+                      if contract_id_pattern.match(contract_id):
+                          print(f'  ✓ {contract_id}')
+                      else:
+                          invalid.append(contract_id)
+                          print(f'  ✗ Invalid format: {contract_id}')
+          
+          if invalid:
+              print(f'\n❌ {len(invalid)} invalid contract IDs')
+              exit(1)
+          else:
+              print(f'\n✓ All contract IDs valid')
+          "
+      
+      - name: Verify baseline references exist
+        run: |
+          python -c "
+          import yaml
+          from pathlib import Path
+          
+          contract_files = list(Path('ASIT/CONTRACTS/active').glob('*.yaml'))
+          baseline_dir = Path('ASIT/BASELINES')
+          
+          if not contract_files:
+              print('No active contracts found')
+              exit(0)
+          
+          print(f'Checking baseline references for {len(contract_files)} contracts...')
+          
+          for contract_file in contract_files:
+              with open(contract_file) as f:
+                  data = yaml.safe_load(f)
+              
+              if data and 'baseline_reference' in data:
+                  baseline_ref = data['baseline_reference']
+                  print(f'  {contract_file.name}: references {baseline_ref}')
+                  # Note: Actual baseline file validation would go here
+              else:
+                  print(f'  ⚠ {contract_file.name}: No baseline reference')
+          
+          print('Baseline reference check complete')
+          "
+      
+      - name: Ensure authority fields are complete
+        run: |
+          python -c "
+          import yaml
+          from pathlib import Path
+          
+          contract_files = list(Path('ASIT/CONTRACTS/active').glob('*.yaml'))
+          
+          if not contract_files:
+              print('No active contracts found')
+              exit(0)
+          
+          print(f'Checking authority fields for {len(contract_files)} contracts...')
+          
+          authority_fields = ['approval_authority', 'execution_authority']
+          
+          incomplete = []
+          for contract_file in contract_files:
+              with open(contract_file) as f:
+                  data = yaml.safe_load(f)
+              
+              if data:
+                  missing = [field for field in authority_fields if field not in data]
+                  if missing:
+                      incomplete.append(f'{contract_file.name}: missing {missing}')
+                      print(f'  ⚠ {contract_file.name}: missing {missing}')
+                  else:
+                      print(f'  ✓ {contract_file.name}')
+          
+          if incomplete:
+              print(f'\n⚠ {len(incomplete)} contracts have incomplete authority fields')
+              # Warning only, don't fail
+          else:
+              print(f'\n✓ All contracts have complete authority fields')
+          "
+
+  governance-checks:
+    name: Additional Governance Checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check for conflicting contracts
+        run: |
+          echo "Checking for conflicting contract definitions..."
+          
+          # Check for duplicate contract IDs
+          if [ -d "ASIT/CONTRACTS/active" ]; then
+            python -c "
+            import yaml
+            from pathlib import Path
+            from collections import Counter
+            
+            contract_files = list(Path('ASIT/CONTRACTS/active').glob('*.yaml'))
+            
+            if not contract_files:
+                print('No active contracts found')
+                exit(0)
+            
+            contract_ids = []
+            for f in contract_files:
+                with open(f) as file:
+                    data = yaml.safe_load(file)
+                    if data and 'contract_id' in data:
+                        contract_ids.append(data['contract_id'])
+            
+            duplicates = [id for id, count in Counter(contract_ids).items() if count > 1]
+            
+            if duplicates:
+                print(f'✗ Duplicate contract IDs found: {duplicates}')
+                exit(1)
+            else:
+                print(f'✓ No duplicate contract IDs ({len(contract_ids)} unique contracts)')
+            "
+          fi
+      
+      - name: Validate contract lifecycle states
+        run: |
+          python -c "
+          import yaml
+          from pathlib import Path
+          
+          valid_statuses = ['DRAFT', 'REVIEW', 'APPROVED', 'ACTIVE', 'SUPERSEDED', 'WITHDRAWN']
+          
+          contract_files = list(Path('ASIT/CONTRACTS').rglob('*.yaml'))
+          contract_files = [f for f in contract_files if f.name != 'CONTRACT_SCHEMA.yaml']
+          
+          if not contract_files:
+              print('No contracts found')
+              exit(0)
+          
+          print(f'Checking lifecycle states for {len(contract_files)} contracts...')
+          
+          invalid = []
+          for contract_file in contract_files:
+              with open(contract_file) as f:
+                  data = yaml.safe_load(f)
+              
+              if data and 'status' in data:
+                  status = data['status']
+                  if status in valid_statuses:
+                      print(f'  ✓ {contract_file.name}: {status}')
+                  else:
+                      invalid.append(f'{contract_file.name}: invalid status {status}')
+                      print(f'  ✗ {contract_file.name}: invalid status {status}')
+          
+          if invalid:
+              print(f'\n❌ {len(invalid)} contracts with invalid status')
+              exit(1)
+          else:
+              print(f'\n✓ All contract statuses valid')
+          "

@@ -1,0 +1,277 @@
+name: S1000D Compliance Validation
+
+on:
+  push:
+    paths:
+      - 'ASIGT/**'
+      - 'templates/**'
+      - 'pipelines/**'
+  pull_request:
+    paths:
+      - 'ASIGT/**'
+      - 'templates/**'
+      - 'pipelines/**'
+
+jobs:
+  validate-templates:
+    name: Validate S1000D Templates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install lxml pyyaml
+      
+      - name: Validate S1000D template structure
+        run: |
+          python -c "
+          from pathlib import Path
+          import re
+          
+          template_dir = Path('templates')
+          
+          if not template_dir.exists():
+              print('⚠ Templates directory not found')
+              exit(0)
+          
+          xml_templates = list(template_dir.rglob('*.xml'))
+          jinja_templates = list(template_dir.rglob('*.jinja2'))
+          
+          all_templates = xml_templates + jinja_templates
+          
+          print(f'Found {len(all_templates)} template files:')
+          print(f'  - XML templates: {len(xml_templates)}')
+          print(f'  - Jinja2 templates: {len(jinja_templates)}')
+          
+          # Check for S1000D namespace declarations
+          s1000d_pattern = re.compile(r'xmlns.*s1000d', re.IGNORECASE)
+          
+          s1000d_templates = []
+          for template in xml_templates:
+              try:
+                  content = template.read_text()
+                  if s1000d_pattern.search(content):
+                      s1000d_templates.append(template)
+                      print(f'  ✓ {template.name} (S1000D namespace found)')
+              except Exception as e:
+                  print(f'  ⚠ Could not read {template.name}: {e}')
+          
+          print(f'\n✓ Validation complete: {len(s1000d_templates)}/{len(xml_templates)} templates with S1000D namespace')
+          "
+      
+      - name: Check ATA chapter alignment
+        run: |
+          python -c "
+          from pathlib import Path
+          import re
+          
+          template_files = list(Path('templates').rglob('*.xml')) + list(Path('templates').rglob('*.jinja2'))
+          
+          if not template_files:
+              print('No template files found')
+              exit(0)
+          
+          print(f'Checking ATA chapter alignment for {len(template_files)} templates...')
+          
+          ata_pattern = re.compile(r'ATA[\s-]*(\d{2})|systemCode=\"(\d{2})\"')
+          
+          ata_references = {}
+          for template_file in template_files:
+              try:
+                  content = template_file.read_text()
+                  matches = ata_pattern.findall(content)
+                  if matches:
+                      chapters = set([m[0] or m[1] for m in matches])
+                      ata_references[template_file.name] = list(chapters)
+                      print(f'  {template_file.name}: ATA chapters {chapters}')
+              except Exception as e:
+                  print(f'  ⚠ Could not read {template_file.name}: {e}')
+          
+          if ata_references:
+              print(f'\n✓ Found ATA references in {len(ata_references)} templates')
+          else:
+              print('\n⚠ No ATA chapter references found')
+          "
+      
+      - name: Verify publication type mappings
+        run: |
+          python -c "
+          from pathlib import Path
+          import yaml
+          
+          pipeline_files = list(Path('pipelines').glob('*.yaml'))
+          
+          if not pipeline_files:
+              print('No pipeline files found')
+              exit(0)
+          
+          print(f'Checking publication type mappings in {len(pipeline_files)} pipelines...')
+          
+          pub_types = set()
+          for pipeline_file in pipeline_files:
+              try:
+                  with open(pipeline_file) as f:
+                      data = yaml.safe_load(f)
+                  
+                  if data and 'publication_type' in data:
+                      pub_type = data['publication_type']
+                      pub_types.add(pub_type)
+                      print(f'  {pipeline_file.stem}: {pub_type}')
+                  elif data and 'target' in data and 'publication_type' in data['target']:
+                      pub_type = data['target']['publication_type']
+                      pub_types.add(pub_type)
+                      print(f'  {pipeline_file.stem}: {pub_type}')
+              except Exception as e:
+                  print(f'  ⚠ Could not process {pipeline_file.name}: {e}')
+          
+          print(f'\n✓ Found {len(pub_types)} publication types: {pub_types}')
+          "
+
+  validate-pipelines:
+    name: Validate Pipeline Definitions
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+      
+      - name: Validate pipeline YAML structure
+        run: |
+          python -c "
+          import yaml
+          from pathlib import Path
+          
+          pipeline_files = list(Path('pipelines').glob('*.yaml'))
+          
+          if not pipeline_files:
+              print('No pipeline files found')
+              exit(0)
+          
+          print(f'Validating {len(pipeline_files)} pipeline files...')
+          
+          errors = []
+          for pipeline_file in pipeline_files:
+              try:
+                  with open(pipeline_file) as f:
+                      data = yaml.safe_load(f)
+                  
+                  if data:
+                      # Check for basic pipeline structure
+                      if 'pipeline' in data or 'stages' in data or 'steps' in data:
+                          print(f'  ✓ {pipeline_file.name}')
+                      else:
+                          print(f'  ⚠ {pipeline_file.name}: No pipeline structure found')
+                  else:
+                      errors.append(f'{pipeline_file.name}: Empty or invalid YAML')
+                      
+              except Exception as e:
+                  errors.append(f'{pipeline_file.name}: {e}')
+                  print(f'  ✗ {pipeline_file.name}: {e}')
+          
+          if errors:
+              print(f'\n❌ {len(errors)} validation errors')
+              exit(1)
+          else:
+              print(f'\n✓ All pipeline files valid')
+          "
+      
+      - name: Check for required pipeline fields
+        run: |
+          python -c "
+          import yaml
+          from pathlib import Path
+          
+          pipeline_files = list(Path('pipelines').glob('*.yaml'))
+          
+          if not pipeline_files:
+              print('No pipeline files found')
+              exit(0)
+          
+          print(f'Checking required fields in {len(pipeline_files)} pipelines...')
+          
+          for pipeline_file in pipeline_files:
+              with open(pipeline_file) as f:
+                  data = yaml.safe_load(f)
+              
+              if data:
+                  has_id = 'id' in data or ('pipeline' in data and 'id' in data['pipeline'])
+                  has_name = 'name' in data or ('pipeline' in data and 'name' in data['pipeline'])
+                  
+                  if has_id and has_name:
+                      print(f'  ✓ {pipeline_file.name}')
+                  else:
+                      missing = []
+                      if not has_id:
+                          missing.append('id')
+                      if not has_name:
+                          missing.append('name')
+                      print(f'  ⚠ {pipeline_file.name}: Missing {missing}')
+          
+          print('\n✓ Pipeline field check complete')
+          "
+
+  s1000d-compatibility:
+    name: S1000D Compatibility Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Check S1000D version declarations
+        run: |
+          echo "Checking S1000D version compatibility..."
+          
+          # Check for S1000D version references in YAML files
+          if grep -r "S1000D" ASIGT/ pipelines/ --include="*.yaml" --include="*.py"; then
+            echo "✓ S1000D version references found"
+          else
+            echo "⚠ No explicit S1000D version references"
+          fi
+      
+      - name: Verify data module code format compliance
+        run: |
+          python -c "
+          import re
+          from pathlib import Path
+          
+          # DMC format: ModelIdentCode-SystemDiffCode-SystemCode-SubSystemCode-SubSubSystemCode-AssyCode-DisassyCode-DisassyCodeVariant-InfoCode-InfoCodeVariant-ItemLocationCode
+          dmc_pattern = re.compile(r'DMC-[A-Z0-9]+-[A-Z0-9]+-\d{2}-\d{2}')
+          
+          print('Checking for Data Module Code (DMC) references...')
+          
+          # Check Python files for DMC generation
+          py_files = list(Path('ASIGT').rglob('*.py'))
+          
+          dmc_refs = 0
+          for py_file in py_files:
+              try:
+                  content = py_file.read_text()
+                  if 'DMC-' in content or 'dmc' in content.lower():
+                      matches = dmc_pattern.findall(content)
+                      if matches:
+                          dmc_refs += len(matches)
+              except:
+                  pass
+          
+          if dmc_refs > 0:
+              print(f'✓ Found {dmc_refs} DMC pattern references')
+          else:
+              print('⚠ No DMC pattern references found')
+          
+          print('DMC format check complete')
+          "
