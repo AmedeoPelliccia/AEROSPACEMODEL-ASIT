@@ -12,8 +12,6 @@ on:
         type: choice
         options:
           - AGENT-DESIGN-VERIFY-001
-          - AGENT-VERIFY-CERT-001
-          - AGENT-OPS-MONITOR-001
       
       component_id:
         description: 'Component ID'
@@ -66,27 +64,47 @@ jobs:
           python << 'EOPYTHON'
           import yaml
           import sys
+          import os
           from pathlib import Path
           
           agent_id = "${{ inputs.agent_id }}"
           
-          # Find agent config file
-          config_file = Path(f"templates/agents/{agent_id.lower().replace('agent-', '').replace('-001', '')}_agent.yaml")
+          # Find agent config by scanning templates and matching cnot_agent.id
+          templates_dir = Path("templates/agents")
+          config_file = None
           
-          if not config_file.exists():
-            print(f"Agent configuration not found: {config_file}")
-            sys.exit(1)
+          if templates_dir.exists():
+              for candidate in templates_dir.glob("*.yaml"):
+                  try:
+                      with candidate.open() as f:
+                          data = yaml.safe_load(f)
+                  except Exception:
+                      # Skip files that cannot be read or parsed
+                      continue
+                  
+                  if not isinstance(data, dict):
+                      continue
+                  
+                  cnot_agent = data.get("cnot_agent", {})
+                  if isinstance(cnot_agent, dict) and cnot_agent.get("id") == agent_id:
+                      config_file = candidate
+                      break
           
-          with open(config_file) as f:
-            config = yaml.safe_load(f)
+          if config_file is None:
+              print(f"No agent config found in {templates_dir} for agent_id {agent_id!r}")
+              sys.exit(1)
+          
+          with config_file.open() as f:
+              config = yaml.safe_load(f)
           
           agent_config = config['cnot_agent']
           
-          # Output configuration
-          print(f"agent_name={agent_config['name']}")
-          print(f"lifecycle_transition={agent_config['lifecycle_transition']['from']}_to_{agent_config['lifecycle_transition']['to']}")
-          print(f"num_gates={len(agent_config.get('gates', []))}")
-          print(f"num_actions={len(agent_config.get('marketplace_actions', [])) + len(agent_config.get('internal_actions', []))}")
+          # Write to GITHUB_OUTPUT
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"agent_name={agent_config['name']}\n")
+              f.write(f"lifecycle_transition={agent_config['lifecycle_transition']['from']}_to_{agent_config['lifecycle_transition']['to']}\n")
+              f.write(f"num_gates={len(agent_config.get('gates', []))}\n")
+              f.write(f"num_actions={len(agent_config.get('marketplace_actions', [])) + len(agent_config.get('internal_actions', []))}\n")
           EOPYTHON
       
       - name: Display agent information
@@ -129,11 +147,35 @@ jobs:
           from aerospacemodel.agents import create_agent_from_yaml
           from pathlib import Path
           import json
+          import yaml
+          import os
+          import sys
           
           agent_id = "${{ inputs.agent_id }}"
           
-          # Find agent config
-          config_file = Path(f"templates/agents/{agent_id.lower().replace('agent-', '').replace('-001', '')}_agent.yaml")
+          # Find agent config by scanning templates and matching cnot_agent.id
+          templates_dir = Path("templates/agents")
+          config_file = None
+          
+          for candidate in templates_dir.glob("*.yaml"):
+              try:
+                  with candidate.open() as f:
+                      data = yaml.safe_load(f)
+              except Exception:
+                  # Skip files that cannot be read or parsed
+                  continue
+              
+              if not isinstance(data, dict):
+                  continue
+              
+              cnot_agent = data.get("cnot_agent", {})
+              if isinstance(cnot_agent, dict) and cnot_agent.get("id") == agent_id:
+                  config_file = candidate
+                  break
+          
+          if config_file is None:
+              print(f"No agent config found in {templates_dir} for agent_id {agent_id!r}")
+              sys.exit(1)
           
           # Create agent
           agent = create_agent_from_yaml(str(config_file))
@@ -168,10 +210,11 @@ jobs:
           # Execute agent
           result = agent.execute(context)
           
-          # Output results
-          print(f"gates_passed={result['success']}")
-          if not result['success']:
-              print(f"blocked_by={result.get('blocked_by', 'unknown')}")
+          # Write to GITHUB_OUTPUT (normalize boolean to lowercase string)
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as f:
+              f.write(f"gates_passed={'true' if result['success'] else 'false'}\n")
+              if not result['success']:
+                  f.write(f"blocked_by={result.get('blocked_by', 'unknown')}\n")
           
           # Save full result
           with open('agent_result.json', 'w') as f:

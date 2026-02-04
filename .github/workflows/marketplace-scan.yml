@@ -206,9 +206,10 @@ jobs:
         run: |
           python << 'EOPYTHON'
           import os
+          import textwrap
           
-          # Generate report
-          report = """
+          # Generate report (using textwrap.dedent to remove indentation)
+          report = textwrap.dedent("""
           ## GitHub Marketplace Actions Report
           
           This report summarizes the GitHub Marketplace actions that were executed or simulated.
@@ -257,8 +258,7 @@ jobs:
           - **Design → Verification**: AI Code Review, SBOM Generation, Security Scan
           - **Verification → Certification**: GHAS Policy Check, SLSA Provenance
           - **Production → Operation**: Usage Audit, Operational Monitoring
-          
-          """
+          """).strip()
           
           # Write to GitHub step summary
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'w') as f:
