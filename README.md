@@ -205,7 +205,45 @@ AEROSPACEMODEL serves as the **transformation and intelligence engine** for the 
 - **Controlled Generation** — AI outputs are bounded by validated knowledge domains and explicit transformation contracts
 - **Audit-Ready Governance** — Every AI-assisted transformation is logged, attributable, and reversible
 
-It is composed of two strictly separated but tightly integrated layers:
+### State-of-the-Art: GitHub Marketplace-Baselined Integrated Automation
+
+AEROSPACEMODEL delivers the **state-of-the-art implementable stack** for integrated automation in aerospace lifecycle process gates through a **CNOT-agent lifecycle simulation architecture**. This marketplace-baselined solution orchestrates 18+ GitHub Marketplace actions as deterministic lifecycle transition agents, operating under the dual-AI governance of **ASIT + ASIGT** with dual database management (**KDB → IDB** transformation).
+
+#### Dual AI Model Architecture
+
+The marketplace integration operates within the **ASIT + ASIGT dual AI model**:
+
+- **ASIT (Aircraft Systems Information Transponder)** — Governance layer that validates lifecycle gates (contract, baseline, authority, BREX, trace, safety) and authorizes marketplace action execution
+- **ASIGT (Aircraft Systems Information Generative Transponder)** — Generation layer that executes marketplace actions (AI inference, SBOM generation, security scanning) only after ASIT gate validation
+
+#### Dual Database Management
+
+The system implements **KDB → IDB transformation** through marketplace-integrated lifecycle gates:
+
+- **KDB (Knowledge Database)** — Engineering intent, requirements, and configuration baselines flow through CNOT-gate validation
+- **IDB (Information Database)** — Validated, certified information products (AMM, SRM, IPC) generated through marketplace-orchestrated transformations
+- **Marketplace Actions as Transformation Agents** — GitHub Actions execute SBOM generation, AI-powered content creation, security validation, and policy enforcement at each lifecycle gate
+
+#### Integrated Automation Capabilities
+
+- **Automated Lifecycle Transitions** — CNOT-gate agents manage transitions (design→verification→certification→production→operation→maintenance) with marketplace action orchestration
+- **Marketplace Action Integration** — 18+ cataloged GitHub Actions for AI inference, SBOM generation, security scanning, and policy enforcement, all governed by ASIT rules
+- **Provenance Tracking** — Full audit trails through SLSA attestations and provenance vectors linking KDB sources to IDB outputs
+- **Policy-Driven Governance** — OPA, GHAS, and BREX policy engines enforce compliance boundaries at each lifecycle gate
+- **Deterministic Execution** — Quantum-circuit-inspired CNOT gates ensure no marketplace action fires until all control assertions pass
+
+> **📖 For complete documentation:**
+> - [CNOT Agent Lifecycle Architecture](docs/CNOT_AGENT_LIFECYCLE_ARCHITECTURE.md) — Reference architecture and dual-AI integration patterns
+> - [GitHub Marketplace Actions Catalog](docs/GITHUB_MARKETPLACE_ACTIONS_CATALOG.md) — 18 actions with licensing and compliance notes
+> - [CNOT Gates Architecture](docs/CNOT_GATES_ARCHITECTURE.md) — Quantum-inspired gate control logic
+
+This marketplace-baselined solution represents **the first certification-ready, fully-governed integration of GitHub Marketplace automation** into aerospace lifecycle management, bridging the gap between engineering knowledge (KDB) and operational information (IDB) through deterministic, auditable AI-assisted transformations.
+
+---
+
+### ASIT + ASIGT: Dual-Layer Architecture
+
+The system is composed of two strictly separated but tightly integrated layers:
 
 - **ASIT — Aircraft Systems Information Transponder**  
   The **structural, governance, and lifecycle authority layer**

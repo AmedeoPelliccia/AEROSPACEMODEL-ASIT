@@ -1,0 +1,125 @@
+# CNOT Agent Configuration Template
+#
+# This template defines the structure for CNOT-gate lifecycle agents.
+# Copy and customize for specific lifecycle transitions.
+
+cnot_agent:
+  # Agent identification
+  id: "AGENT-TEMPLATE-001"
+  name: "Template Agent"
+  description: "Template for CNOT-gate lifecycle agents"
+  
+  # Lifecycle transition this agent manages
+  lifecycle_transition:
+    from: "current_state"      # E.g., "design", "verification", "certification"
+    to: "next_state"            # E.g., "verification", "certification", "production"
+    trigger: "event_type"       # E.g., "pull_request", "release", "schedule"
+  
+  # Quantum circuit mapping (conceptual)
+  circuit_mapping:
+    control_qubit: "current_state_approval"
+    target_qubit: "component_next_state"
+    gate_operation: "validation_transform"
+  
+  # CNOT gates - executed sequentially
+  # Execution stops at first failing gate
+  gates:
+    # Contract validation
+    - type: "ContractGate"
+      contract_id: "KITDM-CTR-CATEGORY-TARGET"
+      description: "Validates transformation contract is active"
+    
+    # Baseline validation
+    - type: "BaselineGate"
+      baseline_id: "FBL-YYYY-QX-NNN"
+      description: "Validates baseline is established"
+    
+    # Authority validation
+    - type: "AuthorityGate"
+      required_authority: "STK_CM"
+      description: "Validates execution authority level"
+    
+    # BREX validation
+    - type: "BREXGate"
+      config:
+        cascade_all: true
+        brex_profile: "AEROSPACEMODEL-PRJ-01"
+      description: "Validates BREX compliance"
+    
+    # Traceability validation
+    - type: "TraceGate"
+      config:
+        coverage_threshold: 100
+        trace_type: "requirements_to_design"
+      description: "Validates trace coverage"
+  
+  # GitHub Marketplace actions to execute after gates pass
+  marketplace_actions:
+    # AI Code Review
+    - name: "AI Code Review"
+      action: "gaurav-nelson/github-actions-ai-code-reviewer@v1"
+      params:
+        OPENAI_API_KEY: "${{ secrets.OPENAI_API_KEY }}"
+        exclude_patterns: "tests/**"
+      outputs:
+        review_report: "artifacts/code_review.json"
+    
+    # SBOM Generation
+    - name: "SBOM Generation"
+      action: "anchore/sbom-action@v0"
+      params:
+        format: "spdx-json"
+        artifact-name: "component-sbom"
+      outputs:
+        sbom: "artifacts/sbom.json"
+  
+  # Internal Python actions
+  internal_actions:
+    # Note: Internal actions must use approved module paths
+    # Example (commented out - update path to match your project structure):
+    # - name: "BREX Validation"
+    #   action: "aerospacemodel.asigt.validators.validate_brex"
+    #   type: "internal"
+    #   params:
+    #     brex_profile: "AEROSPACEMODEL-PRJ-01"
+    #   outputs:
+    #     brex_result: "artifacts/brex_validation.json"
+  
+  # Output configuration
+  outputs:
+    # Artifacts to generate
+    artifacts:
+      - name: "sbom"
+        type: "sbom"
+        format: "spdx-json"
+        retention: "permanent"
+      
+      - name: "provenance"
+        type: "attestation"
+        format: "in-toto"
+        retention: "permanent"
+    
+    # State update configuration
+    state_update:
+      component_state: "next_state_ready"
+      lifecycle_state: "next_state"
+      approval_required: false
+  
+  # Governance configuration
+  governance:
+    policy_engine: "OPA"
+    # Note: Add policy files to your project before uncommenting
+    # policy_files:
+    #   - "policies/lifecycle_policy.rego"
+    policy_files: []
+    human_approval_required: false
+    escalation:
+      conditions:
+        - "security_issues_critical > 0"
+      target: "STK_CM"
+      timeout: "48h"
+
+metadata:
+  version: "2.0.0"
+  created: "2026-02-04"
+  author: "AEROSPACEMODEL Team"
