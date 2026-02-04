@@ -92,8 +92,10 @@ cnot_agent:
   
   governance:
     policy_engine: "OPA"
-    policy_files:
-      - "ASIGT/policies/design_verification_policy.rego"
+    # Note: Add policy files to your project before using this configuration
+    # policy_files:
+    #   - "policies/design_verification_policy.rego"
+    policy_files: []
     human_approval_required: false
     escalation:
       conditions:

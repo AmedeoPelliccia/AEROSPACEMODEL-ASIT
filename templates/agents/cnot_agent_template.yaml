@@ -75,14 +75,15 @@ cnot_agent:
   
   # Internal Python actions
   internal_actions:
-    # BREX Validation
-    - name: "BREX Validation"
-      action: "aerospacemodel.validators.brex_validator.validate_against_brex"
-      type: "internal"
-      params:
-        brex_profile: "AEROSPACEMODEL-PRJ-01"
-      outputs:
-        brex_result: "artifacts/brex_validation.json"
+    # Note: Internal actions must use approved module paths
+    # Example (commented out - update path to match your project structure):
+    # - name: "BREX Validation"
+    #   action: "aerospacemodel.asigt.validators.validate_brex"
+    #   type: "internal"
+    #   params:
+    #     brex_profile: "AEROSPACEMODEL-PRJ-01"
+    #   outputs:
+    #     brex_result: "artifacts/brex_validation.json"
   
   # Output configuration
   outputs:
@@ -107,8 +108,10 @@ cnot_agent:
   # Governance configuration
   governance:
     policy_engine: "OPA"
-    policy_files:
-      - "ASIGT/policies/lifecycle_policy.rego"
+    # Note: Add policy files to your project before uncommenting
+    # policy_files:
+    #   - "policies/lifecycle_policy.rego"
+    policy_files: []
     human_approval_required: false
     escalation:
       conditions:

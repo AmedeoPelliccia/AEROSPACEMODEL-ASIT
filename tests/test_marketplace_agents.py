@@ -5,8 +5,6 @@ Tests the MarketplaceAgent, LifecycleAgent, and AgentRegistry modules.
 """
 
 import pytest
-from pathlib import Path
-import tempfile
 import yaml
 
 from aerospacemodel.agents import (
@@ -229,6 +227,59 @@ class TestLifecycleAgent:
         assert agent.config.agent_id == "YAML-TEST-AGENT"
         assert agent.config.agent_name == "YAML Test Agent"
         assert agent.config.lifecycle_transition == LifecycleTransition.DESIGN_TO_VERIFICATION
+    
+    def test_create_agent_from_yaml_with_internal_actions(self, tmp_path):
+        """Test creating agent from YAML with both marketplace and internal actions."""
+        # Create temporary YAML file with both action types
+        yaml_config = {
+            "cnot_agent": {
+                "id": "YAML-MIXED-AGENT",
+                "name": "YAML Mixed Actions Agent",
+                "description": "Test agent with marketplace and internal actions",
+                "lifecycle_transition": {
+                    "from": "design",
+                    "to": "verification"
+                },
+                "gates": [],
+                "marketplace_actions": [
+                    {
+                        "name": "Marketplace Action",
+                        "action": "test/marketplace-action",
+                        "params": {},
+                        "outputs": {}
+                    }
+                ],
+                "internal_actions": [
+                    {
+                        "name": "Internal Action",
+                        "action": "aerospacemodel.asigt.validators.test_method",
+                        "params": {},
+                        "outputs": {}
+                    }
+                ],
+                "outputs": {},
+                "governance": {}
+            }
+        }
+        
+        yaml_path = tmp_path / "test_mixed_agent.yaml"
+        with open(yaml_path, 'w') as f:
+            yaml.dump(yaml_config, f)
+        
+        # Create agent from YAML
+        agent = create_agent_from_yaml(str(yaml_path))
+        
+        assert agent.config.agent_id == "YAML-MIXED-AGENT"
+        assert len(agent.config.actions) == 2
+        
+        # Verify action types are correctly classified
+        marketplace_actions = [a for a in agent.config.actions if a.action_type == "marketplace"]
+        internal_actions = [a for a in agent.config.actions if a.action_type == "internal"]
+        
+        assert len(marketplace_actions) == 1
+        assert len(internal_actions) == 1
+        assert marketplace_actions[0].name == "Marketplace Action"
+        assert internal_actions[0].name == "Internal Action"
 
 
 class TestAgentRegistry:
@@ -256,17 +307,17 @@ class TestAgentRegistry:
     def test_register_agent(self, sample_config):
         """Test registering an agent."""
         registry = AgentRegistry()
-        registry.register("TEST-001", sample_config)
+        registry.register(sample_config.agent_id, sample_config)
         
-        assert "TEST-001" in registry.list()
+        assert sample_config.agent_id in registry.list()
         assert len(registry.list()) == 1
     
     def test_get_agent(self, sample_config):
         """Test getting an agent."""
         registry = AgentRegistry()
-        registry.register("TEST-001", sample_config)
+        registry.register(sample_config.agent_id, sample_config)
         
-        agent = registry.get("TEST-001")
+        agent = registry.get(sample_config.agent_id)
         assert agent is not None
         assert isinstance(agent, LifecycleAgent)
         assert agent.config == sample_config
@@ -280,9 +331,9 @@ class TestAgentRegistry:
     def test_get_info(self, sample_config):
         """Test getting agent information."""
         registry = AgentRegistry()
-        registry.register("TEST-001", sample_config)
+        registry.register(sample_config.agent_id, sample_config)
         
-        info = registry.get_info("TEST-001")
+        info = registry.get_info(sample_config.agent_id)
         assert info is not None
         assert info["agent_id"] == "REGISTRY-TEST-001"
         assert info["agent_name"] == "Registry Test Agent"
@@ -291,7 +342,7 @@ class TestAgentRegistry:
     def test_list_by_transition(self, sample_config):
         """Test listing agents by transition."""
         registry = AgentRegistry()
-        registry.register("TEST-001", sample_config)
+        registry.register(sample_config.agent_id, sample_config)
         
         # Create another config with different transition
         config2 = AgentConfiguration(
@@ -304,16 +355,16 @@ class TestAgentRegistry:
             outputs={},
             governance={}
         )
-        registry.register("TEST-002", config2)
+        registry.register(config2.agent_id, config2)
         
         # List by transition
         design_verify_agents = registry.list_by_transition("design_to_verification")
         assert len(design_verify_agents) == 1
-        assert "TEST-001" in design_verify_agents
+        assert sample_config.agent_id in design_verify_agents
         
         verify_cert_agents = registry.list_by_transition("verification_to_certification")
         assert len(verify_cert_agents) == 1
-        assert "TEST-002" in verify_cert_agents
+        assert config2.agent_id in verify_cert_agents
     
     def test_global_registry_functions(self, sample_config):
         """Test global registry convenience functions."""
@@ -323,14 +374,14 @@ class TestAgentRegistry:
         registry._agent_instances.clear()
         
         # Register agent
-        register_agent("GLOBAL-TEST", sample_config)
+        register_agent(sample_config.agent_id, sample_config)
         
         # List agents
         agents = list_agents()
-        assert "GLOBAL-TEST" in agents
+        assert sample_config.agent_id in agents
         
         # Get agent
-        agent = get_agent("GLOBAL-TEST")
+        agent = get_agent(sample_config.agent_id)
         assert agent is not None
         assert agent.config == sample_config
 

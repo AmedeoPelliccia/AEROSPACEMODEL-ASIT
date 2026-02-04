@@ -222,10 +222,31 @@ class LifecycleAgent:
     def _execute_internal_action(
         self, action: AgentAction, context: Dict[str, Any]
     ) -> Dict[str, Any]:
-        """Execute an internal Python action."""
+        """
+        Execute an internal Python action.
+        
+        Security: Only allows execution of pre-approved internal actions.
+        """
+        # Allowlist of approved internal action modules
+        APPROVED_MODULES = [
+            "aerospacemodel.asigt.validators",
+            "aerospacemodel.asit",
+        ]
+        
         try:
             # Dynamic import and execution
             module_path, method_name = action.action_source.rsplit(".", 1)
+            
+            # Security check: verify module is in allowlist
+            is_approved = any(
+                module_path.startswith(approved) for approved in APPROVED_MODULES
+            )
+            if not is_approved:
+                raise ValueError(
+                    f"Internal action module '{module_path}' is not in the approved list. "
+                    f"Approved modules: {APPROVED_MODULES}"
+                )
+            
             module = __import__(module_path, fromlist=[method_name])
             method = getattr(module, method_name)
             
@@ -259,7 +280,8 @@ class LifecycleAgent:
             "timestamp": timestamp,
             "gate_decisions": [
                 {
-                    "gate_id": gr.gate_name,
+                    "gate_id": gr.gate_id if hasattr(gr, 'gate_id') else gr.gate_name,
+                    "gate_name": gr.gate_name,
                     "passed": gr.passed,
                     "timestamp": timestamp
                 }
@@ -321,6 +343,29 @@ def create_agent_from_yaml(yaml_path: str) -> LifecycleAgent:
     to_state = agent_config["lifecycle_transition"]["to"]
     transition_name = f"{from_state}_to_{to_state}"
     
+    # Build actions list, preserving the source of each action (marketplace vs internal)
+    actions: List[AgentAction] = []
+    for action in agent_config.get("marketplace_actions", []):
+        actions.append(
+            AgentAction(
+                name=action.get("name", ""),
+                action_type="marketplace",
+                action_source=action.get("action", ""),
+                params=action.get("params", {}),
+                outputs=action.get("outputs", {}),
+            )
+        )
+    for action in agent_config.get("internal_actions", []):
+        actions.append(
+            AgentAction(
+                name=action.get("name", ""),
+                action_type="internal",
+                action_source=action.get("action", ""),
+                params=action.get("params", {}),
+                outputs=action.get("outputs", {}),
+            )
+        )
+    
     # Convert to AgentConfiguration
     config = AgentConfiguration(
         agent_id=agent_config["id"],
@@ -328,19 +373,7 @@ def create_agent_from_yaml(yaml_path: str) -> LifecycleAgent:
         description=agent_config["description"],
         lifecycle_transition=LifecycleTransition(transition_name),
         gates=agent_config.get("gates", []),
-        actions=[
-            AgentAction(
-                name=action.get("name", ""),
-                action_type="marketplace" if "marketplace_actions" in agent_config else "internal",
-                action_source=action.get("action", ""),
-                params=action.get("params", {}),
-                outputs=action.get("outputs", {})
-            )
-            for action in (
-                agent_config.get("marketplace_actions", []) +
-                agent_config.get("internal_actions", [])
-            )
-        ],
+        actions=actions,
         outputs=agent_config.get("outputs", {}),
         governance=agent_config.get("governance", {})
     )

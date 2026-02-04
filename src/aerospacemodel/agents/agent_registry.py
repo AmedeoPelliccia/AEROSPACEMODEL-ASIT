@@ -4,7 +4,7 @@ Agent Registry - Registration and factory pattern for agents
 Provides a registry for discovering and instantiating lifecycle agents.
 """
 
-from typing import Dict, List, Any, Optional, Type
+from typing import Dict, List, Any, Optional
 import logging
 from pathlib import Path
 
@@ -33,9 +33,17 @@ class AgentRegistry:
         Register an agent configuration.
         
         Args:
-            agent_id: Unique agent identifier
+            agent_id: Unique agent identifier (must match config.agent_id)
             config: Agent configuration
+        
+        Raises:
+            ValueError: If agent_id doesn't match config.agent_id
         """
+        if agent_id != config.agent_id:
+            raise ValueError(
+                f"agent_id parameter '{agent_id}' must match config.agent_id '{config.agent_id}'"
+            )
+        
         if agent_id in self._agents:
             logger.warning(f"Agent {agent_id} already registered, overwriting")
         

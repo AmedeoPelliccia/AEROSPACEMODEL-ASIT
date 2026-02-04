@@ -12,7 +12,6 @@ This demo shows:
 4. CNOT gate validation and provenance tracking
 """
 
-import json
 from pathlib import Path
 
 from aerospacemodel.agents import (
@@ -339,7 +338,7 @@ def demo_complete_workflow():
     
     # Step 1: Setup
     print("\nStep 1: Initialize Marketplace Agent")
-    marketplace_agent = MarketplaceAgent(execution_mode="python")
+    MarketplaceAgent(execution_mode="python")
     print("  ✓ Marketplace agent ready")
     
     # Step 2: Create lifecycle agent

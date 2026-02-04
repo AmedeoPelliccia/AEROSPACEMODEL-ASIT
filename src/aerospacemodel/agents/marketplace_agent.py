@@ -52,49 +52,49 @@ class MarketplaceAgent:
             "verified": True
         },
         "openhands-ai": {
-            "source": "xinbenlv/openhands-ai-action",
+            "source": "xinbenlv/openhands-ai-action@v1",
             "category": MarketplaceActionCategory.AI_REASONING,
             "license": "Apache-2.0",
             "verified": False
         },
         "ai-code-reviewer": {
-            "source": "gaurav-nelson/github-actions-ai-code-reviewer",
+            "source": "gaurav-nelson/github-actions-ai-code-reviewer@v1",
             "category": MarketplaceActionCategory.AI_SUMMARIZATION,
             "license": "MIT",
             "verified": False
         },
         "ghas-policy": {
-            "source": "advanced-security/action-policy-as-code",
+            "source": "advanced-security/action-policy-as-code@v1",
             "category": MarketplaceActionCategory.POLICY_ENFORCEMENT,
             "license": "Proprietary",
             "verified": True
         },
         "setup-opa": {
-            "source": "open-policy-agent/setup-opa",
+            "source": "open-policy-agent/setup-opa@v2",
             "category": MarketplaceActionCategory.POLICY_ENFORCEMENT,
             "license": "Apache-2.0",
             "verified": False
         },
         "anchore-sbom": {
-            "source": "anchore/sbom-action",
+            "source": "anchore/sbom-action@v0",
             "category": MarketplaceActionCategory.SBOM_GENERATION,
             "license": "Apache-2.0",
             "verified": True
         },
         "slsa-provenance": {
-            "source": "philips-labs/slsa-provenance-action",
+            "source": "philips-labs/slsa-provenance-action@v0",
             "category": MarketplaceActionCategory.PROVENANCE,
             "license": "Apache-2.0",
             "verified": False
         },
         "security-scanner-ai": {
-            "source": "scottman625/security-scanner-action",
+            "source": "scottman625/security-scanner-action@v1",
             "category": MarketplaceActionCategory.SECURITY_SCANNING,
             "license": "MIT",
             "verified": False
         },
         "black-duck": {
-            "source": "blackduck-inc/blackduck-security",
+            "source": "blackduck-inc/blackduck-security@v1",
             "category": MarketplaceActionCategory.SECURITY_SCANNING,
             "license": "Proprietary",
             "verified": False
