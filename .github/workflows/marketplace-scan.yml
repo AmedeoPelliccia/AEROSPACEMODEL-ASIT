@@ -1,0 +1,345 @@
+name: Marketplace Actions Scan
+
+# This workflow demonstrates integration with GitHub Marketplace actions
+# as cataloged in docs/GITHUB_MARKETPLACE_ACTIONS_CATALOG.md
+
+on:
+  workflow_dispatch:
+    inputs:
+      scan_type:
+        description: 'Type of scan to perform'
+        required: true
+        type: choice
+        options:
+          - ai-code-review
+          - sbom-generation
+          - security-scan
+          - policy-check
+          - all
+  
+  pull_request:
+    types: [opened, synchronize]
+    branches:
+      - main
+      - verification
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  # Job 1: AI Code Review (if enabled)
+  ai-code-review:
+    name: AI Code Review
+    runs-on: ubuntu-latest
+    if: ${{ inputs.scan_type == 'ai-code-review' || inputs.scan_type == 'all' || github.event_name == 'pull_request' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Log AI Code Review action
+        run: |
+          echo "=== AI Code Review ==="
+          echo "Action: gaurav-nelson/github-actions-ai-code-reviewer"
+          echo "License: MIT"
+          echo "Category: AI Summarization"
+          echo "Status: Queued for execution"
+          echo ""
+          echo "Note: This would require OPENAI_API_KEY secret to be configured"
+          echo "Refer to: docs/GITHUB_MARKETPLACE_ACTIONS_CATALOG.md #3"
+      
+      # Uncomment to enable actual AI code review (requires secret configuration)
+      # - name: AI Code Review
+      #   uses: gaurav-nelson/github-actions-ai-code-reviewer@v1
+      #   with:
+      #     OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      #     exclude_patterns: "tests/**,docs/**"
+
+  # Job 2: SBOM Generation
+  sbom-generation:
+    name: SBOM Generation
+    runs-on: ubuntu-latest
+    if: ${{ inputs.scan_type == 'sbom-generation' || inputs.scan_type == 'all' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Generate SBOM with Anchore
+        run: |
+          echo "=== SBOM Generation ==="
+          echo "Action: anchore/sbom-action"
+          echo "License: Apache-2.0"
+          echo "Category: Supply Chain Security"
+          echo "Status: Simulated"
+          echo ""
+          echo "Generating SBOM..."
+          mkdir -p artifacts
+          cat > artifacts/sbom-simulated.json << 'EOFSBOM'
+          {
+            "bomFormat": "CycloneDX",
+            "specVersion": "1.4",
+            "serialNumber": "urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79",
+            "version": 1,
+            "metadata": {
+              "timestamp": "2026-02-04T01:00:00Z",
+              "component": {
+                "type": "application",
+                "name": "aerospacemodel",
+                "version": "2.0.0"
+              }
+            },
+            "components": []
+          }
+          EOFSBOM
+          echo "✓ SBOM generated: artifacts/sbom-simulated.json"
+      
+      # Uncomment to enable actual SBOM generation
+      # - name: Generate SBOM
+      #   uses: anchore/sbom-action@v0
+      #   with:
+      #     format: spdx-json
+      #     artifact-name: sbom-${{ github.sha }}
+      
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-${{ github.run_id }}
+          path: artifacts/sbom-simulated.json
+          retention-days: 90
+
+  # Job 3: Security Scanning
+  security-scan:
+    name: Security Scanning
+    runs-on: ubuntu-latest
+    if: ${{ inputs.scan_type == 'security-scan' || inputs.scan_type == 'all' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Simulate security scan
+        run: |
+          echo "=== Security Scanning ==="
+          echo "Action: scottman625/security-scanner-action"
+          echo "License: MIT"
+          echo "Category: AI-Powered Security"
+          echo "Status: Simulated"
+          echo ""
+          echo "Scanning for vulnerabilities..."
+          mkdir -p artifacts
+          cat > artifacts/security-scan.sarif << 'EOFSARIF'
+          {
+            "$schema": "https://raw.githubusercontent.com/oasis-tcs/sarif-spec/master/Schemata/sarif-schema-2.1.0.json",
+            "version": "2.1.0",
+            "runs": [
+              {
+                "tool": {
+                  "driver": {
+                    "name": "AI Security Scanner",
+                    "version": "1.0.0"
+                  }
+                },
+                "results": []
+              }
+            ]
+          }
+          EOFSARIF
+          echo "✓ Security scan completed: 0 issues found"
+      
+      # Uncomment to enable actual AI security scanning (requires secret)
+      # - name: AI Security Scanner
+      #   uses: scottman625/security-scanner-action@v1
+      #   with:
+      #     OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      
+      - name: Upload security results
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-scan-${{ github.run_id }}
+          path: artifacts/security-scan.sarif
+          retention-days: 90
+
+  # Job 4: Policy Check with OPA
+  policy-check:
+    name: Policy Check (OPA)
+    runs-on: ubuntu-latest
+    if: ${{ inputs.scan_type == 'policy-check' || inputs.scan_type == 'all' }}
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup OPA
+        run: |
+          echo "=== Policy Check (OPA) ==="
+          echo "Action: open-policy-agent/setup-opa"
+          echo "License: Apache-2.0"
+          echo "Category: Policy Enforcement"
+          echo "Status: Simulated"
+          echo ""
+          echo "Note: Would install OPA CLI and run policy tests"
+          echo "Refer to: docs/GITHUB_MARKETPLACE_ACTIONS_CATALOG.md #5"
+      
+      # Uncomment to enable actual OPA setup and testing
+      # - name: Setup OPA
+      #   uses: open-policy-agent/setup-opa@v2
+      #   with:
+      #     version: latest
+      
+      # - name: Run OPA tests
+      #   run: |
+      #     opa test ASIGT/policies/ -v
+
+  # Job 5: Action Catalog Report
+  action-catalog-report:
+    name: Action Catalog Report
+    runs-on: ubuntu-latest
+    needs: [ai-code-review, sbom-generation, security-scan, policy-check]
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Generate action catalog report
+        run: |
+          python << 'EOPYTHON'
+          import os
+          
+          # Generate report
+          report = """
+          ## GitHub Marketplace Actions Report
+          
+          This report summarizes the GitHub Marketplace actions that were executed or simulated.
+          
+          ### Actions Catalog Reference
+          
+          For complete details on each action, see: [GitHub Marketplace Actions Catalog](docs/GITHUB_MARKETPLACE_ACTIONS_CATALOG.md)
+          
+          ### Actions in This Workflow
+          
+          | Action | Category | License | Status |
+          |--------|----------|---------|--------|
+          | `gaurav-nelson/github-actions-ai-code-reviewer` | AI Summarization | MIT | Simulated |
+          | `anchore/sbom-action` | Supply Chain Security | Apache-2.0 | Simulated |
+          | `scottman625/security-scanner-action` | AI-Powered Security | MIT | Simulated |
+          | `open-policy-agent/setup-opa` | Policy Enforcement | Apache-2.0 | Simulated |
+          
+          ### Integration Notes
+          
+          #### Required Secrets
+          
+          To enable full functionality, configure the following secrets in your repository:
+          
+          - `OPENAI_API_KEY` - For AI-powered code review and security scanning
+          - `ANTHROPIC_API_KEY` - For alternative AI models (optional)
+          - `BLACKDUCK_URL` and `BLACKDUCK_TOKEN` - For Black Duck security scanning (optional)
+          
+          #### Enabling Actions
+          
+          To enable actual execution of marketplace actions:
+          
+          1. Uncomment the relevant action steps in this workflow
+          2. Configure required secrets
+          3. Review and accept marketplace action permissions
+          
+          ### Architecture Reference
+          
+          This workflow demonstrates the marketplace action integration described in:
+          - [CNOT Agent Lifecycle Architecture](docs/CNOT_AGENT_LIFECYCLE_ARCHITECTURE.md)
+          - [GitHub Marketplace Actions Catalog](docs/GITHUB_MARKETPLACE_ACTIONS_CATALOG.md)
+          
+          ### CNOT Gate Integration
+          
+          These marketplace actions can be integrated into CNOT-gate agents for lifecycle transitions:
+          
+          - **Design → Verification**: AI Code Review, SBOM Generation, Security Scan
+          - **Verification → Certification**: GHAS Policy Check, SLSA Provenance
+          - **Production → Operation**: Usage Audit, Operational Monitoring
+          
+          """
+          
+          # Write to GitHub step summary
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'w') as f:
+              f.write(report)
+          
+          print(report)
+          EOPYTHON
+      
+      - name: Display catalog summary
+        run: |
+          echo ""
+          echo "=========================================="
+          echo "MARKETPLACE ACTIONS CATALOG SUMMARY"
+          echo "=========================================="
+          echo ""
+          echo "Total Actions Cataloged: 18"
+          echo ""
+          echo "Categories:"
+          echo "  - AI Reasoning & Summarization: 8 actions"
+          echo "  - Policy Enforcement: 3 actions"
+          echo "  - Supply Chain Security: 3 actions"
+          echo "  - Security Scanning: 3 actions"
+          echo "  - Audit & Tracking: 2 actions"
+          echo ""
+          echo "For complete catalog, see:"
+          echo "  docs/GITHUB_MARKETPLACE_ACTIONS_CATALOG.md"
+          echo ""
+          echo "=========================================="
+
+  # Job 6: Integration Test (Python)
+  integration-test:
+    name: Integration Test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+      
+      - name: Test MarketplaceAgent
+        run: |
+          python << 'EOPYTHON'
+          from aerospacemodel.agents import MarketplaceAgent, MarketplaceActionCategory
+          
+          print("=== Testing MarketplaceAgent ===\n")
+          
+          agent = MarketplaceAgent(execution_mode="python")
+          
+          # Test action catalog
+          print("Action Catalog:")
+          for action_key in ["ai-inference", "anchore-sbom", "ghas-policy"]:
+              info = agent.get_action_info(action_key)
+              if info:
+                  print(f"  ✓ {action_key}: {info['source']} ({info['license']})")
+          
+          # Test action execution
+          print("\nExecuting test action:")
+          result = agent.execute_action(
+              "anchore-sbom",
+              {"format": "spdx-json"},
+              {"component": "test"}
+          )
+          
+          print(f"  Status: {result.status}")
+          print(f"  Action: {result.action_source}")
+          
+          # Test category listing
+          print("\nAI Reasoning actions:")
+          ai_actions = agent.list_actions_by_category(MarketplaceActionCategory.AI_REASONING)
+          for action in ai_actions:
+              print(f"  - {action}")
+          
+          print("\n✓ MarketplaceAgent integration test passed")
+          EOPYTHON

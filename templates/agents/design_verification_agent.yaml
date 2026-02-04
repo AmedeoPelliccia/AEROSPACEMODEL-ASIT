@@ -1,0 +1,109 @@
+# Design to Verification Agent
+#
+# Validates design completeness and readiness for verification phase
+
+cnot_agent:
+  id: "AGENT-DESIGN-VERIFY-001"
+  name: "Design to Verification Agent"
+  description: "Validates design completeness and readiness for verification"
+  
+  lifecycle_transition:
+    from: "design"
+    to: "verification"
+    trigger: "pull_request_merged_to_verification_branch"
+  
+  circuit_mapping:
+    control_qubit: "design_approval_state"
+    target_qubit: "component_verification_state"
+    gate_operation: "design_validation_transform"
+  
+  gates:
+    - type: "ContractGate"
+      contract_id: "KITDM-CTR-LM-CSDB_ATA27"
+    
+    - type: "BaselineGate"
+      baseline_id: "FBL-2026-Q1-003"
+    
+    - type: "AuthorityGate"
+      required_authority: "STK_CM"
+    
+    - type: "BREXGate"
+      config:
+        cascade_all: true
+        brex_profile: "AEROSPACEMODEL-PRJ-01"
+    
+    - type: "TraceGate"
+      config:
+        coverage_threshold: 100
+        trace_type: "requirements_to_design"
+  
+  marketplace_actions:
+    - name: "AI Code Review"
+      action: "gaurav-nelson/github-actions-ai-code-reviewer@v1"
+      params:
+        OPENAI_API_KEY: "${{ secrets.OPENAI_API_KEY }}"
+        exclude_patterns: "tests/**"
+      outputs:
+        review_report: "artifacts/code_review.json"
+    
+    - name: "SBOM Generation"
+      action: "anchore/sbom-action@v0"
+      params:
+        format: "spdx-json"
+        artifact-name: "design-sbom"
+      outputs:
+        sbom: "artifacts/design-sbom.json"
+    
+    - name: "Security Scan"
+      action: "scottman625/security-scanner-action@v1"
+      params:
+        OPENAI_API_KEY: "${{ secrets.OPENAI_API_KEY }}"
+      outputs:
+        sarif: "artifacts/security-scan.sarif"
+  
+  internal_actions: []
+  
+  outputs:
+    artifacts:
+      - name: "design_sbom"
+        type: "sbom"
+        format: "spdx-json"
+        retention: "permanent"
+      
+      - name: "code_review_report"
+        type: "report"
+        format: "json"
+        retention: "90_days"
+      
+      - name: "security_scan_results"
+        type: "sarif"
+        format: "sarif"
+        retention: "permanent"
+      
+      - name: "provenance"
+        type: "attestation"
+        format: "in-toto"
+        retention: "permanent"
+    
+    state_update:
+      component_state: "verification_ready"
+      lifecycle_state: "verification"
+      approval_required: false
+  
+  governance:
+    policy_engine: "OPA"
+    policy_files:
+      - "ASIGT/policies/design_verification_policy.rego"
+    human_approval_required: false
+    escalation:
+      conditions:
+        - "security_issues_critical > 0"
+        - "trace_coverage < 100"
+      target: "STK_CM"
+      timeout: "48h"
+
+metadata:
+  version: "2.0.0"
+  created: "2026-02-04"
+  ata_chapter: "27"
+  component_type: "flight_controls"
