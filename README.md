@@ -205,6 +205,20 @@ AEROSPACEMODEL serves as the **transformation and intelligence engine** for the 
 - **Controlled Generation** — AI outputs are bounded by validated knowledge domains and explicit transformation contracts
 - **Audit-Ready Governance** — Every AI-assisted transformation is logged, attributable, and reversible
 
+### GitHub Marketplace Integration & Lifecycle Orchestration
+
+AEROSPACEMODEL implements a **CNOT-agent lifecycle simulation architecture** that orchestrates GitHub Marketplace actions as lifecycle transition agents. This architecture enables:
+
+- **Automated Lifecycle Transitions** — CNOT-gate agents manage transitions (design→verification→certification→production→operation→maintenance)
+- **Marketplace Action Integration** — 18+ cataloged GitHub Actions for AI inference, SBOM generation, security scanning, and policy enforcement
+- **Provenance Tracking** — Full audit trails through SLSA attestations and provenance vectors
+- **Policy-Driven Governance** — OPA, GHAS, and BREX policy engines enforce compliance boundaries
+
+> **📖 For complete documentation:**
+> - [CNOT Agent Lifecycle Architecture](docs/CNOT_AGENT_LIFECYCLE_ARCHITECTURE.md)
+> - [GitHub Marketplace Actions Catalog](docs/GITHUB_MARKETPLACE_ACTIONS_CATALOG.md)
+> - [CNOT Gates Architecture](docs/CNOT_GATES_ARCHITECTURE.md)
+
 It is composed of two strictly separated but tightly integrated layers:
 
 - **ASIT — Aircraft Systems Information Transponder**  
