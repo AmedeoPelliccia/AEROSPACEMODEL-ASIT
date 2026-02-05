@@ -52,7 +52,7 @@ A formal, machine-actionable specification governing how information is to be tr
 ---
 
 ## 4. Top-Level Instruction (TLI)  
-**Definition:**  
+**Definition:**  see /Model_Digital_Constitution.md
 A domain-licensed, authorized instruction that specifies what actions on data are permitted, constrained, or prohibited.
 
 **Key Rule:**  
