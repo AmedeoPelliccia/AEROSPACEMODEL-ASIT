@@ -95,6 +95,9 @@ from aerospacemodel.topology import (
     FunctionalLayerType,
     OrbitalLayer,
     LinkType,
+    NodeRole,
+    QoSClass,
+    QoSProfile,
 )
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -108,6 +111,9 @@ from aerospacemodel.data_lifecycle import (
     LifecycleStage,
     DataClass,
     SecurityDomain,
+    DataOriginType,
+    ConsumptionAction,
+    ProcessingLocation,
 )
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -131,6 +137,9 @@ from aerospacemodel.cognitive import (
     MicroModel,
     FoundationModel,
     FederatedSession,
+    ModelCapability,
+    ModelTier,
+    GovernanceRole,
 )
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -194,6 +203,9 @@ __all__ = [
     "FunctionalLayerType",
     "OrbitalLayer",
     "LinkType",
+    "NodeRole",
+    "QoSClass",
+    "QoSProfile",
 
     # Data Lifecycle
     "DataLifecycleManager",
@@ -202,6 +214,9 @@ __all__ = [
     "LifecycleStage",
     "DataClass",
     "SecurityDomain",
+    "DataOriginType",
+    "ConsumptionAction",
+    "ProcessingLocation",
 
     # Functional Layers
     "FunctionalLayerStack",
@@ -215,6 +230,9 @@ __all__ = [
     "MicroModel",
     "FoundationModel",
     "FederatedSession",
+    "ModelCapability",
+    "ModelTier",
+    "GovernanceRole",
 
     # Framework (Unified Cube)
     "UnifiedFramework",

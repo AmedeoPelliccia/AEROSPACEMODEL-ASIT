@@ -28,7 +28,6 @@ from typing import (
     Optional,
     Set,
     Tuple,
-    Union,
 )
 
 logger = logging.getLogger(__name__)
@@ -179,10 +178,12 @@ class MeshNode:
 
 @dataclass
 class MeshLink:
-    """A directional link between two mesh nodes.
+    """A link between two mesh nodes, treated as bidirectional.
 
     Carries traffic between nodes with defined capacity, latency,
-    and functional layer assignments.
+    and functional layer assignments.  The topology builds an
+    undirected adjacency list so every link is traversable in both
+    directions regardless of *source_id* / *target_id* ordering.
     """
     link_id: str
     source_id: str

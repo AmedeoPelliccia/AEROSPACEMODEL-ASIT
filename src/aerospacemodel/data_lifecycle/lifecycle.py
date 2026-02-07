@@ -21,9 +21,6 @@ from typing import (
     Dict,
     List,
     Optional,
-    Set,
-    Tuple,
-    Union,
 )
 
 logger = logging.getLogger(__name__)
@@ -391,9 +388,23 @@ class DataLifecycleManager:
     ) -> DataRecord:
         """Add a processing directive.
 
-        Advances the record to PROCESSING if it is not already there.
+        Advances the record to PROCESSING if it is currently in
+        TRANSMISSION.  Raises :class:`DataLifecycleError` if the
+        record is in a stage earlier than TRANSMISSION (or already
+        past PROCESSING).
         """
         record = self._get_record(record_id)
+
+        if record.stage not in (
+            LifecycleStage.TRANSMISSION,
+            LifecycleStage.PROCESSING,
+        ):
+            raise DataLifecycleError(
+                f"Cannot add processing to record '{record_id}' "
+                f"in stage {record.stage.value}; "
+                f"expected TRANSMISSION or PROCESSING"
+            )
+
         directive = ProcessingDirective(
             location=location,
             operations=list(operations),
@@ -420,8 +431,24 @@ class DataLifecycleManager:
         record_id: str,
         actions: List[ConsumptionAction],
     ) -> DataRecord:
-        """Mark a record as consumed with the given actions."""
+        """Mark a record as consumed with the given actions.
+
+        Advances the record to CONSUMPTION if it is currently in
+        PROCESSING.  Raises :class:`DataLifecycleError` if the
+        record is in a stage earlier than PROCESSING.
+        """
         record = self._get_record(record_id)
+
+        if record.stage not in (
+            LifecycleStage.PROCESSING,
+            LifecycleStage.CONSUMPTION,
+        ):
+            raise DataLifecycleError(
+                f"Cannot mark record '{record_id}' as consumed "
+                f"in stage {record.stage.value}; "
+                f"expected PROCESSING or CONSUMPTION"
+            )
+
         record.consumption_actions.extend(actions)
 
         if record.stage == LifecycleStage.PROCESSING:

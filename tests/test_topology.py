@@ -8,7 +8,6 @@ including path finding, connectivity analysis, and serialization.
 import pytest
 
 from aerospacemodel.topology.mesh import (
-    ConnectivityError,
     FunctionalLayer,
     FunctionalLayerType,
     LinkType,
