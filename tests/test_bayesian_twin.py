@@ -552,9 +552,9 @@ class TestUpdateCycle:
         assert isinstance(result, InferenceResult)
 
     def test_multiple_updates_progress(self) -> None:
-        import random as _rng
+        import random
 
-        _rng.seed(42)
+        random.seed(42)
         engine = BayesianInferenceEngine(num_particles=200)
         engine.initialize(_make_prior_state())
 

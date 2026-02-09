@@ -33,6 +33,14 @@ from typing import (
 
 logger = logging.getLogger(__name__)
 
+# Default constants for observation and simulation models
+_POD_A50_M = 0.001        # 50 % detection size (metres)
+_POD_BETA = 3.0           # Log-logistic shape parameter
+_NDT_NOISE_STD_M = 0.001  # NDT measurement noise (metres)
+_STRAIN_BASELINE = 1000.0  # Baseline strain prediction (microstrain)
+_STRAIN_NOISE_STD = 100.0  # Strain gauge noise (microstrain)
+_RUL_STEP_CYCLES = 100    # Forward simulation step size (cycles)
+
 
 # =============================================================================
 # EXCEPTIONS
@@ -387,8 +395,8 @@ class BayesianInferenceEngine:
         Returns:
             Probability of detection in [0, 1].
         """
-        a_50 = 0.001   # 50% detection at 1 mm
-        beta = 3.0      # shape parameter
+        a_50 = _POD_A50_M
+        beta = _POD_BETA
         pod = 1.0 / (
             1.0 + (a_50 / max(true_size_m, 1e-10)) ** beta
         )
@@ -431,9 +439,8 @@ class BayesianInferenceEngine:
                         residual = (
                             finding.detected_size_m - damage.size_m
                         )
-                        # Measurement noise std = 0.001 m
                         likelihood *= math.exp(
-                            -0.5 * (residual / 0.001) ** 2
+                            -0.5 * (residual / _NDT_NOISE_STD_M) ** 2
                         )
             else:
                 # No matching damage state for this location
@@ -443,11 +450,10 @@ class BayesianInferenceEngine:
         # --- Sensor readings (strain gauges) ---
         for reading in observations.sensor_readings:
             if reading.sensor_type == SensorType.STRAIN_GAUGE:
-                predicted = 1000.0  # baseline strain (microstrain)
+                predicted = _STRAIN_BASELINE
                 residual = reading.value - predicted
-                # Noise std = 100 microstrain
                 likelihood *= math.exp(
-                    -0.5 * (residual / 100.0) ** 2
+                    -0.5 * (residual / _STRAIN_NOISE_STD) ** 2
                 )
 
         return max(likelihood, 1e-300)
@@ -535,7 +541,7 @@ class BayesianInferenceEngine:
         """
         current_size = damage.size_m
         cycles = 0
-        step = 100
+        step = _RUL_STEP_CYCLES
 
         while current_size < self._critical_damage_m and cycles < max_cycles:
             delta_k = (
