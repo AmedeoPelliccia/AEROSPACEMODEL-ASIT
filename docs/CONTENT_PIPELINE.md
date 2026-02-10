@@ -294,34 +294,41 @@ result = asigt.execute(contract, baseline_id="FBL-2026-Q1-003")
 
 ### CSDB Structure
 
+The AssembleStage creates a proper CSDB (Common Source Database) structure and copies all artifacts into their designated subdirectories:
+
 ```
 IDB/CSDB/AMM/
-├── DM/                          # Data Modules
-│   ├── DMC-AERO-A-28-00-00-00A-040A-A.xml
-│   ├── DMC-AERO-A-28-10-00-00A-520A-A.xml
-│   └── ...
-├── PM/                          # Publication Modules
-│   └── PMC-AMM-2026-00001.xml
-├── DML/                         # Data Module Lists
-│   └── DML-AMM-2026-00001.xml
-└── ICN/                         # Graphics
-    ├── ICN-AERO-00001-001.cgm
-    └── ...
+├── CSDB/                        # Assembled CSDB package
+│   ├── DM/                      # Data Modules (copied from output_path)
+│   │   ├── DMC-AERO-A-28-00-00-00A-040A-A.xml
+│   │   ├── DMC-AERO-A-28-10-00-00A-520A-A.xml
+│   │   └── ...
+│   ├── PM/                      # Publication Modules (copied from output_path)
+│   │   └── PM-AMM-2026-00001.xml
+│   ├── DML/                     # Data Module Lists (copied from output_path)
+│   │   └── DML-AMM-2026-00001.xml
+│   └── ICN/                     # Graphics (if present)
+│       ├── ICN-AERO-00001-001.cgm
+│       └── ...
+├── DMC-*.xml                    # Original DMs (before CSDB assembly)
+├── PM-*.xml                     # Original PM
+└── DML-*.xml                    # Original DML
 ```
+
+**Note:** The `_assemble_csdb()` method copies DMs, PM, and DML files into the `CSDB/` subdirectory structure. Both the original files and the CSDB-organized copies are preserved.
 
 ### Run Artifacts
 
-Every pipeline execution creates immutable run artifacts:
+Every pipeline execution creates run artifacts in the configured run_archive_path (defaults to `output_path/../ASIGT/runs/`):
 
 ```
 ASIGT/runs/20260210-1430__KITDM-CTR-LM-CSDB_ATA28/
-├── INPUT_MANIFEST.json          # What was consumed
-├── OUTPUT_MANIFEST.json         # What was produced
-├── TRACE_MATRIX.csv             # Input→output relationships
-├── VALIDATION_REPORT.json       # BREX/schema/trace results
-├── METRICS.json                 # Performance metrics
+├── run_metadata.json            # Run configuration and timing
+├── stage_results.json           # Individual stage execution results
 └── LOG.txt                      # Detailed execution log
 ```
+
+**Note:** The current implementation focuses on pipeline execution and artifact generation. Full manifest and traceability matrix population is available through the ASIGT engine's extended functionality and can be integrated as needed for production deployments.
 
 ## Performance Metrics
 
