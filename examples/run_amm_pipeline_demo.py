@@ -20,7 +20,6 @@ from __future__ import annotations
 
 import logging
 import sys
-from datetime import datetime
 from pathlib import Path
 
 import yaml
@@ -28,13 +27,7 @@ import yaml
 # Add src to path for development
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from aerospacemodel.asigt.engine import ExecutionContext
-from aerospacemodel.asigt.pipeline import (
-    ContentPipeline,
-    PipelineConfig,
-    create_amm_pipeline,
-    execute_pipeline,
-)
+from aerospacemodel.asigt.pipeline import execute_pipeline
 
 # Configure logging
 logging.basicConfig(

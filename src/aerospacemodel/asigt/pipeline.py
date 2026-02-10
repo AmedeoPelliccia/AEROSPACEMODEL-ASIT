@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import yaml
 
@@ -27,6 +27,7 @@ from .engine import (
     ASIGTEngine,
     ArtifactType,
     ExecutionContext,
+    ExecutionMetrics,
     OutputArtifact,
     RunResult,
     RunStatus,
@@ -84,10 +85,18 @@ class PipelineConfig:
     def from_yaml(cls, yaml_path: Path) -> PipelineConfig:
         """Load pipeline configuration from YAML file."""
         with open(yaml_path, "r", encoding="utf-8") as f:
-            data = yaml.safe_load(f)
+            # yaml.safe_load() returns None for empty or comment-only files; normalize to dict
+            data = yaml.safe_load(f) or {}
+        
+        if not isinstance(data, dict):
+            data = {}
         
         pipeline_data = data.get("pipeline", {})
+        if not isinstance(pipeline_data, dict):
+            pipeline_data = {}
         metadata = pipeline_data.get("metadata", {})
+        if not isinstance(metadata, dict):
+            metadata = {}
         
         config = cls(
             pipeline_id=metadata.get("pipeline_id", ""),
@@ -288,8 +297,9 @@ class IngestNormalizeStage:
         }
         
         for item in normalized:
-            if "ata_chapter" in item.get("metadata", {}):
-                metadata["ata_chapters"].add(item["metadata"]["ata_chapter"])
+            ata_chapter = item.get("metadata", {}).get("ata_chapter")
+            if ata_chapter:
+                metadata["ata_chapters"].add(ata_chapter)
             metadata["source_types"].add(item["type"])
         
         state["metadata"] = metadata
@@ -447,7 +457,12 @@ class TransformStage:
         self.logger.info("Starting TRANSFORM TO S1000D stage")
         
         try:
+            # Try enriched sources first, fall back to normalized sources
             enriched_sources = state.get("enriched_sources", [])
+            if not enriched_sources:
+                enriched_sources = state.get("normalized_sources", [])
+                if not enriched_sources:
+                    self.logger.warning("No sources available for transformation")
             
             # Transform to S1000D data modules
             data_modules = self._transform_to_s1000d(enriched_sources, context)
@@ -516,9 +531,9 @@ class TransformStage:
     
     def _generate_dmc(self, source: Dict[str, Any]) -> str:
         """Generate Data Module Code."""
-        # Simplified DMC generation
-        ata = source.get("metadata", {}).get("ata_chapter", "00")
-        source_id = source.get("id", "UNKNOWN")
+        # Normalize ATA chapter to 2-digit format
+        ata = source.get("metadata", {}).get("ata_chapter", "")
+        ata = (ata or "00").zfill(2)
         
         # Format: MODEL-A-ATA-00-00-00A-040A-A
         dmc = f"AERO-A-{ata}-00-00-00A-040A-A"
@@ -538,10 +553,12 @@ class TransformStage:
     
     def _generate_dm_xml(self, artifact: OutputArtifact, source: Dict[str, Any]) -> None:
         """Generate S1000D XML for data module."""
+        from xml.sax.saxutils import escape
+        
         # Simplified XML generation
         content = source.get("content", {})
-        title = content.get("title", "Untitled")
-        description = content.get("description", "")
+        title = escape(content.get("title", "Untitled"))
+        description = escape(content.get("description", ""))
         
         xml_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <dmodule xmlns="http://www.s1000d.org/S1000D_5-0">
@@ -765,13 +782,39 @@ class AssembleStage:
         context: ExecutionContext
     ) -> Path:
         """Assemble CSDB package structure."""
+        import shutil
+        
         csdb_root = context.output_path / "CSDB"
         csdb_root.mkdir(parents=True, exist_ok=True)
         
         # Create directory structure
-        (csdb_root / "DM").mkdir(exist_ok=True)
-        (csdb_root / "PM").mkdir(exist_ok=True)
-        (csdb_root / "DML").mkdir(exist_ok=True)
+        dm_dir = csdb_root / "DM"
+        pm_dir = csdb_root / "PM"
+        dml_dir = csdb_root / "DML"
+        
+        dm_dir.mkdir(exist_ok=True)
+        pm_dir.mkdir(exist_ok=True)
+        dml_dir.mkdir(exist_ok=True)
+        
+        # Move/copy DMs into CSDB structure
+        for dm in data_modules:
+            if dm.path.exists():
+                dest = dm_dir / dm.path.name
+                shutil.copy2(dm.path, dest)
+                # Update path reference
+                dm.path = dest
+        
+        # Move/copy PM
+        if pm.path.exists():
+            dest = pm_dir / pm.path.name
+            shutil.copy2(pm.path, dest)
+            pm.path = dest
+        
+        # Move/copy DML
+        if dml.path.exists():
+            dest = dml_dir / dml.path.name
+            shutil.copy2(dml.path, dest)
+            dml.path = dest
         
         self.logger.info(f"Assembled CSDB package at {csdb_root}")
         return csdb_root
@@ -895,28 +938,40 @@ class PublishQAStage:
     ) -> Dict[str, Any]:
         """Perform quality assurance checks."""
         qa_results = {
-            "total_checks": 3,
-            "passed": 3,
+            "total_checks": 0,
+            "passed": 0,
             "failed": 0,
             "warnings": [],
             "errors": []
         }
         
         # Check 1: All DMs have valid DMC codes
+        qa_results["total_checks"] += 1
         for dm in data_modules:
-            if not dm.dmc:
-                qa_results["warnings"].append(f"DM {dm.id} missing DMC code")
+            if not getattr(dm, "dmc", None):
+                qa_results["warnings"].append(f"DM {getattr(dm, 'id', '<unknown>')} missing DMC code")
+        # Missing DMC codes are treated as warnings only; the check is considered passed.
+        qa_results["passed"] += 1
         
         # Check 2: PM exists
+        qa_results["total_checks"] += 1
         if not pm:
             qa_results["warnings"].append("Publication Module not generated")
+        # Missing PM is treated as a warning only; the check is considered passed.
+        qa_results["passed"] += 1
         
         # Check 3: All files exist
+        qa_results["total_checks"] += 1
+        missing_files = False
         for dm in data_modules:
             if not dm.path.exists():
                 qa_results["errors"].append(f"DM file not found: {dm.path}")
-                qa_results["failed"] += 1
-                qa_results["passed"] -= 1
+                missing_files = True
+        
+        if missing_files:
+            qa_results["failed"] += 1
+        else:
+            qa_results["passed"] += 1
         
         return qa_results
 
@@ -950,23 +1005,33 @@ class ContentPipeline:
         self.logger = logging.getLogger("asigt.content_pipeline")
         self.engine = ASIGTEngine()
         
-        # Initialize stages
-        self.stages: Dict[PipelineStageType, Any] = {}
+        # Initialize stages as ordered list
+        self.stages: List[Tuple[PipelineStageType, Any]] = []
         self._init_stages()
     
     def _init_stages(self) -> None:
         """Initialize pipeline stages based on configuration."""
-        for stage_config in self.config.stages:
+        # Sort stages by configured order
+        sorted_stages = sorted(self.config.stages, key=lambda s: s.config.get("order", 0))
+        
+        for stage_config in sorted_stages:
+            if not stage_config.enabled:
+                continue
+                
+            stage_instance = None
             if stage_config.stage_type == PipelineStageType.INGEST_NORMALIZE:
-                self.stages[stage_config.stage_type] = IngestNormalizeStage(stage_config)
+                stage_instance = IngestNormalizeStage(stage_config)
             elif stage_config.stage_type == PipelineStageType.VALIDATE_ENRICH:
-                self.stages[stage_config.stage_type] = ValidateEnrichStage(stage_config)
+                stage_instance = ValidateEnrichStage(stage_config)
             elif stage_config.stage_type == PipelineStageType.TRANSFORM:
-                self.stages[stage_config.stage_type] = TransformStage(stage_config)
+                stage_instance = TransformStage(stage_config)
             elif stage_config.stage_type == PipelineStageType.ASSEMBLE:
-                self.stages[stage_config.stage_type] = AssembleStage(stage_config)
+                stage_instance = AssembleStage(stage_config)
             elif stage_config.stage_type == PipelineStageType.PUBLISH_QA:
-                self.stages[stage_config.stage_type] = PublishQAStage(stage_config)
+                stage_instance = PublishQAStage(stage_config)
+            
+            if stage_instance:
+                self.stages.append((stage_config.stage_type, stage_instance))
     
     @classmethod
     def from_yaml(cls, yaml_path: Path) -> ContentPipeline:
@@ -997,35 +1062,51 @@ class ContentPipeline:
             "outputs": []
         }
         
-        # Execute through ASIGT engine
-        result = self.engine.execute(context)
+        # Create result directly without calling engine.execute()
+        run_id = self._generate_run_id(context)
+        result = RunResult(
+            run_id=run_id,
+            status=RunStatus.RUNNING,
+            contract_id=context.contract_id,
+            baseline_id=context.baseline_id,
+            start_time=datetime.now(),
+            metrics=ExecutionMetrics(start_time=datetime.now())
+        )
         
-        # Execute custom pipeline stages
-        stage_order = [
-            PipelineStageType.INGEST_NORMALIZE,
-            PipelineStageType.VALIDATE_ENRICH,
-            PipelineStageType.TRANSFORM,
-            PipelineStageType.ASSEMBLE,
-            PipelineStageType.PUBLISH_QA
-        ]
-        
-        for stage_type in stage_order:
-            if stage_type in self.stages:
-                stage = self.stages[stage_type]
-                stage_result = stage.execute(context, state)
-                result.stage_results.append(stage_result)
-                
-                if stage_result.status == StageStatus.FAILED:
-                    self.logger.error(f"Pipeline stage failed: {stage_type.value}")
-                    result.status = RunStatus.FAILED
-                    break
+        # Execute custom pipeline stages in configured order
+        for stage_type, stage in self.stages:
+            stage_result = stage.execute(context, state)
+            result.stage_results.append(stage_result)
+            
+            if stage_result.status == StageStatus.FAILED:
+                self.logger.error(f"Pipeline stage failed: {stage_type.value}")
+                result.status = RunStatus.FAILED
+                break
         
         # Update result with state data
-        if "data_modules" in state:
-            result.metrics.outputs_generated = len(state["data_modules"])
+        output_count = 0
+        if "data_modules" in state and isinstance(state["data_modules"], list):
+            output_count += len(state["data_modules"])
+        if "publication_module" in state:
+            output_count += 1
+        if "data_module_list" in state:
+            output_count += 1
+        if "rendered_outputs" in state and isinstance(state["rendered_outputs"], list):
+            output_count += len(state["rendered_outputs"])
+        result.metrics.outputs_generated = output_count
         
+        # Set final status
+        if result.status != RunStatus.FAILED:
+            result.status = RunStatus.SUCCESS
+        
+        result.end_time = datetime.now()
         self.logger.info(f"Content pipeline completed: {result.status.value}")
         return result
+    
+    def _generate_run_id(self, context: ExecutionContext) -> str:
+        """Generate unique run ID."""
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M")
+        return f"{timestamp}__{context.contract_id}"
     
     def validate_config(self) -> Tuple[bool, List[str]]:
         """
@@ -1076,7 +1157,8 @@ def execute_pipeline(
     contract_id: str,
     baseline_id: str,
     kdb_root: Path,
-    output_path: Path
+    output_path: Path,
+    run_archive_path: Optional[Path] = None
 ) -> RunResult:
     """
     Execute a content pipeline with simplified parameters.
@@ -1087,12 +1169,17 @@ def execute_pipeline(
         baseline_id: Baseline reference
         kdb_root: KDB root directory
         output_path: Output directory for generated content
+        run_archive_path: Optional run archive path (defaults to output_path/../ASIGT/runs)
         
     Returns:
         RunResult with execution details
     """
     # Create pipeline
     pipeline = ContentPipeline.from_yaml(pipeline_yaml)
+    
+    # Default run_archive_path to be relative to output_path
+    if run_archive_path is None:
+        run_archive_path = output_path.parent / "ASIGT" / "runs"
     
     # Create execution context
     context = ExecutionContext(
@@ -1104,7 +1191,7 @@ def execute_pipeline(
         kdb_root=kdb_root,
         idb_root=output_path.parent,
         output_path=output_path,
-        run_archive_path=Path("ASIGT/runs")
+        run_archive_path=run_archive_path
     )
     
     # Execute pipeline
