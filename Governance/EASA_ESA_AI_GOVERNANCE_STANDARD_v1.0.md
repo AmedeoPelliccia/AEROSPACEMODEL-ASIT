@@ -208,7 +208,7 @@ Gate descriptions:
 | AI safety review (non-blocking) | STK_SAF | P2: Scheduled | 48 hours | BREX-SAFETY-002 |
 | AI model baseline change | CCB | — | 5 business days | BREX-BL-002 |
 | AI bias or fairness concern | STK_ETH | — | 72 hours (interim: disable affected component) | EU AI Act Art. 10 |
-| Undefined AI behavior | STK_CM | HALT | Max 5 business days, then auto-escalate to CCB | Master BREX |
+| Undefined AI behavior | STK_CM | P1: HALT | Max 5 business days, then auto-escalate to CCB | Master BREX |
 
 ---
 
@@ -254,8 +254,8 @@ regulation, implementation mechanism, and verification method:
 | GOV-004 | DO-178C | §4.2 | DAL-based assurance | Pipeline verification | ✅ |
 | GOV-005 | ARP4761 | §3.3 | Failure mode analysis | Bayesian twin monitoring | ✅ |
 | GOV-006 | Part-M | §4.3 | S1000D configuration management | Traceability check | ✅ |
-| GOV-007 | ECSS-E-ST-40C | §5.1 | AI software lifecycle | ESA process audit | 🔲 |
-| GOV-008 | EU AI Act Art. 10 | §6.2 | Bias escalation to STK_ETH | Escalation workflow test | 🔲 |
+| GOV-007 | ECSS-E-ST-40C | §5.1 | AI software lifecycle | ESA process audit | 🔲 Planned: Phase 3 |
+| GOV-008 | EU AI Act Art. 10 | §6.2 | Bias escalation to STK_ETH | Escalation workflow test | 🔲 Planned: Phase 2 |
 
 > **Note:** This matrix is maintained alongside the standard. Each
 > row must be updated when the corresponding implementation or
