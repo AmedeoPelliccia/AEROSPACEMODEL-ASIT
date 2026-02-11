@@ -210,6 +210,28 @@ even if technically feasible or legally permitted.
 
 ---
 
+## Article 11 — Conflict Resolution: Capital vs. Foundational Axiom
+
+When capital demands contradict the foundational axiom — in particular,
+when efficiency-driven capital requirements conflict with the prohibition
+of human exclusion (Article 8) — resolution requires one of the following:
+
+1. **Explicit axiom-responsibility commit**: The repository steward issues
+   an explicit commit accepting responsibility for the axiom deviation,
+   documenting the rationale, scope, and remediation timeline.
+
+2. **Capital withdrawal**: The capital contributor withdraws the
+   conflicting demand. No penalty accrues to the project for upholding
+   its foundational axiom.
+
+**No silent override is permitted.**
+
+A merge that displaces human labor without documented reabsorption
+or steward-accepted deviation constitutes an illegitimate change,
+regardless of its technical or financial merit.
+
+---
+
 ## Foundational Intent and Evolution
 
 This constitution defines **foundational intentions** for the AEROSPACEMODEL.
