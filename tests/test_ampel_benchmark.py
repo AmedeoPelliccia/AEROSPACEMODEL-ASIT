@@ -229,12 +229,13 @@ class TestAmpelBenchmarkManager:
         assert "lih" in envelope["envelope"]
         assert envelope["safety_margin_pct"] == 15.0
         lih = envelope["envelope"]["lih"]
-        # Safety-adjusted values should be 85% of raw values
+        # Safety-adjusted values should reflect the safety margin
+        factor = 1.0 - envelope["safety_margin_pct"] / 100.0
         assert lih["max_p2q_synergy_adjusted"] == pytest.approx(
-            lih["max_p2q_synergy_raw"] * 0.85, abs=1e-6
+            lih["max_p2q_synergy_raw"] * factor, abs=1e-6
         )
         assert lih["max_p2q_savings30_adjusted"] == pytest.approx(
-            lih["max_p2q_savings30_raw"] * 0.85, abs=1e-6
+            lih["max_p2q_savings30_raw"] * factor, abs=1e-6
         )
 
     def test_decision_logging(self):
