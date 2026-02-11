@@ -1,0 +1,109 @@
+name: Constitution Compliance
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  constitution-compliance:
+    name: Constitutional Constraint Validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate constitution integrity
+        run: |
+          python -c "
+          import hashlib
+          from pathlib import Path
+
+          constitution = Path('Model_Digital_Constitution.md')
+          if not constitution.exists():
+              print('❌ Model_Digital_Constitution.md not found')
+              exit(1)
+
+          content = constitution.read_bytes()
+          sha256 = hashlib.sha256(content).hexdigest()
+          print(f'✓ Constitution SHA-256: {sha256}')
+
+          # Verify foundational axiom is present
+          text = content.decode('utf-8')
+          required_markers = [
+              'Foundational Axiom',
+              'Human labor',
+              'Capital',
+              'Technology',
+          ]
+          missing = [m for m in required_markers if m not in text]
+          if missing:
+              print(f'❌ Missing foundational markers: {missing}')
+              exit(1)
+
+          print('✓ Foundational axiom markers present')
+          print('✓ Constitution integrity validated')
+          "
+
+      - name: Validate GOVERNANCE.md references
+        run: |
+          python -c "
+          from pathlib import Path
+
+          governance = Path('GOVERNANCE.md')
+          if not governance.exists():
+              print('❌ GOVERNANCE.md not found')
+              exit(1)
+
+          content = governance.read_text()
+
+          required_refs = [
+              'Model_Digital_Constitution.md',
+              'CONTRIBUTING.md',
+          ]
+          missing = [r for r in required_refs if r not in content]
+          if missing:
+              print(f'❌ GOVERNANCE.md missing references: {missing}')
+              exit(1)
+
+          print('✓ GOVERNANCE.md references validated')
+          "
+
+      - name: Check PR template exists
+        run: |
+          if [ -f ".github/PULL_REQUEST_TEMPLATE.md" ]; then
+            echo "✓ PR template found"
+            # Verify LABOR-REABSORPTION section exists
+            if grep -q "LABOR-REABSORPTION" .github/PULL_REQUEST_TEMPLATE.md; then
+              echo "✓ LABOR-REABSORPTION section present in PR template"
+            else
+              echo "❌ LABOR-REABSORPTION section missing from PR template"
+              exit 1
+            fi
+          else
+            echo "❌ PR template not found at .github/PULL_REQUEST_TEMPLATE.md"
+            exit 1
+          fi
+
+      - name: Verify conflict resolution clause
+        run: |
+          python -c "
+          from pathlib import Path
+
+          constitution = Path('Model_Digital_Constitution.md')
+          text = constitution.read_text()
+
+          if 'Conflict Resolution' not in text:
+              print('❌ Conflict resolution clause missing from constitution')
+              exit(1)
+
+          if 'silent override' not in text.lower():
+              print('❌ Silent override prohibition missing')
+              exit(1)
+
+          print('✓ Conflict resolution clause present')
+          print('✓ Silent override prohibition present')
+          "
