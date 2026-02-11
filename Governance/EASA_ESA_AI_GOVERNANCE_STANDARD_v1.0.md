@@ -54,7 +54,7 @@ This standard applies to:
 > human oversight is not merely out of scope — the AEROSPACEMODEL
 > architecture **prevents** it by design. Every AI output path
 > terminates at a human-authorization gate (Constitution Art. 3,
-> BREX SAFETY-002). No code path exists that commits an AI-generated
+> BREX-SAFETY-002). No code path exists that commits an AI-generated
 > artifact without a human commit-as-contract step (Art. 4).
 
 ---

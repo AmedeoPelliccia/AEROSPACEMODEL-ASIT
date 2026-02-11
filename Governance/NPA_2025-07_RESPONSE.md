@@ -54,7 +54,7 @@ trustworthiness through:
 - **BREX-constrained generation**: All AI outputs are governed by
   deterministic BREX rules, preventing unconstrained behavior.
 - **Contract-based transformations**: Every content transformation
-  requires an ASIT-approved contract (BREX AUTHOR-002).
+  requires an ASIT-approved contract (BREX-AUTHOR-002).
 - **Constitutional limits**: The Digital Constitution (Art. 10)
   provides immutable boundary protection via SHA-256 hash validation.
 
@@ -80,7 +80,7 @@ Enforcement mechanisms include:
   authorship commitment before acceptance.
 - **Safety escalation** (Art. 6): Bayesian confidence < 0.92 triggers
   auto-escalation to STK_SAF with a 48-hour SLA.
-- **BREX SAFETY-002**: All safety-related content requires human
+- **BREX-SAFETY-002**: All safety-related content requires human
   approval before publication.
 
 **Recommendation:** Distinguish between advisory AI (human decides)
