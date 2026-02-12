@@ -37,7 +37,7 @@ meta:
     - "ARP4754A"
     - "ARP4761"
     - "ISO 9001:2015"
-  
+
 precedence_model:
   description: "Layered decision authority model"
   layers:
@@ -77,7 +77,7 @@ precedence_model:
       name: "OPS Feedback Loop"
       authority: "Operations"
       description: "Operational feedback, continuous improvement"
-  
+
   conflict_resolution:
     rule: "Lower layer rejected and escalated"
     description: "If lower layer contradicts higher layer, reject and escalate to higher authority"
@@ -108,7 +108,7 @@ plm_phases:
       - "Problem statement validated"
       - "Governance framework established"
     gate_id: "G-LC01-ENTRY"
-    
+
   LC02:
     canonical_name: "System Requirements"
     ssot_dir: "KDB/LM/SSOT/PLM/LC02_SYSTEM_REQUIREMENTS"
@@ -130,7 +130,7 @@ plm_phases:
       - "System requirements validated"
       - "FBL established and under configuration control"
     gate_id: "G-LC02-FBL"
-    
+
   LC03:
     canonical_name: "Safety & Reliability"
     ssot_dir: "KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY"
@@ -153,7 +153,7 @@ plm_phases:
     constraints:
       - "Must trace to LC02 requirements"
       - "Cannot be skipped for cert-eligible systems"
-    
+
   LC04:
     canonical_name: "Design Definition"
     ssot_dir: "KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION"
@@ -174,7 +174,7 @@ plm_phases:
       - "Design validated"
       - "DBL established and under configuration control"
     gate_id: "G-LC04-DBL"
-    
+
   LC05:
     canonical_name: "Analysis Models"
     ssot_dir: "KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS"
@@ -194,7 +194,7 @@ plm_phases:
       - "All analysis complete"
       - "Models validated against requirements"
     gate_id: "G-LC05-ANALYSIS"
-    
+
   LC06:
     canonical_name: "Integration & Test"
     ssot_dir: "KDB/LM/SSOT/PLM/LC06_VERIFICATION"
@@ -216,7 +216,7 @@ plm_phases:
     gate_id: "G-LC06-CONFORMITY"
     constraints:
       - "Cannot be skipped for cert-eligible systems"
-    
+
   LC07:
     canonical_name: "QA & Process Compliance"
     ssot_dir: "KDB/LM/SSOT/PLM/LC07_QA_PROCESS"
@@ -236,7 +236,7 @@ plm_phases:
       - "QA audits complete"
       - "Process compliance demonstrated"
     gate_id: "G-LC07-QA"
-    
+
   LC08:
     canonical_name: "Certification"
     ssot_dir: "KDB/LM/SSOT/PLM/LC08_CONFIGURATION"
@@ -258,7 +258,7 @@ plm_phases:
     gate_id: "G-LC08-CERT"
     constraints:
       - "Requires LC06 evidence references"
-    
+
   LC09:
     canonical_name: "ESG & Sustainability"
     ssot_dir: "KDB/LM/SSOT/PLM/LC09_ESG_SUSTAINABILITY"
@@ -280,7 +280,7 @@ plm_phases:
     gate_id: "G-LC09-ESG"
     constraints:
       - "Cannot host production release authority"
-    
+
   LC10:
     canonical_name: "Industrial & Supply Chain"
     ssot_dir: "KDB/LM/SSOT/PLM/LC10_INDUSTRIAL_SUPPLY"
@@ -329,7 +329,7 @@ ops_phases:
       - "Customization approved"
       - "Operations manuals delivered"
     gate_id: "G-LC11-OPS"
-    
+
   LC12:
     canonical_name: "Continued Airworthiness & MRO"
     ssot_dir: "IDB/OPS/LM/LC12_MAINTENANCE_REPAIR"
@@ -358,7 +358,7 @@ ops_phases:
     gate_id: "G-LC12-MRO"
     constraints:
       - "Must reference certified baseline lineage"
-    
+
   LC13:
     canonical_name: "Maintenance Source Data"
     ssot_dir: "IDB/OPS/LM/LC13_MAINTENANCE_SOURCE"
@@ -384,7 +384,7 @@ ops_phases:
     exit_criteria:
       - "Continuous - operational phase"
     gate_id: "G-LC13-SOURCE"
-    
+
   LC14:
     canonical_name: "End of Life"
     ssot_dir: "IDB/OPS/LM/LC14_END_OF_LIFE"
@@ -418,14 +418,14 @@ baseline_rules:
     description: "System requirements and interface control documents"
     exclusivity: true
     authority: "System Engineering"
-    
+
   DBL:
     producer_lc: "LC04"
     name: "Design Baseline"
     description: "Detailed design and configuration definition"
     exclusivity: true
     authority: "Design Engineering"
-    
+
   PBL:
     producer_lc: "LC10"
     name: "Product Baseline"
@@ -443,15 +443,15 @@ constraints:
       - phase: "LC04"
         package: "INTERFACES"
         description: "Detailed interface design and integration"
-    
+
   synthetic_naming:
     rule: "No synthetic LC naming allowed"
     enforcement: "All phases must use canonical_name from this registry"
-    
+
   production_authority:
     rule: "LC09 cannot host production release authority"
     rationale: "ESG is assessment phase, not production authority"
-    
+
   certification_continuity:
     rule: "All operational changes must reference certified baseline lineage"
     phases: ["LC12", "LC13"]
@@ -467,7 +467,7 @@ governance:
   change_control:
     process: "ECR/ECO"
     approval_authority: "Configuration Control Board"
-  
+
 traceability:
   requirement: "All phases must maintain upward and downward trace"
   trace_types:

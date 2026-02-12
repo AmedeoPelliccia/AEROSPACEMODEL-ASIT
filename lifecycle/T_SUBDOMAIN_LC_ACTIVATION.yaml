@@ -39,58 +39,58 @@ lifecycle_packages:
     - "KNU_PLANNING"
     - "GOVERNANCE"
     - "INCENTIVES"
-  
+
   LC02:
     - "REQ"
     - "ICD"
     - "DATA"
     - "COMPLIANCE_INTENT"
-  
+
   LC03:
     - "SAFETY"
     - "RELIABILITY"
     - "HAZARD_MGMT"
-  
+
   LC04:
     - "DESIGN"
     - "CONFIG"
     - "INTERFACES"
-  
+
   LC05:
     - "ANALYSIS"
     - "MODELS"
     - "VALIDATION"
-  
+
   LC06:
     - "TEST"
     - "INTEGRATION"
     - "CONFORMITY"
-  
+
   LC07:
     - "QA"
     - "PROCESS_COMPLIANCE"
     - "ACCEPTANCE"
-  
+
   LC08:
     - "CERT_BASIS"
     - "COMPLIANCE"
     - "FLIGHT_TEST"
-  
+
   LC09:
     - "ESG"
     - "LCA"
     - "ENV_COMPLIANCE"
-  
+
   LC10:
     - "INDUSTRIAL"
     - "SUPPLY"
     - "QUALITY_PROD"
-  
+
   LC11:
     - "CUSTOMER_DELTAS"
     - "OPS_CONFIG"
     - "RELEASE_NOTES"
-  
+
   LC12:
     - "SB"
     - "REPAIR"
@@ -98,12 +98,12 @@ lifecycle_packages:
     - "AOG"
     - "COC"
     - "COMPLIANCE"
-  
+
   LC13:
-    - "Maintenance_Source"
-    - "Repair_Source"
-    - "Overhaul_Source"
-  
+    - "MAINTENANCE_SOURCE"
+    - "REPAIR_SOURCE"
+    - "OVERHAUL_SOURCE"
+
   LC14:
     - "DISMANTLING"
     - "MATERIAL_RECOVERY"
@@ -118,11 +118,11 @@ baseline_rules:
   FBL:
     producer_lc: "LC02"
     required_packages: ["REQ", "ICD"]
-  
+
   DBL:
     producer_lc: "LC04"
     required_packages: ["DESIGN", "CONFIG", "INTERFACES"]
-  
+
   PBL:
     producer_lc: "LC10"
     required_packages: ["INDUSTRIAL", "SUPPLY", "QUALITY_PROD"]
@@ -158,82 +158,82 @@ subdomains:
     special_conditions:
       - "SC-28-H2-001: Hydrogen storage and distribution"
       - "SC-28-CRYO-002: Cryogenic temperature handling"
-    
+
     plm:
       LC01:
         active: true
         packages: ["KNOT_MGMT", "KNU_PLANNING", "GOVERNANCE"]
         rationale: "Initial H2 system concept definition"
-      
+
       LC02:
         active: true
         packages: ["REQ", "ICD", "DATA", "COMPLIANCE_INTENT"]
         baseline_out: "FBL"
         rationale: "H2 system requirements and interfaces"
-      
+
       LC03:
         active: true
         packages: ["SAFETY", "RELIABILITY", "HAZARD_MGMT"]
         rationale: "Critical safety assessment for H2 systems (explosion, cryogenic hazards)"
-      
+
       LC04:
         active: true
         packages: ["DESIGN", "CONFIG", "INTERFACES"]
         baseline_out: "DBL"
         rationale: "LH2 tank design, insulation, leak detection, venting"
-      
+
       LC05:
         active: true
         packages: ["ANALYSIS", "MODELS", "VALIDATION"]
         rationale: "Thermal analysis, boil-off modeling, structural analysis"
-      
+
       LC06:
         active: true
         packages: ["TEST", "INTEGRATION", "CONFORMITY"]
         rationale: "H2 leak testing, pressure testing, thermal cycling"
-      
+
       LC07:
         active: true
         packages: ["QA", "PROCESS_COMPLIANCE", "ACCEPTANCE"]
         rationale: "H2 system quality assurance"
-      
+
       LC08:
         active: true
         packages: ["CERT_BASIS", "COMPLIANCE", "FLIGHT_TEST"]
         rationale: "H2 system certification per special conditions"
-      
+
       LC09:
         active: true
         packages: ["ESG", "LCA", "ENV_COMPLIANCE"]
         rationale: "H2 lifecycle environmental impact assessment"
-      
+
       LC10:
         active: true
         packages: ["INDUSTRIAL", "SUPPLY", "QUALITY_PROD"]
         baseline_out: "PBL"
         rationale: "H2 system production authorization"
-    
+
     ops:
       LC11:
         active: true
         packages: ["CUSTOMER_DELTAS", "OPS_CONFIG"]
         rationale: "Customer H2 fueling infrastructure integration"
-      
+
       LC12:
         active: true
         packages: ["SB", "REPAIR", "QUERY", "AOG", "COC", "COMPLIANCE"]
         rationale: "H2 system maintenance and airworthiness"
-      
+
       LC13:
         active: true
-        packages: ["Maintenance_Source", "Repair_Source"]
+        packages: ["MAINTENANCE_SOURCE", "REPAIR_SOURCE"]
         rationale: "H2 system maintenance source data"
-      
+
       LC14:
         active: true
         packages: ["DISMANTLING", "MATERIAL_RECOVERY", "DPP_CLOSURE"]
         rationale: "H2 tank decommissioning and material recovery"
-    
+
     gates:
       - "G-LC02-FBL"
       - "G-LC04-DBL"
@@ -254,82 +254,82 @@ subdomains:
     novel_technology: true
     special_conditions:
       - "SC-71-FUELCELL-001: Fuel cell power plant certification"
-    
+
     plm:
       LC01:
         active: true
         packages: ["KNOT_MGMT", "KNU_PLANNING", "GOVERNANCE"]
         rationale: "Fuel cell propulsion concept definition"
-      
+
       LC02:
         active: true
         packages: ["REQ", "ICD", "DATA", "COMPLIANCE_INTENT"]
         baseline_out: "FBL"
         rationale: "Fuel cell system requirements and power interfaces"
-      
+
       LC03:
         active: true
         packages: ["SAFETY", "RELIABILITY", "HAZARD_MGMT"]
         rationale: "Fuel cell safety assessment (thermal, electrical, H2 supply)"
-      
+
       LC04:
         active: true
         packages: ["DESIGN", "CONFIG", "INTERFACES"]
         baseline_out: "DBL"
         rationale: "Fuel cell stack, BoP, thermal management design"
-      
+
       LC05:
         active: true
         packages: ["ANALYSIS", "MODELS", "VALIDATION"]
         rationale: "Electrochemical modeling, thermal analysis, power conditioning"
-      
+
       LC06:
         active: true
         packages: ["TEST", "INTEGRATION", "CONFORMITY"]
         rationale: "Fuel cell stack testing, system integration, power output validation"
-      
+
       LC07:
         active: true
         packages: ["QA", "PROCESS_COMPLIANCE", "ACCEPTANCE"]
         rationale: "Fuel cell production quality assurance"
-      
+
       LC08:
         active: true
         packages: ["CERT_BASIS", "COMPLIANCE", "FLIGHT_TEST"]
         rationale: "Fuel cell propulsion certification per special conditions"
-      
+
       LC09:
         active: true
         packages: ["ESG", "LCA", "ENV_COMPLIANCE"]
         rationale: "Fuel cell lifecycle and zero-emission propulsion assessment"
-      
+
       LC10:
         active: true
         packages: ["INDUSTRIAL", "SUPPLY", "QUALITY_PROD"]
         baseline_out: "PBL"
         rationale: "Fuel cell production authorization"
-    
+
     ops:
       LC11:
         active: true
         packages: ["CUSTOMER_DELTAS", "OPS_CONFIG"]
         rationale: "Customer propulsion configuration"
-      
+
       LC12:
         active: true
         packages: ["SB", "REPAIR", "QUERY", "AOG", "COC", "COMPLIANCE"]
         rationale: "Fuel cell system maintenance and stack replacement"
-      
+
       LC13:
         active: true
-        packages: ["Maintenance_Source", "Repair_Source", "Overhaul_Source"]
+        packages: ["MAINTENANCE_SOURCE", "REPAIR_SOURCE", "OVERHAUL_SOURCE"]
         rationale: "Fuel cell maintenance and overhaul procedures"
-      
+
       LC14:
         active: true
         packages: ["DISMANTLING", "MATERIAL_RECOVERY", "DPP_CLOSURE"]
         rationale: "Fuel cell stack decommissioning and material recovery"
-    
+
     gates:
       - "G-LC02-FBL"
       - "G-LC04-DBL"
@@ -351,82 +351,82 @@ subdomains:
     special_conditions:
       - "SC-AI-ASSURANCE-001: AI model assurance and explainability"
       - "EU_AI_ACT: High-risk AI system compliance"
-    
+
     plm:
       LC01:
         active: true
         packages: ["KNOT_MGMT", "KNU_PLANNING", "GOVERNANCE"]
         rationale: "AI/ML concept and ethical governance"
-      
+
       LC02:
         active: true
         packages: ["REQ", "ICD", "DATA", "COMPLIANCE_INTENT"]
         baseline_out: "FBL"
         rationale: "AI/ML requirements, training data governance, model interfaces"
-      
+
       LC03:
         active: true
         packages: ["SAFETY", "RELIABILITY", "HAZARD_MGMT"]
         rationale: "AI safety assessment (bias, failure modes, human oversight)"
-      
+
       LC04:
         active: true
         packages: ["DESIGN", "CONFIG", "INTERFACES"]
         baseline_out: "DBL"
         rationale: "Model architecture, training pipeline, inference design"
-      
+
       LC05:
         active: true
         packages: ["ANALYSIS", "MODELS", "VALIDATION"]
         rationale: "Model training, validation, performance analysis, explainability"
-      
+
       LC06:
         active: true
         packages: ["TEST", "INTEGRATION", "CONFORMITY"]
         rationale: "Model testing, adversarial testing, integration validation"
-      
+
       LC07:
         active: true
         packages: ["QA", "PROCESS_COMPLIANCE", "ACCEPTANCE"]
         rationale: "AI model quality assurance and ethical compliance"
-      
+
       LC08:
         active: true
         packages: ["CERT_BASIS", "COMPLIANCE", "FLIGHT_TEST"]
         rationale: "AI model certification per special conditions and EU AI Act"
-      
+
       LC09:
         active: true
         packages: ["ESG", "LCA", "ENV_COMPLIANCE"]
         rationale: "Optional: AI energy consumption and ethical impact assessment"
-      
+
       LC10:
         active: true
         packages: ["INDUSTRIAL", "SUPPLY", "QUALITY_PROD"]
         baseline_out: "PBL"
         rationale: "AI model production deployment authorization"
-    
+
     ops:
       LC11:
         active: true
         packages: ["CUSTOMER_DELTAS", "OPS_CONFIG"]
         rationale: "Customer AI model customization and configuration"
-      
+
       LC12:
         active: true
         packages: ["SB", "REPAIR", "QUERY", "AOG", "COC", "COMPLIANCE"]
         rationale: "AI model monitoring, drift detection, retraining"
-      
+
       LC13:
         active: true
-        packages: ["Maintenance_Source"]
+        packages: ["MAINTENANCE_SOURCE"]
         rationale: "AI model maintenance: retraining data, model updates"
-      
+
       LC14:
         active: true
         packages: ["DPP_CLOSURE"]
         rationale: "Optional: AI model decommissioning and data deletion"
-    
+
     gates:
       - "G-LC02-FBL"
       - "G-LC04-DBL"
@@ -457,27 +457,27 @@ validation_rules:
     name: "Baseline Producer Lock"
     rule: "FBL can only be produced at LC02, DBL at LC04, PBL at LC10"
     enforcement: "block"
-  
+
   - id: "VAL-002"
     name: "Safety Phase Mandatory"
     rule: "LC03 cannot be skipped for cert-eligible novel technology systems"
     enforcement: "block"
-  
+
   - id: "VAL-003"
     name: "Conformity Gate Mandatory"
     rule: "LC06 cannot be skipped for cert-eligible systems"
     enforcement: "block"
-  
+
   - id: "VAL-004"
     name: "Certification Trace"
     rule: "LC08 compliance claims must reference LC06 evidence"
     enforcement: "block"
-  
+
   - id: "VAL-005"
     name: "Production Authority Lock"
     rule: "LC09 cannot produce PBL - only LC10 produces PBL"
     enforcement: "block"
-  
+
   - id: "VAL-006"
     name: "Operational Lineage"
     rule: "LC12/LC13 must reference certified baseline lineage (LC08 → LC10)"
@@ -491,7 +491,7 @@ ci_hints:
   yamllint:
     max_line_length: 200
     truthy: disable
-  
+
   validation_script: "scripts/validate_lc_activation.py"
   schema: "lifecycle/schemas/t_subdomain_lc_activation.schema.json"
 

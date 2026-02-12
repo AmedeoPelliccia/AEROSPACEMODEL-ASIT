@@ -35,7 +35,7 @@ gate_group_a_integrity:
   description: "Structural validity and canonical compliance checks"
   execution_order: 1
   abort_on_failure: true
-  
+
   gates:
     A1_LC_CODE_VALIDITY:
       gate_id: "A1"
@@ -46,7 +46,7 @@ gate_group_a_integrity:
       violation_severity: "CRITICAL"
       violation_message: "Invalid lifecycle code - must be LC01 through LC14"
       remediation: "Use only canonical lifecycle codes from LC_PHASE_REGISTRY.yaml"
-      
+
     A2_PHASE_NAME_CANONICAL:
       gate_id: "A2"
       name: "Phase Name Canonical"
@@ -63,7 +63,7 @@ gate_group_a_integrity:
         - lc_code: "LC04"
           required_name: "Design Definition"
           invalid_names: ["Design", "Detailed Design", "Engineering"]
-      
+
     A3_PACKAGE_TYPE_ALLOWED:
       gate_id: "A3"
       name: "Package Type Allowed"
@@ -78,7 +78,7 @@ gate_group_a_integrity:
           allowed_packages: ["REQ", "ICD", "DATA", "COMPLIANCE_INTENT"]
         - lc_code: "LC04"
           allowed_packages: ["DESIGN", "CONFIG", "INTERFACES"]
-      
+
     A4_ARTIFACT_PATH_ROOT:
       gate_id: "A4"
       name: "Artifact Path Root"
@@ -105,7 +105,7 @@ gate_group_b_baseline:
   description: "Baseline production, exclusivity, and promotion validation"
   execution_order: 2
   abort_on_failure: true
-  
+
   gates:
     B1_FBL_EXCLUSIVITY:
       gate_id: "B1"
@@ -116,7 +116,7 @@ gate_group_b_baseline:
       violation_severity: "CRITICAL"
       violation_message: "FBL can only be produced at LC02 System Requirements"
       remediation: "Move FBL production to LC02 or change baseline type"
-      
+
     B2_DBL_EXCLUSIVITY:
       gate_id: "B2"
       name: "DBL Exclusivity"
@@ -126,7 +126,7 @@ gate_group_b_baseline:
       violation_severity: "CRITICAL"
       violation_message: "DBL can only be produced at LC04 Design Definition"
       remediation: "Move DBL production to LC04 or change baseline type"
-      
+
     B3_PBL_EXCLUSIVITY:
       gate_id: "B3"
       name: "PBL Exclusivity"
@@ -137,7 +137,7 @@ gate_group_b_baseline:
       violation_message: "PBL can only be produced at LC10 Industrial & Supply Chain"
       remediation: "Move PBL production to LC10 or change baseline type"
       constraint: "LC09 cannot host production release authority"
-      
+
     B4_BASELINE_PROMOTION_TRACE:
       gate_id: "B4"
       name: "Baseline Promotion Trace"
@@ -164,7 +164,7 @@ gate_group_c_certification:
   description: "Certification continuity, traceability, and compliance validation"
   execution_order: 3
   abort_on_failure: true
-  
+
   gates:
     C1_SAFETY_REQUIREMENTS_TRACE:
       gate_id: "C1"
@@ -182,7 +182,7 @@ gate_group_c_certification:
         - from: "LC03 HAZARD_MGMT"
           to: "LC02 REQ"
           type: "hazard_mitigation_trace"
-      
+
     C2_COMPLIANCE_EVIDENCE_REFS:
       gate_id: "C2"
       name: "Compliance Evidence References"
@@ -199,7 +199,7 @@ gate_group_c_certification:
         - from: "LC08 CERT_BASIS"
           to: "LC06 CONFORMITY"
           type: "conformity_evidence_trace"
-      
+
     C3_OPERATIONAL_BASELINE_LINEAGE:
       gate_id: "C3"
       name: "Operational Baseline Lineage"
@@ -222,38 +222,38 @@ genlm_run_contract:
   description: "Deterministic execution contract for GenLM-driven content generation"
   authority: "ASIT"
   enforcement: "mandatory"
-  
+
   determinism:
     model_pin:
       requirement: "required"
       description: "Model version must be pinned (e.g., gpt-4-0125-preview)"
       enforcement: "block"
-    
+
     prompt_pin:
       requirement: "required"
       description: "Prompt template must be versioned and pinned"
       enforcement: "block"
-    
+
     policy_pin:
       requirement: "required"
       description: "Policy/instruction file must be versioned and pinned"
       enforcement: "block"
-    
+
     temperature:
       requirement: "0.0"
       description: "Temperature must be 0.0 for deterministic output"
       enforcement: "block"
-    
+
     top_p:
       requirement: "1.0"
       description: "Top-p must be 1.0 for deterministic sampling"
       enforcement: "block"
-    
+
     seed:
       requirement: "required"
       description: "Random seed must be set for reproducibility"
       enforcement: "block"
-  
+
   input_minimum:
     description: "Minimum required inputs for any GenLM run"
     required_fields:
@@ -264,22 +264,22 @@ genlm_run_contract:
       - "ata_or_subdomain"
       - "effectivity"
     validation: "All fields must be populated before generation"
-  
+
   hard_fail_conditions:
     description: "Conditions that cause immediate generation failure"
     conditions:
       - condition: "noncanonical_lc_name"
         message: "Phase name does not match canonical registry"
         gate: "A2_PHASE_NAME_CANONICAL"
-      
+
       - condition: "package_outside_phase"
         message: "Package type not allowed in this phase"
         gate: "A3_PACKAGE_TYPE_ALLOWED"
-      
+
       - condition: "baseline_misplacement"
         message: "Baseline produced in wrong phase"
         gate: "B1/B2/B3_BASELINE_EXCLUSIVITY"
-      
+
       - condition: "missing_trace_parent"
         message: "Required upstream trace link missing"
         gate: "C1/C2/C3_TRACE_REQUIREMENTS"
@@ -293,22 +293,22 @@ gate_execution:
     - group: "Gate Group A"
       gates: ["A1", "A2", "A3", "A4"]
       description: "Integrity checks - structural validity"
-      
+
     - group: "Gate Group B"
       gates: ["B1", "B2", "B3", "B4"]
       description: "Baseline checks - production and promotion rules"
-      
+
     - group: "Gate Group C"
       gates: ["C1", "C2", "C3"]
       description: "Certification continuity - traceability and compliance"
-  
+
   execution_rules:
     - "Gates execute sequentially in order: Group A → Group B → Group C"
     - "First failure aborts execution and reports violation"
     - "All gates in a group must pass before proceeding to next group"
     - "Critical violations halt all downstream processing"
     - "Error violations log and escalate for review"
-  
+
   reporting:
     format: "JSON"
     required_fields:
@@ -319,7 +319,7 @@ gate_execution:
       - "violation_message"
       - "timestamp"
       - "context"
-    
+
     log_retention: "7 years (certification requirement)"
 
 # =============================================================================
