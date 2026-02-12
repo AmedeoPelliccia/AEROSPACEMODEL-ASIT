@@ -209,7 +209,9 @@ def test_evaluate_default_assessment():
     assert "computed" in result["ngi_autoassessment"]
     assert result["ngi_autoassessment"]["computed"]["publish_decision"] in ["PASS", "WARN", "BLOCK"]
     assert result["ngi_autoassessment"]["computed"]["hard_gates_passed"] == True
-    assert result["ngi_autoassessment"]["computed"]["total_score_0_100"] == 63
+    # Updated score after improvements: D1 (3→4), D4 (3→4), D8 (2→3) = +7 points
+    assert result["ngi_autoassessment"]["computed"]["total_score_0_100"] == 70
+    assert result["ngi_autoassessment"]["computed"]["publish_decision"] == "PASS"
 
 
 if __name__ == "__main__":

@@ -5,11 +5,14 @@ ngi_autoassessment:
 
   domains:
     D1_verificability:
-      score: 3
+      score: 4
       evidence: 
         - "lifecycle/LC_PHASE_REGISTRY.yaml"
         - "lifecycle/TLI_GATE_RULEBOOK.yaml"
-      notes: "Lifecycle gates and traceability implemented"
+        - "docs/verification/KPI_TRACKING.md"
+        - "docs/verification/MONITORING_DASHBOARD.md"
+        - "docs/verification/METRICS.md"
+      notes: "Lifecycle gates and traceability with KPI tracking, monitoring dashboard, and comprehensive metrics"
     D2_transparency:
       score: 3
       evidence: 
@@ -24,11 +27,14 @@ ngi_autoassessment:
         - "GOVERNANCE.md"
       notes: "Open source license, governance rules"
     D4_security:
-      score: 3
+      score: 4
       evidence: 
         - ".github/workflows/ci.yml"
         - "tests/"
-      notes: "CI/CD with testing infrastructure"
+        - "docs/security/KPI_TRACKING.md"
+        - "docs/security/MONITORING.md"
+        - "docs/security/METRICS.md"
+      notes: "CI/CD with testing infrastructure, security KPIs, monitoring, and comprehensive metrics tracking"
     D5_governance:
       score: 4
       evidence: 
@@ -50,10 +56,13 @@ ngi_autoassessment:
         - "GOVERNANCE.md"
       notes: "Project identity and licensing clear"
     D8_sustainability:
-      score: 2
+      score: 3
       evidence: 
         - "GOVERNANCE.md"
-      notes: "Basic governance for sustainability"
+        - "docs/sustainability/RESOURCE_METRICS.md"
+        - "docs/sustainability/OPTIMIZATION_STRATEGY.md"
+        - "docs/sustainability/CARBON_IMPACT_ANALYSIS.md"
+      notes: "Per-service resource metrics, optimization strategy, and carbon impact analysis with reduction targets"
     D9_antimisinf:
       score: 3
       evidence: 
