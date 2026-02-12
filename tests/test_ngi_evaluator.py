@@ -1,15 +1,15 @@
 """Tests for NGI policy evaluator."""
-import os
-import tempfile
 import yaml
 import pytest
 from pathlib import Path
+from importlib.util import spec_from_file_location, module_from_spec
 
 
-# Import the evaluator module
-import sys
-sys.path.insert(0, str(Path(__file__).parent.parent / "scripts"))
-import ngi_evaluator
+# Import the evaluator module using importlib
+_evaluator_path = Path(__file__).parent.parent / "scripts" / "ngi_evaluator.py"
+spec = spec_from_file_location("ngi_evaluator", _evaluator_path)
+ngi_evaluator = module_from_spec(spec)
+spec.loader.exec_module(ngi_evaluator)
 
 
 def test_policy_file_exists():
@@ -43,7 +43,7 @@ def test_clamp_score_valid():
     assert ngi_evaluator.clamp_score(0) == 0
     assert ngi_evaluator.clamp_score(3) == 3
     assert ngi_evaluator.clamp_score(5) == 5
-    assert ngi_evaluator.clamp_score(2.5) == 2
+    assert ngi_evaluator.clamp_score(3.0) == 3  # Integral float OK
 
 
 def test_clamp_score_invalid():
@@ -53,6 +53,9 @@ def test_clamp_score_invalid():
     
     with pytest.raises(ValueError, match="fuera de rango"):
         ngi_evaluator.clamp_score(-1)
+    
+    with pytest.raises(ValueError, match="Score debe ser entero"):
+        ngi_evaluator.clamp_score(2.5)  # Non-integral float rejected
     
     with pytest.raises(ValueError, match="no numérico"):
         ngi_evaluator.clamp_score("invalid")
@@ -89,15 +92,15 @@ def test_evaluate_block_hard_gates():
             "assessment_date": "2026-02-12",
             "assessor": "test",
             "domains": {
-                "D1_verificability": {"score": 2, "evidence": [], "notes": ""},  # Hard gate fail
-                "D2_transparency": {"score": 3, "evidence": [], "notes": ""},
-                "D3_privacy": {"score": 3, "evidence": [], "notes": ""},
-                "D4_security": {"score": 3, "evidence": [], "notes": ""},
-                "D5_governance": {"score": 3, "evidence": [], "notes": ""},
-                "D6_interop": {"score": 3, "evidence": [], "notes": ""},
-                "D7_identity": {"score": 3, "evidence": [], "notes": ""},
-                "D8_sustainability": {"score": 3, "evidence": [], "notes": ""},
-                "D9_antimisinf": {"score": 3, "evidence": [], "notes": ""},
+                "D1_verificability": {"score": 2, "evidence": ["test.md"], "notes": ""},  # Hard gate fail
+                "D2_transparency": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D3_privacy": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D4_security": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D5_governance": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D6_interop": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D7_identity": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D8_sustainability": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D9_antimisinf": {"score": 3, "evidence": ["test.md"], "notes": ""},
             }
         }
     }
@@ -119,15 +122,15 @@ def test_evaluate_warn_soft_total():
             "assessment_date": "2026-02-12",
             "assessor": "test",
             "domains": {
-                "D1_verificability": {"score": 3, "evidence": [], "notes": ""},
-                "D2_transparency": {"score": 3, "evidence": [], "notes": ""},
-                "D3_privacy": {"score": 3, "evidence": [], "notes": ""},
-                "D4_security": {"score": 3, "evidence": [], "notes": ""},
-                "D5_governance": {"score": 3, "evidence": [], "notes": ""},
-                "D6_interop": {"score": 3, "evidence": [], "notes": ""},
-                "D7_identity": {"score": 3, "evidence": [], "notes": ""},
-                "D8_sustainability": {"score": 2, "evidence": [], "notes": ""},
-                "D9_antimisinf": {"score": 3, "evidence": [], "notes": ""},
+                "D1_verificability": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D2_transparency": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D3_privacy": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D4_security": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D5_governance": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D6_interop": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D7_identity": {"score": 3, "evidence": ["test.md"], "notes": ""},
+                "D8_sustainability": {"score": 2, "evidence": ["test.md"], "notes": ""},
+                "D9_antimisinf": {"score": 3, "evidence": ["test.md"], "notes": ""},
             }
         }
     }
@@ -153,15 +156,15 @@ def test_evaluate_pass():
             "assessment_date": "2026-02-12",
             "assessor": "test",
             "domains": {
-                "D1_verificability": {"score": 4, "evidence": [], "notes": ""},
-                "D2_transparency": {"score": 4, "evidence": [], "notes": ""},
-                "D3_privacy": {"score": 4, "evidence": [], "notes": ""},
-                "D4_security": {"score": 4, "evidence": [], "notes": ""},
-                "D5_governance": {"score": 4, "evidence": [], "notes": ""},
-                "D6_interop": {"score": 4, "evidence": [], "notes": ""},
-                "D7_identity": {"score": 4, "evidence": [], "notes": ""},
-                "D8_sustainability": {"score": 4, "evidence": [], "notes": ""},
-                "D9_antimisinf": {"score": 4, "evidence": [], "notes": ""},
+                "D1_verificability": {"score": 4, "evidence": ["test.md"], "notes": ""},
+                "D2_transparency": {"score": 4, "evidence": ["test.md"], "notes": ""},
+                "D3_privacy": {"score": 4, "evidence": ["test.md"], "notes": ""},
+                "D4_security": {"score": 4, "evidence": ["test.md"], "notes": ""},
+                "D5_governance": {"score": 4, "evidence": ["test.md"], "notes": ""},
+                "D6_interop": {"score": 4, "evidence": ["test.md"], "notes": ""},
+                "D7_identity": {"score": 4, "evidence": ["test.md"], "notes": ""},
+                "D8_sustainability": {"score": 4, "evidence": ["test.md"], "notes": ""},
+                "D9_antimisinf": {"score": 4, "evidence": ["test.md"], "notes": ""},
             }
         }
     }

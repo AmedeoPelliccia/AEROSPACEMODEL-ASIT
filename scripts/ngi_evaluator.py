@@ -27,6 +27,9 @@ def load_yaml(path: str) -> Dict[str, Any]:
 def clamp_score(x: Any) -> int:
     if not isinstance(x, (int, float)):
         raise ValueError(f"Score inválido (no numérico): {x}")
+    # Reject non-integer floats (except integral floats like 3.0)
+    if isinstance(x, float) and x != int(x):
+        raise ValueError(f"Score debe ser entero, no flotante: {x}")
     xi = int(x)
     if xi < 0 or xi > 5:
         raise ValueError(f"Score fuera de rango 0..5: {x}")
@@ -49,29 +52,56 @@ def evaluate(policy: Dict[str, Any], assessment: Dict[str, Any]) -> Dict[str, An
         if d not in domains:
             raise ValueError(f"Falta dominio requerido: {d}")
 
+    # Validate evidence minimum items
+    policy_domains = policy["policy"]["domains"]
+    for d in DOMAIN_KEYS:
+        min_items = policy_domains[d].get("required_evidence_min_items", 0)
+        evidence = domains[d].get("evidence", [])
+        if len(evidence) < min_items:
+            raise ValueError(f"Dominio {d} requiere al menos {min_items} evidencias, tiene {len(evidence)}")
+
     # Weighted score
     total = 0.0
     for d in DOMAIN_KEYS:
         score = clamp_score(domains[d].get("score", 0))
-        weight = policy["policy"]["domains"][d]["weight"]
+        weight = policy_domains[d]["weight"]
         total += (score / 5.0) * weight
 
     # deterministic rounding (half up)
     total_int = int(math.floor(total + 0.5))
 
-    # Hard gates
+    # Read hard gates from policy
     s = {d: clamp_score(domains[d].get("score", 0)) for d in DOMAIN_KEYS}
-    hard_ok = (
-        s["D1_verificability"] >= 3 and
-        s["D3_privacy"] >= 3 and
-        s["D4_security"] >= 3 and
-        s["D7_identity"] >= 3
-    )
+    hard_gates = policy["policy"]["gates"]["hard"]
+    hard_ok = True
+    for gate in hard_gates:
+        # Parse rule like "D1_verificability.score >= 3"
+        rule = gate["rule"]
+        if ".score >=" in rule:
+            domain = rule.split(".score")[0]
+            threshold = int(rule.split(">=")[1].strip())
+            if s.get(domain, 0) < threshold:
+                hard_ok = False
+                break
 
-    soft_total_ok = total_int >= 70
-    soft_min_domain_ok = all(v >= 2 for v in s.values())
+    # Read soft gates from policy
+    soft_gates = policy["policy"]["gates"]["soft"]
+    soft_total_ok = True
+    soft_min_domain_ok = True
+    for gate in soft_gates:
+        rule = gate["rule"]
+        if gate["id"] == "SOFT_TOTAL":
+            # Extract threshold from rule like "computed.total_score_0_100 >= 70"
+            threshold = int(rule.split(">=")[1].strip())
+            soft_total_ok = total_int >= threshold
+        elif gate["id"] == "SOFT_MIN_DOMAIN":
+            # Extract threshold from rule like "all_domain_scores >= 2"
+            threshold = int(rule.split(">=")[1].strip())
+            soft_min_domain_ok = all(v >= threshold for v in s.values())
+
     soft_ok = soft_total_ok and soft_min_domain_ok
 
+    # Decision logic from policy
     if (not hard_ok) or (not soft_min_domain_ok):
         decision = "BLOCK"
     elif hard_ok and (not soft_total_ok):
