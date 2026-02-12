@@ -1,0 +1,1067 @@
+# Human-Centric Digital Systems Charter - Technical Controls v1.0
+# Testable controls and audit evidence for charter compliance
+
+version: "1.0.0"
+authority: ASIT
+charter_reference: "Governance/HUMAN_CENTRIC_DIGITAL_SYSTEMS_CHARTER_v1.0.md"
+effective_date: "2026-02-12"
+
+# =============================================================================
+# ARTICLE 1: PURPOSE CONSTRAINT
+# =============================================================================
+
+article_1_purpose_constraint:
+  normative_requirement: "Optimize for user welfare, not attention extraction"
+  
+  technical_controls:
+    - control_id: TC-ART1-001
+      name: "Algorithm Objective Function Documentation"
+      description: "All ranking/recommendation algorithms must document objective functions"
+      implementation:
+        - "Document objective function in algorithm design docs"
+        - "Demonstrate user welfare prioritization over engagement"
+        - "Conduct quarterly review of objective function alignment"
+      verification:
+        - "Review algorithm design documentation"
+        - "Compare user-defined goal completion vs. engagement metrics"
+        - "Audit algorithm updates for objective drift"
+    
+    - control_id: TC-ART1-002
+      name: "User Welfare Impact Assessment"
+      description: "Pre-deployment user welfare impact assessment required"
+      implementation:
+        - "Conduct welfare impact analysis for new features"
+        - "Measure time-well-spent metrics vs. attention-capture metrics"
+        - "Require STK_WELFARE approval for high-impact features"
+      verification:
+        - "Check existence of welfare impact assessment docs"
+        - "Verify STK_WELFARE sign-off in git commit history"
+        - "Compare predicted vs. actual welfare impact post-launch"
+    
+    - control_id: TC-ART1-003
+      name: "Engagement Metric Subordination"
+      description: "Engagement metrics tracked but not primary optimization target"
+      implementation:
+        - "Separate welfare metrics from engagement metrics in dashboards"
+        - "Set primary OKRs based on welfare, secondary on engagement"
+        - "Alert when engagement optimization conflicts with welfare"
+      verification:
+        - "Review OKR definitions and weights"
+        - "Audit optimization algorithms for engagement vs. welfare priority"
+        - "Check for welfare-engagement conflict alerts and resolutions"
+  
+  audit_evidence:
+    - evidence_id: AE-ART1-001
+      artifact: "docs/algorithms/objective_functions.md"
+      description: "Algorithm objective function documentation"
+      retention: "7 years"
+      update_frequency: "quarterly"
+    
+    - evidence_id: AE-ART1-002
+      artifact: "assessments/user_welfare_impact_*.yaml"
+      description: "User welfare impact assessment reports"
+      retention: "7 years"
+      update_frequency: "per feature launch"
+    
+    - evidence_id: AE-ART1-003
+      artifact: "metrics/welfare_vs_engagement.csv"
+      description: "Welfare vs. engagement metrics comparison"
+      retention: "7 years"
+      update_frequency: "daily"
+  
+  test_criteria:
+    - test_id: TEST-ART1-001
+      description: "Verify objective function prioritizes user welfare"
+      acceptance_criteria:
+        - "User-defined goal completion rate > engagement time optimization"
+        - "Welfare metrics tracked and publicly reported monthly"
+        - "Zero hidden engagement optimization in production systems"
+      test_frequency: "quarterly"
+      test_method: "automated + manual audit"
+
+# =============================================================================
+# ARTICLE 2: INFERENCE BOUNDARY
+# =============================================================================
+
+article_2_inference_boundary:
+  normative_requirement: "No inference or operationalization of psychological vulnerability"
+  
+  technical_controls:
+    - control_id: TC-ART2-001
+      name: "Banned Features Registry"
+      description: "Maintain registry of prohibited vulnerability signals"
+      implementation:
+        - "Document all banned psychological vulnerability signals"
+        - "Update registry quarterly with new vulnerability patterns"
+        - "Integrate registry into CI/CD scanning pipeline"
+      verification:
+        - "Review registry completeness and currency"
+        - "Check CI/CD integration for banned feature detection"
+        - "Audit production systems for banned feature absence"
+    
+    - control_id: TC-ART2-002
+      name: "Pre-Deployment Vulnerability Scan"
+      description: "Scan all models/features for vulnerability exploitation"
+      implementation:
+        - "Automated scan of model inputs for banned features"
+        - "ML model inspection for vulnerability proxy learning"
+        - "Block deployment if vulnerability signals detected"
+      verification:
+        - "Check scan execution logs for all deployments"
+        - "Verify zero vulnerability signals in production models"
+        - "Audit scan effectiveness with red team exercises"
+    
+    - control_id: TC-ART2-003
+      name: "Runtime Vulnerability Detection"
+      description: "Real-time detection of vulnerability-based targeting"
+      implementation:
+        - "Deploy runtime monitor for banned feature usage"
+        - "Alert and block any vulnerability exploitation attempts"
+        - "Log all detection events for audit trail"
+      verification:
+        - "Review detection logs for zero vulnerability usage"
+        - "Test detection system with synthetic vulnerability signals"
+        - "Measure detection latency (target: < 100ms)"
+  
+  prohibited_signals:
+    - signal_id: "VULN-001"
+      name: "Emotional State Inference"
+      description: "Inferred emotional vulnerability for targeting"
+      examples: ["sadness", "anxiety", "loneliness", "anger"]
+    
+    - signal_id: "VULN-002"
+      name: "Cognitive Load Exploitation"
+      description: "Targeting based on cognitive overload state"
+      examples: ["multitasking", "stress", "decision_fatigue"]
+    
+    - signal_id: "VULN-003"
+      name: "Addiction Pattern Reinforcement"
+      description: "Exploiting compulsive behavior patterns"
+      examples: ["variable_ratio_rewards", "streak_maintenance", "FOMO_triggers"]
+    
+    - signal_id: "VULN-004"
+      name: "Financial Stress Indicators"
+      description: "Targeting based on financial vulnerability"
+      examples: ["debt_browsing", "payday_timing", "budget_constraints"]
+    
+    - signal_id: "VULN-005"
+      name: "Mental Health Vulnerability"
+      description: "Exploiting mental health conditions"
+      examples: ["depression_indicators", "anxiety_patterns", "self_harm_searches"]
+    
+    - signal_id: "VULN-006"
+      name: "Impulse Control Weakness"
+      description: "Targeting impulsive decision-making states"
+      examples: ["late_night_browsing", "alcohol_mentions", "impulse_purchase_history"]
+  
+  audit_evidence:
+    - evidence_id: AE-ART2-001
+      artifact: "policy/banned_features_registry.yaml"
+      description: "Complete registry of banned vulnerability signals"
+      retention: "permanent"
+      update_frequency: "quarterly"
+    
+    - evidence_id: AE-ART2-002
+      artifact: "logs/vulnerability_detection_*.log"
+      description: "Vulnerability detection logs"
+      retention: "7 years"
+      update_frequency: "real-time"
+    
+    - evidence_id: AE-ART2-003
+      artifact: "assessments/exploitation_scan_*.yaml"
+      description: "Pre-deployment vulnerability scan reports"
+      retention: "7 years"
+      update_frequency: "per deployment"
+  
+  test_criteria:
+    - test_id: TEST-ART2-001
+      description: "Verify no psychological vulnerability inference"
+      acceptance_criteria:
+        - "Zero detections of banned vulnerability signals in production"
+        - "100% coverage of banned feature scanning in CI/CD"
+        - "Quarterly third-party audit of inference boundaries"
+      test_frequency: "daily (automated), quarterly (external audit)"
+      test_method: "automated scanning + red team + external audit"
+
+# =============================================================================
+# ARTICLE 3: CONTEXTUAL ADS DEFAULT
+# =============================================================================
+
+article_3_contextual_ads_default:
+  normative_requirement: "Contextual-only advertising unless explicit consent"
+  
+  technical_controls:
+    - control_id: TC-ART3-001
+      name: "Default Contextual-Only Ad Serving"
+      description: "All users default to contextual-only ad mode"
+      implementation:
+        - "Configure ad system default: contextual_only = true"
+        - "Zero user-level signals in contextual mode"
+        - "Enforce at infrastructure level (not just policy layer)"
+      verification:
+        - "Audit ad serving logs for user-level signal absence"
+        - "Measure User-Level Targeting Rate (ULTR) = 0 for non-consenting users"
+        - "Test ad serving with synthetic user without consent"
+    
+    - control_id: TC-ART3-002
+      name: "Granular Consent Management"
+      description: "Per-category opt-in consent with revocation"
+      implementation:
+        - "Implement consent categories (not binary consent)"
+        - "One-click revocation of all personalized targeting"
+        - "Consent expiration: 12 months, requires re-confirmation"
+      verification:
+        - "Check consent receipt structure and storage"
+        - "Test revocation effectiveness (target: < 1 hour)"
+        - "Audit consent expiration enforcement"
+    
+    - control_id: TC-ART3-003
+      name: "Contextual Delivery Share (CDS) Tracking"
+      description: "Monitor and report contextual vs. personalized ad ratio"
+      implementation:
+        - "Track CDS metric: (Contextual ads / Total ads) × 100"
+        - "Target: CDS ≥ 90% in Year 1, increasing annually"
+        - "Public dashboard with real-time CDS reporting"
+      verification:
+        - "Review CDS calculation methodology"
+        - "Audit CDS data sources and accuracy"
+        - "Compare reported CDS with independent measurement"
+  
+  consent_categories:
+    - category_id: "CONSENT-001"
+      name: "Contextual Ads"
+      description: "Ads matched to content, not user"
+      default_state: true
+      revocable: true
+      signals_used: ["page_topic", "time_of_day", "language"]
+    
+    - category_id: "CONSENT-002"
+      name: "Personalized Ads"
+      description: "Ads using user-level signals"
+      default_state: false
+      revocable: true
+      signals_used: ["browsing_history", "user_interests", "demographics"]
+      requires_explicit_opt_in: true
+    
+    - category_id: "CONSENT-003"
+      name: "Cross-Site Tracking"
+      description: "Tracking across websites/apps"
+      default_state: false
+      revocable: true
+      signals_used: ["third_party_cookies", "device_fingerprint"]
+      requires_explicit_opt_in: true
+      additional_disclosure: "Required for personalized ads across sites"
+  
+  audit_evidence:
+    - evidence_id: AE-ART3-001
+      artifact: "logs/ad_serving_mode_*.log"
+      description: "Ad serving mode logs (contextual vs. personalized)"
+      retention: "7 years"
+      update_frequency: "real-time"
+    
+    - evidence_id: AE-ART3-002
+      artifact: "receipts/user_consent_*.json"
+      description: "User consent receipts with timestamps"
+      retention: "7 years post-user-deletion"
+      update_frequency: "per consent event"
+    
+    - evidence_id: AE-ART3-003
+      artifact: "metrics/contextual_delivery_share.csv"
+      description: "Contextual Delivery Share (CDS) metrics"
+      retention: "7 years"
+      update_frequency: "daily"
+  
+  test_criteria:
+    - test_id: TEST-ART3-001
+      description: "Verify contextual-only default ad serving"
+      acceptance_criteria:
+        - "User-Level Targeting Rate (ULTR) = 0 for users without explicit consent"
+        - "Contextual Delivery Share (CDS) >= 90% across all surfaces"
+        - "Consent revocation effective within 1 hour"
+      test_frequency: "daily"
+      test_method: "automated monitoring + synthetic user testing"
+
+# =============================================================================
+# ARTICLE 4: COGNITIVE INTEGRITY
+# =============================================================================
+
+article_4_cognitive_integrity:
+  normative_requirement: "No manipulative interaction loops or dark patterns"
+  
+  technical_controls:
+    - control_id: TC-ART4-001
+      name: "Dark Pattern Detection in CI/CD"
+      description: "Automated scanning for manipulative UI/UX patterns"
+      implementation:
+        - "Integrate dark pattern detector in CI/CD pipeline"
+        - "Block deployment if prohibited patterns detected"
+        - "Maintain pattern library updated quarterly"
+      verification:
+        - "Review dark pattern detection reports for all releases"
+        - "Test detector with known dark pattern examples"
+        - "Measure false positive/negative rates"
+    
+    - control_id: TC-ART4-002
+      name: "Manipulation Incident Rate (MIR) Tracking"
+      description: "Monitor and report manipulation pattern violations"
+      implementation:
+        - "Track MIR: (Incidents / User sessions) × 1M"
+        - "Target: Continuous decline, zero high-severity incidents"
+        - "100% remediation within 48 hours"
+      verification:
+        - "Review MIR trend analysis"
+        - "Audit incident severity classification"
+        - "Verify remediation completion times"
+    
+    - control_id: TC-ART4-003
+      name: "Campaign Kill-Switch"
+      description: "Automatic halt for non-compliant campaigns"
+      implementation:
+        - "Real-time monitoring of running campaigns"
+        - "Automatic halt on manipulation detection"
+        - "Human review required for re-enablement"
+      verification:
+        - "Test kill-switch activation with synthetic violation"
+        - "Audit kill-switch triggers and responses"
+        - "Measure kill-switch latency (target: < 5 minutes)"
+  
+  prohibited_patterns:
+    - pattern_id: "DARK-001"
+      name: "Variable-Ratio Reinforcement"
+      description: "Slot machine mechanics (unpredictable rewards)"
+      examples: ["random_loot_boxes", "streak_bonuses", "surprise_rewards"]
+      severity: "high"
+    
+    - pattern_id: "DARK-002"
+      name: "Artificial Scarcity/Urgency"
+      description: "Fake countdown timers or limited availability"
+      examples: ["countdown_timers", "only_X_left", "limited_time_only"]
+      severity: "high"
+    
+    - pattern_id: "DARK-003"
+      name: "Confirm-Shaming"
+      description: "Guilt-based retention language"
+      examples: ["No_I_dont_want_to_save", "I_prefer_worse_quality"]
+      severity: "high"
+    
+    - pattern_id: "DARK-004"
+      name: "Bait-and-Switch"
+      description: "Misleading consent flows or feature changes"
+      examples: ["opt_in_disguised_as_opt_out", "hidden_subscription_renewal"]
+      severity: "high"
+    
+    - pattern_id: "DARK-005"
+      name: "Roach Motel"
+      description: "Easy to enter, hard to exit"
+      examples: ["difficult_unsubscribe", "hidden_cancellation", "delete_requires_call"]
+      severity: "medium"
+    
+    - pattern_id: "DARK-006"
+      name: "Forced Continuity"
+      description: "Auto-renewal without clear opt-out"
+      examples: ["hidden_auto_renewal", "no_cancel_button", "must_call_to_cancel"]
+      severity: "medium"
+  
+  audit_evidence:
+    - evidence_id: AE-ART4-001
+      artifact: "assessments/dark_pattern_scan_*.yaml"
+      description: "Dark pattern detection scan reports"
+      retention: "7 years"
+      update_frequency: "per deployment"
+    
+    - evidence_id: AE-ART4-002
+      artifact: "metrics/manipulation_incidents.csv"
+      description: "Manipulation Incident Rate (MIR) tracking"
+      retention: "7 years"
+      update_frequency: "daily"
+    
+    - evidence_id: AE-ART4-003
+      artifact: "logs/manipulation_remediation_*.log"
+      description: "Manipulation remediation action logs"
+      retention: "7 years"
+      update_frequency: "per incident"
+  
+  test_criteria:
+    - test_id: TEST-ART4-001
+      description: "Verify absence of manipulative patterns"
+      acceptance_criteria:
+        - "Zero variable-ratio reward schedules in production"
+        - "No artificial scarcity or urgency signals detected"
+        - "Manipulation Incident Rate (MIR) continuous decline YoY"
+        - "100% of detected patterns remediated within 48 hours"
+      test_frequency: "daily (automated), quarterly (manual audit)"
+      test_method: "automated scanning + user testing + external audit"
+
+# =============================================================================
+# ARTICLE 5: EXPLAINABILITY RIGHT
+# =============================================================================
+
+article_5_explainability_right:
+  normative_requirement: "Users have right to see why content shown and how to disable"
+  
+  technical_controls:
+    - control_id: TC-ART5-001
+      name: "Explainability API"
+      description: "Real-time API for content decision explanations"
+      implementation:
+        - "Deploy explainability API for all content decisions"
+        - "API response includes: reason, signals, weights, alternatives"
+        - "Target response time: < 200ms"
+      verification:
+        - "Test API with sample content decisions"
+        - "Measure API response time distribution"
+        - "Audit API coverage across all content types"
+    
+    - control_id: TC-ART5-002
+      name: "Signal Class Inventory"
+      description: "Maintain public inventory of all signal classes"
+      implementation:
+        - "Document all signal classes used in systems"
+        - "Provide user-accessible descriptions"
+        - "Update inventory quarterly"
+      verification:
+        - "Review inventory completeness"
+        - "Compare inventory with actual system signals"
+        - "Check user-facing descriptions for clarity"
+    
+    - control_id: TC-ART5-003
+      name: "Explainability Coverage (EC) Metric"
+      description: "Track percentage of decisions with explainability"
+      implementation:
+        - "Track EC: (Decisions with explainability / Total decisions) × 100"
+        - "Target: EC = 100% for all algorithmic decisions"
+        - "Public dashboard with EC reporting"
+      verification:
+        - "Audit EC calculation methodology"
+        - "Verify explainability data quality"
+        - "Test with random decision sample"
+  
+  explainability_levels:
+    - level: "L1 - Category"
+      description: "High-level reason category"
+      example: "Shown because: Contextual relevance to current content"
+      required_for: "all_decisions"
+    
+    - level: "L2 - Signals"
+      description: "Specific signals used"
+      example: "Signals used: Page topic (technology), Time of day (afternoon)"
+      required_for: "user_request"
+    
+    - level: "L3 - Weights"
+      description: "Signal contribution weights"
+      example: "Signal contributions: Page topic (0.7), Time (0.3)"
+      required_for: "user_request"
+    
+    - level: "L4 - Alternatives"
+      description: "Other content considered"
+      example: "Other content considered: [list of 3 alternatives with scores]"
+      required_for: "advanced_users"
+  
+  signal_class_categories:
+    - category: "Contextual Signals"
+      description: "Content-based, not user-based"
+      examples: ["page_topic", "time_of_day", "language", "location_general"]
+      user_control: "Always active, cannot be disabled"
+    
+    - category: "User Preference Signals"
+      description: "User-controlled preferences"
+      examples: ["language_preference", "notification_settings", "accessibility_options"]
+      user_control: "Fully controllable in settings"
+    
+    - category: "Behavioral Signals (with consent)"
+      description: "User behavior, requires consent"
+      examples: ["browsing_history", "purchase_history", "search_history"]
+      user_control: "Opt-in required, can disable per-signal"
+  
+  audit_evidence:
+    - evidence_id: AE-ART5-001
+      artifact: "metrics/explainability_coverage.csv"
+      description: "Explainability Coverage (EC) metric"
+      retention: "7 years"
+      update_frequency: "weekly"
+    
+    - evidence_id: AE-ART5-002
+      artifact: "policy/signal_class_inventory.yaml"
+      description: "Complete signal class inventory"
+      retention: "permanent"
+      update_frequency: "quarterly"
+    
+    - evidence_id: AE-ART5-003
+      artifact: "logs/explainability_requests_*.log"
+      description: "User explainability request logs"
+      retention: "7 years"
+      update_frequency: "real-time"
+  
+  test_criteria:
+    - test_id: TEST-ART5-001
+      description: "Verify explainability right implementation"
+      acceptance_criteria:
+        - "Explainability Coverage (EC) = 100% for all content decisions"
+        - "Signal class inventory updated quarterly"
+        - "Explainability API response time < 200ms (p99)"
+        - "All signal classes have user-accessible disablement controls"
+      test_frequency: "weekly (automated), quarterly (manual audit)"
+      test_method: "automated monitoring + user testing + API testing"
+
+# =============================================================================
+# ARTICLE 6: FUNCTIONAL SEPARATION
+# =============================================================================
+
+article_6_functional_separation:
+  normative_requirement: "Reasoning and advertising systems must be separated"
+  
+  technical_controls:
+    - control_id: TC-ART6-001
+      name: "Infrastructure Separation"
+      description: "Separate compute/storage for reasoning and ad systems"
+      implementation:
+        - "Deploy reasoning and ad systems on separate infrastructure"
+        - "No shared databases or data stores"
+        - "Separate API endpoints and network zones"
+      verification:
+        - "Audit infrastructure topology diagrams"
+        - "Test network isolation between systems"
+        - "Verify zero shared storage volumes"
+    
+    - control_id: TC-ART6-002
+      name: "Policy Firewall"
+      description: "Enforce separation at data flow level"
+      implementation:
+        - "Deploy policy firewall between reasoning and ad systems"
+        - "Block all data flows from reasoning to ad stack"
+        - "Log and alert on separation violations"
+      verification:
+        - "Review policy firewall rules"
+        - "Test with synthetic data flow attempts"
+        - "Audit firewall logs for zero violations"
+    
+    - control_id: TC-ART6-003
+      name: "Ad/Assist Separation Integrity (AASI) Testing"
+      description: "Automated testing of separation integrity"
+      implementation:
+        - "Weekly automated AASI test suite"
+        - "Test scenarios: data leakage, model sharing, shared objectives"
+        - "Target: AASI = 100% (zero tolerance)"
+      verification:
+        - "Review AASI test results"
+        - "Audit test coverage completeness"
+        - "Quarterly third-party AASI audit"
+  
+  separation_requirements:
+    - component: "Models"
+      reasoning_system: "Assistant LLM (GPT, Claude, etc.)"
+      advertising_system: "Ad targeting models (contextual only)"
+      shared: false
+      enforcement: "Separate model registries, no cross-loading"
+    
+    - component: "Data"
+      reasoning_system: "User queries, conversation context"
+      advertising_system: "Ad inventory, contextual signals"
+      shared: false
+      enforcement: "Separate databases, policy firewall"
+    
+    - component: "Objectives"
+      reasoning_system: "User satisfaction, task completion"
+      advertising_system: "Ad relevance (contextual)"
+      shared: false
+      enforcement: "Separate OKRs, independent optimization"
+    
+    - component: "Logs"
+      reasoning_system: "Reasoning traces, user interactions"
+      advertising_system: "Ad impressions, clicks"
+      shared: false
+      enforcement: "Separate log storage, no cross-analysis"
+    
+    - component: "Compute"
+      reasoning_system: "Dedicated reasoning quota"
+      advertising_system: "Separate ad serving quota"
+      shared: true
+      enforcement: "Shared platform infrastructure, separate quotas"
+  
+  audit_evidence:
+    - evidence_id: AE-ART6-001
+      artifact: "assessments/separation_integrity_*.yaml"
+      description: "Ad/Assist Separation Integrity (AASI) test results"
+      retention: "7 years"
+      update_frequency: "weekly"
+    
+    - evidence_id: AE-ART6-002
+      artifact: "docs/architecture/system_separation.md"
+      description: "Infrastructure separation documentation"
+      retention: "permanent"
+      update_frequency: "quarterly"
+    
+    - evidence_id: AE-ART6-003
+      artifact: "logs/data_flow_audit_*.log"
+      description: "Data flow audit logs"
+      retention: "7 years"
+      update_frequency: "real-time"
+  
+  test_criteria:
+    - test_id: TEST-ART6-001
+      description: "Verify functional separation integrity"
+      acceptance_criteria:
+        - "Ad/Assist Separation Integrity (AASI) = 100% passing checks"
+        - "Zero shared models between reasoning and advertising"
+        - "Zero data leakage detected in quarterly audits"
+        - "Separate compute quotas enforced at infrastructure level"
+      test_frequency: "weekly (automated), quarterly (external audit)"
+      test_method: "automated AASI tests + penetration testing + external audit"
+
+# =============================================================================
+# ARTICLE 7: AUDITABILITY BY DESIGN
+# =============================================================================
+
+article_7_auditability_by_design:
+  normative_requirement: "Tamper-evident audit trails for high-impact systems"
+  
+  technical_controls:
+    - control_id: TC-ART7-001
+      name: "Cryptographically Signed Audit Logs"
+      description: "Tamper-evident audit trail using append-only ledger"
+      implementation:
+        - "Deploy append-only audit log system (e.g., blockchain, Merkle tree)"
+        - "Cryptographically sign all audit entries"
+        - "Verify audit log integrity weekly"
+      verification:
+        - "Test audit log tamper detection"
+        - "Verify signature chain integrity"
+        - "Audit log retention: 7 years minimum"
+    
+    - control_id: TC-ART7-002
+      name: "Third-Party Audit Program"
+      description: "Quarterly independent audits with public summaries"
+      implementation:
+        - "Contract independent audit firm (annual RFP)"
+        - "Quarterly audit scope: AASI, ULTR, CDS, MIR, EC, PICS"
+        - "Publish public audit summary within 30 days"
+      verification:
+        - "Review audit firm independence and qualifications"
+        - "Verify audit scope completeness"
+        - "Check public summary publication timeliness"
+    
+    - control_id: TC-ART7-003
+      name: "Auditable Events Coverage"
+      description: "Ensure all high-impact events are audited"
+      implementation:
+        - "Document auditable event taxonomy"
+        - "Instrument systems for audit event capture"
+        - "Target: 100% coverage of high-impact events"
+      verification:
+        - "Review auditable events list completeness"
+        - "Audit instrumentation coverage"
+        - "Sample events for audit log presence"
+  
+  auditable_events:
+    - event_category: "Algorithm Changes"
+      events:
+        - "Ranking algorithm deployment"
+        - "Targeting rule modification"
+        - "Model retraining and deployment"
+      audit_fields: ["timestamp", "actor", "change_description", "approval_signature"]
+    
+    - event_category: "User Profile Updates"
+      events:
+        - "User consent granted/revoked"
+        - "User preference changes"
+        - "Account status changes"
+      audit_fields: ["timestamp", "user_id", "change_type", "old_value", "new_value"]
+    
+    - event_category: "Content Moderation"
+      events:
+        - "High-impact content removal"
+        - "Account suspension/termination"
+        - "Policy violation classification"
+      audit_fields: ["timestamp", "moderator", "content_id", "violation_type", "action_taken"]
+    
+    - event_category: "Policy Changes"
+      events:
+        - "Ad serving policy updates"
+        - "Targeting criteria changes"
+        - "Banned features registry updates"
+      audit_fields: ["timestamp", "policy_owner", "change_description", "effective_date"]
+  
+  audit_evidence:
+    - evidence_id: AE-ART7-001
+      artifact: "audit/integrity_proofs_*.json"
+      description: "Audit trail integrity proofs (Merkle roots, signatures)"
+      retention: "7 years"
+      update_frequency: "weekly"
+    
+    - evidence_id: AE-ART7-002
+      artifact: "audit/external_reports_*.pdf"
+      description: "Third-party audit reports"
+      retention: "7 years"
+      update_frequency: "quarterly"
+    
+    - evidence_id: AE-ART7-003
+      artifact: "metrics/audit_coverage.csv"
+      description: "Audit log coverage metrics"
+      retention: "7 years"
+      update_frequency: "weekly"
+  
+  test_criteria:
+    - test_id: TEST-ART7-001
+      description: "Verify audit trail integrity and completeness"
+      acceptance_criteria:
+        - "100% of high-impact decisions have signed audit entries"
+        - "Audit log integrity verified weekly (zero tampering detections)"
+        - "Third-party audit completion: 4 per year"
+        - "Public audit summary published within 30 days of completion"
+      test_frequency: "weekly (automated), quarterly (external audit)"
+      test_method: "automated integrity checks + third-party audits"
+
+# =============================================================================
+# ARTICLE 8: COMPUTE ALLOCATION DUTY
+# =============================================================================
+
+article_8_compute_allocation_duty:
+  normative_requirement: "Minimum compute share for public-interest services"
+  
+  technical_controls:
+    - control_id: TC-ART8-001
+      name: "Public-Interest Compute Share (PICS) Tracking"
+      description: "Monitor and report PICS allocation"
+      implementation:
+        - "Track PICS: (Public-interest compute / Total compute) × 100"
+        - "Target: Year 1: 15%, Year 2: 20%, Year 3: 25%, Year 4: 30%"
+        - "Public dashboard with monthly PICS reporting"
+      verification:
+        - "Audit compute allocation methodology"
+        - "Verify compute hours attribution accuracy"
+        - "Compare reported PICS with independent measurement"
+    
+    - control_id: TC-ART8-002
+      name: "Compute Budget Segregation"
+      description: "Separate budgets for revenue and public-interest"
+      implementation:
+        - "Define compute quotas: revenue-generating vs. public-interest"
+        - "Enforce quotas at infrastructure level"
+        - "Prevent quota borrowing without CCO approval"
+      verification:
+        - "Review quota definitions and allocations"
+        - "Audit quota enforcement mechanisms"
+        - "Check for unauthorized quota borrowing"
+    
+    - control_id: TC-ART8-003
+      name: "PICS Shortfall Penalty"
+      description: "Penalty for failing to meet PICS targets"
+      implementation:
+        - "Calculate monthly PICS shortfall"
+        - "Penalty: 2x shortfall redirected to public services"
+        - "Automatic penalty application, reported publicly"
+      verification:
+        - "Review shortfall calculation methodology"
+        - "Verify penalty application and fund redirection"
+        - "Audit public-interest service funding increases"
+  
+  public_interest_services:
+    - service_category: "Safety & Security"
+      minimum_allocation: "5%"
+      services:
+        - "Content moderation and abuse detection"
+        - "Security threat analysis and response"
+        - "User safety feature development"
+      uptime_requirement: "99.9%"
+    
+    - service_category: "Accessibility"
+      minimum_allocation: "3%"
+      services:
+        - "Screen reader optimization"
+        - "Alternative input method support"
+        - "Cognitive accessibility features"
+      uptime_requirement: "99.9%"
+    
+    - service_category: "Quality & Transparency"
+      minimum_allocation: "4%"
+      services:
+        - "Explainability API infrastructure"
+        - "Audit trail generation and storage"
+        - "Third-party audit data preparation"
+      uptime_requirement: "99.9%"
+    
+    - service_category: "Public-Interest Research"
+      minimum_allocation: "3%"
+      services:
+        - "Open datasets for academic research"
+        - "Algorithmic fairness testing"
+        - "Misinformation research collaboration"
+      uptime_requirement: "99.5%"
+  
+  audit_evidence:
+    - evidence_id: AE-ART8-001
+      artifact: "metrics/public_interest_compute_share.csv"
+      description: "Public-Interest Compute Share (PICS) metrics"
+      retention: "7 years"
+      update_frequency: "monthly"
+    
+    - evidence_id: AE-ART8-002
+      artifact: "logs/compute_allocation_*.log"
+      description: "Compute allocation logs"
+      retention: "7 years"
+      update_frequency: "real-time"
+    
+    - evidence_id: AE-ART8-003
+      artifact: "reports/pics_annual_*.md"
+      description: "Annual PICS targets and achievements"
+      retention: "permanent"
+      update_frequency: "annually"
+  
+  test_criteria:
+    - test_id: TEST-ART8-001
+      description: "Verify public-interest compute allocation"
+      acceptance_criteria:
+        - "PICS >= 15% in Year 1, increasing 5% annually to 30% by Year 4"
+        - "Monthly PICS tracking with public dashboard"
+        - "Zero months below target (or penalty applied and reported)"
+        - "Public-interest services operational 99.9% uptime (safety/accessibility/quality)"
+      test_frequency: "monthly"
+      test_method: "automated compute tracking + service uptime monitoring"
+
+# =============================================================================
+# KPI DEFINITIONS AND TARGETS
+# =============================================================================
+
+kpi_framework:
+  kpis:
+    - kpi_id: "KPI-001"
+      name: "User-Level Targeting Rate (ULTR)"
+      definition: "Percentage of ad impressions using user-level signals"
+      formula: "(Ads with user-level targeting / Total ads served) × 100"
+      targets:
+        year_1: "<= 10% (protected surfaces only)"
+        year_2: "<= 5%"
+        year_3: "<= 2%"
+        year_4: "→ 0% (except explicit consent)"
+      measurement_frequency: "daily"
+      public_reporting: "monthly"
+    
+    - kpi_id: "KPI-002"
+      name: "Contextual Delivery Share (CDS)"
+      definition: "Percentage of ad impressions served via contextual signals"
+      formula: "(Contextual ads served / Total ads served) × 100"
+      targets:
+        year_1: ">= 90%"
+        year_2: ">= 93%"
+        year_3: ">= 95%"
+        year_4: ">= 98%"
+      measurement_frequency: "daily"
+      public_reporting: "monthly"
+    
+    - kpi_id: "KPI-003"
+      name: "Manipulation Incident Rate (MIR)"
+      definition: "Manipulation pattern violations per 1M user sessions"
+      formula: "(Manipulation incidents detected / User sessions) × 1,000,000"
+      targets:
+        year_1: "Establish baseline"
+        year_2: "10% reduction YoY"
+        year_3: "20% reduction YoY"
+        year_4: "30% reduction YoY"
+      measurement_frequency: "daily"
+      public_reporting: "quarterly"
+    
+    - kpi_id: "KPI-004"
+      name: "Explainability Coverage (EC)"
+      definition: "Percentage of content decisions with explainability"
+      formula: "(Decisions with explainability / Total decisions) × 100"
+      targets:
+        year_1: "100% (ads only)"
+        year_2: "100% (ads + recommendations)"
+        year_3: "100% (all algorithmic decisions)"
+        year_4: "100% (maintain)"
+      measurement_frequency: "weekly"
+      public_reporting: "quarterly"
+    
+    - kpi_id: "KPI-005"
+      name: "Ad/Assist Separation Integrity (AASI)"
+      definition: "Percentage of separation integrity tests passed"
+      formula: "(Separation tests passed / Total separation tests) × 100"
+      targets:
+        year_1: "100% (zero tolerance)"
+        year_2: "100% (zero tolerance)"
+        year_3: "100% (zero tolerance)"
+        year_4: "100% (zero tolerance)"
+      measurement_frequency: "weekly (automated), quarterly (external audit)"
+      public_reporting: "quarterly"
+    
+    - kpi_id: "KPI-006"
+      name: "Public-Interest Compute Share (PICS)"
+      definition: "Percentage of compute for public-interest services"
+      formula: "(Public-interest compute hours / Total compute hours) × 100"
+      targets:
+        year_1: ">= 15%"
+        year_2: ">= 20%"
+        year_3: ">= 25%"
+        year_4: ">= 30%"
+      measurement_frequency: "monthly"
+      public_reporting: "monthly"
+
+# =============================================================================
+# COMPLIANCE ENFORCEMENT
+# =============================================================================
+
+compliance_enforcement:
+  charter_compliance_office:
+    name: "Charter Compliance Office (CCO)"
+    independence: "Reports to executive leadership and board, independent of product/engineering"
+    responsibilities:
+      - "Monitor all KPIs (ULTR, CDS, MIR, EC, AASI, PICS)"
+      - "Conduct internal audits and investigations"
+      - "Coordinate third-party audits"
+      - "Manage public reporting and transparency"
+      - "Enforce sanctions for violations"
+    authority: "Can halt non-compliant features pending review"
+    reporting: "Quarterly public transparency reports"
+  
+  sanctions_ladder:
+    - level: 1
+      severity: "Minor Violation"
+      examples:
+        - "Explainability API response time > 200ms for < 1% of requests"
+        - "CDS drops 1% below target for one day"
+      actions:
+        - "Automated alert to engineering team"
+        - "Remediation within 7 days"
+      escalation: "If not remediated, escalate to Level 2"
+    
+    - level: 2
+      severity: "Moderate Violation"
+      examples:
+        - "PICS falls 2% below target for one month"
+        - "MIR increases 5% month-over-month"
+      actions:
+        - "CCO notification and investigation"
+        - "Corrective action plan within 14 days"
+        - "Remediation within 30 days"
+      penalties:
+        - "PICS shortfall: 2x redirected to public-interest services"
+      public_reporting: "Violation and remediation disclosed in quarterly report"
+    
+    - level: 3
+      severity: "Serious Violation"
+      examples:
+        - "User-level targeting detected without consent"
+        - "Dark pattern deployed in production"
+      actions:
+        - "Immediate feature halt (kill-switch)"
+        - "Root cause analysis required"
+        - "Systemic fix and external audit"
+      penalties:
+        - "$100K fine per incident (internal budget reallocation)"
+      public_reporting: "Incident report published within 48 hours"
+    
+    - level: 4
+      severity: "Critical Violation"
+      examples:
+        - "Psychological vulnerability exploitation detected in production"
+        - "AASI test failure (data leakage between reasoning and ad systems)"
+      actions:
+        - "Immediate platform-wide halt of all personalized systems"
+        - "Complete audit and external review"
+        - "Executive accountability required"
+      penalties:
+        - "$1M fine (donated to digital rights organizations)"
+      public_reporting: "Full incident report, corrective actions, leadership changes"
+      executive_action: "Responsible executives removed from decision authority"
+
+# =============================================================================
+# INTEGRATION WITH EXISTING GOVERNANCE
+# =============================================================================
+
+integration:
+  digital_constitution_mapping:
+    - hcds_article: "Article 1 (Purpose Constraint)"
+      constitution_article: "Article 3 (Technology as Servant)"
+      alignment: "Mutual reinforcement - technology serves human welfare"
+    
+    - hcds_article: "Article 2 (Inference Boundary)"
+      constitution_article: "Article 6 (Human Harm Precedence)"
+      alignment: "Vulnerability exploitation is form of human harm"
+    
+    - hcds_article: "Article 3 (Contextual Ads Default)"
+      constitution_article: "Article 8 (Prohibition of Human Exclusion)"
+      alignment: "User autonomy preserved through contextual default"
+    
+    - hcds_article: "Article 4 (Cognitive Integrity)"
+      constitution_article: "Article 3 (Technology as Servant)"
+      alignment: "Manipulation is anti-servitude"
+    
+    - hcds_article: "Article 5 (Explainability Right)"
+      constitution_article: "Article 5 (Traceability and Accountability)"
+      alignment: "Explainability enables accountability"
+    
+    - hcds_article: "Article 6 (Functional Separation)"
+      constitution_article: "Article 10 (Governance by Explicit Limits)"
+      alignment: "Separation enforces explicit architectural limits"
+    
+    - hcds_article: "Article 7 (Auditability by Design)"
+      constitution_article: "Article 5 (Traceability and Accountability)"
+      alignment: "Audit trails enable traceability"
+    
+    - hcds_article: "Article 8 (Compute Allocation Duty)"
+      constitution_article: "Article 1 (Human Labor as Foundation)"
+      alignment: "Public-interest compute honors labor foundation"
+  
+  brex_integration:
+    new_rules:
+      - rule_id: "HCDS-001"
+        condition: "user_targeting requires explicit consent"
+        enforcement: "block"
+        message: "User-level targeting prohibited without consent (Article 3)"
+      
+      - rule_id: "HCDS-002"
+        condition: "vulnerability_signals must not be used"
+        enforcement: "block"
+        message: "Psychological vulnerability inference prohibited (Article 2)"
+      
+      - rule_id: "HCDS-003"
+        condition: "explainability must be available"
+        enforcement: "require"
+        message: "Explainability required for all content decisions (Article 5)"
+      
+      - rule_id: "HCDS-004"
+        condition: "assistant and ad systems must be separated"
+        enforcement: "block"
+        message: "Functional separation required (Article 6)"
+      
+      - rule_id: "HCDS-005"
+        condition: "dark_patterns must not be deployed"
+        enforcement: "block"
+        message: "Manipulative patterns prohibited (Article 4)"
+      
+      - rule_id: "HCDS-006"
+        condition: "PICS minimum must be met"
+        enforcement: "require"
+        message: "Public-interest compute allocation required (Article 8)"
+  
+  lifecycle_gates:
+    - phase: "LC02 (Functional Baseline)"
+      new_gate: "G-HCDS-MANIPULATION-SCAN"
+      description: "Feature must pass Article 4 manipulation pattern scan"
+      acceptance_criteria: "Zero prohibited dark patterns detected"
+    
+    - phase: "LC04 (Design Baseline)"
+      new_gate: "G-HCDS-SEPARATION-DESIGN"
+      description: "System design must document Article 6 functional separation"
+      acceptance_criteria: "Separation architecture documented and approved"
+    
+    - phase: "LC06 (Conformity)"
+      new_gate: "G-HCDS-EXPLAINABILITY-COVERAGE"
+      description: "Explainability coverage (Article 5) must be 100%"
+      acceptance_criteria: "All content decisions have explainability data"
+    
+    - phase: "LC08 (Verification)"
+      new_gate: "G-HCDS-AASI-TESTS"
+      description: "AASI tests (Article 6) must pass 100%"
+      acceptance_criteria: "Zero separation integrity violations detected"
+
+# =============================================================================
+# VERSION HISTORY
+# =============================================================================
+
+version_history:
+  - version: "1.0.0"
+    date: "2026-02-12"
+    author: "AEROSPACEMODEL Project"
+    changes: "Initial release"
+    status: "active"

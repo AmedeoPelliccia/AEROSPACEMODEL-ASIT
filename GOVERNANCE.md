@@ -14,9 +14,12 @@ PR workflows, and governance code.
 | Document | Scope | Location |
 |----------|-------|----------|
 | Digital Constitution | Foundational axiom, articles, limits | [`Model_Digital_Constitution.md`](Model_Digital_Constitution.md) |
+| **Human-Centric Digital Systems Charter** | **Re-founding framework for digital ecosystems** | [`Governance/HUMAN_CENTRIC_DIGITAL_SYSTEMS_CHARTER_v1.0.md`](Governance/HUMAN_CENTRIC_DIGITAL_SYSTEMS_CHARTER_v1.0.md) |
 | Contributing Guide | Contribution process, CoDevOps model | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | Master BREX Authority | BREX decision rules | [`ASIT/GOVERNANCE/master_brex_authority.yaml`](ASIT/GOVERNANCE/master_brex_authority.yaml) |
 | Contract Schema | Contract structure | [`ASIT/CONTRACTS/CONTRACT_SCHEMA.yaml`](ASIT/CONTRACTS/CONTRACT_SCHEMA.yaml) |
+| HCDS Technical Controls | Testable controls for charter compliance | [`policy/hcds_technical_controls_v1.yaml`](policy/hcds_technical_controls_v1.yaml) |
+| HCDS 90-Day Roadmap | Transition implementation plan | [`roadmaps/HCDS_90_DAY_TRANSITION_ROADMAP_v1.md`](roadmaps/HCDS_90_DAY_TRANSITION_ROADMAP_v1.md) |
 
 ---
 
