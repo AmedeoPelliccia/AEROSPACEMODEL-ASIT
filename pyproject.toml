@@ -7,7 +7,7 @@ name = "aerospacemodel"
 version = "2.0.0"
 description = "ASIT + ASIGT: Aircraft Systems Information Transponders for governed aerospace technical publications"
 readme = "README.md"
-license = {text = "Apache-2.0"}
+license = {text = "CC0-1.0"}
 authors = [
     {name = "AEROSPACEMODEL Contributors", email = "dev@aerospacemodel.io"}
 ]
@@ -31,7 +31,7 @@ classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
     "Intended Audience :: Manufacturing",
-    "License :: OSI Approved :: Apache Software License",
+    "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
@@ -79,10 +79,10 @@ all = [
 aerospacemodel = "aerospacemodel.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/AEROSPACEMODEL/ASIT-ASIGT"
-Documentation = "https://docs.aerospacemodel.io"
-Repository = "https://github.com/AEROSPACEMODEL/ASIT-ASIGT.git"
-Issues = "https://github.com/AEROSPACEMODEL/ASIT-ASIGT/issues"
+Homepage = "https://github.com/AmedeoPelliccia/AEROSPACEMODEL"
+Documentation = "https://github.com/AmedeoPelliccia/AEROSPACEMODEL/tree/main/docs"
+Repository = "https://github.com/AmedeoPelliccia/AEROSPACEMODEL.git"
+Issues = "https://github.com/AmedeoPelliccia/AEROSPACEMODEL/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

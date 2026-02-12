@@ -175,7 +175,7 @@ AEROSPACEMODEL/
 ├── assessments/                   # Compliance assessments
 ├── policy/                        # Policy YAML files (NGI, HCDS controls)
 ├── roadmaps/                      # Implementation roadmaps
-├── docs/                          # Extended documentation (18+ documents)
+├── docs/                          # Extended documentation (27 documents)
 ├── examples/                      # Usage examples
 │
 ├── Model_Digital_Constitution.md  # Foundational digital constitution
@@ -203,7 +203,7 @@ AEROSPACEMODEL/
 git clone https://github.com/AmedeoPelliccia/AEROSPACEMODEL.git
 cd AEROSPACEMODEL
 
-# Install the package
+# Install the package with all optional dependencies
 pip install -e ".[all]"
 
 # Verify installation
@@ -243,31 +243,37 @@ else:
 
 The **[OPT-IN_FRAMEWORK](OPT-IN_FRAMEWORK/)** provides the canonical ATA iSpec 2200-aligned content structure for the AMPEL360 Q100 program across the complete aircraft lifecycle (LC01–LC14).
 
-| Domain | Scope | ATA Range |
-|--------|-------|-----------|
-| **O — Organizations** | Governance, maintenance policies | ATA 00–05 |
-| **P — Programs** | Program-level documentation | ATA 06–12 |
-| **T — Technologies** | 15 on-board system subdomains | ATA 20–80, 95–97 |
-| **I — Infrastructures** | Ground support, H₂ supply chain | Ground systems |
-| **N — Neural Networks** | AI governance, DPP, ledger | AI/ML systems |
+| Domain | Scope | ATA Range | Novel Technology |
+|--------|-------|-----------|------------------|
+| **O — Organizations** | Governance, maintenance policies | ATA 00–05 | — |
+| **P — Programs** | Program-level documentation | ATA 06–12 | — |
+| **T — Technologies** | 15 on-board system subdomains | ATA 20–80, 95–97 | C2 (Cryogenic LH₂), P (Fuel Cell), I2 (AI/ML) |
+| **I — Infrastructures** | Ground support, H₂ supply chain | Ground systems | — |
+| **N — Neural Networks** | AI governance, DPP, ledger | AI/ML systems | — |
 
 **Novel Technology Subdomains** (full LC01–LC14 activation):
-- **C2 — Circular Cryogenic Cells** — LH₂ storage, cryogenic handling, boil-off management
-- **P — Propulsion** — Fuel cell stacks, balance of plant, thermal management
-- **I2 — Intelligence** — AI/ML models, synthetic data, adversarial testing
+- **C2 — Circular Cryogenic Cells** — LH₂ storage (-253°C), cryogenic handling, boil-off management (Special Conditions: SC-28-H2-001, SC-28-CRYO-002)
+- **P — Propulsion** — Fuel cell stacks, balance of plant, thermal management (Special Condition: SC-71-FUELCELL-001)
+- **I2 — Intelligence** — AI/ML models, synthetic data (ATA 97), adversarial testing, EU AI Act compliance (Special Condition: SC-AI-ASSURANCE-001)
 
 ---
 
 ## Lifecycle Registry (LC01–LC14)
 
-| File | Purpose |
-|------|---------|
-| [`LC_PHASE_REGISTRY.yaml`](lifecycle/LC_PHASE_REGISTRY.yaml) | Canonical definitions for LC01–LC14 |
-| [`TLI_GATE_RULEBOOK.yaml`](lifecycle/TLI_GATE_RULEBOOK.yaml) | Gate logic and compliance rules per phase |
-| [`T_SUBDOMAIN_LC_ACTIVATION.yaml`](lifecycle/T_SUBDOMAIN_LC_ACTIVATION.yaml) | Technology subdomain activation rules |
+| File | Purpose | Content Root |
+|------|---------|--------------|
+| [`LC_PHASE_REGISTRY.yaml`](lifecycle/LC_PHASE_REGISTRY.yaml) | Canonical definitions for LC01–LC14 | All phases |
+| [`TLI_GATE_RULEBOOK.yaml`](lifecycle/TLI_GATE_RULEBOOK.yaml) | Gate logic and compliance rules per phase | All phases |
+| [`T_SUBDOMAIN_LC_ACTIVATION.yaml`](lifecycle/T_SUBDOMAIN_LC_ACTIVATION.yaml) | Technology subdomain activation rules | T-domain only |
 
-- **LC01–LC10 (PLM phases):** Content rooted at `KDB/LM/SSOT/PLM`
-- **LC11–LC14 (OPS phases):** Content rooted at `IDB/OPS/LM`
+**Phase-to-Database Mapping:**
+- **LC01–LC10 (PLM phases):** Content rooted at `KDB/LM/SSOT/PLM` (Knowledge Database)
+- **LC11–LC14 (OPS phases):** Content rooted at `IDB/OPS/LM` (Information Database)
+
+**Key Baselines:**
+- **FBL (Functional Baseline)** — Locked at LC02 (Requirements)
+- **DBL (Design Baseline)** — Locked at LC04 (Design)
+- **PBL (Product Baseline)** — Locked at LC10 (Production)
 
 ---
 
@@ -285,13 +291,13 @@ EAARF Charter (Industry Collaboration)
 Technical Controls & Roadmaps (Implementation)
 ```
 
-| Document | Status | Location |
-|----------|--------|----------|
-| [Digital Constitution](Model_Digital_Constitution.md) | ✅ Active | Root |
-| [HCDS Charter v1.0](Governance/HUMAN_CENTRIC_DIGITAL_SYSTEMS_CHARTER_v1.0.md) | ✅ Active | `Governance/` |
-| [EASA/ESA AI Governance](Governance/EASA_ESA_AI_GOVERNANCE_STANDARD_v1.0.md) | 📝 Draft | `Governance/` |
-| [EAARF Charter](Governance/EAARF_CHARTER_DRAFT.md) | 📝 Draft | `Governance/` |
-| [NPA 2025-07 Response](Governance/NPA_2025-07_RESPONSE.md) | 📝 Draft | `Governance/` |
+| Document | Status | Location | Key Contribution |
+|----------|--------|----------|------------------|
+| [Digital Constitution](Model_Digital_Constitution.md) | ✅ Active | Root | Foundational principles: human labor founds, capital finances, technology serves |
+| [HCDS Charter v1.0](Governance/HUMAN_CENTRIC_DIGITAL_SYSTEMS_CHARTER_v1.0.md) | ✅ Active | `Governance/` | 8 articles (Purpose Constraint, Inference Boundary, Contextual Ads, etc.) + 6 KPIs |
+| [EASA/ESA AI Governance](Governance/EASA_ESA_AI_GOVERNANCE_STANDARD_v1.0.md) | 📝 Draft | `Governance/` | Aviation AI governance aligned with EASA Roadmap 2.0 |
+| [EAARF Charter](Governance/EAARF_CHARTER_DRAFT.md) | 📝 Draft | `Governance/` | European Aerospace AI Research Forum charter |
+| [NPA 2025-07 Response](Governance/NPA_2025-07_RESPONSE.md) | 📝 Draft | `Governance/` | Formal response to EASA Notice of Proposed Amendment |
 
 ### Core Principles
 
@@ -344,7 +350,7 @@ OPERATION START
 
 ### Verifiable Control Properties
 
-- ✅ **Bounded generation** under BREX policy constraints — no unconstrained LLM freedom
+- ✅ **Bounded generation under BREX policy constraints** — no unconstrained LLM freedom
 - ✅ **Reproducibility profile** — seed/config/baseline locked, execution evidence logged
 - ✅ **Evidence-backed explainability** — all outputs carry provenance, contract ID, and decision trail
 - ✅ **Separation integrity** — pass/fail tests with signed audit logs
@@ -362,8 +368,8 @@ AEROSPACEMODEL delivers the state-of-the-art implementable stack for integrated 
 |-----------|------|
 | **ASIT gates** | Validate contract, baseline, authority, BREX, trace, safety |
 | **ASIGT actions** | Execute AI inference, SBOM generation, security scanning *after* gate validation |
-| **KDB** | Engineering intent, requirements, configuration baselines |
-| **IDB** | Validated, certified information products (AMM, SRM, IPC) |
+| **KDB** | Engineering intent, requirements, configuration baselines (LC01–LC10) |
+| **IDB** | Validated, certified information products — AMM, SRM, IPC (LC11–LC14) |
 
 ### Integrated Automation
 
@@ -412,29 +418,29 @@ A multi-agent ASIT-governed aerospace design intelligence system running on HPC 
 
 | Workflow | File | Purpose |
 |----------|------|---------|
-| **CI** | `ci.yml` | Lint, test, build on every push/PR |
-| **BREX Compliance** | `brex-compliance.yml` | Validate BREX decision rules |
-| **CNOT Agent Orchestration** | `cnot-agent-orchestration.yml` | Lifecycle gate simulation |
-| **Constitution Compliance** | `constitution-compliance.yml` | Digital Constitution checks |
-| **Contract Governance** | `contract-governance.yml` | Transformation contract validation |
-| **Marketplace Scan** | `marketplace-scan.yml` | GitHub Marketplace action audit |
-| **NGI Assessment** | `ngi-assessment.yml` | Next Generation Internet compliance |
-| **Release** | `release.yml` | Semantic versioning & publish |
-| **S1000D Validation** | `s1000d-validation.yml` | S1000D schema & BREX validation |
-| **Static Analysis** | `static.yml` | Type checking & code quality |
-| **Lifecycle Registry** | `validate_lifecycle_registry.yml` | LC phase registry integrity |
+| **CI** | [`ci.yml`](.github/workflows/ci.yml) | Lint, test, build on every push/PR |
+| **BREX Compliance** | [`brex-compliance.yml`](.github/workflows/brex-compliance.yml) | Validate BREX decision rules |
+| **CNOT Agent Orchestration** | [`cnot-agent-orchestration.yml`](.github/workflows/cnot-agent-orchestration.yml) | Lifecycle gate simulation |
+| **Constitution Compliance** | [`constitution-compliance.yml`](.github/workflows/constitution-compliance.yml) | Digital Constitution checks |
+| **Contract Governance** | [`contract-governance.yml`](.github/workflows/contract-governance.yml) | Transformation contract validation |
+| **Marketplace Scan** | [`marketplace-scan.yml`](.github/workflows/marketplace-scan.yml) | GitHub Marketplace action audit |
+| **NGI Assessment** | [`ngi-assessment.yml`](.github/workflows/ngi-assessment.yml) | Next Generation Internet compliance (70/100 PASS) |
+| **Release** | [`release.yml`](.github/workflows/release.yml) | Semantic versioning & publish |
+| **S1000D Validation** | [`s1000d-validation.yml`](.github/workflows/s1000d-validation.yml) | S1000D schema & BREX validation |
+| **Static Analysis** | [`static.yml`](.github/workflows/static.yml) | Type checking & code quality |
+| **Lifecycle Registry** | [`validate_lifecycle_registry.yml`](.github/workflows/validate_lifecycle_registry.yml) | LC phase registry integrity |
 
 ---
 
 ## Pipelines
 
-| Pipeline | Publication Type | Description |
-|----------|------------------|-------------|
-| **AMM** | AMM | Aircraft Maintenance Manual — system descriptions, procedures, troubleshooting |
-| **SRM** | SRM | Structural Repair Manual — damage limits, repairs, NDT |
-| **CMM** | CMM | Component Maintenance Manual — Tier-1 supplier documentation |
-| **IPC** | IPC | Illustrated Parts Catalog — exploded views, parts lists |
-| **DT Documentation** | DT_DOC | Digital Twin integrated — condition-based, event-driven, certification |
+| Pipeline | Publication Type | Description | File |
+|----------|------------------|-------------|------|
+| **AMM** | AMM | Aircraft Maintenance Manual — system descriptions, procedures, troubleshooting | [`amm_pipeline.yaml`](pipelines/amm_pipeline.yaml) |
+| **SRM** | SRM | Structural Repair Manual — damage limits, repairs, NDT | [`srm_pipeline.yaml`](pipelines/srm_pipeline.yaml) |
+| **CMM** | CMM | Component Maintenance Manual — Tier-1 supplier documentation | [`cmm_pipeline.yaml`](pipelines/cmm_pipeline.yaml) |
+| **IPC** | IPC | Illustrated Parts Catalog — exploded views, parts lists | [`ipc_pipeline.yaml`](pipelines/ipc_pipeline.yaml) |
+| **DT Documentation** | DT_DOC | Digital Twin integrated — condition-based, event-driven, certification | [`dt_documentation_pipeline.yaml`](pipelines/dt_documentation_pipeline.yaml) |
 
 ---
 
@@ -444,53 +450,55 @@ A multi-agent ASIT-governed aerospace design intelligence system running on HPC 
 
 | Milestone | Date | AEROSPACEMODEL Scope | Status |
 |-----------|------|---------------------|--------|
-| Prohibited practices (Art. 5) | 2 Feb 2025 | No vulnerability exploitation, no dark patterns | ✅ Aligned |
-| GPAI / governance obligations | 2 Aug 2025 | Transparency, documentation, risk management | ✅ Aligned |
-| Most obligations (Art. 6, 8–15) | 2 Aug 2026 | High-risk system compliance (conformity, QMS, logging) | 🔄 In progress |
-| High-risk AI in regulated products | 2 Aug 2027 | Embedded AI in aviation-certified systems | 📋 Planned |
+| **Prohibited practices** (Art. 5) | 2 Feb 2025 | No vulnerability exploitation, no dark patterns, no cognitive manipulation | ✅ Aligned |
+| **GPAI / governance obligations** (Art. 53) | 2 Aug 2025 | Transparency obligations, technical documentation, risk management systems | ✅ Aligned |
+| **Most obligations** (Art. 6, 8–15) | 2 Aug 2026 | High-risk system compliance: conformity assessment, QMS, human oversight, logging | 🔄 In progress |
+| **High-risk AI in regulated products** | 2 Aug 2027 | Embedded AI in aviation-certified systems under applicable certification basis | 📋 Planned |
 
-> AEROSPACEMODEL is aligned to AI Act implementation milestones, not claiming blanket compliance ahead of enforcement dates.
+> **Caveat:** AEROSPACEMODEL is aligned to AI Act implementation milestones, not claiming blanket compliance ahead of enforcement dates. Conformity assessment will be performed under applicable certification basis (CS-25, DO-178C, etc.) at product level.
 
 ### EASA AI Guidance
 
 | Reference | Nature | AEROSPACEMODEL Alignment |
 |-----------|--------|--------------------------|
-| EASA AI Roadmap 2.0 | Programmatic guidance | Architectural alignment; compliance demonstrated through project evidence under applicable certification basis |
-| Concept Paper Issue 2 | Proposed means of compliance | BREX governance, HITL boundaries, and provenance vectors designed to satisfy anticipated MOC |
-| NPA 2025-07 | Notice of Proposed Amendment | Formal response prepared — see [`Governance/NPA_2025-07_RESPONSE.md`](Governance/NPA_2025-07_RESPONSE.md) |
+| **EASA AI Roadmap 2.0** | Programmatic guidance (non-binding) | Architectural alignment; compliance demonstrated through project evidence under applicable certification basis |
+| **Concept Paper Issue 2** | Guidance/programmatic artifact | BREX governance, HITL boundaries, and provenance vectors designed to satisfy anticipated means of compliance (MOC) |
+| **NPA 2025-07** | Notice of Proposed Amendment | Formal response prepared — see [`Governance/NPA_2025-07_RESPONSE.md`](Governance/NPA_2025-07_RESPONSE.md) |
+
+> **Caveat:** EASA guidance documents are programmatic artifacts, not binding means of compliance (MOC). AEROSPACEMODEL demonstrates alignment through architectural design patterns and evidence generation capabilities. Final compliance is determined through formal certification basis under CS-25, Special Conditions, and applicable EASA/FAA directives.
 
 ### Digital Services Act (Regulation EU 2022/2065)
 
 Applicable where HCDS Charter controls mediate cognitive interaction:
 
-| Article | Requirement | AEROSPACEMODEL Control |
-|---------|-------------|----------------------|
-| Art. 25 | Anti-dark-pattern constraints | HCDS-005: Dark patterns must not be deployed (Charter Art. 4) |
-| Art. 26 | Ad transparency | HCDS-004: Assistant and ad systems must be separated (Charter Art. 6) |
-| Art. 28 | Protections for minors in profiling-based ad delivery | HCDS-001: User-level targeting requires explicit consent (Charter Art. 3) |
+| Article | Requirement | AEROSPACEMODEL Control | Charter Reference |
+|---------|-------------|------------------------|-------------------|
+| **Art. 25** | Anti-dark-pattern constraints | HCDS-005: Dark patterns must not be deployed | Charter Art. 4 (Cognitive Integrity) |
+| **Art. 26** | Ad transparency | HCDS-004: Assistant and ad systems must be functionally separated | Charter Art. 6 (Functional Separation) |
+| **Art. 28** | Protections for minors in profiling-based ad delivery | HCDS-001: User-level targeting requires explicit consent | Charter Art. 3 (Contextual Ads Default) |
 
 ### Additional Regulatory Alignment
 
-| Regulation | Scope |
-|------------|-------|
-| **GDPR** (Reg. EU 2016/679) | Data minimization, purpose limitation, explainability (Art. 5, 12–22) |
-| **DO-178C / DO-160** | Software certification, environmental testing |
-| **ARP4754A / ARP4761** | Systems development, safety assessment |
-| **CS-25** | Certification specifications for large aeroplanes |
+| Regulation | Scope | AEROSPACEMODEL Alignment |
+|------------|-------|--------------------------|
+| **GDPR** (Reg. EU 2016/679) | Data minimization, purpose limitation, explainability (Art. 5, 12–22) | Built-in data governance, provenance tracking, explainability vectors |
+| **DO-178C / DO-160** | Software certification, environmental testing | Traceability support, evidence generation for certification artifacts |
+| **ARP4754A / ARP4761** | Systems development, safety assessment | Lifecycle phase mapping, safety gate validation, FMEA support |
+| **CS-25** | Certification specifications for large aeroplanes | Special Conditions framework (SC-28-H2-001, SC-71-FUELCELL-001, SC-AI-ASSURANCE-001) |
 
 ---
 
 ## Standards Alignment
 
-| Domain | Standard |
-|--------|----------|
-| Technical Publications | **S1000D (Issue 4.x / 5.0)** |
-| System Structure | **ATA iSpec 2200** |
-| Systems Engineering | **ARP4754A** |
-| Safety | **ARP4761** |
-| Software Assurance | **DO-178C** (traceability support) |
-| Environmental Testing | **DO-160** |
-| Quality | **AS9100-compatible governance** |
+| Domain | Standard | Version | Purpose |
+|--------|----------|---------|---------|
+| Technical Publications | **S1000D** | Issue 4.x / 5.0 | Data module structure, BREX validation |
+| System Structure | **ATA iSpec 2200** | Latest | Chapter-based system decomposition |
+| Systems Engineering | **ARP4754A** | Current | Guidelines for development of civil aircraft and systems |
+| Safety | **ARP4761** | Current | Safety assessment process |
+| Software Assurance | **DO-178C** | Current | Software traceability and certification support |
+| Environmental Testing | **DO-160** | Latest | Environmental conditions and test procedures |
+| Quality | **AS9100** | Compatible | Quality management system for aviation |
 
 ---
 
@@ -498,16 +506,22 @@ Applicable where HCDS Charter controls mediate cognitive interaction:
 
 AEROSPACEMODEL serves as the **transformation and intelligence engine** for the [AMPEL360-Q100](https://github.com/AmedeoPelliccia/AMPEL360-Q100) Full Digital Information Twin Architecture (FIDITA).
 
+**Integration Points:**
+- **Digital Twin Layer:** Real-time operational data → AEROSPACEMODEL → condition-based documentation
+- **Lifecycle Continuity:** AMPEL360 design intent → AEROSPACEMODEL TLI governance → certified publications
+- **Governance Alignment:** Shared BREX rules, lifecycle gates, and provenance tracking
+
 ---
 
 ## Who This Is For
 
-- **Aircraft OEMs** — new or derivative programs
-- **Advanced air mobility & hydrogen aircraft developers** — novel technology certification
-- **MRO organisations** — modernising digital publications
-- **Tier-1 suppliers** — delivering certifiable documentation
-- **Certification & compliance engineering teams** — evidence continuity
+- **Aircraft OEMs** — new or derivative programs requiring digital continuity
+- **Advanced air mobility & hydrogen aircraft developers** — novel technology certification (LH₂, fuel cells, AI/ML)
+- **MRO organisations** — modernising digital publications with S1000D/ATA compliance
+- **Tier-1 suppliers** — delivering certifiable component documentation
+- **Certification & compliance engineering teams** — evidence continuity and audit trails
 - **AI governance researchers** — EASA / EU AI Act compliance frameworks
+- **Digital transformation leaders** — implementing governed AI in regulated industries
 
 ---
 
@@ -524,10 +538,24 @@ AEROSPACEMODEL serves as the **transformation and intelligence engine** for the 
 | [`docs/CONTENT_PIPELINE.md`](docs/CONTENT_PIPELINE.md) | Content pipeline architecture |
 | [`docs/NGI_POLICY_SYSTEM.md`](docs/NGI_POLICY_SYSTEM.md) | Next Generation Internet policy framework |
 | [`docs/NGI_QUICKSTART.md`](docs/NGI_QUICKSTART.md) | NGI quick start guide |
+| [`docs/NGI_IMPROVEMENT_SUMMARY.md`](docs/NGI_IMPROVEMENT_SUMMARY.md) | NGI assessment improvement (63→70/100) |
 | [`docs/HCDS_AVIATION_INTEGRATION.md`](docs/HCDS_AVIATION_INTEGRATION.md) | Human-Centric Digital Systems × Aviation |
 | [`docs/HCDS_QUICK_START_GUIDE.md`](docs/HCDS_QUICK_START_GUIDE.md) | HCDS Charter implementation guide |
 | [`docs/AMPEL_TECHNICAL_VALIDATION_DOSSIER.md`](docs/AMPEL_TECHNICAL_VALIDATION_DOSSIER.md) | AMPEL360 technical validation dossier |
 | [`docs/IMPLEMENTATION_SUMMARY.md`](docs/IMPLEMENTATION_SUMMARY.md) | Implementation summary & status |
+| [`docs/S1000D_TEMPLATE_GUIDE.md`](docs/S1000D_TEMPLATE_GUIDE.md) | S1000D template usage guide |
+| [`docs/ASIGT_PIPELINE_IMPLEMENTATION.md`](docs/ASIGT_PIPELINE_IMPLEMENTATION.md) | ASIGT pipeline implementation details |
+| [`docs/ATA_27_BREX_INSTRUCTIONS.md`](docs/ATA_27_BREX_INSTRUCTIONS.md) | ATA 27 Flight Controls BREX instructions |
+| [`docs/ATA_28_BREX_INSTRUCTIONS.md`](docs/ATA_28_BREX_INSTRUCTIONS.md) | ATA 28 Fuel System BREX instructions |
+| [`docs/sustainability/RESOURCE_METRICS.md`](docs/sustainability/RESOURCE_METRICS.md) | Resource consumption metrics and baseline |
+| [`docs/sustainability/OPTIMIZATION_STRATEGY.md`](docs/sustainability/OPTIMIZATION_STRATEGY.md) | Sustainability optimization strategy |
+| [`docs/sustainability/CARBON_IMPACT_ANALYSIS.md`](docs/sustainability/CARBON_IMPACT_ANALYSIS.md) | Carbon footprint analysis (438 kg CO₂e/year) |
+| [`docs/verification/KPI_TRACKING.md`](docs/verification/KPI_TRACKING.md) | Verification KPI tracking (97.5% traceability) |
+| [`docs/verification/MONITORING_DASHBOARD.md`](docs/verification/MONITORING_DASHBOARD.md) | Real-time verification monitoring dashboard |
+| [`docs/verification/METRICS.md`](docs/verification/METRICS.md) | Verification metrics and targets |
+| [`docs/security/KPI_TRACKING.md`](docs/security/KPI_TRACKING.md) | Security KPI tracking (0.8 vulnerabilities/KLOC) |
+| [`docs/security/MONITORING.md`](docs/security/MONITORING.md) | Security monitoring and alerting |
+| [`docs/security/METRICS.md`](docs/security/METRICS.md) | Security metrics and targets |
 
 ---
 
