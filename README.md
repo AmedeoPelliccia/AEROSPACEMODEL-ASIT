@@ -547,6 +547,7 @@ AEROSPACEMODEL serves as the **transformation and intelligence engine** for the 
 | [`docs/ASIGT_PIPELINE_IMPLEMENTATION.md`](docs/ASIGT_PIPELINE_IMPLEMENTATION.md) | ASIGT pipeline implementation details |
 | [`docs/ATA_27_BREX_INSTRUCTIONS.md`](docs/ATA_27_BREX_INSTRUCTIONS.md) | ATA 27 Flight Controls BREX instructions |
 | [`docs/ATA_28_BREX_INSTRUCTIONS.md`](docs/ATA_28_BREX_INSTRUCTIONS.md) | ATA 28 Fuel System BREX instructions |
+| [`docs/specifications/README.md`](docs/specifications/README.md) | NIB Technical Specification generator (AEROSPACEMODEL-ASIT-NIB-SPEC-001) |
 | [`docs/sustainability/RESOURCE_METRICS.md`](docs/sustainability/RESOURCE_METRICS.md) | Resource consumption metrics and baseline |
 | [`docs/sustainability/OPTIMIZATION_STRATEGY.md`](docs/sustainability/OPTIMIZATION_STRATEGY.md) | Sustainability optimization strategy |
 | [`docs/sustainability/CARBON_IMPACT_ANALYSIS.md`](docs/sustainability/CARBON_IMPACT_ANALYSIS.md) | Carbon footprint analysis (438 kg CO₂e/year) |
@@ -568,7 +569,7 @@ AEROSPACEMODEL serves as the **transformation and intelligence engine** for the 
 | 3 | **Transformation Contract** | Machine-actionable specification governing cross-domain information transformation |
 | 4 | **Top-Level Instruction (TLI)** | Domain-licensed instruction defining permitted/constrained/prohibited data actions — see [Digital Constitution](Model_Digital_Constitution.md) |
 | 5 | **SPCA** | Software Programming Chain Application — enforces transformation contracts |
-| 6 | **Non-Inference Boundary** | Execution boundary where automation halts due to irreducible ambiguity |
+| 6 | **Non-Inference Boundary (NIB)** | Execution boundary where automation halts due to irreducible ambiguity — see [NIB Spec Generator](docs/specifications/README.md) |
 | 7 | **HITL** | Human-in-the-Loop — auditable human decision at non-inference boundaries |
 | 8 | **Multiagent Domino** | Cascading failure from chained agents without contract gates |
 | 9 | **ABDB** | Aircraft Blended Digital Body — procedural, semantic, authoritative System of Systems |
