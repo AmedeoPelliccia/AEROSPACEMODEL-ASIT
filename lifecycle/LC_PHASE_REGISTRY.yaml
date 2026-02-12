@@ -365,15 +365,15 @@ ops_phases:
     phase_type: "OPS"
     description: "Authoritative maintenance source data and evidence"
     packages:
-      - "Maintenance_Source"
-      - "Repair_Source"
-      - "Overhaul_Source"
+      - "MAINTENANCE_SOURCE"
+      - "REPAIR_SOURCE"
+      - "OVERHAUL_SOURCE"
     sub_packages:
-      Maintenance_Source:
+      MAINTENANCE_SOURCE:
         EVIDENCE: "Maintenance evidence and records"
-      Repair_Source:
+      REPAIR_SOURCE:
         EVIDENCE: "Repair evidence and records"
-      Overhaul_Source:
+      OVERHAUL_SOURCE:
         EVIDENCE: "Overhaul evidence and records"
     baseline: null
     baseline_state: "none"
