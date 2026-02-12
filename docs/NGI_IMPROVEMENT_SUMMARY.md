@@ -137,17 +137,17 @@ Successfully improved the NGI (Next Generation Internet) Policy Compliance asses
 
 | File | Lines | Purpose |
 |------|-------|---------|
-| docs/sustainability/RESOURCE_METRICS.md | ~1,200 | Per-service resource inventory and metrics |
-| docs/sustainability/OPTIMIZATION_STRATEGY.md | ~800 | 30% reduction strategy with roadmap |
-| docs/sustainability/CARBON_IMPACT_ANALYSIS.md | ~1,000 | 438 kg CO2e/year baseline and analysis |
-| docs/verification/KPI_TRACKING.md | ~900 | 10 strategic verification KPIs |
-| docs/verification/MONITORING_DASHBOARD.md | ~1,100 | Real-time monitoring infrastructure |
-| docs/verification/METRICS.md | ~850 | Comprehensive metrics reference |
-| docs/security/KPI_TRACKING.md | ~900 | Security KPIs and SLAs |
-| docs/security/MONITORING.md | ~1,000 | 24/7 threat detection system |
-| docs/security/METRICS.md | ~750 | Security metrics and benchmarking |
+| docs/sustainability/RESOURCE_METRICS.md | 155 | Per-service resource inventory and metrics |
+| docs/sustainability/OPTIMIZATION_STRATEGY.md | 235 | 30% reduction strategy with roadmap |
+| docs/sustainability/CARBON_IMPACT_ANALYSIS.md | 292 | 438 kg CO2e/year baseline and analysis |
+| docs/verification/KPI_TRACKING.md | 326 | 10 strategic verification KPIs |
+| docs/verification/MONITORING_DASHBOARD.md | 407 | Real-time monitoring infrastructure |
+| docs/verification/METRICS.md | 463 | Comprehensive metrics reference |
+| docs/security/KPI_TRACKING.md | 464 | Security KPIs and SLAs |
+| docs/security/MONITORING.md | 483 | 24/7 threat detection system |
+| docs/security/METRICS.md | 442 | Security metrics and benchmarking |
 
-**Total**: 9 documents, ~8,500 lines
+**Total**: 9 documents, 3,267 lines
 
 ## Key Metrics Established
 

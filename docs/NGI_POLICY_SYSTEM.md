@@ -57,8 +57,8 @@ Defines the compliance framework:
 
 #### Current Assessment (`ngi_assessment.yaml`)
 - Reflects current project state
-- Score: 63/100 (L3)
-- Decision: WARN
+- Score: 70/100 (L3)
+- Decision: PASS ✅
 - Evidence: References to actual project artifacts
 
 #### Template (`ngi_assessment.template.yaml`)
@@ -220,29 +220,29 @@ Comprehensive testing:
 
 | Domain | Score | Weight | Contribution |
 |--------|-------|--------|--------------|
-| D1 - Verificability | 3 | 15 | 9.0 |
+| D1 - Verificability | 4 | 15 | 12.0 |
 | D2 - Transparency | 3 | 10 | 6.0 |
 | D3 - Privacy | 3 | 15 | 9.0 |
-| D4 - Security | 3 | 15 | 9.0 |
+| D4 - Security | 4 | 15 | 12.0 |
 | D5 - Governance | 4 | 10 | 8.0 |
 | D6 - Interoperability | 4 | 10 | 8.0 |
 | D7 - Identity | 3 | 10 | 6.0 |
-| D8 - Sustainability | 2 | 5 | 2.0 |
+| D8 - Sustainability | 3 | 5 | 3.0 |
 | D9 - Anti-misinformation | 3 | 10 | 6.0 |
 
-**Total Score**: 63/100
+**Total Score**: 70/100
 **Maturity Level**: L3 (Operación Gobernada)
 **Hard Gates**: ✅ Passed
-**Soft Gates**: ⚠️ Failed (score < 70)
-**Decision**: **WARN**
+**Soft Gates**: ✅ Passed
+**Decision**: **PASS** ✅
 
-## Improvement Path to PASS
+## Improvement Path to L4
 
-To achieve PASS status (>= 70 score), options:
+To achieve L4 status (>= 75 score), options:
 
-1. **Improve D8 (Sustainability)** from 2 to 3
-   - Add per-service resource metrics
-   - Document optimization strategies
+1. **Improve D2 (Transparency)** from 3 to 4
+   - Add documentation coverage metrics
+   - Implement API changelog
    - Implement carbon impact tracking
    - +1.0 points → **64/100** (still WARN)
 

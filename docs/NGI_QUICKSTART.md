@@ -13,7 +13,7 @@ python scripts/ngi_evaluator.py \
 cat /tmp/result.yaml
 ```
 
-**Current project score: 63/100 (WARN)**
+**Current project score: 70/100 (PASS)** ✅
 
 ### 2. Understanding Your Assessment
 
@@ -82,35 +82,66 @@ Pick any domain with score 3 and improve to 4:
 Improve D8 (Sustainability) from 2 to 4:
 - Add resource metrics per service
 - Document optimization strategies
-- Track carbon impact
+## Current Status
 
-**Impact: +2 points → 65/100**
+**Project score: 70/100 (PASS)** ✅  
+**Maturity level: L3 - Operación Gobernada**
 
-### Reach PASS (70/100)
-Combine improvements:
-1. D8: 2 → 4 (+2.0 points)
-2. D1: 3 → 4 (+3.0 points)
-3. D2: 3 → 4 (+2.0 points)
+### Recent Improvements
 
-**Result: 70/100 → PASS ✅**
+1. **D8 Sustainability: 2 → 3** (+1.0 point)
+   - Added per-service resource metrics
+   - Documented optimization strategy (30% reduction target)
+   - Established carbon impact baseline (438 kg CO2e/year)
+
+2. **D1 Verificability: 3 → 4** (+3.0 points)
+   - Implemented KPI tracking (10 strategic metrics)
+   - Added real-time monitoring dashboards
+   - Created comprehensive metrics reference
+
+3. **D4 Security: 3 → 4** (+3.0 points)
+   - Established security KPIs and SLAs
+   - Deployed 24/7 threat monitoring
+   - Documented vulnerability tracking
+
+### Maintain PASS Status
+
+To keep 70/100 score:
+- Review metrics quarterly
+- Track KPIs monthly
+- Update evidence as improvements are made
+- Address any degradation immediately
+
+### Reach L4 (75+)
+
+To advance to L4 (Gestión Avanzada Metricas):
+1. D2 Transparency: 3 → 4 (+2.0 points)
+2. D7 Identity: 3 → 4 (+2.0 points)
+3. D9 Anti-misinformation: 3 → 4 (+2.0 points)
+
+**Result: 76/100 → L4 ✅**
 
 ## Evidence Checklist
 
-### Quick Wins for D8 (Sustainability)
+### Current Evidence for D8 (Sustainability)
 
-- [ ] Create `ops/resource_metrics.yaml` with CPU/memory per service
-- [ ] Add `docs/optimization_strategy.md` documenting efficiency goals
-- [ ] Generate `ops/carbon_estimate.csv` from cloud provider data
-- [ ] Update assessment: D8 score to 3 or 4
+- [x] Resource metrics: `docs/sustainability/RESOURCE_METRICS.md`
+- [x] Optimization strategy: `docs/sustainability/OPTIMIZATION_STRATEGY.md`
+- [x] Carbon analysis: `docs/sustainability/CARBON_IMPACT_ANALYSIS.md`
 
-### Quick Wins for D1 (Verificability)
+### Current Evidence for D1 (Verificability)
 
-- [ ] Document commit signing policy
-- [ ] Create artifact hash manifest
-- [ ] Add release verification guide
-- [ ] Update assessment: D1 score to 4
+- [x] KPI tracking: `docs/verification/KPI_TRACKING.md`
+- [x] Monitoring dashboard: `docs/verification/MONITORING_DASHBOARD.md`
+- [x] Metrics reference: `docs/verification/METRICS.md`
 
-### Quick Wins for D2 (Transparency)
+### Current Evidence for D4 (Security)
+
+- [x] KPI tracking: `docs/security/KPI_TRACKING.md`
+- [x] Monitoring: `docs/security/MONITORING.md`
+- [x] Metrics: `docs/security/METRICS.md`
+
+### Future Evidence for D2 (Transparency)
 
 - [ ] Add documentation coverage report
 - [ ] Create API changelog

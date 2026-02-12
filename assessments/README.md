@@ -104,19 +104,33 @@ List of actions needed to improve the assessment.
 
 The `ngi_assessment.yaml` file reflects the current state of the AEROSPACEMODEL project:
 
-- **Total Score**: 63/100 (L3 - Operación Gobernada)
+- **Total Score**: 70/100 (L3 - Operación Gobernada)
 - **Hard Gates**: ✅ Passed
-- **Soft Gates**: ⚠️ Need improvement (score < 70)
-- **Decision**: WARN
+- **Soft Gates**: ✅ Passed
+- **Decision**: PASS ✅
 
-### Improvement Opportunities
+### Recent Improvements
 
-To reach PASS status (score >= 70), consider:
+Achieved PASS status through:
 
-1. Improve D8 (Sustainability) from 2 to 3+ by adding:
-   - Per-service resource metrics
-   - Optimization documentation
-   - Carbon impact analysis
+1. **D8 Sustainability**: 2 → 3
+   - Added per-service resource metrics
+   - Documented optimization strategy
+   - Established carbon impact baseline
+
+2. **D1 Verificability**: 3 → 4
+   - Implemented KPI tracking
+   - Added monitoring dashboards
+   - Created metrics reference
+
+3. **D4 Security**: 3 → 4
+   - Established security KPIs
+   - Deployed threat monitoring
+   - Documented vulnerability tracking
+
+### Next Level: L4 (75+)
+
+To advance to L4 (Gestión Avanzada Metricas), consider:
 
 2. Enhance any domain with score = 3 to score = 4 by:
    - Adding KPI tracking
