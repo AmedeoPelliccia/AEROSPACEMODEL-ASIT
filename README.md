@@ -1,281 +1,90 @@
-# Abstract  
-**Author:** Amedeo Pelliccia
-
-Prior to the availability of generative artificial intelligence, system-level understanding depended on explicit physics-based hardware models, mathematically grounded software execution, and tightly controlled data pipelines. In such environments, embedding was equivalent to execution: intelligence emerged only through tightly coupled runtime behavior, where every state transition was explicit and traceable. Traditional aerospace systems operated within deterministic boundaries, and any deviation required human intervention or formal change control.
-
-The rapid adoption of loosely integrated, multi-system artificial intelligence architectures—often characterized by disconnected knowledge meshes, fragmented identity layers, and high-latency synchronization points—has introduced significant structural and operational complexity. These systems frequently achieve regulatory compliance without delivering measurable improvements in functional performance, reliability, or lifecycle efficiency. The result is increased verification burden, inconsistent traceability, and fragile operational handoffs that degrade overall system integrity.
-
-This work proposes a post–generative AI operational framework centered on **Top-Level Instructions (TLI)** as the foundation for control, governance, and lifecycle orchestration. TLIs are domain-licensed, context-specific decision boundaries that define authorization scopes and deterministic behavior envelopes. Within this framework, knowledge pathways are modularized and serviced, enabling automation through **pre-gated decision points** where deterministic processes are explicitly identified and executed. **Inference** is applied only when irreducible ambiguity is encountered; at that point, a formally defined **non-inference boundary** triggers a **Human-in-the-Loop (HITL)** escalation. By structurally limiting inference and exposing system assumptions, this approach preserves auditability, safety, and operational determinism within state-of-the-art implementable stacks.
-
-A **Work Breakdown Structure (WBS)** is formalized as a computable ontology and used to configure development environments that deliver contractible capabilities via ontological code sources encompassing engineering mathematics, physics constraints, and domain semantics. Within this framework, **truth** is defined through versioned data-to-knowledge baselines with explicit effectivity and configuration semantics, and **AutoML graph structures** support audience-customizable user interfaces without altering authoritative constraints. Transformation logic binds these layers into an operational context, enabling a persistent supersystemic identity layer capable of managing contextual state, decision provenance, and execution boundaries. The resulting architecture provides a scalable foundation for advanced automation in safety-critical and industrial domains, approaching a coherent, system-level awareness that refrains from reliance on unconstrained inference.
-
-> **📚 For complete EASA/FAA regulatory mappings of these terms, see [EASA/FAA Vocabulary Mapping](docs/EASA_FAA_VOCABULARY_MAPPING.md)**  
-> **📊 For visual ontology diagrams, see [Ontology Diagram](docs/ONTOLOGY_DIAGRAM.md)**
-
----
-
-# Logical Glossary of Enabling Concepts
-
-This glossary defines each enabling technology and concept introduced in this work, ordered from **foundational primitives** to **execution mechanisms** and **system-of-systems behavior**. Each term includes a concise problem statement and the specific role it plays within the broader architectural framework.
-
----
-
-## 1. Digital Continuity  
-**Definition:**  
-The capability to preserve identity, configuration, authority, semantics, and evidence of aircraft data across all lifecycle stages—spanning design, certification, production, operation, sustainment, and feedback integration.
-
-**Role:**  
-Prevents loss of traceability when information transits between tools, organizational boundaries, or lifecycle phases.
-
----
-
-## 2. Broken Bridge / Broken Link  
-**Definition:**  
-A structural discontinuity at a process or tool interface where one or more core invariants—identity, configuration, semantics, authority, evidence—are lost, degraded, or inconsistently interpreted.
-
-**Impact:**  
-Computational pipelines deterministically replicate broken assumptions, turning local disruptions into system-wide integrity failures.
-
----
-
-## 3. Transformation Contract  
-**Definition:**  
-A formal, machine-actionable specification governing how information is to be transformed between lifecycle contexts or domains.
-
-**Core Components:**  
-- Identity mapping rules  
-- Configuration and effectivity constraints  
-- Semantic constraints (taxonomies, units, roles)  
-- Authority attribution (master vs derived)  
-- Evidence and provenance requirements
-
----
-
-## 4. Top-Level Instruction (TLI)  
-**Definition:**  see [Model_Digital_Constitution.md](Model_Digital_Constitution.md)
-/Model_Digital_Constitution.md
-A domain-licensed, authorized instruction that specifies what actions on data are permitted, constrained, or prohibited.
-
-**Key Rule:**  
-If a TLI does not explicitly authorize an action or transformation, the action must not occur within the governed execution environment.
-
----
-
-## 5. SPCA – Software Programming Chain Application  
-**Definition:**  
-The executable chain responsible for enforcing transformation contracts across heterogeneous software ecosystems (PLM, CAD, publication, ERP, MRO, etc.).
-
-**Responsibilities:**  
-- Executes transformation steps according to contract constraints  
-- Validates identity, configuration, semantic, authority invariants  
-- Logs provenance, decision boundaries, and context  
-- Stops execution at non-inference boundaries and triggers HITL
-
----
-
-## 6. Non-Inference Boundary  
-**Definition:**  
-A formally defined execution boundary where automation terminates because ambiguity cannot be resolved deterministically.
-
-**Behavior:**  
-Execution halts, state remains uncollapsed, and Human-in-the-Loop escalation is required.
-
----
-
-## 7. Human-in-the-Loop (HITL)  
-**Definition:**  
-An explicit, auditable human decision point invoked at predefined non-inference boundaries where deterministic computation is insufficient.
-
----
-
-## 8. Multiagent Domino  
-**Definition:**  
-A cascading failure pattern in which locally valid outputs from chained agents propagate upstream errors into global lifecycle inconsistency.
-
-**Root Cause:**  
-Absence of explicit contract gates between agents.
-
----
-
-## 9. ABDB – Aircraft Blended Digital Body  
-**Definition:**  
-A System of Systems representing the twin process of the aircraft lifecycle—not geometric alone, but procedural, semantic, and authoritative.
-
-**Scope:**  
-Engineering intent, configuration baselines, certification evidence, operational artifacts, in-service feedback, all bound into a unified digital body.
-
----
-
-## 10. Twin Process  
-**Definition:**  
-A digital construct that mirrors how the aircraft is designed, certified, operated, sustained, and evolved.
-
----
-
-## 11. System of Systems (SoS)  
-**Definition:**  
-An architecture in which independently managed systems are orchestrated through governance mechanisms to produce holistic lifecycle capabilities.
-
----
-
-## 12. ATA-Level Structuring  
-**Definition:**  
-Decomposition of transformation logic and contracts according to ATA chapters, enabling domain-aligned governance, certification compatibility, and incremental deployment.
-
----
-
-## 13. ASIT – Aircraft/System Information Transformer  
-**Definition:**  
-A deterministic component that applies rule-based conversions where inference is unnecessary, fully governed and reproducible.
-
----
-
-## 14. ASIGT – Aircraft/System Information Generative Transformer  
-**Definition:**  
-A contract-governed generative transformer and transponder that produces and re-emits lifecycle artifacts within ATA-scoped boundaries.
-
-**Properties:**  
-- Derivative, not creative  
-- Authority-preserving  
-- Traceability ensured
-
----
-
-## 15. Generative (Regulator-Safe Meaning)  
-**Definition:**  
-Constrained, contract-bound generation that is reproducible, auditable, and non-speculative.
-
-**Forbidden:**  
-Guessing, inventing facts, or filling authority gaps.
-
----
-
-## 16. Quantum-Circuit–Inspired Logic  
-**Definition:**  
-A control-theoretic execution model in which lifecycle transformations behave like explicit gates rather than implicit data flows.
-
----
-
-## 17. CNOT – Control Neural Origin Transaction  
-**Definition:**  
-A transformation gate that executes only when the authoritative control state is valid and authorized.
-
-**Principle:**  
-If control assertions fail, the gate does not fire.
-
----
-
-## 18. State Collapse  
-**Definition:**  
-The explicit, authorized resolution of lifecycle ambiguity into a concrete artifact.
-
----
-
-## 19. Provenance Vector  
-**Definition:**  
-A machine-readable record linking outputs to sources, transformation contracts, execution context, and human decisions.
-
----
-
-## 20. Revolution Without Disruption  
-**Definition:**  
-Lifecycle transformation achieved through governed integration rather than replacement of certified tools, preserving program stability and regulatory approvals.
-
----
-
-## Final Synthesis  
-These concepts define a governed, contract-driven digital continuity architecture in which the **Aircraft Blended Digital Body (ABDB)** provides system-level coherence, the **SPCA** executes governed transformations, **ASIT** and **ASIGT** function as ATA-scoped transformer gates, and no information state is generated, propagated, or collapsed without explicit authority, traceability, and execution control.
+<p align="center">
+  <strong>AEROSPACEMODEL</strong><br/>
+  <em>European-governed digital continuity infrastructure for deterministic, traceable aerospace lifecycle transformations.</em>
+</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Version-2.0.0-blue.svg" alt="Version">
-  <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License">
+  <img src="https://img.shields.io/badge/License-CC0%201.0-lightgrey.svg" alt="License">
+  <img src="https://img.shields.io/badge/Python-3.9%2B-green" alt="Python">
   <img src="https://img.shields.io/badge/S1000D-Issue%205.0-teal" alt="S1000D">
   <img src="https://img.shields.io/badge/ATA-iSpec%202200-orange" alt="ATA">
-  <img src="https://img.shields.io/badge/Traceability-Evidence%20Ready-green" alt="Traceability Evidence Ready">
+  <img src="https://img.shields.io/badge/Traceability-Evidence%20Ready-green" alt="Traceability">
+  <img src="https://img.shields.io/badge/EU%20AI%20Act-Milestone%20Aligned-purple" alt="EU AI Act">
+  <img src="https://img.shields.io/badge/GAIA--X-Sovereign-blue" alt="GAIA-X">
 </p>
-
-
-### Integration with AMPEL360
-
-AEROSPACEMODEL serves as the **transformation and intelligence engine** for the [AMPEL360-Q100](https://github.com/AmedeoPelliccia/AMPEL360-Q100) Full Digital Information Twin Architecture (FIDITA):
-
-### Design Principles
-
-- **Certification-Grade Provenance** — Full traceability from source knowledge to published output
-- **Standards Compliance** — Native alignment with S1000D, ATA iSpec 2200, and aerospace data exchange standards
-- **Controlled Generation** — AI outputs are bounded by validated knowledge domains and explicit transformation contracts
-- **Audit-Ready Governance** — Every AI-assisted transformation is logged, attributable, and reversible
-
-### State-of-the-Art: GitHub Marketplace-Baselined Integrated Automation
-
-AEROSPACEMODEL delivers the **state-of-the-art implementable stack** for integrated automation in aerospace lifecycle process gates through a **CNOT-agent lifecycle simulation architecture**. This marketplace-baselined solution orchestrates 18+ GitHub Marketplace actions as deterministic lifecycle transition agents, operating under the dual-AI governance of **ASIT + ASIGT** with dual database management (**KDB → IDB** transformation).
-
-#### Dual AI Model Architecture
-
-The marketplace integration operates within the **ASIT + ASIGT dual AI model**:
-
-- **ASIT (Aircraft Systems Information Transponder)** — Governance layer that validates lifecycle gates (contract, baseline, authority, BREX, trace, safety) and authorizes marketplace action execution
-- **ASIGT (Aircraft Systems Information Generative Transponder)** — Generation layer that executes marketplace actions (AI inference, SBOM generation, security scanning) only after ASIT gate validation
-
-#### Dual Database Management
-
-The system implements **KDB → IDB transformation** through marketplace-integrated lifecycle gates:
-
-- **KDB (Knowledge Database)** — Engineering intent, requirements, and configuration baselines flow through CNOT-gate validation
-- **IDB (Information Database)** — Validated, certified information products (AMM, SRM, IPC) generated through marketplace-orchestrated transformations
-- **Marketplace Actions as Transformation Agents** — GitHub Actions execute SBOM generation, AI-powered content creation, security validation, and policy enforcement at each lifecycle gate
-
-#### Integrated Automation Capabilities
-
-- **Automated Lifecycle Transitions** — CNOT-gate agents manage transitions (design→verification→certification→production→operation→maintenance) with marketplace action orchestration
-- **Marketplace Action Integration** — 18+ cataloged GitHub Actions for AI inference, SBOM generation, security scanning, and policy enforcement, all governed by ASIT rules
-- **Provenance Tracking** — Full audit trails through SLSA attestations and provenance vectors linking KDB sources to IDB outputs
-- **Policy-Driven Governance** — OPA, GHAS, and BREX policy engines enforce compliance boundaries at each lifecycle gate
-- **Deterministic Execution** — Quantum-circuit-inspired CNOT gates ensure no marketplace action fires until all control assertions pass
-
-> **📖 For complete documentation:**
-> - [CNOT Agent Lifecycle Architecture](docs/CNOT_AGENT_LIFECYCLE_ARCHITECTURE.md) — Reference architecture and dual-AI integration patterns
-> - [GitHub Marketplace Actions Catalog](docs/GITHUB_MARKETPLACE_ACTIONS_CATALOG.md) — 18 actions with licensing and compliance notes
-> - [CNOT Gates Architecture](docs/CNOT_GATES_ARCHITECTURE.md) — Quantum-inspired gate control logic
-
-This marketplace-baselined solution represents **the first certification-ready, fully-governed integration of GitHub Marketplace automation** into aerospace lifecycle management, bridging the gap between engineering knowledge (KDB) and operational information (IDB) through deterministic, auditable AI-assisted transformations.
 
 ---
 
-### ASIT + ASIGT: Dual-Layer Architecture
+## Table of Contents
 
-The system is composed of two strictly separated but tightly integrated layers:
+- [Overview](#overview)
+- [Why AEROSPACEMODEL](#why-aerospacemodel)
+- [Core Architecture — ASIT + ASIGT](#core-architecture--asit--asigt)
+- [Architecture at a Glance](#architecture-at-a-glance)
+- [Key Capabilities](#key-capabilities)
+- [Repository Structure](#repository-structure)
+- [Getting Started](#getting-started)
+- [OPT-IN Framework (TLI v2.1)](#opt-in-framework-tli-v21)
+- [Lifecycle Registry (LC01–LC14)](#lifecycle-registry-lc01lc14)
+- [Governance Stack](#governance-stack)
+- [BREX-Driven Instruction System](#brex-driven-instruction-system)
+- [CNOT-Gate Lifecycle Automation](#cnot-gate-lifecycle-automation)
+- [HPC + Quantum + Agentic MDO](#hpc--quantum--agentic-mdo)
+- [CI/CD & GitHub Actions Workflows](#cicd--github-actions-workflows)
+- [Pipelines](#pipelines)
+- [Regulatory Applicability Matrix](#regulatory-applicability-matrix)
+- [Standards Alignment](#standards-alignment)
+- [Integration with AMPEL360](#integration-with-ampel360)
+- [Who This Is For](#who-this-is-for)
+- [Documentation Index](#documentation-index)
+- [Enabling Concepts — Glossary](#enabling-concepts--glossary)
+- [Contributing](#contributing)
+- [License](#license)
 
-- **ASIT — Aircraft Systems Information Transponder**  
-  The **structural, governance, and lifecycle authority layer**
+---
 
-- **ASIGT — Aircraft Systems Information Generative Transponder**  
-  The **content generation layer**, operating *exclusively under ASIT control*
+## Overview
 
-> **ASIT defines the information universe.  
-> ASIGT generates content inside it.**
+**AEROSPACEMODEL** provides a European-governed digital continuity infrastructure enabling deterministic, traceable lifecycle transformations with explicit human oversight. It is aligned with **EASA certification principles**, **GAIA-X data sovereignty**, and the **EU AI Act** risk-based approach following its implementation milestones.
 
----gh
+The framework is centred on **Top-Level Instructions (TLI)** as the foundation for control, governance, and lifecycle orchestration. TLIs are domain-licensed, context-specific decision boundaries that define authorization scopes and deterministic behaviour envelopes. Inference is applied *only* at formally defined **non-inference boundaries**, which trigger mandatory **Human-in-the-Loop (HITL)** escalation.
 
-## What Problem It Solves
+> **Author:** Amedeo Pelliccia
+
+---
+
+## Why AEROSPACEMODEL
 
 Aerospace programs struggle not with *lack of data*, but with:
 
-- Loss of traceability between engineering and operations  
-- Manual, error-prone publication generation  
-- Governance gaps between design, certification, and MRO  
-- Reinterpretation of engineering intent in downstream documents  
+| Problem | Impact |
+|---------|--------|
+| **Loss of traceability** between engineering and operations | Certification evidence gaps |
+| **Manual, error-prone** publication generation | Costly rework, delayed deliveries |
+| **Governance gaps** between design, certification, and MRO | Regulatory non-compliance |
+| **Reinterpretation of intent** in downstream documents | Safety-critical information drift |
 
-**ASIT-ASIGT eliminates these breaks** by enforcing a single, governed digital thread from **SSOT engineering truth** to **operational information products**.
+**AEROSPACEMODEL eliminates these breaks** by enforcing a single, governed digital thread from **SSOT engineering truth** to **operational information products** — with every transformation logged, auditable, and reversible.
 
 ---
 
-## Core Principle
+## Core Architecture — ASIT + ASIGT
+
+The system is composed of two strictly separated but tightly integrated layers:
+
+| Layer | Full Name | Role |
+|-------|-----------|------|
+| **ASIT** | Aircraft Systems Information Transponder | Governance, structure, lifecycle authority, baselines, contracts |
+| **ASIGT** | Aircraft Systems Information Generative Transponder | Content generation, *operating exclusively under ASIT control* |
+
+> **ASIT defines the information universe.
+> ASIGT generates content inside it.**
+
+### Key Constraint (certification-safe)
 
 > **No content is generated unless the structure, authority, and lifecycle state are defined.**
-
-ASIGT **cannot operate standalone**.  
-It executes **only** through ASIT contracts, baselines, and governance rules.
+> ASIGT cannot operate standalone — it executes only within ASIT-approved contracts and baselines.
 
 ---
 
@@ -303,180 +112,201 @@ Validated Engineering Knowledge (SSOT)
             ▼
 Operational Digital Information
 (AMM, SRM, CMM, IPC, SB, IETP, Ops Data)
-````
-
----
-
-## ASIT — Aircraft Systems Information Transponder
-
-**ASIT is the authoritative layer.**
-
-It defines:
-
-* ATA iSpec 2200–aligned **system structure**
-* Lifecycle partitioning 
-* SSOT ownership and baselining
-* Contract-driven transformations
-* Change control, approvals, and traceability rules
-
-ASIT answers the questions:
-
-* *What is allowed to propagate?*
-* *From which baseline?*
-* *Under which authority?*
-* *For which lifecycle state?*
-
----
-
-## ASIGT — Aircraft Systems Information Generative Transponder
-
-**ASIGT is the content materialization layer.**
-
-It performs **governed generation** of:
-
-* S1000D Data Modules (DM, PM, DML)
-* Publication structures (AMM, SRM, CMM, IPC, SB)
-* IETP runtime packages
-* Applicability-filtered operational views
-
-ASIGT answers the question:
-
-* *How is approved knowledge transformed into executable information?*
-
-### Key Constraint (certification-safe)
-
-> **ASIGT does not define scope, structure, or configuration.
-> It executes only within ASIT-approved contracts and baselines.**
-
----
-
-## Standards Alignment
-
-| Domain                 | Standard                           |
-| ---------------------- | ---------------------------------- |
-| Technical Publications | **S1000D (Issue 4.x / 5.0)**       |
-| System Structure       | **ATA iSpec 2200**                 |
-| Systems Engineering    | **ARP4754A**                       |
-| Safety                 | **ARP4761**                        |
-| Software Assurance     | **DO-178C (traceability support)** |
-| Quality                | **AS9100-compatible governance**   |
-
----
-
-## What ASIT-ASIGT Produces
-
-* **Audit-ready S1000D CSDB content**
-* **Traceable operational procedures**
-* **Configuration-specific publications**
-* **IETP-ready digital information**
-* **Certification and MRO evidence continuity**
-
-All outputs carry:
-
-* Provenance
-* Baseline reference
-* Contract ID
-* Traceability metadata
-
----
-
-## Repository Structure (Canonical)
-
-```text
-AEROSPACEMODEL-ASIT-ASIGT/
-│
-├── ASIT/                 # Governance, structure, lifecycle authority
-│   ├── GOVERNANCE/
-│   │   └── master_brex_authority.yaml   # BREX decision rules (authoritative)
-│   ├── INDEX/
-│   ├── CONTRACTS/
-│   └── ASIT_CORE.md
-│
-├── ASIGT/                # Content generation layer (invoked by ASIT)
-│   ├── generators/
-│   ├── brex/
-│   │   ├── S1000D_5.0_DEFAULT.yaml      # S1000D default BREX
-│   │   ├── project_brex.template.yaml   # Project BREX template
-│   │   ├── brex_decision_engine.py      # BREX Decision Engine
-│   │   ├── BREX_REASONING_FLOWCHART.md  # Reasoning documentation
-│   │   └── __init__.py
-│   ├── s1000d_templates/
-│   └── ASIGT_CORE.md
-│
-├── .github/
-│   └── instructions/     # BREX-driven instruction files
-│       ├── ata27_flight_controls.instructions.md
-│       └── ata28_fuel.instructions.md
-│
-├── src/aerospacemodel/   # Python package
-│   ├── asit/             # ASIT module
-│   ├── asigt/            # ASIGT module with BREX governance
-│   │   ├── brex_governance.py  # BREX-governed validator
-│   │   └── ...
-│   └── cli.py
-│
-├── pipelines/            # ASIT-controlled pipelines invoking ASIGT
-├── schemas/              # S1000D / ATA references
-├── docs/
-└── README.md
 ```
 
 ---
 
-## Pipelines
+## Key Capabilities
 
-ASIT-controlled pipelines define complete transformation workflows for generating S1000D-compliant documentation:
+- **Certification-Grade Provenance** — Full traceability from source knowledge to published output
+- **Standards Compliance** — Native alignment with S1000D Issue 5.0, ATA iSpec 2200, and aerospace data exchange standards
+- **Controlled Generation** — AI outputs bounded by validated knowledge domains and explicit transformation contracts
+- **Audit-Ready Governance** — Every AI-assisted transformation is logged, attributable, and reversible
+- **Dual Database Management** — KDB (Knowledge Database) → IDB (Information Database) transformation through lifecycle gates
+- **CNOT-Gate Determinism** — Quantum-circuit-inspired gates ensure no action fires until all control assertions pass
+- **HPC + Quantum + Multi-Agent MDO** — Massive parallel design optimization under BREX governance
+- **Human-Centric Digital Systems** — Charter-based governance for human agency, truth, and ethical AI
 
-| Pipeline | Description | Publication Type |
-|----------|-------------|------------------|
-| **AMM Pipeline** | Aircraft Maintenance Manual generation including system descriptions, maintenance procedures, and troubleshooting | AMM |
-| **SRM Pipeline** | Structural Repair Manual generation including damage limits, repair procedures, and NDT requirements | SRM |
-| **CMM Pipeline** | Component Maintenance Manual generation for Tier-1 suppliers and component-level documentation | CMM |
-| **IPC Pipeline** | Illustrated Parts Catalog generation with exploded views, parts lists, and vendor information | IPC |
-| **DT Documentation Pipeline** | Digital Twin integrated documentation with condition-based, event-driven, and certification workflows | DT_DOC |
+---
 
-### Digital Twin Documentation Pipeline
+## Repository Structure
 
-The **DT Documentation Pipeline** (`pipelines/dt_documentation_pipeline.yaml`) integrates Digital Twin capabilities with documentation generation, supporting:
+```text
+AEROSPACEMODEL/
+│
+├── .github/
+│   ├── instructions/              # BREX-driven ATA-specific instruction files
+│   └── workflows/                 # 11 GitHub Actions CI/CD workflows
+│       ├── ci.yml
+│       ├── brex-compliance.yml
+│       ├── cnot-agent-orchestration.yml
+│       ├── constitution-compliance.yml
+│       ├── contract-governance.yml
+│       ├── marketplace-scan.yml
+│       ├── ngi-assessment.yml
+│       ├── release.yml
+│       ├── s1000d-validation.yml
+│       ├── static.yml
+│       └── validate_lifecycle_registry.yml
+│
+├── ASIT/                          # Governance, structure, lifecycle authority
+│   ├── GOVERNANCE/
+│   ├── INDEX/
+│   ├── CONTRACTS/
+│   └── ASIT_CORE.md
+│
+├── ASIGT/                         # Content generation layer (invoked by ASIT)
+│   ├── generators/
+│   ├── brex/                      # BREX Decision Engine
+│   ├── hpc/                       # HPC compute architecture
+│   ├── agents/                    # MDO agent swarm
+│   ├── quantum/                   # Quantum optimizer
+│   └── ASIGT_CORE.md
+│
+├── Governance/                    # Governance charters & policy frameworks
+├── OPT-IN_FRAMEWORK/              # ATA iSpec 2200 canonical content structure
+├── lifecycle/                     # Canonical lifecycle registry (LC01–LC14)
+├── src/aerospacemodel/            # Python package (96% of codebase)
+├── pipelines/                     # ASIT-controlled transformation pipelines
+├── schemas/                       # S1000D / ATA reference schemas
+├── templates/                     # Jinja2 S1000D templates
+├── scripts/                       # Utility scripts
+├── tests/                         # Test suite
+├── assessments/                   # Compliance assessments
+├── policy/                        # Policy YAML files (NGI, HCDS controls)
+├── roadmaps/                      # Implementation roadmaps
+├── docs/                          # Extended documentation (18+ documents)
+├── examples/                      # Usage examples
+│
+├── Model_Digital_Constitution.md  # Foundational digital constitution
+├── GOVERNANCE.md                  # Root governance document
+├── CONTRIBUTING.md                # Contribution guidelines
+├── HCDS_CHARTER_README.md         # Human-Centric Digital Systems overview
+├── IMPLEMENTATION_SUMMARY.md      # Implementation status
+├── pyproject.toml                 # Python package configuration
+├── LICENSE                        # CC0 1.0 Universal
+└── README.md                      # ← You are here
+```
 
-**Condition-Based Documentation**
-- Dynamic Maintenance Tasks — Maintenance procedures generated based on real-time health status
-- Adaptive Inspection Intervals — Inspection schedules adjusted based on component condition
-- Predictive Maintenance Advisories — Proactive maintenance recommendations from DT analysis
-- Real-Time Troubleshooting Guides — Fault isolation procedures informed by current system state
+---
 
-**Event-Driven Documentation**
-- Service Bulletins (SB) — Triggered by DT events and configuration changes
-- Airworthiness Directives (AD) Compliance — AD tracking and compliance documentation
-- Engineering Orders (EO) — Change implementation and status tracking
-- Incident Reports — Event-triggered incident documentation with root cause analysis
+## Getting Started
 
-**Certification Documentation**
-- Type Certificate Data Sheets — Aircraft certification data
-- Compliance Evidence — Regulatory compliance documentation
-- Test Reports — Qualification, acceptance, and conformity test documentation
-- Safety Analysis Documents — FHA, FMEA, FTA, SSA, PSSA, ASA documentation
+### Prerequisites
 
-All outputs maintain full traceability between the Digital Twin state, engineering baseline, and generated documentation.
+- Python ≥ 3.9
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/AmedeoPelliccia/AEROSPACEMODEL.git
+cd AEROSPACEMODEL
+
+# Install the package
+pip install -e ".[all]"
+
+# Verify installation
+aerospacemodel --help
+```
+
+### Quick Example — BREX-Governed Validation
+
+```python
+from aerospacemodel.asigt import BREXGovernedValidator, OperationContext
+
+validator = BREXGovernedValidator(
+    contract_id="KITDM-CTR-LM-CSDB_ATA28",
+    baseline_id="FBL-2026-Q1-003"
+)
+
+result = validator.validate_operation(
+    operation="generate_dm",
+    context=OperationContext(
+        contract_id="KITDM-CTR-LM-CSDB_ATA28",
+        ata_domain="ATA 28",
+        safety_impact=False
+    )
+)
+
+if result.allowed:
+    print("Operation permitted — proceed with generation")
+elif result.escalation_required:
+    print(f"Escalation required to: {result.escalation_target}")
+else:
+    print(f"Operation blocked by: {result.blocked_by}")
+```
+
+---
+
+## OPT-IN Framework (TLI v2.1)
+
+The **[OPT-IN_FRAMEWORK](OPT-IN_FRAMEWORK/)** provides the canonical ATA iSpec 2200-aligned content structure for the AMPEL360 Q100 program across the complete aircraft lifecycle (LC01–LC14).
+
+| Domain | Scope | ATA Range |
+|--------|-------|-----------|
+| **O — Organizations** | Governance, maintenance policies | ATA 00–05 |
+| **P — Programs** | Program-level documentation | ATA 06–12 |
+| **T — Technologies** | 15 on-board system subdomains | ATA 20–80, 95–97 |
+| **I — Infrastructures** | Ground support, H₂ supply chain | Ground systems |
+| **N — Neural Networks** | AI governance, DPP, ledger | AI/ML systems |
+
+**Novel Technology Subdomains** (full LC01–LC14 activation):
+- **C2 — Circular Cryogenic Cells** — LH₂ storage, cryogenic handling, boil-off management
+- **P — Propulsion** — Fuel cell stacks, balance of plant, thermal management
+- **I2 — Intelligence** — AI/ML models, synthetic data, adversarial testing
+
+---
+
+## Lifecycle Registry (LC01–LC14)
+
+| File | Purpose |
+|------|---------|
+| [`LC_PHASE_REGISTRY.yaml`](lifecycle/LC_PHASE_REGISTRY.yaml) | Canonical definitions for LC01–LC14 |
+| [`TLI_GATE_RULEBOOK.yaml`](lifecycle/TLI_GATE_RULEBOOK.yaml) | Gate logic and compliance rules per phase |
+| [`T_SUBDOMAIN_LC_ACTIVATION.yaml`](lifecycle/T_SUBDOMAIN_LC_ACTIVATION.yaml) | Technology subdomain activation rules |
+
+- **LC01–LC10 (PLM phases):** Content rooted at `KDB/LM/SSOT/PLM`
+- **LC11–LC14 (OPS phases):** Content rooted at `IDB/OPS/LM`
+
+---
+
+## Governance Stack
+
+```text
+Model Digital Constitution (Foundational)
+        ↓
+Human-Centric Digital Systems Charter v1.0 (Re-founding)
+        ↓
+EASA/ESA AI Governance Standard v1.0 (Aviation-Specific)
+        ↓
+EAARF Charter (Industry Collaboration)
+        ↓
+Technical Controls & Roadmaps (Implementation)
+```
+
+| Document | Status | Location |
+|----------|--------|----------|
+| [Digital Constitution](Model_Digital_Constitution.md) | ✅ Active | Root |
+| [HCDS Charter v1.0](Governance/HUMAN_CENTRIC_DIGITAL_SYSTEMS_CHARTER_v1.0.md) | ✅ Active | `Governance/` |
+| [EASA/ESA AI Governance](Governance/EASA_ESA_AI_GOVERNANCE_STANDARD_v1.0.md) | 📝 Draft | `Governance/` |
+| [EAARF Charter](Governance/EAARF_CHARTER_DRAFT.md) | 📝 Draft | `Governance/` |
+| [NPA 2025-07 Response](Governance/NPA_2025-07_RESPONSE.md) | 📝 Draft | `Governance/` |
+
+### Core Principles
+
+1. **Human labor founds** → Capital finances → Technology serves → The person progresses
+2. **Human harm has absolute precedence** — no responsibility gaps
+3. **Automation proposes; humans authorize** — deterministic HITL at every non-inference boundary
+4. **Systems that mediate human cognition must be governed as civic infrastructure**
 
 ---
 
 ## BREX-Driven Instruction System
 
-**Version 2.0.0** introduces the **BREX-Driven Instruction System** for guided reasoning and deterministic content generation.
-
-### Core Concept
-
-> **The AEROSPACEMODEL Agent's reasoning must be constrained, guided, and explainable through a BREX ruleset. Every step is a validated decision node. No free-form autonomy exists.**
-
-This creates a **deterministic agent** whose reasoning can be:
-- **Audited** — Complete decision trail
-- **Replayed** — Same inputs produce same outputs
-- **Certified** — Evidence generation for DO-178C/ARP4754A
+> **The AEROSPACEMODEL Agent's reasoning is constrained, guided, and explainable through a BREX ruleset. Every step is a validated decision node. No free-form autonomy exists.**
 
 ### BREX Decision Cascade
-
-Every operation passes through a cascading decision tree:
 
 ```text
 OPERATION START
@@ -484,9 +314,8 @@ OPERATION START
       ▼
 ┌─────────────────────────────────┐
 │ CTR-001: Contract Required?     │
-│ ───────────────────────────     │
-│ Check: contract_id EXISTS       │
-│ Check: contract_status=APPROVED │
+│   Check: contract_id EXISTS     │
+│   Check: contract_status=APPROVED│
 └────────────────┬────────────────┘
            ┌─────┴─────┐
           FALSE       TRUE
@@ -505,243 +334,247 @@ OPERATION START
                     └─────────────────────┘
 ```
 
-### Decision Actions
-
-| Action | Behavior |
-|--------|----------|
+| Action | Behaviour |
+|--------|-----------|
 | **ALLOW** | Operation proceeds under BREX governance |
 | **BLOCK** | Operation halts immediately |
 | **ESCALATE** | Human approval required (STK_SAF, CCB, etc.) |
 | **WARN** | Proceed with warning logged |
 | **UNDEFINED** | Halt — BREX Undefined Condition Violation |
 
-### Audit Log Format
+### Verifiable Control Properties
 
-```text
-2026-01-29T10:35:00Z | RULE CTR-001 | Contract Required | OK | contract: ASIT-ENG-2026-001
-2026-01-29T10:35:01Z | RULE STRUCT-007 | ATA Domain Valid | OK | ATA 28
-2026-01-29T10:35:02Z | RULE SAFETY-002 | Safety Impact | ESCALATION | pending human approval
-2026-01-29T10:35:03Z | ACTION BLOCKED | pending human approval
-```
-
-### Key Components
-
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| **BREX Decision Engine** | `ASIGT/brex/brex_decision_engine.py` | Core reasoning engine |
-| **Master BREX Authority** | `ASIT/GOVERNANCE/master_brex_authority.yaml` | Authoritative rules |
-| **Instruction Files** | `.github/instructions/*.instructions.md` | ATA-specific governance |
-| **Reasoning Flowchart** | `ASIGT/brex/BREX_REASONING_FLOWCHART.md` | Decision architecture |
-
-### Usage Example
-
-```python
-from aerospacemodel.asigt import BREXGovernedValidator, OperationContext
-
-# Create validator with contract context
-validator = BREXGovernedValidator(
-    contract_id="KITDM-CTR-LM-CSDB_ATA28",
-    baseline_id="FBL-2026-Q1-003"
-)
-
-# Validate a generate operation
-result = validator.validate_operation(
-    operation="generate_dm",
-    context=OperationContext(
-        contract_id="KITDM-CTR-LM-CSDB_ATA28",
-        ata_domain="ATA 28",
-        safety_impact=False
-    )
-)
-
-if result.allowed:
-    print("Operation permitted - proceed with generation")
-elif result.escalation_required:
-    print(f"Escalation required to: {result.escalation_target}")
-else:
-    print(f"Operation blocked by: {result.blocked_by}")
-```
-
-### Determinism Guarantee
-
-The BREX Decision Engine enforces:
-
-- ✅ **No unconstrained LLM freedom**
-- ✅ **No hallucination**
-- ✅ **Full reproducibility**
-- ✅ **All outputs explainable and validated**
-- ✅ **Only contract-approved transformations**
-
-If the agent reaches an unruled situation:
-→ **It halts**
-→ **Raises a BREX Undefined Condition Violation**
+- ✅ **Bounded generation** under BREX policy constraints — no unconstrained LLM freedom
+- ✅ **Reproducibility profile** — seed/config/baseline locked, execution evidence logged
+- ✅ **Evidence-backed explainability** — all outputs carry provenance, contract ID, and decision trail
+- ✅ **Separation integrity** — pass/fail tests with signed audit logs
+- ✅ **Only contract-approved transformations** — unruled situations halt with BREX Undefined Condition Violation
 
 ---
 
-## HPC + Quantum + Agentic Aerospace Design Architecture
+## CNOT-Gate Lifecycle Automation
 
-**Version 2.0.0** introduces the **HPC + Quantum + Agentic Architecture** for massive simultaneous integrated aerospace design optimization.
+AEROSPACEMODEL delivers the state-of-the-art implementable stack for integrated automation in aerospace lifecycle process gates through a **CNOT-agent lifecycle simulation architecture**.
 
-### Overview
+### Dual AI Model + Dual Database
 
-A **multi-agent ASIT-governed aerospace design intelligence system** running on HPC clusters with hybrid classical-quantum acceleration, capable of evaluating **millions of aircraft configurations in parallel** under strict deterministic **BREX decision rules**.
+| Component | Role |
+|-----------|------|
+| **ASIT gates** | Validate contract, baseline, authority, BREX, trace, safety |
+| **ASIGT actions** | Execute AI inference, SBOM generation, security scanning *after* gate validation |
+| **KDB** | Engineering intent, requirements, configuration baselines |
+| **IDB** | Validated, certified information products (AMM, SRM, IPC) |
+
+### Integrated Automation
+
+- **18+ GitHub Marketplace Actions** governed by ASIT rules
+- **Automated lifecycle transitions** — design → verification → certification → production → operation → maintenance
+- **Provenance tracking** — SLSA attestations and provenance vectors
+- **Policy-driven governance** — OPA, GHAS, and BREX policy engines
+- **Deterministic execution** — no action fires until all control assertions pass
+
+> 📖 See [CNOT Agent Lifecycle Architecture](docs/CNOT_AGENT_LIFECYCLE_ARCHITECTURE.md) and [GitHub Marketplace Actions Catalog](docs/GITHUB_MARKETPLACE_ACTIONS_CATALOG.md)
+
+---
+
+## HPC + Quantum + Agentic MDO
+
+A multi-agent ASIT-governed aerospace design intelligence system running on HPC clusters with hybrid classical-quantum acceleration.
 
 ```text
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           ASIT GOVERNANCE LAYER                             │
-│  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐        │
-│  │  Contracts  │  │  Baselines  │  │ BREX Rules  │  │   Safety    │        │
-│  └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘        │
-└───────────────────────────────────────┬─────────────────────────────────────┘
-                                        │
-┌───────────────────────────────────────▼─────────────────────────────────────┐
-│                     MULTI-AGENT MDO ORCHESTRATION                           │
-│           Aerodynamics | Structures | Propulsion | Economics                │
-│                     ↓ Pareto Front Construction ↓                           │
-└───────────────────────────────────────┬─────────────────────────────────────┘
-                                        │
-┌───────────────────────────────────────▼─────────────────────────────────────┐
-│                          HPC COMPUTE LAYER                                  │
-│  ┌────────────────┐  ┌────────────────┐  ┌────────────────┐                │
-│  │  CPU Cluster   │  │  GPU Cluster   │  │    Quantum     │                │
-│  │  (CFD, FEM)    │  │  (AI/ML)       │  │  (QAOA, VQE)   │                │
-│  └────────────────┘  └────────────────┘  └────────────────┘                │
-└─────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────────┐
+│                       ASIT GOVERNANCE LAYER                         │
+│  ┌───────────┐  ┌───────────┐  ┌───────────┐  ┌───────────┐       │
+│  │ Contracts │  │ Baselines │  │BREX Rules │  │  Safety   │       │
+│  └───────────┘  └───────────┘  └───────────┘  └───────────┘       │
+└───────────────────────────┬─────────────────────────────────────────┘
+                            │
+┌───────────────────────────▼─────────────────────────────────────────┐
+│                 MULTI-AGENT MDO ORCHESTRATION                       │
+│         Aerodynamics | Structures | Propulsion | Economics          │
+│                   ↓ Pareto Front Construction ↓                     │
+└───────────────────────────┬─────────────────────────────────────────┘
+                            │
+┌───────────────────────────▼─────────────────────────────────────────┐
+│                        HPC COMPUTE LAYER                            │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │
+│  │  CPU Cluster  │  │  GPU Cluster  │  │   Quantum    │              │
+│  │  (CFD, FEM)   │  │  (AI/ML)      │  │  (QAOA, VQE) │              │
+│  └──────────────┘  └──────────────┘  └──────────────┘              │
+└─────────────────────────────────────────────────────────────────────┘
 ```
 
-### Key Capabilities
+> 📖 See [HPC, Quantum & Agentic Architecture](docs/HPC_QUANTUM_AGENTIC_ARCHITECTURE.md)
 
-| Capability | Description |
-|------------|-------------|
-| **Agentic HPC** | AI-powered job scheduling with memory prediction and resource optimization |
-| **Multi-Agent MDO** | Swarm of specialized agents (Aero, Struct, Prop, Econ) exploring design trade-spaces |
-| **Quantum Acceleration** | QAOA, VQE for global optimization and configuration selection |
-| **BREX Governance** | Deterministic, auditable reasoning at every decision point |
-| **Certification-Ready** | Full traceability for DO-178C/ARP4754A compliance |
+---
 
-### Multi-Agent MDO Swarm
+## CI/CD & GitHub Actions Workflows
 
-Specialized agents collaborate to optimize aircraft design:
+| Workflow | File | Purpose |
+|----------|------|---------|
+| **CI** | `ci.yml` | Lint, test, build on every push/PR |
+| **BREX Compliance** | `brex-compliance.yml` | Validate BREX decision rules |
+| **CNOT Agent Orchestration** | `cnot-agent-orchestration.yml` | Lifecycle gate simulation |
+| **Constitution Compliance** | `constitution-compliance.yml` | Digital Constitution checks |
+| **Contract Governance** | `contract-governance.yml` | Transformation contract validation |
+| **Marketplace Scan** | `marketplace-scan.yml` | GitHub Marketplace action audit |
+| **NGI Assessment** | `ngi-assessment.yml` | Next Generation Internet compliance |
+| **Release** | `release.yml` | Semantic versioning & publish |
+| **S1000D Validation** | `s1000d-validation.yml` | S1000D schema & BREX validation |
+| **Static Analysis** | `static.yml` | Type checking & code quality |
+| **Lifecycle Registry** | `validate_lifecycle_registry.yml` | LC phase registry integrity |
 
-| Agent | Specialization | Objectives |
-|-------|----------------|------------|
-| **Aerodynamics** | CFD analysis, L/D optimization | Max L/D, Min drag |
-| **Structures** | FEM analysis, weight estimation | Min weight, safety margins |
-| **Propulsion** | Engine sizing, efficiency | Min SFC, emissions |
-| **Economics** | DOC, ROI analysis | Min operating cost |
-| **Synthesizer** | Multi-objective optimization | Pareto front construction |
+---
 
-### Quantum Algorithms
+## Pipelines
 
-| Algorithm | Use Case | Quantum Advantage |
-|-----------|----------|-------------------|
-| **QAOA** | Configuration selection, MaxCut | Polynomial speedup |
-| **VQE** | Ground state, continuous opt | Potential exponential |
-| **QML** | Surrogate models | Enhanced learning |
+| Pipeline | Publication Type | Description |
+|----------|------------------|-------------|
+| **AMM** | AMM | Aircraft Maintenance Manual — system descriptions, procedures, troubleshooting |
+| **SRM** | SRM | Structural Repair Manual — damage limits, repairs, NDT |
+| **CMM** | CMM | Component Maintenance Manual — Tier-1 supplier documentation |
+| **IPC** | IPC | Illustrated Parts Catalog — exploded views, parts lists |
+| **DT Documentation** | DT_DOC | Digital Twin integrated — condition-based, event-driven, certification |
 
-### Usage Example
+---
 
-```python
-from ASIGT.hpc import create_aerospace_hpc_cluster
-from ASIGT.agents import create_aircraft_mdo_swarm, OptimizationObjective
-from ASIGT.quantum import create_aerospace_quantum_optimizer
+## Regulatory Applicability Matrix
 
-# Initialize HPC cluster
-cluster = create_aerospace_hpc_cluster(
-    cluster_id="AEROSPACE-HPC-01",
-    cpu_nodes=100,
-    gpu_nodes=20,
-    quantum_qubits=127
-)
+### EU AI Act (Regulation EU 2024/1689)
 
-# Create MDO agent swarm
-swarm = create_aircraft_mdo_swarm(
-    swarm_id="MDO-SWARM-001",
-    contract_id="KITDM-CTR-MDO-001",
-    baseline_id="FBL-2026-Q1-003"
-)
+| Milestone | Date | AEROSPACEMODEL Scope | Status |
+|-----------|------|---------------------|--------|
+| Prohibited practices (Art. 5) | 2 Feb 2025 | No vulnerability exploitation, no dark patterns | ✅ Aligned |
+| GPAI / governance obligations | 2 Aug 2025 | Transparency, documentation, risk management | ✅ Aligned |
+| Most obligations (Art. 6, 8–15) | 2 Aug 2026 | High-risk system compliance (conformity, QMS, logging) | 🔄 In progress |
+| High-risk AI in regulated products | 2 Aug 2027 | Embedded AI in aviation-certified systems | 📋 Planned |
 
-# Run optimization
-result = swarm.run_optimization(
-    objectives=[
-        OptimizationObjective.MAXIMIZE_L_D,
-        OptimizationObjective.MINIMIZE_WEIGHT,
-        OptimizationObjective.MINIMIZE_FUEL_BURN
-    ],
-    constraints=[],
-    generations=100
-)
+> AEROSPACEMODEL is aligned to AI Act implementation milestones, not claiming blanket compliance ahead of enforcement dates.
 
-# Quantum refinement on Pareto front
-quantum = create_aerospace_quantum_optimizer(contract_id="KITDM-CTR-MDO-001")
-quantum_result = quantum.hybrid_optimize(result["pareto_front"])
+### EASA AI Guidance
 
-print(f"Optimal configurations: {len(quantum_result.best_solution)}")
-```
+| Reference | Nature | AEROSPACEMODEL Alignment |
+|-----------|--------|--------------------------|
+| EASA AI Roadmap 2.0 | Programmatic guidance | Architectural alignment; compliance demonstrated through project evidence under applicable certification basis |
+| Concept Paper Issue 2 | Proposed means of compliance | BREX governance, HITL boundaries, and provenance vectors designed to satisfy anticipated MOC |
+| NPA 2025-07 | Notice of Proposed Amendment | Formal response prepared — see [`Governance/NPA_2025-07_RESPONSE.md`](Governance/NPA_2025-07_RESPONSE.md) |
 
-### HPC Components
+### Digital Services Act (Regulation EU 2022/2065)
 
-| Component | Location | Purpose |
-|-----------|----------|---------|
-| **HPC Compute Architecture** | `ASIGT/hpc/hpc_compute_architecture.py` | Cluster management, agentic scheduling |
-| **MDO Agent Swarm** | `ASIGT/agents/mdo_agent_swarm.py` | Multi-agent optimization |
-| **Quantum Optimizer** | `ASIGT/quantum/quantum_optimizer.py` | QAOA, VQE implementations |
-| **HPC MDO Pipeline** | `pipelines/hpc_mdo_pipeline.yaml` | Complete MDO workflow definition |
-| **HPC Agentic BREX** | `ASIT/GOVERNANCE/hpc_agentic_brex.yaml` | BREX rules for HPC operations |
+Applicable where HCDS Charter controls mediate cognitive interaction:
 
-### Documentation
+| Article | Requirement | AEROSPACEMODEL Control |
+|---------|-------------|----------------------|
+| Art. 25 | Anti-dark-pattern constraints | HCDS-005: Dark patterns must not be deployed (Charter Art. 4) |
+| Art. 26 | Ad transparency | HCDS-004: Assistant and ad systems must be separated (Charter Art. 6) |
+| Art. 28 | Protections for minors in profiling-based ad delivery | HCDS-001: User-level targeting requires explicit consent (Charter Art. 3) |
 
-| Document | Description |
-|----------|-------------|
-| [`docs/HPC_QUANTUM_AGENTIC_ARCHITECTURE.md`](docs/HPC_QUANTUM_AGENTIC_ARCHITECTURE.md) | HPC, Quantum, and Multi-Agent MDO Architecture |
-| [`docs/EASA_FAA_VOCABULARY_MAPPING.md`](docs/EASA_FAA_VOCABULARY_MAPPING.md) | Complete mapping of AEROSPACEMODEL terms to EASA/FAA regulatory vocabulary |
-| [`docs/ONTOLOGY_DIAGRAM.md`](docs/ONTOLOGY_DIAGRAM.md) | Visual ontology diagrams showing system architecture and regulatory alignment |
+### Additional Regulatory Alignment
+
+| Regulation | Scope |
+|------------|-------|
+| **GDPR** (Reg. EU 2016/679) | Data minimization, purpose limitation, explainability (Art. 5, 12–22) |
+| **DO-178C / DO-160** | Software certification, environmental testing |
+| **ARP4754A / ARP4761** | Systems development, safety assessment |
+| **CS-25** | Certification specifications for large aeroplanes |
+
+---
+
+## Standards Alignment
+
+| Domain | Standard |
+|--------|----------|
+| Technical Publications | **S1000D (Issue 4.x / 5.0)** |
+| System Structure | **ATA iSpec 2200** |
+| Systems Engineering | **ARP4754A** |
+| Safety | **ARP4761** |
+| Software Assurance | **DO-178C** (traceability support) |
+| Environmental Testing | **DO-160** |
+| Quality | **AS9100-compatible governance** |
+
+---
+
+## Integration with AMPEL360
+
+AEROSPACEMODEL serves as the **transformation and intelligence engine** for the [AMPEL360-Q100](https://github.com/AmedeoPelliccia/AMPEL360-Q100) Full Digital Information Twin Architecture (FIDITA).
 
 ---
 
 ## Who This Is For
 
-* Aircraft OEMs (new or derivative programs)
-* Advanced air mobility and hydrogen aircraft developers
-* MRO organizations modernizing digital publications
-* Tier-1 suppliers delivering certifiable documentation
-* Certification and compliance engineering teams
+- **Aircraft OEMs** — new or derivative programs
+- **Advanced air mobility & hydrogen aircraft developers** — novel technology certification
+- **MRO organisations** — modernising digital publications
+- **Tier-1 suppliers** — delivering certifiable documentation
+- **Certification & compliance engineering teams** — evidence continuity
+- **AI governance researchers** — EASA / EU AI Act compliance frameworks
 
 ---
 
-## Key Differentiator
+## Documentation Index
 
-**ASIT-ASIGT is not content generation.
-It is generation under authority.**
+| Document | Description |
+|----------|-------------|
+| [`docs/CNOT_AGENT_LIFECYCLE_ARCHITECTURE.md`](docs/CNOT_AGENT_LIFECYCLE_ARCHITECTURE.md) | Reference architecture and dual-AI integration patterns |
+| [`docs/CNOT_GATES_ARCHITECTURE.md`](docs/CNOT_GATES_ARCHITECTURE.md) | Quantum-inspired gate control logic |
+| [`docs/GITHUB_MARKETPLACE_ACTIONS_CATALOG.md`](docs/GITHUB_MARKETPLACE_ACTIONS_CATALOG.md) | 18 marketplace actions with licensing & compliance |
+| [`docs/HPC_QUANTUM_AGENTIC_ARCHITECTURE.md`](docs/HPC_QUANTUM_AGENTIC_ARCHITECTURE.md) | HPC, Quantum & Multi-Agent MDO Architecture |
+| [`docs/EASA_FAA_VOCABULARY_MAPPING.md`](docs/EASA_FAA_VOCABULARY_MAPPING.md) | AEROSPACEMODEL → EASA/FAA regulatory vocabulary |
+| [`docs/ONTOLOGY_DIAGRAM.md`](docs/ONTOLOGY_DIAGRAM.md) | Visual ontology diagrams & regulatory alignment |
+| [`docs/CONTENT_PIPELINE.md`](docs/CONTENT_PIPELINE.md) | Content pipeline architecture |
+| [`docs/NGI_POLICY_SYSTEM.md`](docs/NGI_POLICY_SYSTEM.md) | Next Generation Internet policy framework |
+| [`docs/NGI_QUICKSTART.md`](docs/NGI_QUICKSTART.md) | NGI quick start guide |
+| [`docs/HCDS_AVIATION_INTEGRATION.md`](docs/HCDS_AVIATION_INTEGRATION.md) | Human-Centric Digital Systems × Aviation |
+| [`docs/HCDS_QUICK_START_GUIDE.md`](docs/HCDS_QUICK_START_GUIDE.md) | HCDS Charter implementation guide |
+| [`docs/AMPEL_TECHNICAL_VALIDATION_DOSSIER.md`](docs/AMPEL_TECHNICAL_VALIDATION_DOSSIER.md) | AMPEL360 technical validation dossier |
+| [`docs/IMPLEMENTATION_SUMMARY.md`](docs/IMPLEMENTATION_SUMMARY.md) | Implementation summary & status |
 
-There is no reinterpretation layer, no manual rewrite, no uncontrolled propagation.
+---
 
-What operations consume is a **direct, governed projection of validated engineering knowledge**.
+## Enabling Concepts — Glossary
+
+| # | Concept | Definition |
+|---|---------|------------|
+| 1 | **Digital Continuity** | Preserving identity, configuration, authority, semantics, and evidence across all lifecycle stages |
+| 2 | **Broken Bridge** | Structural discontinuity where core invariants are lost at tool/process interfaces |
+| 3 | **Transformation Contract** | Machine-actionable specification governing cross-domain information transformation |
+| 4 | **Top-Level Instruction (TLI)** | Domain-licensed instruction defining permitted/constrained/prohibited data actions — see [Digital Constitution](Model_Digital_Constitution.md) |
+| 5 | **SPCA** | Software Programming Chain Application — enforces transformation contracts |
+| 6 | **Non-Inference Boundary** | Execution boundary where automation halts due to irreducible ambiguity |
+| 7 | **HITL** | Human-in-the-Loop — auditable human decision at non-inference boundaries |
+| 8 | **Multiagent Domino** | Cascading failure from chained agents without contract gates |
+| 9 | **ABDB** | Aircraft Blended Digital Body — procedural, semantic, authoritative System of Systems |
+| 10 | **Twin Process** | Digital mirror of how the aircraft is designed, certified, operated, and sustained |
+| 11 | **System of Systems** | Independently managed systems orchestrated through governance for holistic capabilities |
+| 12 | **ATA-Level Structuring** | Transformation decomposition by ATA chapter for domain-aligned governance |
+| 13 | **ASIT** | Deterministic rule-based transformer — fully governed and reproducible |
+| 14 | **ASIGT** | Contract-governed generative transponder — derivative, authority-preserving |
+| 15 | **Generative (safe)** | Constrained, reproducible, auditable generation — no guessing, no inventing |
+| 16 | **Quantum-Circuit Logic** | Lifecycle transformations behave like explicit gates, not implicit data flows |
+| 17 | **CNOT Gate** | Transformation gate fires only when authoritative control state is valid |
+| 18 | **State Collapse** | Authorised resolution of lifecycle ambiguity into a concrete artifact |
+| 19 | **Provenance Vector** | Machine-readable output → source → contract → context → human decision link |
+| 20 | **Revolution Without Disruption** | Governed integration, not replacement, of certified tools |
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines, including BREX-compliant contribution requirements, contract-based change control, ATA chapter alignment rules, and testing expectations.
 
 ---
 
 ## License
 
+**CC0 1.0 Universal** — see [LICENSE](LICENSE).
 
+This work is dedicated to the public domain under the [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/) dedication.
 
 ---
 
-## Final Statement
-
-**AEROSPACEMODEL-ASIT-ASIGT** establishes a new category:
-
-> **The aerospace information transponder stack**
-> — structure by ASIT, content by ASIGT, truth preserved end-to-end.
-
-```
-```
-
-
-
 <p align="center">
   <strong>AEROSPACEMODEL</strong><br/>
-  Transform governed engineering knowledge into certified technical publications and auditable evidence.
+  <em>Structure by ASIT · Content by ASIGT · Truth preserved end-to-end.</em>
 </p>
-```
 
 ---
