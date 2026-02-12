@@ -52,7 +52,7 @@ The following behaviors are not acceptable, including in technical disagreements
 If you believe someone is violating this Code of Conduct, report it to:
 
 - **Email:** `<conduct@aerospacemodel.com>`  
-  (Replace with your actual reporting address.)
+  (not operative yet)
 
 Please include as much relevant detail as possible (context, links, timestamps, screenshots if available).
 
