@@ -1,0 +1,26 @@
+{
+  "name": "aerospacemodel-nib-spec-generator",
+  "version": "1.0.0",
+  "description": "Document generator for AEROSPACEMODEL Non-Inference Boundary (NIB) Technical Specification",
+  "main": "generate_nib_spec.js",
+  "scripts": {
+    "generate": "node generate_nib_spec.js",
+    "test": "echo \"No tests defined\" && exit 0"
+  },
+  "keywords": [
+    "aerospacemodel",
+    "nib",
+    "non-inference-boundary",
+    "asit",
+    "governance",
+    "specification"
+  ],
+  "author": "Amedeo Pelliccia",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "docx": "^8.5.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
