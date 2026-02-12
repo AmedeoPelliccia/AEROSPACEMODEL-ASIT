@@ -116,3 +116,52 @@ For questions or issues regarding the NIB specification or document generation:
 **Document Generator Version**: 1.0.0  
 **Specification Version**: 1.0 DRAFT  
 **Last Updated**: 2026-02-13
+
+---
+
+## Quick Start
+
+### View the Specification
+
+The NIB specification is available in two formats:
+
+1. **Markdown** (for quick reference): [`NIB_SPECIFICATION.md`](NIB_SPECIFICATION.md)
+2. **Word Document** (formal publication): Generate using the instructions above
+
+### Key Concepts Summary
+
+**Non-Inference Boundary (NIB)** = The point where automation halts because it cannot deterministically resolve an operation.
+
+**Why it matters:**
+- Implements EU AI Act Articles 14–15 (Human Oversight)
+- Replaces arbitrary HITL checkpoints with structurally-derived boundaries
+- Ensures human intervention occurs exactly where needed (no more, no less)
+- Every NIB resolution is auditable and traceable
+
+**Classification:**
+- **6 Source Types**: Rule Exhaustion, Ambiguity, Safety Threshold, Contractual Prohibition, Trust Boundary, Epistemic Limit
+- **5 Safety Levels**: Catastrophic, Hazardous, Major, Minor, No Safety Effect
+- **Classification Tuple**: e.g., `NIB-S/SIL-HAZ` determines escalation authority
+
+### Files in This Directory
+
+| File | Purpose | Size |
+|------|---------|------|
+| `generate_nib_spec.js` | Word document generator (docx format) | 12 KB |
+| `package.json` | Node.js dependencies | 614 B |
+| `NIB_SPECIFICATION.md` | Full specification in markdown format | 20 KB |
+| `README.md` | This file - usage guide | 5 KB |
+| `.gitignore` | Excludes node_modules and generated files | 160 B |
+
+### Integration Points
+
+The NIB specification integrates with:
+- **BREX Decision Engine**: Runtime NIB detection
+- **CNOT Gates**: Lifecycle control gates
+- **Master BREX Authority**: Escalation rules
+- **HCDS Charter**: Human oversight principles
+- **EU AI Act**: Articles 14-15 compliance mechanism
+
+---
+
+**Last Updated:** 2026-02-13
