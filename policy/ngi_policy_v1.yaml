@@ -1,0 +1,92 @@
+policy:
+  id: "NGI_POLICY_V1"
+  version: "1.0.0"
+  status: "RELEASED"
+  timezone: "Europe/Madrid"
+  scoring_scale:
+    min: 0
+    max: 5
+    semantics:
+      0: "inexistente"
+      1: "ad_hoc"
+      2: "basico_documentado"
+      3: "implementado_repetible"
+      4: "medido_con_kpis"
+      5: "optimizado_auditado_externamente"
+
+  domains:
+    D1_verificability:
+      weight: 15
+      required_evidence_min_items: 1
+    D2_transparency:
+      weight: 10
+      required_evidence_min_items: 1
+    D3_privacy:
+      weight: 15
+      required_evidence_min_items: 1
+    D4_security:
+      weight: 15
+      required_evidence_min_items: 1
+    D5_governance:
+      weight: 10
+      required_evidence_min_items: 1
+    D6_interop:
+      weight: 10
+      required_evidence_min_items: 1
+    D7_identity:
+      weight: 10
+      required_evidence_min_items: 1
+    D8_sustainability:
+      weight: 5
+      required_evidence_min_items: 1
+    D9_antimisinf:
+      weight: 10
+      required_evidence_min_items: 1
+
+  maturity_levels:
+    - {id: "L1", min: 0,  max: 39, label: "Inicial_Reactivo"}
+    - {id: "L2", min: 40, max: 59, label: "Control_Basico"}
+    - {id: "L3", min: 60, max: 74, label: "Operacion_Gobernada"}
+    - {id: "L4", min: 75, max: 89, label: "Gestion_Avanzada_Metricas"}
+    - {id: "L5", min: 90, max: 100, label: "Referencia_Auditable"}
+
+  gates:
+    hard:
+      - id: "HARD_D1"
+        rule: "D1_verificability.score >= 3"
+      - id: "HARD_D3"
+        rule: "D3_privacy.score >= 3"
+      - id: "HARD_D4"
+        rule: "D4_security.score >= 3"
+      - id: "HARD_D7"
+        rule: "D7_identity.score >= 3"
+
+    soft:
+      - id: "SOFT_TOTAL"
+        rule: "computed.total_score_0_100 >= 70"
+      - id: "SOFT_MIN_DOMAIN"
+        rule: "all_domain_scores >= 2"
+
+  decision_logic:
+    BLOCK_if:
+      - "any_hard_gate_failed"
+      - "SOFT_MIN_DOMAIN_failed"
+    WARN_if:
+      - "hard_gates_passed and SOFT_TOTAL_failed"
+    PASS_if:
+      - "hard_gates_passed and all_soft_gates_passed"
+
+  output_contract:
+    required_top_keys:
+      - project_id
+      - assessment_date
+      - assessor
+      - domains
+      - computed
+      - remediation
+    computed_fields:
+      - total_score_0_100
+      - maturity_level
+      - hard_gates_passed
+      - soft_gates_passed
+      - publish_decision

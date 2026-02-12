@@ -1,0 +1,54 @@
+name: NGI Autoassessment
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  ngi-policy-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+
+      - name: Run NGI evaluator
+        run: |
+          python scripts/ngi_evaluator.py \
+            --policy policy/ngi_policy_v1.yaml \
+            --assessment assessments/ngi_assessment.yaml \
+            --out assessments/ngi_assessment.result.yaml
+
+      - name: Show result
+        run: |
+          cat assessments/ngi_assessment.result.yaml
+
+      - name: Enforce decision
+        run: |
+          DECISION=$(python - <<'PY'
+          import yaml
+          with open("assessments/ngi_assessment.result.yaml","r",encoding="utf-8") as f:
+              d=yaml.safe_load(f)
+          print(d["ngi_autoassessment"]["computed"]["publish_decision"])
+          PY
+          )
+          echo "Decision: $DECISION"
+          if [ "$DECISION" = "BLOCK" ]; then
+            echo "Blocking merge due to NGI policy."
+            exit 1
+          fi
+          # WARN -> success exit code but visible in logs
+          exit 0

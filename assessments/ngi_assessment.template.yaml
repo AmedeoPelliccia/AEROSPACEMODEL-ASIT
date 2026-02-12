@@ -1,0 +1,51 @@
+ngi_autoassessment:
+  project_id: "YOUR_PROJECT"
+  assessment_date: "2026-02-12"
+  assessor: "internal"
+
+  domains:
+    D1_verificability:
+      score: 0
+      evidence: []
+      notes: ""
+    D2_transparency:
+      score: 0
+      evidence: []
+      notes: ""
+    D3_privacy:
+      score: 0
+      evidence: []
+      notes: ""
+    D4_security:
+      score: 0
+      evidence: []
+      notes: ""
+    D5_governance:
+      score: 0
+      evidence: []
+      notes: ""
+    D6_interop:
+      score: 0
+      evidence: []
+      notes: ""
+    D7_identity:
+      score: 0
+      evidence: []
+      notes: ""
+    D8_sustainability:
+      score: 0
+      evidence: []
+      notes: ""
+    D9_antimisinf:
+      score: 0
+      evidence: []
+      notes: ""
+
+  computed:
+    total_score_0_100: 0
+    maturity_level: "L1"
+    hard_gates_passed: false
+    soft_gates_passed: false
+    publish_decision: "BLOCK"
+
+  remediation: []

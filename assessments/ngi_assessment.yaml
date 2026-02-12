@@ -1,0 +1,80 @@
+ngi_autoassessment:
+  project_id: "AEROSPACEMODEL"
+  assessment_date: "2026-02-12"
+  assessor: "ci-bot"
+
+  domains:
+    D1_verificability:
+      score: 4
+      evidence: 
+        - "lifecycle/LC_PHASE_REGISTRY.yaml"
+        - "lifecycle/TLI_GATE_RULEBOOK.yaml"
+        - "docs/verification/KPI_TRACKING.md"
+        - "docs/verification/MONITORING_DASHBOARD.md"
+        - "docs/verification/METRICS.md"
+      notes: "Lifecycle gates and traceability with KPI tracking, monitoring dashboard, and comprehensive metrics"
+    D2_transparency:
+      score: 3
+      evidence: 
+        - "README.md"
+        - "GOVERNANCE.md"
+        - "Model_Digital_Constitution.md"
+      notes: "Documentation and governance visible"
+    D3_privacy:
+      score: 3
+      evidence: 
+        - "LICENSE"
+        - "GOVERNANCE.md"
+      notes: "Open source license, governance rules"
+    D4_security:
+      score: 4
+      evidence: 
+        - ".github/workflows/ci.yml"
+        - "tests/"
+        - "docs/security/KPI_TRACKING.md"
+        - "docs/security/MONITORING.md"
+        - "docs/security/METRICS.md"
+      notes: "CI/CD with testing infrastructure, security KPIs, monitoring, and comprehensive metrics tracking"
+    D5_governance:
+      score: 4
+      evidence: 
+        - "GOVERNANCE.md"
+        - "Model_Digital_Constitution.md"
+        - ".github/PULL_REQUEST_TEMPLATE.md"
+      notes: "Constitutional governance with enforcement"
+    D6_interop:
+      score: 4
+      evidence: 
+        - "ASIGT/s1000d_templates/"
+        - "schemas/"
+        - "pyproject.toml"
+      notes: "S1000D standards, open schemas, Python package"
+    D7_identity:
+      score: 3
+      evidence: 
+        - "LICENSE"
+        - "GOVERNANCE.md"
+      notes: "Project identity and licensing clear"
+    D8_sustainability:
+      score: 3
+      evidence: 
+        - "GOVERNANCE.md"
+        - "docs/sustainability/RESOURCE_METRICS.md"
+        - "docs/sustainability/OPTIMIZATION_STRATEGY.md"
+        - "docs/sustainability/CARBON_IMPACT_ANALYSIS.md"
+      notes: "Per-service resource metrics, optimization strategy, and carbon impact analysis with reduction targets"
+    D9_antimisinf:
+      score: 3
+      evidence: 
+        - "lifecycle/TLI_GATE_RULEBOOK.yaml"
+        - "GOVERNANCE.md"
+      notes: "Trace validation and governance rules"
+
+  computed:
+    total_score_0_100: 0
+    maturity_level: "L1"
+    hard_gates_passed: false
+    soft_gates_passed: false
+    publish_decision: "BLOCK"
+
+  remediation: []

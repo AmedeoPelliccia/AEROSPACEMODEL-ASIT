@@ -1,0 +1,26 @@
+ngi_autoassessment:
+  project_id: "AMPEL360-PUBLISHER"
+  assessment_date: "2026-02-12"
+  assessor: "ci-bot"
+
+  domains:
+    D1_verificability: {score: 4, evidence: ["evidence/claims_map.json"], notes: "Claims críticos trazables"}
+    D2_transparency:   {score: 3, evidence: ["docs/model_card.md"], notes: "Model/System card disponible"}
+    D3_privacy:        {score: 3, evidence: ["privacy/ropa.yaml"], notes: "Base legal y minimización definidas"}
+    D4_security:       {score: 4, evidence: ["security/control_matrix.yaml"], notes: "SAST/DAST + IR test"}
+    D5_governance:     {score: 3, evidence: ["governance/editorial_policy.md"], notes: "Workflow aprobado"}
+    D6_interop:        {score: 4, evidence: ["api/openapi.yaml"], notes: "APIs abiertas y export completo"}
+    D7_identity:       {score: 3, evidence: ["trust/legal_registry_check.json"], notes: "Entidad validada"}
+    D8_sustainability: {score: 2, evidence: ["ops/carbon_estimate.csv"], notes: "Métrica base inicial"}
+    D9_antimisinf:     {score: 3, evidence: ["policy/claim_risk_rules.yaml"], notes: "Riesgo de claims activo"}
+
+  computed:
+    total_score_0_100: 67
+    maturity_level: "L3"
+    hard_gates_passed: true
+    soft_gates_passed: false
+    publish_decision: "WARN"
+
+  remediation:
+    - "Elevar D8 a >=3 con métricas por servicio y optimización de inferencia"
+    - "Subir score total a >=70 para PASS"
