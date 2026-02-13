@@ -475,4 +475,4 @@ Example YAML template for annotating BREX rules with NIB metadata:
 
 AEROSPACEMODEL-ASIT-NIB-SPEC-001 v1.0 DRAFT  
 © 2026 Amedeo Pelliccia / IDEALEeu Enterprise  
-Licensed under Apache License 2.0
+Released under CC0-1.0 (Public Domain Dedication)

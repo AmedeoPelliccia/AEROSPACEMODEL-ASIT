@@ -94,7 +94,7 @@ The NIB specification ensures compliance with:
 
 © 2026 Amedeo Pelliccia / IDEALEeu Enterprise
 
-Licensed under the Apache License, Version 2.0. See the LICENSE file in the repository root for details.
+Released under the CC0 1.0 Universal Public Domain Dedication (CC0-1.0). See the LICENSE file in the repository root for details.
 
 ### Related Documentation
 

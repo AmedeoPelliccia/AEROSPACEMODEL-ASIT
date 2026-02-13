@@ -9,9 +9,6 @@ const {
 // Colour palette
 const NAVY = "1B2A4A";
 const STEEL = "2E5090";
-const LIGHT_BLUE = "D6E4F0";
-const LIGHT_GREY = "F2F2F2";
-const MID_GREY = "E0E0E0";
 const WHITE = "FFFFFF";
 
 // Reusable helpers
@@ -65,21 +62,12 @@ function para(text, opts = {}) {
   });
 }
 
-function multiRunPara(runs, opts = {}) {
-  return new Paragraph({
-    spacing: { after: opts.after || 160, before: opts.before || 0, line: opts.line || 276 },
-    alignment: opts.align || AlignmentType.JUSTIFIED,
-    children: runs.map(r => new TextRun({ font: "Arial", size: 20, color: "333333", ...r }))
-  });
-}
-
 function spacer(h = 120) { return new Paragraph({ spacing: { after: h } }); }
 
 console.log("\nGenerating AEROSPACEMODEL NIB Specification Document...");
 console.log("Document ID: AEROSPACEMODEL-ASIT-NIB-SPEC-001");
 console.log("Version: 1.0 DRAFT\n");
 
-// See issue #XXX for complete document structure
 // This script generates a professional Word document with:
 // - Cover page with branding
 // - Document control and approval sections  
@@ -159,7 +147,7 @@ const doc = new Document({
         para("Organisation:  IDEALEeu Enterprise  /  AMPEL360 Programme", { align: AlignmentType.CENTER, size: 18, color: "666666", after: 60 }),
         para("Normative Parent:  Model Digital Constitution  →  TLI v2.1  →  BREX Decision Engine", { align: AlignmentType.CENTER, size: 18, color: "666666", after: 60 }),
         spacer(800),
-        para("© 2026 Amedeo Pelliccia / IDEALEeu Enterprise.  Apache License 2.0.", { align: AlignmentType.CENTER, size: 16, color: "999999" }),
+        para("© 2026 Amedeo Pelliccia / IDEALEeu Enterprise.  Released under CC0 1.0 Universal (CC0 1.0) Public Domain Dedication.", { align: AlignmentType.CENTER, size: 16, color: "999999" }),
       ]
     },
     // Main content section with headers/footers
