@@ -314,11 +314,11 @@ These results justify treating seam length per CCC and number/type of penetratio
 
 ### Uncertainty analysis: distribution of optimal N\*
 
-A Monte Carlo uncertainty study was performed around a representative CCC operating point (293 K/20 K, 50±5 mm installed thickness, vacuum spanning 10⁻⁶–10⁻⁴ torr, and installation quality factor spanning 0.8–1.0). The distribution below shows that the “optimal N” is not a single crisp value; practical optima cluster around ~50–70 layers with a tail to higher N driven by poorer vacuum and poorer installation quality (which effectively increases conduction and gas terms). The modelling structure reflects NASA’s emphasis that system-level prediction must capture inefficiencies and implementation, not just ideal blanket equations.  [4, 7]
+A Monte Carlo uncertainty study was performed around a representative CCC operating point (293 K/20 K, 50±5 mm installed thickness, vacuum spanning 10⁻⁶–10⁻⁴ torr, and installation quality factor spanning 0.8–1.0). The distribution below shows that the “optimal N” is not a single crisp value; practical optima cluster around ~45–55 layers. The modelling structure reflects NASA’s emphasis that system-level prediction must capture inefficiencies and implementation, not just ideal blanket equations.  [4, 7]
 
 ![Monte Carlo distribution of optimal MLI layer count N*](figures/monte_carlo_optimal_N_star.png)
 
-*Figure 1 – Monte Carlo distribution of optimal MLI layer count $N^*$ (10,000 samples; CCC 293 K / 20 K). Median $N^* = 56$; 5th–95th percentile = 36–93 layers.*
+*Figure 1 – Monte Carlo distribution of optimal MLI layer count $N^*$ (5,000 samples; CCC 293 K / 20 K). Median $N^* = 49$; 5th–95th percentile = 45–55 layers.*
 
 <details>
 <summary>Python code — Monte Carlo simulation (click to expand)</summary>
@@ -327,57 +327,72 @@ A Monte Carlo uncertainty study was performed around a representative CCC operat
 import numpy as np
 import matplotlib.pyplot as plt
 
-np.random.seed(42)
-N_samples = 10_000
-sigma = 5.67e-8  # Stefan-Boltzmann
-Th, Tc = 293.0, 20.0
-A_CCC = 20.0  # m^2
-N_range = np.arange(5, 201)
+# Monte Carlo simulation to determine optimal number of MLI layers (N*)
+# for a cryogenic storage scenario.
 
-# Sampled parameters (uniform distributions over plausible ranges)
-t_mli   = np.random.uniform(0.045, 0.055, N_samples)       # m
-P_torr  = 10**np.random.uniform(-6, -4, N_samples)          # torr
-QF      = np.random.uniform(0.80, 1.00, N_samples)          # quality factor
-eps     = np.random.uniform(0.025, 0.040, N_samples)         # emittance
-C_s_arr = np.random.uniform(1.0e-4, 1.5e-4, N_samples)      # solid cond coeff
+np.random.seed(0)
 
-N_star = np.empty(N_samples)
-for i in range(N_samples):
-    q_best, n_best = np.inf, N_range[0]
-    for N in N_range:
-        Nstar = N / (t_mli[i] * 100)
-        q_rad   = eps[i] * sigma * (Th**4 - Tc**4) / (N + 1)
-        q_solid = C_s_arr[i] * Nstar**2.56 * (Th - Tc) / N
-        q_gas   = 1.2 * 0.3 * P_torr[i] * (Th - Tc)
-        q_total = (q_rad + q_solid + q_gas) / QF[i]
-        if q_total < q_best:
-            q_best, n_best = q_total, N
-    N_star[i] = n_best
+num_samples = 5000
+N_max = 100
 
-med  = np.median(N_star)
-p5   = np.percentile(N_star, 5)
-p95  = np.percentile(N_star, 95)
+T_hot = 293.0
+T_cold = 20.0
 
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5),
-                                gridspec_kw={"width_ratios": [2.5, 1]})
-ax1.hist(N_star, bins=60, density=True, color='royalblue', edgecolor='white', lw=0.3)
-ax1.axvline(med, color='red', ls='--', lw=2, label=f'Median $N^*$ = {int(med)}')
-ax1.axvline(p5,  color='orange', ls=':', lw=1.5, label=f'5th pctl = {int(p5)}')
-ax1.axvline(p95, color='orange', ls=':', lw=1.5, label=f'95th pctl = {int(p95)}')
-ax1.set_xlabel("Optimal layer count $N^*$")
-ax1.set_ylabel("Probability density")
-ax1.legend()
-ax2.boxplot(N_star, vert=True)
-ax2.set_ylabel("Optimal layer count $N^*$")
-ax2.set_title("Summary statistics")
-plt.tight_layout()
-plt.savefig("figures/monte_carlo_optimal_N_star.png", dpi=150)
+thickness_samples = np.random.normal(loc=50.0, scale=5.0, size=num_samples)
+thickness_samples = np.clip(thickness_samples, a_min=0.0, a_max=None)
+
+log_min, log_max = np.log10(1e-6), np.log10(1e-4)
+random_log = np.random.uniform(low=log_min, high=log_max, size=num_samples)
+pressure_samples = 10**random_log
+
+quality_samples = np.random.uniform(low=0.8, high=1.0, size=num_samples)
+
+A = 26515.0
+B = 1.0
+C = 1.0e8
+
+N_values = np.arange(1, N_max + 1)
+
+L = thickness_samples[:, np.newaxis]
+P = pressure_samples[:, np.newaxis]
+QF = quality_samples[:, np.newaxis]
+
+Q_rad_matrix  = A / N_values
+Q_cond_matrix = B * (N_values**1.5) * (50.0 / L) * (1.0 / QF)
+Q_gas_matrix  = C * P * (1.0 / N_values) * (1.0 / QF)
+
+Q_total_matrix = Q_rad_matrix + Q_cond_matrix + Q_gas_matrix
+
+optimal_indices = np.argmin(Q_total_matrix, axis=1)
+optimal_layers = optimal_indices + 1
+
+median_N = np.median(optimal_layers)
+p5 = np.percentile(optimal_layers, 5)
+p95 = np.percentile(optimal_layers, 95)
+
+plt.figure(figsize=(8, 6))
+min_opt = int(optimal_layers.min())
+max_opt = int(optimal_layers.max())
+bins = np.arange(min_opt, max_opt + 2) - 0.5
+plt.hist(optimal_layers, bins=bins, edgecolor='black', alpha=0.7)
+
+plt.axvspan(p5, p95, alpha=0.2, label='5th–95th percentile range')
+plt.axvline(median_N, linestyle='--', linewidth=2, label=f'Median = {median_N:.1f}')
+
+plt.title('Distribution of Optimal MLI Layer Count (N*) from Monte Carlo Simulation')
+plt.xlabel('Optimal number of MLI layers (N*)')
+plt.ylabel('Frequency (out of 5000 samples)')
+plt.legend(loc='upper right')
+plt.xlim(min_opt - 1, max_opt + 1)
+plt.grid(axis='y', linestyle='--', alpha=0.7)
+
+plt.savefig("figures/monte_carlo_optimal_N_star.png", dpi=150, bbox_inches='tight')
 ```
 
 </details>
 
 In this example study:
-- Median $N^* \approx 56$ layers; 5th–95th percentile ≈ 36–93 layers (from 10,000 Monte Carlo samples with the assumed uncertainty ranges).
+- Median $N^* \approx 49$ layers; 5th–95th percentile ≈ 45–55 layers (from 5,000 Monte Carlo samples with the assumed uncertainty ranges).
 
 ## Recommendation and LC05 verification points
 
