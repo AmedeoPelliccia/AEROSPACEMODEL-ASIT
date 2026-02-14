@@ -17,6 +17,8 @@
 | `TS-28-10-TS02_distributed_architecture.yaml` | Distributed Small Cells vs Single Large Tank | Distributed Circular Cryogenic Cells |
 | `TS-28-10-TS03_insulation.yaml` | Insulation Concept | Vacuum + MLI |
 | `evaluation_criteria.yaml` | Weighted evaluation matrix & open risks | Multi-Cell Circular Vacuum-MLI |
+| `CS25_compliance_matrix.yaml` | EASA CS-25 compliance matrix (YAML, machine-readable) | 23 reqs + 6 Special Conditions |
+| `CS25_compliance_matrix.md` | EASA CS-25 compliance matrix (Markdown, human-readable) | — |
 
 ## Governance
 
