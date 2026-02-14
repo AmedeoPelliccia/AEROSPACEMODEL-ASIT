@@ -1,0 +1,30 @@
+# COMPLIANCE_STATUS.yaml
+# Certification compliance dashboard for 28-10-00 Fuel Storage General
+
+subject_id: "28-10-00"
+title: "Fuel Storage General — Compliance Status"
+special_condition_ref: "SC-28-H2-001"
+
+compliance_items:
+  - item: "Boil-off rate within limits"
+    sc_ref: "SC-28-H2-001"
+    requirement: "REQ-Q100-C2-011"
+    compliance_status: "in_progress"
+    evidence: ""
+    notes: "Thermal analysis pending (LC05)"
+
+  - item: "Leak detection system coverage"
+    sc_ref: "SC-28-H2-001"
+    requirement: "REQ-Q100-C2-012"
+    compliance_status: "not_started"
+    evidence: ""
+    notes: "Awaiting sensor layout from LC04"
+
+  - item: "Pressure relief valve redundancy"
+    sc_ref: "SC-28-H2-001"
+    requirement: "REQ-Q100-C2-013"
+    compliance_status: "compliant"
+    evidence: "DES-Q100-C2-014"
+    notes: "Dual relief valves confirmed in design"
+
+last_updated: "2026-02-14"

@@ -1,0 +1,4 @@
+source_id,target_id,relationship,direction,status
+REQ-Q100-C2-010,DES-Q100-C2-010,implemented_by,forward,active
+REQ-Q100-C2-011,DES-Q100-C2-011,implemented_by,forward,active
+REQ-Q100-C2-013,DES-Q100-C2-014,implemented_by,forward,active

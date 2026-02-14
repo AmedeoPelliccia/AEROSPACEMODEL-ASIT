@@ -1,0 +1,4 @@
+source_id,target_id,relationship,direction,status
+REQ-Q100-C2-010,DES-Q100-C2-010,implements,forward,active
+REQ-Q100-C2-010,TST-Q100-C2-010,verifies,forward,active
+REQ-Q100-C2-010,SSOT-Q100-C2-002,derives_from,backward,active

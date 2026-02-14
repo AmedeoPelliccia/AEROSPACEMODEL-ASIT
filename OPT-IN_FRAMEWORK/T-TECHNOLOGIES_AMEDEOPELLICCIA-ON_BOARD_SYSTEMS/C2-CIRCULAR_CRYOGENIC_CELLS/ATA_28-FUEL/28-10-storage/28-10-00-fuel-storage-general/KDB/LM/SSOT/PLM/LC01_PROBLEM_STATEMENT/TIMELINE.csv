@@ -1,0 +1,4 @@
+milestone,target_date,lc_phase,status,description
+Problem statement approved,2026-01-31,LC01,completed,KNOT/KNU framework established for C2 storage
+Requirements baseline,2026-03-15,LC02,in_progress,System requirements capture and review
+Preliminary design review,2026-06-30,LC04,planned,PDR gate for C2 cell geometry and materials

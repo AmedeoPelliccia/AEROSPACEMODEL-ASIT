@@ -1,0 +1,23 @@
+# SSOT_INDEX.yaml
+# Subject authoritative sources for 28-10-00 Fuel Storage General
+
+subject_id: "28-10-00"
+title: "Fuel Storage General — SSOT Index"
+
+authoritative_sources:
+  requirements:
+    path: "KDB/LM/SSOT/PLM/LC02_SYSTEM_REQUIREMENTS"
+    description: "System requirements for C2 fuel storage"
+    authority: "STK_ENG"
+
+  safety:
+    path: "KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY"
+    description: "Safety assessment and hazard analysis"
+    authority: "STK_SAF"
+
+  design:
+    path: "KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU"
+    description: "Design definition for C2 cell structure"
+    authority: "STK_ENG"
+
+last_updated: "2026-02-14"

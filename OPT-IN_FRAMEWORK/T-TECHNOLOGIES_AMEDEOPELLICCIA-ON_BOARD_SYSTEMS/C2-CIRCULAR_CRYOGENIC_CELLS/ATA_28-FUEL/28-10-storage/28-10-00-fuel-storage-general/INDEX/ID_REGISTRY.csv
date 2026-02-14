@@ -1,0 +1,6 @@
+id,type,title,lc_phase,status,created_date
+REQ-Q100-C2-010,requirement,C2 Storage Pressure Envelope,LC02,approved,2026-01-15
+REQ-Q100-C2-011,requirement,C2 Boil-Off Rate Limit,LC02,approved,2026-01-15
+DES-Q100-C2-010,design,C2 Circular Cell Geometry,LC04,in_progress,2026-02-01
+HAZ-Q100-C2-001,hazard,LH2 Tank Leak — Catastrophic,LC03,identified,2026-01-20
+SSOT-Q100-C2-002,ssot,Fuel Storage General SSOT,LC02,established,2026-01-10

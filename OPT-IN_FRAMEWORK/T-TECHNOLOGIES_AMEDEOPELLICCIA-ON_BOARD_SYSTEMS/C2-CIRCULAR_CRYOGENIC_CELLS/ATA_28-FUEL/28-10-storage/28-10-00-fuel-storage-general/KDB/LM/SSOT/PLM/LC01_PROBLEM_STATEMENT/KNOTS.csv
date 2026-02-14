@@ -1,0 +1,4 @@
+knot_id,title,source,uncertainty_type,severity,owner,status,target_date
+KNOT-C2-001,Cryogenic insulation thermal performance,GENESIS,technical,high,STK_ENG,open,2026-06-30
+KNOT-C2-002,Hydrogen permeation through inner shell,GENESIS,technical,high,STK_ENG,open,2026-05-15
+KNOT-C2-003,Boil-off rate under flight load cycling,GENESIS,operational,medium,STK_ENG,open,2026-07-31

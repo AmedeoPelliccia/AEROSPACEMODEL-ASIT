@@ -1,0 +1,5 @@
+activity,responsible,accountable,consulted,informed
+KNOT identification,STK_ENG,STK_PM,STK_SAF,STK_CM
+KNU planning,STK_ENG,STK_PM,STK_SAF,STK_QA
+Trade study execution,STK_ENG,STK_ENG,STK_SAF,STK_PM
+Problem statement approval,STK_PM,STK_PM,STK_ENG;STK_SAF,STK_CM;STK_QA

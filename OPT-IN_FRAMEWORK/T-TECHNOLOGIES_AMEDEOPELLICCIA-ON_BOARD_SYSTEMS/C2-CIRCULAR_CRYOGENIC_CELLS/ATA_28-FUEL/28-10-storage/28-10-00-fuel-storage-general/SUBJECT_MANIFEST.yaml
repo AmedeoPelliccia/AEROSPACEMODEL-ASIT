@@ -1,0 +1,27 @@
+# SUBJECT_MANIFEST.yaml
+# Inventory snapshot for ATA 28-10-00 Fuel Storage General
+# AMPEL360 Q100 — C2 Circular Cryogenic Cells
+
+subject_id: "28-10-00"
+title: "Fuel Storage General"
+ata_code: "28-10-00"
+technology_domain: "C2"
+aircraft_program: "AMPEL360 Q100"
+contract_ref: "KITDM-CTR-LM-CSDB_ATA28"
+
+status_counts:
+  requirements: 15
+  design_specs: 0
+  tests: 0
+  publications: 0
+
+lifecycle_phase: "LC04"
+baseline_ref: "DBL-Q100-2026-Q2"
+
+governance:
+  safety_critical: true
+  stakeholder_review: "STK_SAF"
+  brex_profile: "AEROSPACEMODEL-PRJ-01"
+
+last_updated: "2026-02-14"
+manifest_version: "1.0.0"

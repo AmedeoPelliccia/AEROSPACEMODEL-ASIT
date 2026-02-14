@@ -1,0 +1,4 @@
+source_id,target_id,relationship,direction,status
+HAZ-Q100-C2-001,REQ-Q100-C2-010,mitigated_by,forward,active
+HAZ-Q100-C2-001,DES-Q100-C2-014,mitigated_by,forward,active
+REQ-Q100-C2-012,HAZ-Q100-C2-002,addresses,forward,active

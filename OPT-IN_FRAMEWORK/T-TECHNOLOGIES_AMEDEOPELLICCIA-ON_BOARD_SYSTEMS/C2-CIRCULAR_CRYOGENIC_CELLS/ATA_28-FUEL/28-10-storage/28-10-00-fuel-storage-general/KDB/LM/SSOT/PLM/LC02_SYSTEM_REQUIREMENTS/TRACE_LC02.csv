@@ -1,0 +1,4 @@
+source_id,target_id,relationship,direction,status
+REQ-Q100-C2-010,SSOT-Q100-C2-002,derives_from,backward,active
+REQ-Q100-C2-011,KNOT-C2-003,derives_from,backward,active
+REQ-Q100-C2-012,SC-28-H2-001,complies_with,backward,active

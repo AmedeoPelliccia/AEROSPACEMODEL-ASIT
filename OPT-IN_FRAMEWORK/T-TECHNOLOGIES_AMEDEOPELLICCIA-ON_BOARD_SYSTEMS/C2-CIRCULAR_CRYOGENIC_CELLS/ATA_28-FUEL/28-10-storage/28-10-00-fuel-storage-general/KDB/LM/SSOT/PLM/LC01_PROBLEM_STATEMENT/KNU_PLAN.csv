@@ -1,0 +1,4 @@
+knu_id,knot_ref,title,knowledge_type,target_lc,responsible,status
+KNU-C2-001,KNOT-C2-001,MLI layer count optimization analysis,analysis,LC05,STK_ENG,planned
+KNU-C2-002,KNOT-C2-002,316L permeation test at 20K,test,LC06,STK_ENG,planned
+KNU-C2-003,KNOT-C2-003,Boil-off simulation under vibration loads,simulation,LC05,STK_ENG,planned

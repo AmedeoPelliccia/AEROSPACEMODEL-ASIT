@@ -1,0 +1,4 @@
+source_id,target_id,relationship,status
+KNOT-C2-001,KNU-C2-001,resolved_by,active
+KNOT-C2-002,KNU-C2-002,resolved_by,active
+KNOT-C2-003,KNU-C2-003,resolved_by,active
