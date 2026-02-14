@@ -151,7 +151,7 @@ The report’s example calculations are illustrative and parameterised:
 - Reflector emittance parameter used in plots: \(E=0.03\) (typical) unless noted; guidance reports typical IR emittance in this range for aluminised films. citeturn13view2turn10view0turn25view0
 - Seam and penetration adders are not hard-coded in plots (plots show blanket-only behaviour); they are applied explicitly in recommendations and test planning using NASA-measured seam/penetration penalties. citeturn18view0turn13view3
 
-image_group{"layout":"carousel","aspect_ratio":"16:9","query":["multilayer insulation blanket cross section diagram","cryogenic tank vacuum jacket multilayer insulation","Dacron spacer netting for MLI","double aluminized Mylar MLI film"],"num_per_query":1}
+_Illustrative figures (not included here) may show: (i) a multilayer insulation blanket cross‑section, (ii) a cryogenic tank vacuum jacket with MLI, (iii) Dacron spacer netting within the MLI stack, and (iv) double‑aluminised Mylar MLI film._
 
 ```mermaid
 flowchart TD
