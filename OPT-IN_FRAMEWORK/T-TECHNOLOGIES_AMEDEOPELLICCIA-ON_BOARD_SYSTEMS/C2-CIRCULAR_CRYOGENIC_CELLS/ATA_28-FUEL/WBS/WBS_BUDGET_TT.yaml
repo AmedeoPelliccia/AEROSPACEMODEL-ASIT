@@ -1,0 +1,51 @@
+# WBS Token Budget Allocation – ATA 28 LH₂ Fuel System
+# Version: 1.0.0
+# Note: Informational only — token allocations are non-binding estimates.
+
+total_pool: 10000
+
+allocations:
+  - wbs_id: WP-28-01
+    title: System Design
+    token_count: 1200
+    percentage: 12.0
+
+  - wbs_id: WP-28-02
+    title: Safety Analysis
+    token_count: 1500
+    percentage: 15.0
+
+  - wbs_id: WP-28-03
+    title: Tank Development
+    token_count: 1800
+    percentage: 18.0
+
+  - wbs_id: WP-28-04
+    title: Distribution System
+    token_count: 1000
+    percentage: 10.0
+
+  - wbs_id: WP-28-05
+    title: Boil-Off Management
+    token_count: 800
+    percentage: 8.0
+
+  - wbs_id: WP-28-06
+    title: Leak Detection
+    token_count: 1200
+    percentage: 12.0
+
+  - wbs_id: WP-28-07
+    title: Ground Handling
+    token_count: 600
+    percentage: 6.0
+
+  - wbs_id: WP-28-08
+    title: Integration & Test
+    token_count: 1200
+    percentage: 12.0
+
+  - wbs_id: WP-28-09
+    title: Certification
+    token_count: 700
+    percentage: 7.0

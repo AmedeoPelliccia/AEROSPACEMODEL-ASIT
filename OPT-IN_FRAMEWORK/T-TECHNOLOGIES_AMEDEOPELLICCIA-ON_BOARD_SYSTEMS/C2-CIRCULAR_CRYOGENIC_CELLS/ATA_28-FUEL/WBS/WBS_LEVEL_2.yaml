@@ -1,0 +1,62 @@
+# WBS Level 2 – ATA 28 LH₂ Fuel System (AMPEL360 Q100)
+# Decomposition of WP-28-03 (Tank Development) and WP-28-06 (Leak Detection)
+# Version: 1.0.0
+
+work_packages:
+  # --- WP-28-03 Tank Development ---
+  - id: WP-28-03-01
+    parent: WP-28-03
+    title: Cell Design
+    description: Detailed design of C2 circular cryogenic cells including geometry, structural analysis, and interface definitions.
+    owner: STK_ENG
+    lc_phases: [LC03, LC04]
+
+  - id: WP-28-03-02
+    parent: WP-28-03
+    title: Insulation
+    description: Vacuum-jacketed multi-layer insulation (MLI) design and thermal performance analysis.
+    owner: STK_ENG
+    lc_phases: [LC03, LC04, LC05]
+
+  - id: WP-28-03-03
+    parent: WP-28-03
+    title: Pressure Systems
+    description: Pressurization, pressure relief valves, burst discs, and venting system design.
+    owner: STK_ENG
+    lc_phases: [LC03, LC04, LC05]
+
+  - id: WP-28-03-04
+    parent: WP-28-03
+    title: Materials Qualification
+    description: Cryogenic material testing and qualification (SS 304/316, Al 5083, Inconel, PTFE seals).
+    owner: STK_ENG
+    lc_phases: [LC04, LC05, LC06]
+
+  - id: WP-28-03-05
+    parent: WP-28-03
+    title: Manufacturing Process
+    description: Manufacturing process development, tooling, and first-article inspection planning.
+    owner: STK_ENG
+    lc_phases: [LC05, LC06, LC07]
+
+  # --- WP-28-06 Leak Detection ---
+  - id: WP-28-06-01
+    parent: WP-28-06
+    title: Sensor Selection
+    description: Trade study and selection of H₂ leak detection sensors (electrochemical, thermal conductivity, optical).
+    owner: STK_SAF
+    lc_phases: [LC03, LC04]
+
+  - id: WP-28-06-02
+    parent: WP-28-06
+    title: System Architecture
+    description: Leak detection system architecture, sensor placement, and redundancy design.
+    owner: STK_SAF
+    lc_phases: [LC03, LC04, LC05]
+
+  - id: WP-28-06-03
+    parent: WP-28-06
+    title: Threshold Calibration
+    description: Detection threshold definition, calibration procedures, and false-alarm rate analysis.
+    owner: STK_SAF
+    lc_phases: [LC04, LC05, LC06]

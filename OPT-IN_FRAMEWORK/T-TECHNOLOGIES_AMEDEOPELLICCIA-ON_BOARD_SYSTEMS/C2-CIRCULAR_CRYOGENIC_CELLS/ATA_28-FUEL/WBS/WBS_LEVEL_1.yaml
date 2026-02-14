@@ -1,0 +1,57 @@
+# WBS Level 1 – ATA 28 LH₂ Fuel System (AMPEL360 Q100)
+# Version: 1.0.0
+
+work_packages:
+  - id: WP-28-01
+    title: System Design
+    description: Overall system architecture, interface definitions, and requirement allocation.
+    owner: STK_ENG
+    lc_phases: [LC01, LC02, LC03, LC04]
+
+  - id: WP-28-02
+    title: Safety Analysis
+    description: FHA, PSSA, SSA, and failure mode analysis per ARP4761.
+    owner: STK_SAF
+    lc_phases: [LC02, LC03, LC04, LC06]
+
+  - id: WP-28-03
+    title: Tank Development
+    description: C2 circular cryogenic cell design, insulation, and pressure systems.
+    owner: STK_ENG
+    lc_phases: [LC03, LC04, LC05, LC06]
+
+  - id: WP-28-04
+    title: Distribution System
+    description: Cryogenic transfer pumps, insulated lines, and pressure control.
+    owner: STK_ENG
+    lc_phases: [LC03, LC04, LC05, LC06]
+
+  - id: WP-28-05
+    title: Boil-Off Management
+    description: BOG capture, thermal management, and venting systems.
+    owner: STK_ENG
+    lc_phases: [LC03, LC04, LC05, LC06]
+
+  - id: WP-28-06
+    title: Leak Detection
+    description: H₂ leak detection sensors, architecture, and threshold calibration.
+    owner: STK_SAF
+    lc_phases: [LC03, LC04, LC05, LC06]
+
+  - id: WP-28-07
+    title: Ground Handling
+    description: Refueling, defueling, and ground support equipment interfaces.
+    owner: STK_ENG
+    lc_phases: [LC04, LC05, LC06, LC08]
+
+  - id: WP-28-08
+    title: Integration & Test
+    description: System integration, qualification testing, and flight test support.
+    owner: STK_ENG
+    lc_phases: [LC05, LC06, LC07, LC08]
+
+  - id: WP-28-09
+    title: Certification
+    description: Type certification activities including compliance demonstration.
+    owner: STK_CM
+    lc_phases: [LC06, LC07, LC08, LC09]

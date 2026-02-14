@@ -1,0 +1,25 @@
+# Token Allocation by Activity – ATA 28
+# Version: 1.0.0
+
+total_pool: 5000
+
+activity_pools:
+  - activity: KNOT closure
+    description: Resolving safety or engineering KNOTs
+    token_pool: 1500
+    per_knot: 50
+
+  - activity: Requirement authoring
+    description: Authoring and verifying allocated requirements
+    token_pool: 1200
+    per_requirement: 10
+
+  - activity: Test execution
+    description: Executing and documenting qualification tests
+    token_pool: 1300
+    per_test: 25
+
+  - activity: Safety analysis
+    description: Contributing to FHA, PSSA, SSA activities
+    token_pool: 1000
+    per_analysis: 100

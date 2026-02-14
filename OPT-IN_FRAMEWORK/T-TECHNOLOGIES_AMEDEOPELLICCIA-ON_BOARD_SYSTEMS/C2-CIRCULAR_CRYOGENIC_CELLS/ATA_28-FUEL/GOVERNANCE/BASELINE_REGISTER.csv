@@ -1,0 +1,4 @@
+baseline_id,type,scope,established_date,approver,status
+FBL-Q100-ATA28-001,FBL,System requirements and functional architecture,2026-03-01,CCB / STK_SAF,established
+DBL-Q100-ATA28-001,DBL,Detailed design and safety analysis outputs,2026-12-15,CCB / STK_SAF,established
+PBL-Q100-ATA28-001,PBL,Production configuration and as-built documentation,,CCB / STK_SAF,planned

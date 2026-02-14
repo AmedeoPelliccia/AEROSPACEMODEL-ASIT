@@ -1,0 +1,5 @@
+artifact_type,approval_role,gate,escalation_required
+requirements,STK_ENG,PDR,no
+design,STK_ENG,CDR,no
+safety_analysis,STK_SAF,CDR,yes
+test_results,STK_ENG,TRR,no

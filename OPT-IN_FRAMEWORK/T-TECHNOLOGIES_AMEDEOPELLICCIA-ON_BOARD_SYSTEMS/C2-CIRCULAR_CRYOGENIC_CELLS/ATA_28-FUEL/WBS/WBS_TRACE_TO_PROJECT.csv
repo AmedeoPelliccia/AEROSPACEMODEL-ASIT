@@ -1,0 +1,11 @@
+wbs_id,wbs_title,milestone,target_date,lc_phase,status
+WP-28-01,System Design,PDR,2026-06-15,LC04,planned
+WP-28-02,Safety Analysis,PDR,2026-06-15,LC04,planned
+WP-28-03,Tank Development,CDR,2026-12-15,LC04,planned
+WP-28-04,Distribution System,CDR,2026-12-15,LC04,planned
+WP-28-05,Boil-Off Management,CDR,2026-12-15,LC04,planned
+WP-28-06,Leak Detection,CDR,2026-12-15,LC04,planned
+WP-28-07,Ground Handling,TRR,2027-06-15,LC06,planned
+WP-28-08,Integration & Test,TRR,2027-06-15,LC06,planned
+WP-28-09,Certification,FRR,2027-10-15,LC08,planned
+WP-28-03-04,Materials Qualification,TRR,2027-06-15,LC06,planned
