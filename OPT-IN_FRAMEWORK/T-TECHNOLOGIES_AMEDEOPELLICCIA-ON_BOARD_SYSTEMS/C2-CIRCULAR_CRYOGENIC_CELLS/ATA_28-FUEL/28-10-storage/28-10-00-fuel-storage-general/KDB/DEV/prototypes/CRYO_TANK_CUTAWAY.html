@@ -34,8 +34,8 @@
     - Three.js r162      (WebGL 3-D engine)
   ═══════════════════════════════════════════════════════════════════
 -->
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react@18.2.0/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 <script crossorigin src="https://unpkg.com/three@0.162.0/build/three.min.js"></script>
 <style>
@@ -349,7 +349,7 @@ const CRYO_TANK_CUTAWAY = () => {
     // ═════════════════════════════════════════════════════════════
     //  MLI LAYERS
     // ═════════════════════════════════════════════════════════════
-    const totalMLI = 30;
+    const totalMLI = 60;
     const bandsCount = 6;
     const layersPerBand = Math.ceil(totalMLI / bandsCount);
 
@@ -749,15 +749,16 @@ const CRYO_TANK_CUTAWAY = () => {
       strut:       new THREE.Vector3(-1.5, 0.44, 0),
       feedthrough:  new THREE.Vector3(1.26, 0.56, 0),
     };
-    const worldPos = positions[labelId];
-    if (!worldPos) return null;
+    const basePos = positions[labelId];
+    if (!basePos) return null;
 
+    const worldPos = basePos.clone();
     const group = sceneRef.current.userData.group;
     if (group) {
       worldPos.applyEuler(group.rotation);
     }
 
-    const projected = worldPos.clone().project(cameraRef.current);
+    const projected = worldPos.project(cameraRef.current);
     const el = rendererRef.current.domElement;
     return {
       x: (projected.x * 0.5 + 0.5) * el.clientWidth,
@@ -771,6 +772,10 @@ const CRYO_TANK_CUTAWAY = () => {
     if (!loaded) return;
     if (frameRef.current) cancelAnimationFrame(frameRef.current);
     disposeScene(sceneRef.current);
+    if (rendererRef.current) {
+      rendererRef.current.dispose();
+      rendererRef.current = null;
+    }
     buildScene();
     animate();
   }, [cutAngle]); // eslint-disable-line react-hooks/exhaustive-deps

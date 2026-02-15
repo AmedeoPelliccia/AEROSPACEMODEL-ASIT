@@ -161,6 +161,10 @@ class TestTechnicalContent:
     def test_mli_layer_count(self, html):
         assert "60 layers" in html
 
+    def test_mli_total_constant(self, html):
+        """The totalMLI constant must match the documented 60 layers."""
+        assert "totalMLI = 60" in html
+
     def test_wall_thickness(self, html):
         assert "3 mm" in html
 
