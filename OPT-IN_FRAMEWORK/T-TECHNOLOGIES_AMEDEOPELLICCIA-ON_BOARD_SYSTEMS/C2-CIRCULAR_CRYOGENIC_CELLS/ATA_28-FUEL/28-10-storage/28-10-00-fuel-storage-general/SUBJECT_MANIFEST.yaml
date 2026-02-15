@@ -10,10 +10,10 @@ aircraft_program: "AMPEL360 Q100"
 contract_ref: "KITDM-CTR-LM-CSDB_ATA28"
 
 status_counts:
-  requirements: 15
+  requirements: 16
   design_specs: 0
-  tests: 0
-  publications: 0
+  tests: 2
+  publications: 1
 
 lifecycle_phase: "LC04"
 baseline_ref: "DBL-Q100-2026-Q2"

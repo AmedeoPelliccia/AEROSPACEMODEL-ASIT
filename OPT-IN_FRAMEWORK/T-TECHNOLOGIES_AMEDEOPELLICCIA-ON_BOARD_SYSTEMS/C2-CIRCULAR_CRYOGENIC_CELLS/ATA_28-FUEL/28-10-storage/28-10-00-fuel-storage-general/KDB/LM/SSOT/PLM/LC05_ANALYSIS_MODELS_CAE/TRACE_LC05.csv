@@ -1,1 +1,5 @@
 source_id,target_id,relationship,direction,status
+KNU-28-10-00-ANA-002,C2-28-OKNOT-002,resolved_by,backward,active
+KNU-28-10-00-ANA-002,KNU-28-10-00-REQ-002,derives_from,backward,active
+KNU-28-10-00-ANA-003,C2-28-OKNOT-002,resolved_by,backward,active
+KNU-28-10-00-ANA-003,KNU-28-10-00-ANA-002,derives_from,backward,active
