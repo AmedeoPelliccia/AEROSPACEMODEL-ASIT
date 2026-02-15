@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>LH₂ Cryogenic Tank — Cutaway Prototype | ATA 28-10-00</title>
+<!--
+  ═══════════════════════════════════════════════════════════════════
+  CRYO_TANK_CUTAWAY — Interactive 3-D Cutaway of Circular Cryogenic
+  Cell (C2) Liquid-Hydrogen Storage Tank
+
+  ATA 28-10  ·  28-10-00 Fuel Storage General
+  Technology Domain: C2-CIRCULAR_CRYOGENIC_CELLS
+  Lifecycle Phase: KDB/DEV (prototype — NOT baselined)
+
+  Layers visualised:
+    1. Inner Pressure Vessel   (Al-Li, 3 mm, 20 K / 3.5 bar)
+    2. Liquid Hydrogen (LH₂)   (20.28 K, 70.8 kg/m³)
+    3. MLI Blanket (60 layers)  (aluminised Mylar + Dacron spacers)
+    4. Vacuum Annulus           (10⁻⁵ torr)
+    5. Outer Vacuum Jacket      (CFRP composite, ~290 K)
+    6. Ring Cradle Mounts       (PTFE slide pads, shear pins)
+    7. Bipod Composite Struts   (G10-CR fiberglass)
+    8. Feed-through Penetration (bayonet coupling, bellows)
+
+  This file is a DEVELOPMENT PROTOTYPE.
+  It is NOT authoritative and must not be referenced by publications
+  or contracts (see KDB/README.md).
+
+  Dependencies loaded from CDN:
+    - React 18          (UI framework)
+    - ReactDOM 18       (DOM renderer)
+    - Babel standalone   (JSX transform in browser)
+    - Three.js r162      (WebGL 3-D engine)
+  ═══════════════════════════════════════════════════════════════════
+-->
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script crossorigin src="https://unpkg.com/three@0.162.0/build/three.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body, #root { width: 100%; height: 100%; overflow: hidden; font-family: 'Inter', 'Segoe UI', system-ui, sans-serif; background: #0a0e1a; color: #e2e8f0; }
+  .viewer-wrap { position: relative; width: 100%; height: 100%; }
+  .canvas-mount { width: 100%; height: 100%; }
+
+  /* ── HUD overlay ── */
+  .hud { position: absolute; top: 16px; left: 16px; pointer-events: none; }
+  .hud h1 { font-size: 15px; font-weight: 700; letter-spacing: 0.04em; color: #94a3b8; }
+  .hud p  { font-size: 11px; color: #64748b; margin-top: 2px; }
+
+  /* ── Controls panel ── */
+  .controls { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+    background: rgba(15,23,42,.85); backdrop-filter: blur(12px);
+    border: 1px solid rgba(148,163,184,.15); border-radius: 12px;
+    padding: 12px 20px; display: flex; align-items: center; gap: 16px;
+    pointer-events: auto; }
+  .controls label { font-size: 12px; color: #94a3b8; white-space: nowrap; }
+  .controls input[type=range] { width: 160px; accent-color: #3b82f6; }
+  .controls button { background: rgba(59,130,246,.15); border: 1px solid rgba(59,130,246,.3);
+    color: #93c5fd; border-radius: 6px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
+  .controls button:hover { background: rgba(59,130,246,.25); }
+
+  /* ── Label dots + tooltip ── */
+  .label-dot { position: absolute; width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid currentColor; cursor: pointer; transform: translate(-50%,-50%);
+    transition: box-shadow .2s; pointer-events: auto; z-index: 2; }
+  .label-dot:hover, .label-dot.active { box-shadow: 0 0 10px currentColor; }
+  .label-dot .pulse { position: absolute; inset: -4px; border-radius: 50%;
+    border: 1px solid currentColor; opacity: 0; animation: ping 2s ease-out infinite; }
+  @keyframes ping { 0%{transform:scale(1);opacity:.6} 100%{transform:scale(2.2);opacity:0} }
+
+  .tooltip { position: absolute; left: 20px; top: -8px; width: 260px;
+    background: rgba(15,23,42,.92); backdrop-filter: blur(14px);
+    border: 1px solid rgba(148,163,184,.18); border-radius: 10px;
+    padding: 12px 14px; pointer-events: none; z-index: 3; }
+  .tooltip h3 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+  .tooltip p  { font-size: 11px; line-height: 1.5; color: #94a3b8; }
+
+  /* ── Legend sidebar ── */
+  .legend { position: absolute; top: 70px; right: 16px;
+    background: rgba(15,23,42,.8); backdrop-filter: blur(10px);
+    border: 1px solid rgba(148,163,184,.12); border-radius: 10px;
+    padding: 10px 14px; pointer-events: auto; max-width: 200px; }
+  .legend h2 { font-size: 12px; color: #64748b; margin-bottom: 8px; text-transform: uppercase; letter-spacing: .06em; }
+  .legend-item { display: flex; align-items: center; gap: 8px; padding: 3px 0; cursor: pointer; font-size: 12px; }
+  .legend-item:hover { color: #f1f5f9; }
+  .legend-swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-type="module">
+/* global React, ReactDOM, THREE */
+const { useState, useEffect, useRef, useCallback } = React;
+
+const CRYO_TANK_CUTAWAY = () => {
+  const mountRef = useRef(null);
+  const sceneRef = useRef(null);
+  const rendererRef = useRef(null);
+  const cameraRef = useRef(null);
+  const frameRef = useRef(null);
+  const meshIndexRef = useRef({});
+  const clipPlanesRef = useRef([]);
+  const lh2MatRef = useRef(null);
+
+  const isDragging = useRef(false);
+  const prevMouse = useRef({ x: 0, y: 0 });
+  const rotation = useRef({ x: 0.3, y: -0.6 });
+  const targetRotation = useRef({ x: 0.3, y: -0.6 });
+  const zoom = useRef(4.2);
+  const targetZoom = useRef(4.2);
+
+  const [loaded, setLoaded] = useState(false);
+  const [activeLabel, setActiveLabel] = useState(null);
+  const [showLabels, setShowLabels] = useState(true);
+  const [cutAngle, setCutAngle] = useState(270);
+
+  const LABELS = [
+    { id: "vessel", title: "Inner Pressure Vessel", desc: "Ø 0.8 m × 4.2 m barrel, 3 mm Al-Li wall, hemispherical endcaps. Operating at 20 K / 3.5 bar. Thin-wall ratio R/t ≈ 133.", color: "#60a5fa" },
+    { id: "lh2", title: "Liquid Hydrogen (LH₂)", desc: "Cryogenic fuel at 20.28 K, density 70.8 kg/m³. Stored sub-critical for maximum gravimetric efficiency.", color: "#38bdf8" },
+    { id: "mli", title: "MLI Blanket (60 layers)", desc: "Vacuum-jacketed multi-layer insulation: aluminised Mylar foils at ~10 layers/cm with Dacron net spacers. Warm boundary ~290 K, cold boundary ~20 K.", color: "#fbbf24" },
+    { id: "vacuum", title: "Vacuum Annulus", desc: "Evacuated to 10⁻⁵ torr. Eliminates convective heat transfer between 20 K inner and 290 K outer walls.", color: "#a78bfa" },
+    { id: "jacket", title: "Outer Vacuum Jacket", desc: "CFRP composite shell, room-temperature boundary (~290 K). Carries external loads and interfaces with airframe ring frames.", color: "#94a3b8" },
+    { id: "cradle", title: "Ring Cradle Mount", desc: "Circumferential ring with PTFE slide pads. Allows ±12 mm axial thermal contraction, secured with shear pins and tension straps.", color: "#f97316" },
+    { id: "strut", title: "Bipod Composite Struts", desc: "Paired G10-CR fiberglass struts on spherical bearings. Minimise conductive heat leak (< 0.3 W per strut pair).", color: "#34d399" },
+    { id: "feedthrough", title: "Feed-through Penetration", desc: "Vacuum-tight bayonet coupling for fill/vent/instrumentation. Bellows compensate thermal contraction.", color: "#f472b6" },
+  ];
+
+  // ── Scene disposal ──────────────────────────────────────────────
+  const disposeScene = useCallback((scene) => {
+    if (!scene) return;
+    scene.traverse((obj) => {
+      if (!obj) return;
+      if (obj.geometry) obj.geometry.dispose();
+      if (obj.material) {
+        const mats = Array.isArray(obj.material) ? obj.material : [obj.material];
+        mats.forEach((m) => {
+          if (!m) return;
+          Object.keys(m).forEach((k) => {
+            const v = m[k];
+            if (v && v.isTexture) v.dispose();
+          });
+          m.dispose();
+        });
+      }
+    });
+  }, []);
+
+  // ── Register mesh to label index ───────────────────────────────
+  const register = useCallback((id, obj) => {
+    if (!meshIndexRef.current[id]) meshIndexRef.current[id] = [];
+    if (obj.material) {
+      obj.userData.baseOpacity = obj.material.opacity ?? 1.0;
+      obj.userData.baseEmissiveIntensity = obj.material.emissiveIntensity ?? 0;
+    }
+    meshIndexRef.current[id].push(obj);
+  }, []);
+
+  // ── Clipping planes from cut angle ─────────────────────────────
+  const buildClipPlanes = useCallback((angleDeg) => {
+    if (!THREE) return { planes: [], useIntersection: false };
+    if (angleDeg >= 360) return { planes: [], useIntersection: false };
+
+    const phi = THREE.MathUtils.degToRad(angleDeg);
+    let planeA, planeB;
+    let useIntersection = false;
+
+    if (phi <= Math.PI) {
+      planeA = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+      planeB = new THREE.Plane(new THREE.Vector3(0, -Math.sin(phi), Math.cos(phi)), 0);
+      useIntersection = false;
+    } else {
+      planeA = new THREE.Plane(new THREE.Vector3(0, -1, 0), 0);
+      planeB = new THREE.Plane(new THREE.Vector3(0, Math.sin(phi), -Math.cos(phi)), 0);
+      useIntersection = true;
+    }
+
+    return { planes: [planeA, planeB], useIntersection };
+  }, []);
+
+  // ── Build scene ────────────────────────────────────────────────
+  const buildScene = useCallback(() => {
+    if (!THREE || !mountRef.current) return;
+
+    meshIndexRef.current = {};
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a0e1a);
+    sceneRef.current = scene;
+
+    const w = mountRef.current.clientWidth;
+    const h = mountRef.current.clientHeight;
+    const camera = new THREE.PerspectiveCamera(38, w / h, 0.01, 100);
+    camera.position.set(0, 0, zoom.current);
+    cameraRef.current = camera;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setSize(w, h);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+    renderer.localClippingEnabled = true;
+    while (mountRef.current.querySelector("canvas")) {
+      mountRef.current.querySelector("canvas").remove();
+    }
+    mountRef.current.appendChild(renderer.domElement);
+    rendererRef.current = renderer;
+
+    // ── Clipping planes ──
+    const clipResult = buildClipPlanes(cutAngle);
+    const clipPlanes = clipResult.planes || [];
+    const useIntersection = clipResult.useIntersection || false;
+    clipPlanesRef.current = clipPlanes;
+
+    const clipped = (mat) => {
+      if (clipPlanes.length > 0) {
+        mat.clippingPlanes = clipPlanes;
+        mat.clipIntersection = useIntersection;
+        mat.clipShadows = true;
+      }
+      return mat;
+    };
+
+    // ── Lights ──
+    scene.add(new THREE.AmbientLight(0x334466, 0.6));
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    keyLight.position.set(3, 4, 5);
+    keyLight.castShadow = true;
+    scene.add(keyLight);
+
+    const fillLight = new THREE.DirectionalLight(0x6688cc, 0.4);
+    fillLight.position.set(-3, 1, -2);
+    scene.add(fillLight);
+
+    const rimLight = new THREE.DirectionalLight(0x88aaff, 0.3);
+    rimLight.position.set(0, -2, -4);
+    scene.add(rimLight);
+
+    const pointLight = new THREE.PointLight(0x3388ff, 0.8, 8);
+    pointLight.position.set(0, 0, 0);
+    scene.add(pointLight);
+
+    // ── Main group ──
+    const group = new THREE.Group();
+    scene.add(group);
+
+    // ── Geometry parameters ──
+    const innerR = 0.4;
+    const innerLen = 2.1;
+    const wallThickMm = 3.0;
+    const wallThick = wallThickMm * 1e-3;
+    const innerR2 = Math.max(innerR - wallThick, 0.001);
+    const mliInnerR = innerR + 0.025;
+    const mliOuterR = innerR + 0.11;
+    const jacketR = innerR + 0.16;
+    const jacketThick = 0.012;
+    const jacketInnerR = jacketR - jacketThick;
+    const jacketHalfLen = innerLen + 0.22;
+
+    // ═════════════════════════════════════════════════════════════
+    //  INNER PRESSURE VESSEL
+    // ═════════════════════════════════════════════════════════════
+    const vesselMat = clipped(new THREE.MeshPhysicalMaterial({
+      color: 0x1e40af, metalness: 0.7, roughness: 0.25,
+      emissive: 0x0a1a4a, emissiveIntensity: 0.3,
+      clearcoat: 0.4, side: THREE.DoubleSide,
+    }));
+
+    const barrelGeo = new THREE.CylinderGeometry(innerR, innerR, innerLen * 2, 128, 1, true);
+    const barrel = new THREE.Mesh(barrelGeo, vesselMat);
+    barrel.rotation.z = Math.PI / 2;
+    group.add(barrel);
+    register("vessel", barrel);
+
+    const innerBarrelMat = clipped(new THREE.MeshPhysicalMaterial({
+      color: 0x1e40af, metalness: 0.6, roughness: 0.3,
+      emissive: 0x0a1a4a, emissiveIntensity: 0.25, side: THREE.BackSide,
+    }));
+    const innerBarrelGeo = new THREE.CylinderGeometry(innerR2, innerR2, innerLen * 2, 128, 1, true);
+    const innerBarrel = new THREE.Mesh(innerBarrelGeo, innerBarrelMat);
+    innerBarrel.rotation.z = Math.PI / 2;
+    group.add(innerBarrel);
+    register("vessel", innerBarrel);
+
+    const endcapGeo = new THREE.SphereGeometry(innerR, 64, 32, 0, Math.PI * 2, 0, Math.PI / 2);
+    const endcapL = new THREE.Mesh(endcapGeo, vesselMat);
+    endcapL.position.x = -innerLen;
+    endcapL.rotation.z = -Math.PI / 2;
+    group.add(endcapL);
+    register("vessel", endcapL);
+
+    const endcapR = new THREE.Mesh(endcapGeo, vesselMat);
+    endcapR.position.x = innerLen;
+    endcapR.rotation.z = Math.PI / 2;
+    group.add(endcapR);
+    register("vessel", endcapR);
+
+    const endcapInnerGeo = new THREE.SphereGeometry(innerR2, 64, 32, 0, Math.PI * 2, 0, Math.PI / 2);
+    const endcapInnerMat = clipped(new THREE.MeshPhysicalMaterial({
+      color: 0x1e40af, metalness: 0.5, roughness: 0.35,
+      emissive: 0x0a1a4a, emissiveIntensity: 0.2, side: THREE.BackSide,
+    }));
+    const ecInL = new THREE.Mesh(endcapInnerGeo, endcapInnerMat);
+    ecInL.position.x = -innerLen;
+    ecInL.rotation.z = -Math.PI / 2;
+    group.add(ecInL);
+    register("vessel", ecInL);
+
+    const ecInR = new THREE.Mesh(endcapInnerGeo, endcapInnerMat);
+    ecInR.position.x = innerLen;
+    ecInR.rotation.z = Math.PI / 2;
+    group.add(ecInR);
+    register("vessel", ecInR);
+
+    // ═════════════════════════════════════════════════════════════
+    //  LH₂ FILL
+    // ═════════════════════════════════════════════════════════════
+    const lh2R = innerR2 - 0.002;
+    const lh2Mat = clipped(new THREE.MeshPhysicalMaterial({
+      color: 0x38bdf8, transparent: true, opacity: 0.18,
+      emissive: 0x1e3a5f, emissiveIntensity: 0.5,
+      roughness: 0.1, metalness: 0.0, side: THREE.DoubleSide,
+    }));
+    lh2MatRef.current = lh2Mat;
+
+    const lh2BarrelGeo = new THREE.CylinderGeometry(lh2R, lh2R, innerLen * 2, 64, 1, true);
+    const lh2Barrel = new THREE.Mesh(lh2BarrelGeo, lh2Mat);
+    lh2Barrel.rotation.z = Math.PI / 2;
+    group.add(lh2Barrel);
+    register("lh2", lh2Barrel);
+
+    const lh2CapGeo = new THREE.SphereGeometry(lh2R, 48, 24, 0, Math.PI * 2, 0, Math.PI / 2);
+    const lh2CapL = new THREE.Mesh(lh2CapGeo, lh2Mat);
+    lh2CapL.position.x = -innerLen;
+    lh2CapL.rotation.z = -Math.PI / 2;
+    group.add(lh2CapL);
+    register("lh2", lh2CapL);
+
+    const lh2CapR = new THREE.Mesh(lh2CapGeo, lh2Mat);
+    lh2CapR.position.x = innerLen;
+    lh2CapR.rotation.z = Math.PI / 2;
+    group.add(lh2CapR);
+    register("lh2", lh2CapR);
+
+    // ═════════════════════════════════════════════════════════════
+    //  MLI LAYERS
+    // ═════════════════════════════════════════════════════════════
+    const totalMLI = 30;
+    const bandsCount = 6;
+    const layersPerBand = Math.ceil(totalMLI / bandsCount);
+
+    for (let band = 0; band < bandsCount; band++) {
+      const tBand = band / (bandsCount - 1);
+      const bandMat = clipped(new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color().setHSL(0.12 - tBand * 0.06, 0.3 + tBand * 0.5, 0.5 + tBand * 0.3),
+        metalness: 0.9, roughness: 0.08 + tBand * 0.15,
+        transparent: true, opacity: 0.3 + tBand * 0.25,
+        side: THREE.DoubleSide,
+        emissive: new THREE.Color().setHSL(0.6 - tBand * 0.5, 0.2, 0.02 + (1 - tBand) * 0.06),
+        emissiveIntensity: 0.3,
+      }));
+
+      const startIdx = band * layersPerBand;
+      const endIdx = Math.min(startIdx + layersPerBand, totalMLI);
+      const count = endIdx - startIdx;
+
+      const foilBaseGeo = new THREE.CylinderGeometry(1, 1, innerLen * 2 + 0.06, 96, 1, true);
+      const foilInstances = new THREE.InstancedMesh(foilBaseGeo, bandMat, count);
+
+      const dummy = new THREE.Object3D();
+      for (let j = 0; j < count; j++) {
+        const i = startIdx + j;
+        const t = i / (totalMLI - 1);
+        const r = mliInnerR + t * (mliOuterR - mliInnerR);
+        dummy.position.set(0, 0, 0);
+        dummy.rotation.set(0, 0, Math.PI / 2);
+        dummy.scale.set(r, 1, r);
+        dummy.updateMatrix();
+        foilInstances.setMatrixAt(j, dummy.matrix);
+      }
+      foilInstances.instanceMatrix.needsUpdate = true;
+      group.add(foilInstances);
+      register("mli", foilInstances);
+    }
+
+    for (let i = 2; i < totalMLI; i += 6) {
+      const t = i / (totalMLI - 1);
+      const r = mliInnerR + t * (mliOuterR - mliInnerR) + 0.001;
+      const spacerMat = clipped(new THREE.MeshBasicMaterial({
+        color: 0xffffff, transparent: true, opacity: 0.05,
+        wireframe: true, side: THREE.DoubleSide,
+      }));
+      const spacerGeo = new THREE.CylinderGeometry(r, r, innerLen * 2 + 0.04, 24, 6, true);
+      const spacer = new THREE.Mesh(spacerGeo, spacerMat);
+      spacer.rotation.z = Math.PI / 2;
+      group.add(spacer);
+      register("mli", spacer);
+    }
+
+    for (let i = 0; i < totalMLI; i += 5) {
+      const t = i / (totalMLI - 1);
+      const r = mliInnerR + t * (mliOuterR - mliInnerR);
+      const discMat = clipped(new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color().setHSL(0.12 - t * 0.06, 0.4, 0.55),
+        metalness: 0.85, roughness: 0.1,
+        transparent: true, opacity: 0.25, side: THREE.DoubleSide,
+      }));
+      const discGeo = new THREE.RingGeometry(innerR + 0.01, r, 64, 1);
+      [-1, 1].forEach((sign) => {
+        const disc = new THREE.Mesh(discGeo, discMat);
+        disc.position.x = sign * (innerLen + 0.03);
+        disc.rotation.y = sign * Math.PI / 2;
+        group.add(disc);
+        register("mli", disc);
+      });
+    }
+
+    // ═════════════════════════════════════════════════════════════
+    //  VACUUM ANNULUS
+    // ═════════════════════════════════════════════════════════════
+    const vacuumR = (mliOuterR + jacketInnerR) / 2;
+    const vacuumMat = clipped(new THREE.MeshBasicMaterial({
+      color: 0x7c3aed, transparent: true, opacity: 0.04, side: THREE.DoubleSide,
+    }));
+    const vacuumGeo = new THREE.CylinderGeometry(vacuumR, vacuumR, jacketHalfLen * 2 - 0.04, 64, 1, true);
+    const vacuumShell = new THREE.Mesh(vacuumGeo, vacuumMat);
+    vacuumShell.rotation.z = Math.PI / 2;
+    group.add(vacuumShell);
+    register("vacuum", vacuumShell);
+
+    // ═════════════════════════════════════════════════════════════
+    //  OUTER VACUUM JACKET
+    // ═════════════════════════════════════════════════════════════
+    const jacketMat = clipped(new THREE.MeshPhysicalMaterial({
+      color: 0x64748b, metalness: 0.4, roughness: 0.55,
+      clearcoat: 0.2, side: THREE.DoubleSide,
+    }));
+    const jacketInnerMat = clipped(new THREE.MeshPhysicalMaterial({
+      color: 0x475569, metalness: 0.3, roughness: 0.6, side: THREE.BackSide,
+    }));
+
+    const jacketOutGeo = new THREE.CylinderGeometry(jacketR, jacketR, jacketHalfLen * 2, 128, 1, true);
+    const jacketOut = new THREE.Mesh(jacketOutGeo, jacketMat);
+    jacketOut.rotation.z = Math.PI / 2;
+    group.add(jacketOut);
+    register("jacket", jacketOut);
+
+    const jacketInGeo = new THREE.CylinderGeometry(jacketInnerR, jacketInnerR, jacketHalfLen * 2, 128, 1, true);
+    const jacketIn = new THREE.Mesh(jacketInGeo, jacketInnerMat);
+    jacketIn.rotation.z = Math.PI / 2;
+    group.add(jacketIn);
+    register("jacket", jacketIn);
+
+    const jacketEndGeo = new THREE.SphereGeometry(jacketR, 64, 32, 0, Math.PI * 2, 0, Math.PI / 4);
+    [-1, 1].forEach((sign) => {
+      const jacketEnd = new THREE.Mesh(jacketEndGeo, jacketMat);
+      jacketEnd.position.x = sign * jacketHalfLen;
+      jacketEnd.rotation.z = sign * Math.PI / 2;
+      group.add(jacketEnd);
+      register("jacket", jacketEnd);
+    });
+
+    // ═════════════════════════════════════════════════════════════
+    //  RING CRADLE MOUNTS
+    // ═════════════════════════════════════════════════════════════
+    const cradleMat = clipped(new THREE.MeshPhysicalMaterial({
+      color: 0xf97316, metalness: 0.6, roughness: 0.35, side: THREE.DoubleSide,
+    }));
+    const ptfeMat = clipped(new THREE.MeshPhysicalMaterial({
+      color: 0xfef3c7, metalness: 0.1, roughness: 0.7, side: THREE.DoubleSide,
+    }));
+    const pinMat = clipped(new THREE.MeshPhysicalMaterial({
+      color: 0xcc4400, metalness: 0.8, roughness: 0.2,
+    }));
+
+    const cradlePositions = [-0.9, 0.9];
+    cradlePositions.forEach((xPos) => {
+      const ringGeo = new THREE.TorusGeometry(jacketR + 0.02, 0.018, 12, 96);
+      const ring = new THREE.Mesh(ringGeo, cradleMat);
+      ring.position.x = xPos;
+      ring.rotation.x = Math.PI / 2;
+      group.add(ring);
+      register("cradle", ring);
+
+      const numPads = 6;
+      for (let i = 0; i < numPads; i++) {
+        const padAngle = (Math.PI * 2 / numPads) * i;
+        const padGeo = new THREE.BoxGeometry(0.05, 0.025, 0.04);
+        const pad = new THREE.Mesh(padGeo, ptfeMat);
+        const pr = jacketR + 0.02;
+        pad.position.set(xPos, Math.sin(padAngle) * pr, Math.cos(padAngle) * pr);
+        pad.rotation.x = -padAngle;
+        group.add(pad);
+        register("cradle", pad);
+      }
+
+      for (let i = 0; i < 4; i++) {
+        const pa = (Math.PI * 2 / 4) * i + Math.PI / 8;
+        const pinGeo = new THREE.CylinderGeometry(0.005, 0.005, 0.04, 8);
+        const pin = new THREE.Mesh(pinGeo, pinMat);
+        const pinR = jacketR + 0.02;
+        pin.position.set(xPos, Math.sin(pa) * pinR, Math.cos(pa) * pinR);
+        pin.rotation.x = Math.PI / 2 - pa;
+        group.add(pin);
+        register("cradle", pin);
+      }
+
+      [0.4, -0.4].forEach((offset) => {
+        const strapGeo = new THREE.TorusGeometry(jacketR + 0.035, 0.004, 6, 32, Math.PI * 0.6);
+        const strapMat = clipped(new THREE.MeshPhysicalMaterial({
+          color: 0xd97706, metalness: 0.5, roughness: 0.4,
+        }));
+        const strap = new THREE.Mesh(strapGeo, strapMat);
+        strap.position.x = xPos;
+        strap.rotation.set(Math.PI / 2, 0, offset);
+        group.add(strap);
+        register("cradle", strap);
+      });
+    });
+
+    // ═════════════════════════════════════════════════════════════
+    //  BIPOD COMPOSITE STRUTS
+    // ═════════════════════════════════════════════════════════════
+    const strutMat = clipped(new THREE.MeshPhysicalMaterial({
+      color: 0x10b981, metalness: 0.3, roughness: 0.45, side: THREE.DoubleSide,
+    }));
+    const bearingMat = clipped(new THREE.MeshPhysicalMaterial({
+      color: 0x9ca3af, metalness: 0.85, roughness: 0.15,
+    }));
+
+    const strutSets = [
+      { x: -1.5, angles: [Math.PI * 0.55, Math.PI * 1.15] },
+      { x: 0, angles: [Math.PI * 0.35, Math.PI * 0.85] },
+      { x: 1.5, angles: [Math.PI * 0.55, Math.PI * 1.15] },
+    ];
+
+    strutSets.forEach(({ x, angles }) => {
+      angles.forEach((a) => {
+        const innerPoint = new THREE.Vector3(x, Math.sin(a) * (innerR + 0.005), Math.cos(a) * (innerR + 0.005));
+        const outerPoint = new THREE.Vector3(x, Math.sin(a) * (jacketR + 0.03), Math.cos(a) * (jacketR + 0.03));
+        const dir = new THREE.Vector3().subVectors(outerPoint, innerPoint);
+        const len = dir.length();
+        const mid = new THREE.Vector3().addVectors(innerPoint, outerPoint).multiplyScalar(0.5);
+
+        const strutGeo = new THREE.CylinderGeometry(0.012, 0.009, len, 8);
+        const strut = new THREE.Mesh(strutGeo, strutMat);
+        strut.position.copy(mid);
+        strut.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+        group.add(strut);
+        register("strut", strut);
+
+        const bGeo = new THREE.SphereGeometry(0.016, 12, 12);
+        [innerPoint, outerPoint].forEach((pt) => {
+          const bearing = new THREE.Mesh(bGeo, bearingMat);
+          bearing.position.copy(pt);
+          group.add(bearing);
+          register("strut", bearing);
+        });
+      });
+    });
+
+    // ═════════════════════════════════════════════════════════════
+    //  FEED-THROUGH PENETRATION
+    // ═════════════════════════════════════════════════════════════
+    const feedMat = clipped(new THREE.MeshPhysicalMaterial({
+      color: 0xec4899, metalness: 0.5, roughness: 0.3,
+    }));
+    const feedX = innerLen * 0.6;
+    const feedAngle = Math.PI * 0.5;
+    const feedDirY = Math.sin(feedAngle);
+    const feedDirZ = Math.cos(feedAngle);
+
+    const feedLen = jacketR - innerR + 0.06;
+    const feedGeo = new THREE.CylinderGeometry(0.022, 0.022, feedLen, 16);
+    const feed = new THREE.Mesh(feedGeo, feedMat);
+    const feedMidR = (innerR + jacketR) / 2;
+    feed.position.set(feedX, feedDirY * feedMidR, feedDirZ * feedMidR);
+    feed.quaternion.setFromUnitVectors(
+      new THREE.Vector3(0, 1, 0),
+      new THREE.Vector3(0, feedDirY, feedDirZ).normalize()
+    );
+    group.add(feed);
+    register("feedthrough", feed);
+
+    const bellowsMat = clipped(new THREE.MeshPhysicalMaterial({
+      color: 0xd97706, metalness: 0.7, roughness: 0.2,
+    }));
+    for (let b = 0; b < 6; b++) {
+      const bellowR = 0.026 + (b % 2) * 0.008;
+      const bellowGeo = new THREE.TorusGeometry(bellowR, 0.003, 8, 24);
+      const bellow = new THREE.Mesh(bellowGeo, bellowsMat);
+      const br = innerR + 0.025 + b * 0.018;
+      bellow.position.set(feedX, feedDirY * br, feedDirZ * br);
+      bellow.quaternion.setFromUnitVectors(
+        new THREE.Vector3(0, 0, 1),
+        new THREE.Vector3(0, feedDirY, feedDirZ).normalize()
+      );
+      group.add(bellow);
+      register("feedthrough", bellow);
+    }
+
+    const flangeGeo = new THREE.CylinderGeometry(0.04, 0.04, 0.008, 24);
+    const flange = new THREE.Mesh(flangeGeo, bearingMat);
+    flange.position.set(feedX, feedDirY * jacketR, feedDirZ * jacketR);
+    flange.quaternion.setFromUnitVectors(
+      new THREE.Vector3(0, 1, 0),
+      new THREE.Vector3(0, feedDirY, feedDirZ).normalize()
+    );
+    group.add(flange);
+    register("feedthrough", flange);
+
+    // ── Store group for rotation ──
+    scene.userData.group = group;
+    setLoaded(true);
+  }, [cutAngle, buildClipPlanes, register]);
+
+  // ── Highlight helpers ──────────────────────────────────────────
+  const highlightLabel = useCallback((labelId) => {
+    Object.entries(meshIndexRef.current).forEach(([id, meshes]) => {
+      const isTarget = id === labelId;
+      meshes.forEach((mesh) => {
+        if (!mesh.material) return;
+        const mat = mesh.material;
+        if (isTarget) {
+          mat.emissiveIntensity = (mesh.userData.baseEmissiveIntensity || 0) + 0.4;
+          if (mat.opacity !== undefined && mat.transparent) {
+            mat.opacity = Math.min((mesh.userData.baseOpacity || 0.5) + 0.25, 1.0);
+          }
+        } else {
+          mat.emissiveIntensity = mesh.userData.baseEmissiveIntensity || 0;
+          if (mat.opacity !== undefined && mat.transparent) {
+            mat.opacity = mesh.userData.baseOpacity || 1.0;
+          }
+        }
+      });
+    });
+  }, []);
+
+  const clearHighlight = useCallback(() => {
+    Object.values(meshIndexRef.current).forEach((meshes) => {
+      meshes.forEach((mesh) => {
+        if (!mesh.material) return;
+        const mat = mesh.material;
+        mat.emissiveIntensity = mesh.userData.baseEmissiveIntensity || 0;
+        if (mat.opacity !== undefined && mat.transparent) {
+          mat.opacity = mesh.userData.baseOpacity || 1.0;
+        }
+      });
+    });
+  }, []);
+
+  // ── Animation loop ─────────────────────────────────────────────
+  const animate = useCallback(() => {
+    frameRef.current = requestAnimationFrame(animate);
+
+    const lerp = 0.08;
+    rotation.current.x += (targetRotation.current.x - rotation.current.x) * lerp;
+    rotation.current.y += (targetRotation.current.y - rotation.current.y) * lerp;
+    zoom.current += (targetZoom.current - zoom.current) * lerp;
+
+    const scene = sceneRef.current;
+    const camera = cameraRef.current;
+    const renderer = rendererRef.current;
+    if (!scene || !camera || !renderer) return;
+
+    const group = scene.userData.group;
+    if (group) {
+      group.rotation.x = rotation.current.x;
+      group.rotation.y = rotation.current.y;
+    }
+
+    camera.position.z = zoom.current;
+    camera.updateProjectionMatrix();
+
+    // LH₂ shimmer
+    if (lh2MatRef.current) {
+      const t = performance.now() * 0.001;
+      lh2MatRef.current.emissiveIntensity = 0.4 + Math.sin(t * 1.5) * 0.15;
+    }
+
+    renderer.render(scene, camera);
+  }, []);
+
+  // ── Mount / unmount ────────────────────────────────────────────
+  useEffect(() => {
+    buildScene();
+    animate();
+
+    const handleResize = () => {
+      const el = mountRef.current;
+      if (!el || !rendererRef.current || !cameraRef.current) return;
+      const w = el.clientWidth;
+      const h = el.clientHeight;
+      rendererRef.current.setSize(w, h);
+      cameraRef.current.aspect = w / h;
+      cameraRef.current.updateProjectionMatrix();
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      disposeScene(sceneRef.current);
+      if (rendererRef.current) {
+        rendererRef.current.dispose();
+        rendererRef.current = null;
+      }
+    };
+  }, [buildScene, animate, disposeScene]);
+
+  // ── Mouse handlers ─────────────────────────────────────────────
+  const onPointerDown = useCallback((e) => {
+    isDragging.current = true;
+    prevMouse.current = { x: e.clientX, y: e.clientY };
+  }, []);
+
+  const onPointerMove = useCallback((e) => {
+    if (!isDragging.current) return;
+    const dx = e.clientX - prevMouse.current.x;
+    const dy = e.clientY - prevMouse.current.y;
+    targetRotation.current.y += dx * 0.005;
+    targetRotation.current.x += dy * 0.005;
+    targetRotation.current.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, targetRotation.current.x));
+    prevMouse.current = { x: e.clientX, y: e.clientY };
+  }, []);
+
+  const onPointerUp = useCallback(() => {
+    isDragging.current = false;
+  }, []);
+
+  const onWheel = useCallback((e) => {
+    targetZoom.current = Math.max(1.5, Math.min(10, targetZoom.current + e.deltaY * 0.003));
+  }, []);
+
+  // ── 3-D label position projection ─────────────────────────────
+  const getLabelScreenPos = useCallback((labelId) => {
+    if (!cameraRef.current || !rendererRef.current || !sceneRef.current) return null;
+    const positions = {
+      vessel:      new THREE.Vector3(0, 0.42, 0),
+      lh2:         new THREE.Vector3(0, 0, 0),
+      mli:         new THREE.Vector3(0.6, 0.48, 0),
+      vacuum:      new THREE.Vector3(-0.5, 0.52, 0),
+      jacket:      new THREE.Vector3(0, 0.58, 0),
+      cradle:      new THREE.Vector3(0.9, 0.6, 0),
+      strut:       new THREE.Vector3(-1.5, 0.44, 0),
+      feedthrough:  new THREE.Vector3(1.26, 0.56, 0),
+    };
+    const worldPos = positions[labelId];
+    if (!worldPos) return null;
+
+    const group = sceneRef.current.userData.group;
+    if (group) {
+      worldPos.applyEuler(group.rotation);
+    }
+
+    const projected = worldPos.clone().project(cameraRef.current);
+    const el = rendererRef.current.domElement;
+    return {
+      x: (projected.x * 0.5 + 0.5) * el.clientWidth,
+      y: (-projected.y * 0.5 + 0.5) * el.clientHeight,
+      visible: projected.z < 1,
+    };
+  }, []);
+
+  // ── Rebuild on cut-angle change ────────────────────────────────
+  useEffect(() => {
+    if (!loaded) return;
+    if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    disposeScene(sceneRef.current);
+    buildScene();
+    animate();
+  }, [cutAngle]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // ── Label click handler ────────────────────────────────────────
+  const handleLabelClick = useCallback((id) => {
+    if (activeLabel === id) {
+      setActiveLabel(null);
+      clearHighlight();
+    } else {
+      setActiveLabel(id);
+      highlightLabel(id);
+    }
+  }, [activeLabel, clearHighlight, highlightLabel]);
+
+  // ── Render ─────────────────────────────────────────────────────
+  const [, forceUpdate] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => forceUpdate((n) => n + 1), 100);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div className="viewer-wrap">
+      <div
+        className="canvas-mount"
+        ref={mountRef}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerLeave={onPointerUp}
+        onWheel={onWheel}
+      />
+
+      {/* ── HUD ── */}
+      <div className="hud">
+        <h1>LH₂ Cryogenic Storage Tank — Cutaway</h1>
+        <p>ATA 28-10-00 · C2 Circular Cryogenic Cell · KDB/DEV Prototype</p>
+      </div>
+
+      {/* ── Legend sidebar ── */}
+      <div className="legend">
+        <h2>Layers</h2>
+        {LABELS.map((l) => (
+          <div
+            key={l.id}
+            className="legend-item"
+            style={{ color: activeLabel === l.id ? l.color : undefined }}
+            onClick={() => handleLabelClick(l.id)}
+          >
+            <span className="legend-swatch" style={{ background: l.color }} />
+            {l.title}
+          </div>
+        ))}
+      </div>
+
+      {/* ── 3-D projected label dots ── */}
+      {showLabels && LABELS.map((l) => {
+        const pos = getLabelScreenPos(l.id);
+        if (!pos || !pos.visible) return null;
+        const isActive = activeLabel === l.id;
+        return (
+          <div
+            key={l.id}
+            className={`label-dot ${isActive ? "active" : ""}`}
+            style={{ left: pos.x, top: pos.y, color: l.color }}
+            onClick={() => handleLabelClick(l.id)}
+          >
+            <span className="pulse" />
+            {isActive && (
+              <div className="tooltip">
+                <h3 style={{ color: l.color }}>{l.title}</h3>
+                <p>{l.desc}</p>
+              </div>
+            )}
+          </div>
+        );
+      })}
+
+      {/* ── Controls ── */}
+      <div className="controls">
+        <label>
+          Cutaway {cutAngle}°
+          <input
+            type="range"
+            min="30"
+            max="360"
+            value={cutAngle}
+            onChange={(e) => setCutAngle(Number(e.target.value))}
+          />
+        </label>
+        <button onClick={() => setShowLabels((v) => !v)}>
+          {showLabels ? "Hide" : "Show"} Labels
+        </button>
+        <button onClick={() => {
+          targetRotation.current = { x: 0.3, y: -0.6 };
+          targetZoom.current = 4.2;
+        }}>
+          Reset View
+        </button>
+      </div>
+    </div>
+  );
+};
+
+// ── Mount ──
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<CRYO_TANK_CUTAWAY />);
+</script>
+</body>
+</html>
