@@ -1,0 +1,206 @@
+# Parametric Model PM-28-10-PM03
+# Mounting / Load Path Analysis
+# ATA 28-10-00 Fuel Storage General
+# AMPEL360 Q100 — C2 Circular Cryogenic Cells
+
+model_id: "PM-28-10-PM03"
+title: "Mounting / Load Path Analysis"
+ata_code: "28-10-00"
+technology_domain: "C2"
+aircraft_program: "AMPEL360 Q100"
+lifecycle_phase: "LC05"
+status: "preliminary"
+author: "STK_ENG"
+date: "2026-02-15"
+version: "0.1.0"
+
+objective: >
+  Define the structural analysis model for cryogenic cell mounting and
+  load paths.  The model evaluates vibration response, crash loads, and
+  thermal cycling effects on the support structure to ensure compliance
+  with CS 25.561 (emergency landing), CS 25.571 (fatigue and damage
+  tolerance), and DO-160 vibration requirements while accommodating
+  cryogenic thermal contraction.
+
+load_cases:
+  - id: "LC-VIB-01"
+    name: "Random vibration (flight)"
+    type: "vibration"
+    standard: "DO-160G, Section 8"
+    spectrum: "Category S2 (fuselage zone)"
+    frequency_range: [10, 2000]
+    frequency_unit: "Hz"
+    duration: "60 min equivalent"
+    description: "In-service random vibration during flight phases"
+
+  - id: "LC-VIB-02"
+    name: "Ground taxi vibration"
+    type: "vibration"
+    standard: "DO-160G, Section 8"
+    spectrum: "Category T (taxi and take-off)"
+    frequency_range: [5, 500]
+    frequency_unit: "Hz"
+    duration: "30 min equivalent"
+    description: "Ground operations vibration including taxi and take-off roll"
+
+  - id: "LC-CRASH-01"
+    name: "Forward crash (9 g)"
+    type: "crash"
+    standard: "CS 25.561"
+    load_factor_g: 9.0
+    direction: "Forward"
+    description: "Ultimate forward emergency landing load"
+
+  - id: "LC-CRASH-02"
+    name: "Downward crash (6 g)"
+    type: "crash"
+    standard: "CS 25.561"
+    load_factor_g: 6.0
+    direction: "Downward"
+    description: "Ultimate downward emergency landing load"
+
+  - id: "LC-CRASH-03"
+    name: "Side crash (3 g)"
+    type: "crash"
+    standard: "CS 25.561"
+    load_factor_g: 3.0
+    direction: "Lateral"
+    description: "Ultimate lateral emergency landing load"
+
+  - id: "LC-CRASH-04"
+    name: "Aft crash (1.5 g)"
+    type: "crash"
+    standard: "CS 25.561"
+    load_factor_g: 1.5
+    direction: "Aft"
+    description: "Ultimate rearward emergency landing load"
+
+  - id: "LC-THERM-01"
+    name: "Cryogenic cool-down"
+    type: "thermal_cycling"
+    T_ambient: 293
+    T_cryo: 20
+    delta_T: -273
+    temperature_unit: "K"
+    description: "Thermal contraction from ambient to LH₂ operating temperature"
+
+  - id: "LC-THERM-02"
+    name: "Mission thermal cycle"
+    type: "thermal_cycling"
+    T_high: 293
+    T_low: 20
+    n_cycles_target: 20000
+    temperature_unit: "K"
+    description: "Repeated fill / drain thermal cycles over aircraft service life"
+
+  - id: "LC-COMB-01"
+    name: "Combined crash + cryogenic"
+    type: "combined"
+    description: "Crash load factors applied with tank at cryogenic temperature (worst case)"
+    components: ["LC-CRASH-01", "LC-THERM-01"]
+
+mount_concepts:
+  - id: "MNT-A"
+    name: "Ring cradle with PTFE slide pads"
+    description: >
+      Circumferential ring supports with PTFE-lined sliding pads
+      allowing axial thermal contraction.  One fixed ring + N-1
+      sliding rings per cell.
+    thermal_contraction: "Accommodated via sliding interface"
+    vibration_isolation: "Passive; natural frequency tuned above 25 Hz"
+    crash_retention: "Shear pins + tension straps"
+    heritage: "LNG marine tank supports"
+
+  - id: "MNT-B"
+    name: "Bipod strut frame"
+    description: >
+      Paired strut supports with spherical bearings allowing
+      multi-axis thermal movement.  Low-conductivity composite
+      struts minimise heat leak through supports.
+    thermal_contraction: "Accommodated via bearing articulation"
+    vibration_isolation: "Tuned strut stiffness"
+    crash_retention: "Strut ultimate load capacity"
+    heritage: "Spacecraft cryogenic tank supports"
+
+  - id: "MNT-C"
+    name: "Skirt / ring-frame integration"
+    description: >
+      Tank integrated into BWB ring-frame structure with flexible
+      mounting interface at each frame station.
+    thermal_contraction: "Bellows / flex joints at frame interfaces"
+    vibration_isolation: "Structural integration (stiff coupling)"
+    crash_retention: "Frame shear-web design"
+    heritage: "Aircraft fuselage tank integration"
+
+analysis_methods:
+  - name: "Modal analysis"
+    description: "Finite-element natural frequency and mode shape extraction"
+    tool: "FEA (NASTRAN SOL 103 or equivalent)"
+    output: "Natural frequencies, mode shapes, participation factors"
+
+  - name: "Random vibration response"
+    description: "PSD-based response to DO-160 vibration spectra"
+    tool: "FEA (NASTRAN SOL 111)"
+    output: "RMS stress, acceleration at mount points"
+
+  - name: "Static crash analysis"
+    description: "Inertia relief analysis under CS 25.561 load factors"
+    tool: "FEA (NASTRAN SOL 101)"
+    output: "Mount reaction forces, stress distribution, margins of safety"
+
+  - name: "Thermal stress analysis"
+    description: "Contraction-induced stresses at mount interfaces"
+    tool: "FEA (NASTRAN SOL 153 or coupled thermal-structural)"
+    output: "Interface forces, sliding pad displacements, stress at constraints"
+
+  - name: "Fatigue and damage tolerance"
+    description: "Cycle-by-cycle assessment under thermal + vibration spectrum"
+    tool: "Fatigue analysis (Miner's rule + crack growth)"
+    output: "Fatigue life, inspection intervals per CS 25.571"
+
+acceptance_criteria:
+  - criterion: "Natural frequency > 25 Hz (mounted)"
+    standard: "DO-160G avoidance of airframe resonance bands"
+
+  - criterion: "Positive margin of safety under all CS 25.561 crash cases"
+    standard: "CS 25.561 / CS 25.562"
+
+  - criterion: "Thermal cycling fatigue life >= 2× design service life"
+    standard: "CS 25.571"
+
+  - criterion: "Mount heat leak <= allocated thermal budget per support"
+    standard: "Thermal interface control (PM-28-10-PM02 budget)"
+
+  - criterion: "No yielding under combined crash + cryogenic loads"
+    standard: "CS 25.305 (safety factors applied)"
+
+outputs:
+  - name: "Mount concept trade matrix"
+    description: "Weighted evaluation of MNT-A / MNT-B / MNT-C"
+  - name: "Reaction force envelopes"
+    description: "Max mount forces for each load case"
+  - name: "Thermal displacement map"
+    description: "Contraction displacements at each mount station"
+  - name: "Fatigue life prediction"
+    description: "Cycles to crack initiation at critical mount locations"
+  - name: "Vibration response spectra"
+    description: "Tank acceleration vs frequency under DO-160 excitation"
+
+feeds:
+  - lifecycle: "LC06"
+    artifact: "Vibration and static load qualification tests"
+  - lifecycle: "LC05"
+    artifact: "Mount detail design drawings"
+  - lifecycle: "LC03"
+    artifact: "Safety FHA update — mount failure modes"
+
+traceability:
+  derives_from:
+    - "TS-28-10-TS01"
+    - "TS-28-10-TS02"
+    - "FBL-Q100-ATA28-001"
+  satisfies:
+    - "FBL-REQ-001"
+    - "FBL-REQ-004"
+    - "FBL-REQ-010"
+  verifies: []

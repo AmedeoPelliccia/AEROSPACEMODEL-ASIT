@@ -56,6 +56,13 @@ artifact_types:
     formats: ["yaml", "md"]
     description: "EASA CS-25 compliance matrix for LH₂ cryogenic fuel storage with Special Conditions"
 
+  parametric_models:
+    count: 3
+    location: "28-10-storage/28-10-00-fuel-storage-general/KDB/DEV/models/"
+    naming_pattern: "PM-28-10-PM{NN}_{topic}.yaml"
+    formats: ["yaml", "md"]
+    description: "LC05 parametric models for tank geometry, MLI thermal stack-up, and mounting loads"
+
   baselines:
     count: 1
     location: "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/"

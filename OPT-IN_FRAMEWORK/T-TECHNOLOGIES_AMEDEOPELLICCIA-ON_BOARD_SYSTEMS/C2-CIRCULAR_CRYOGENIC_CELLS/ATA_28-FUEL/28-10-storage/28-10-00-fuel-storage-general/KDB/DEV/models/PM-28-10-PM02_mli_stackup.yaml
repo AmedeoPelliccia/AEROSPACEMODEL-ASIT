@@ -1,0 +1,181 @@
+# Parametric Model PM-28-10-PM02
+# MLI Thermal Stack-Up Model
+# ATA 28-10-00 Fuel Storage General
+# AMPEL360 Q100 — C2 Circular Cryogenic Cells
+
+model_id: "PM-28-10-PM02"
+title: "MLI Thermal Stack-Up Model"
+ata_code: "28-10-00"
+technology_domain: "C2"
+aircraft_program: "AMPEL360 Q100"
+lifecycle_phase: "LC05"
+status: "preliminary"
+author: "STK_ENG"
+date: "2026-02-15"
+version: "0.1.0"
+
+objective: >
+  Define the thermal stack-up model for vacuum-jacketed multi-layer
+  insulation on circular cryogenic cells.  The model predicts total
+  heat leak as a function of MLI layer count, layer density, vacuum
+  level, boundary temperatures, and integration losses (seams and
+  penetrations) to enable boil-off rate estimation and insulation
+  sizing per the selected baseline (TS-28-10-TS03, Option A).
+
+parameters:
+  - symbol: "N"
+    name: "Number of reflective shields"
+    unit: "–"
+    range: [20, 100]
+    description: "Count of aluminised Mylar or DAM reflective layers"
+
+  - symbol: "N_star"
+    name: "Layer density"
+    unit: "layers/cm"
+    range: [5, 20]
+    description: "Packing density; optimal typically 8–12 layers/cm"
+
+  - symbol: "T_h"
+    name: "Warm boundary temperature"
+    unit: "K"
+    range: [235, 320]
+    description: "Vacuum jacket outer wall or compartment temperature"
+
+  - symbol: "T_c"
+    name: "Cold boundary temperature"
+    unit: "K"
+    range: [20, 25]
+    description: "LH₂ tank wall temperature (~20 K for para-hydrogen)"
+
+  - symbol: "P_vac"
+    name: "Vacuum pressure"
+    unit: "torr"
+    range: [1.0e-6, 1.0e-3]
+    description: "Residual gas pressure in the vacuum annulus"
+
+  - symbol: "A_CCC"
+    name: "CCC external surface area"
+    unit: "m²"
+    range: [5, 80]
+    description: "Total insulated surface area of one cell"
+
+  - symbol: "L_seam"
+    name: "Total seam length"
+    unit: "m"
+    range: [0, 50]
+    description: "Cumulative seam length across all blanket joints"
+
+  - symbol: "n_pen"
+    name: "Number of penetrations"
+    unit: "–"
+    range: [2, 20]
+    description: "Count of strut / feedthrough penetrations"
+
+governing_equations:
+  - name: "Radiation heat flux (modified Lockheed MLI model)"
+    expression: >
+      q_rad = C_r * epsilon_eff * (T_h^4.67 - T_c^4.67) / N
+    notes: >
+      C_r = radiation constant; epsilon_eff = effective emissivity of
+      reflector/spacer assembly.  Exponent 4.67 from Lockheed fit
+      accounts for radiation + solid conduction coupling.
+
+  - name: "Solid conduction heat flux (Dacron spacer)"
+    expression: >
+      q_cond = C_s * N_star^2.63 * (T_h - T_c) / N
+    notes: >
+      C_s = McIntosh conductivity coefficient; N_star dependence
+      captures contact pressure effect on inter-layer conduction.
+
+  - name: "Residual gas conduction"
+    expression: >
+      q_gas = C_g * P_vac * (T_h - T_c)
+    notes: >
+      Free-molecule regime conduction; linear in pressure.  Dominant
+      only when P_vac > ~1E-4 torr.
+
+  - name: "Total blanket heat flux"
+    expression: >
+      q_MLI = q_rad + q_cond + q_gas
+    unit: "W/m²"
+
+  - name: "Seam heat leak"
+    expression: >
+      Q_seam = k_seam * L_seam
+    notes: >
+      k_seam ≈ 0.169 W/m (NASA measured value for 30-layer MLI with
+      LH₂ sink).
+
+  - name: "Penetration heat leak"
+    expression: >
+      Q_pen = n_pen * q_pen_avg
+    notes: >
+      q_pen_avg ≈ 0.31–0.50 W per penetration (composite–aluminium
+      strut range from NASA calorimetry).
+
+  - name: "Total cell heat leak"
+    expression: >
+      Q_total = A_CCC * q_MLI + Q_seam + Q_pen
+    unit: "W"
+
+  - name: "Boil-off rate"
+    expression: >
+      m_dot_boil = Q_total / h_fg
+    notes: >
+      h_fg ≈ 447 kJ/kg for para-hydrogen at 20 K (NIST).
+
+optimisation:
+  objective_function: "Minimise Q_total subject to mass and thickness constraints"
+  constraints:
+    - "N <= N_max (envelope thickness limit)"
+    - "N_star within [8, 12] layers/cm (optimal density band)"
+    - "Boil-off rate <= 0.1 %/h of stored mass under cruise conditions"
+    - "Total MLI mass <= m_MLI_budget"
+  design_variables: ["N", "N_star"]
+  method: "Parametric sweep + Monte Carlo sensitivity"
+
+reference_cases:
+  - case: "Ground hot-day"
+    T_h: 320
+    T_c: 20
+    P_vac: 1.0e-5
+    notes: "Worst-case boil-off rate"
+
+  - case: "Cruise"
+    T_h: 250
+    T_c: 20
+    P_vac: 1.0e-5
+    notes: "Nominal operations"
+
+  - case: "Degraded vacuum"
+    T_h: 280
+    T_c: 20
+    P_vac: 1.0e-4
+    notes: "Sensitivity to vacuum loss"
+
+outputs:
+  - name: "Optimal layer count N*"
+    description: "Layer count at heat-leak knee (~55 ± 15 layers)"
+  - name: "Heat flux vs N curve"
+    description: "q_MLI(N) for each reference case"
+  - name: "Boil-off rate map"
+    description: "m_dot_boil vs N for each reference case"
+  - name: "Seam/penetration budget"
+    description: "Maximum allowable seam length and penetration count"
+  - name: "Vacuum sensitivity"
+    description: "Q_total vs P_vac at nominal N"
+
+feeds:
+  - lifecycle: "LC06"
+    artifact: "Thermal vacuum qualification test plan"
+  - lifecycle: "LC05"
+    artifact: "Boil-off rate prediction for mission profile"
+
+traceability:
+  derives_from:
+    - "TS-28-10-TS03"
+    - "FBL-Q100-ATA28-001"
+    - "KNU-C2-001"
+  satisfies:
+    - "FBL-REQ-003"
+  verifies: []

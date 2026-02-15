@@ -1,0 +1,145 @@
+# Parametric Model PM-28-10-PM01
+# Tank Geometry — Circular Cross-Section Optimisation
+# ATA 28-10-00 Fuel Storage General
+# AMPEL360 Q100 — C2 Circular Cryogenic Cells
+
+model_id: "PM-28-10-PM01"
+title: "Tank Geometry — Circular Cross-Section Optimisation"
+ata_code: "28-10-00"
+technology_domain: "C2"
+aircraft_program: "AMPEL360 Q100"
+lifecycle_phase: "LC05"
+status: "preliminary"
+author: "STK_ENG"
+date: "2026-02-15"
+version: "0.1.0"
+
+objective: >
+  Define the parametric model for circular cryogenic cell cross-section
+  optimisation.  The model captures geometry, structural sizing, and
+  volumetric efficiency as functions of internal radius, operating
+  pressure, wall thickness, and material properties in order to minimise
+  structural mass while meeting pressure containment and fatigue
+  requirements per CS 25.571.
+
+parameters:
+  - symbol: "r_i"
+    name: "Internal radius"
+    unit: "m"
+    range: [0.3, 1.2]
+    description: "Inner radius of the circular cylindrical shell"
+
+  - symbol: "t_w"
+    name: "Wall thickness"
+    unit: "mm"
+    range: [1.5, 6.0]
+    description: "Minimum wall thickness driven by hoop stress and fatigue"
+
+  - symbol: "P_design"
+    name: "Design pressure"
+    unit: "bar"
+    range: [2.0, 6.0]
+    description: "Maximum operating pressure including relief margin"
+
+  - symbol: "L"
+    name: "Cylinder length"
+    unit: "m"
+    range: [1.0, 6.0]
+    description: "Barrel length excluding end-caps"
+
+  - symbol: "sigma_allow"
+    name: "Allowable stress"
+    unit: "MPa"
+    range: [120, 450]
+    description: "Material allowable at -253 °C (cryogenic service)"
+
+  - symbol: "rho_mat"
+    name: "Material density"
+    unit: "kg/m³"
+    range: [2700, 8000]
+    description: "Structural material density (Al-alloy to stainless steel range)"
+
+governing_equations:
+  - name: "Hoop stress"
+    expression: "sigma_hoop = P_design * r_i / t_w"
+    constraint: "sigma_hoop <= sigma_allow / SF"
+    notes: "SF = 1.5 for limit load; 2.0 for ultimate (CS 25.305)"
+
+  - name: "Longitudinal stress"
+    expression: "sigma_long = P_design * r_i / (2 * t_w)"
+    constraint: "sigma_long <= sigma_allow / SF"
+
+  - name: "Minimum wall thickness"
+    expression: "t_w_min = P_design * r_i * SF / sigma_allow"
+    notes: "Derived from hoop stress requirement"
+
+  - name: "Shell mass (barrel)"
+    expression: "m_barrel = 2 * pi * r_i * t_w * L * rho_mat"
+    notes: "Excludes end-caps"
+
+  - name: "End-cap mass (hemispherical)"
+    expression: "m_endcap = 4 * pi * r_i^2 * t_w * rho_mat / 2"
+    notes: "Two hemispherical end-caps per cell; t_w/2 for hemi-sphere"
+
+  - name: "Internal volume"
+    expression: "V_int = pi * r_i^2 * L + (4/3) * pi * r_i^3"
+    notes: "Cylinder barrel + two hemispheres"
+
+  - name: "Volumetric efficiency"
+    expression: "eta_vol = V_int / V_envelope"
+    notes: "V_envelope = bounding box of insulated assembly"
+
+optimisation:
+  objective_function: "Minimise m_total = m_barrel + m_endcap"
+  constraints:
+    - "sigma_hoop <= sigma_allow / SF"
+    - "t_w >= t_w_min"
+    - "V_int >= V_required"
+    - "Fatigue life >= N_cycles (CS 25.571 target)"
+    - "r_i <= r_envelope (BWB bay clearance)"
+  design_variables: ["r_i", "L", "t_w"]
+  method: "Gradient-based + parametric sweep"
+
+material_candidates:
+  - id: "MAT-A"
+    name: "Al 5083-H321"
+    sigma_allow_cryo: "350 MPa"
+    rho: "2660 kg/m³"
+    notes: "Heritage cryogenic alloy; high weldability"
+
+  - id: "MAT-B"
+    name: "316L Stainless Steel"
+    sigma_allow_cryo: "450 MPa"
+    rho: "8000 kg/m³"
+    notes: "Excellent cryogenic toughness; higher density"
+
+  - id: "MAT-C"
+    name: "Al 2219-T87"
+    sigma_allow_cryo: "340 MPa"
+    rho: "2840 kg/m³"
+    notes: "Shuttle ET heritage; good weldability"
+
+outputs:
+  - name: "Optimal radius / length ratio"
+    description: "r_i / L ratio that minimises mass for given volume"
+  - name: "Wall thickness map"
+    description: "t_w vs P_design for each material candidate"
+  - name: "Mass sensitivity"
+    description: "dm/dr_i, dm/dL partial derivatives"
+  - name: "Fatigue margin"
+    description: "Cryogenic cycle count at design thickness vs CS 25.571 target"
+
+feeds:
+  - lifecycle: "LC06"
+    artifact: "FEA verification of selected geometry"
+  - lifecycle: "LC05"
+    artifact: "Mass model update (WBS level 3)"
+
+traceability:
+  derives_from:
+    - "TS-28-10-TS01"
+    - "FBL-Q100-ATA28-001"
+  satisfies:
+    - "FBL-REQ-001"
+    - "FBL-REQ-010"
+  verifies: []

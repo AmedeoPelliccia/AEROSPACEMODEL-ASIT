@@ -257,5 +257,8 @@ evidence_package:
   - "TS-28-10-TS03_insulation.yaml"
   - "evaluation_criteria.yaml"
   - "CS25_compliance_matrix.yaml"
+  - "PM-28-10-PM01_tank_geometry.yaml"
+  - "PM-28-10-PM02_mli_stackup.yaml"
+  - "PM-28-10-PM03_mounting_loads.yaml"
   # Includes this baseline document as part of the evidence package
   - "FBL-Q100-ATA28-001.yaml"
