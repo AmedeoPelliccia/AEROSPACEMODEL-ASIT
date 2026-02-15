@@ -12,7 +12,7 @@ lifecycle_phase: "LC05"
 status: "preliminary"
 author: "STK_ENG"
 date: "2026-02-15"
-version: "0.1.0"
+version: "0.1.1"
 
 objective: >
   Define the parametric model for circular cryogenic cell cross-section
@@ -33,7 +33,13 @@ parameters:
     name: "Wall thickness"
     unit: "mm"
     range: [1.5, 6.0]
-    description: "Minimum wall thickness driven by von Mises stress and fatigue"
+    description: "Nominal wall thickness; equations use t_w_m in meters"
+
+  - symbol: "t_w_m"
+    name: "Wall thickness (SI)"
+    unit: "m"
+    derived: "t_w_m = t_w * 1e-3"
+    description: "Converted wall thickness in meters for governing equations"
 
   - symbol: "P_limit"
     name: "Limit pressure"
@@ -79,41 +85,45 @@ parameters:
 
 governing_equations:
   - name: "Pressure conversion"
-    expression: "P [Pa] = P [bar] * 1e5"
-    notes: "All equations use SI units internally"
+    expression: "P_Pa = P_bar * 1e5"
+    notes: "All stress equations use SI: pressure in Pa, dimensions in m"
+
+  - name: "Wall thickness conversion"
+    expression: "t_w_m = t_w * 1e-3"
+    notes: "Convert mm input to meters for governing equations"
 
   - name: "Thin-wall validity gate"
-    expression: "t_w / r_i <= 0.10"
-    notes: "If violated, switch to thick-wall (Lamé) model"
+    expression: "t_w_m / r_i <= 0.10"
+    notes: "If violated, switch to thick-wall (Lamé) model below"
 
-  - name: "Hoop stress"
-    expression: "sigma_hoop = P * r_i / t_w"
-    notes: "Thin-wall membrane hoop stress (closed-end cylinder)"
+  - name: "Hoop stress (thin-wall)"
+    expression: "sigma_theta = P_Pa * r_i / t_w_m"
+    notes: "Thin-wall membrane hoop stress (closed-end cylinder); units Pa"
 
-  - name: "Longitudinal stress"
-    expression: "sigma_long = P * r_i / (2 * t_w)"
-    notes: "Thin-wall membrane longitudinal stress"
+  - name: "Longitudinal stress (thin-wall)"
+    expression: "sigma_z = P_Pa * r_i / (2 * t_w_m)"
+    notes: "Thin-wall membrane longitudinal stress; units Pa"
 
-  - name: "Von Mises equivalent stress"
-    expression: "sigma_vM = sqrt(3)/2 * P * r_i / t_w"
+  - name: "Von Mises equivalent stress (thin-wall)"
+    expression: "sigma_vM = sqrt(3)/2 * P_Pa * r_i / t_w_m"
     constraint_limit: "sigma_vM(P_limit) <= sigma_allow_limit"
     constraint_ultimate: "sigma_vM(P_ultimate) <= sigma_allow_ult"
-    notes: "More robust than hoop-only; derived from sigma_theta^2 + sigma_z^2 - sigma_theta*sigma_z"
+    notes: "Derived from sqrt(sigma_theta^2 + sigma_z^2 - sigma_theta*sigma_z)"
 
   - name: "Minimum wall thickness (von Mises, limit)"
-    expression: "t_w_min = sqrt(3)/2 * P_limit * r_i / (eta_j * sigma_allow_limit)"
-    notes: "Includes joint efficiency factor eta_j; apply max(t_w_min, t_mfg, t_NDE, t_corr)"
+    expression: "t_w_m_min = sqrt(3)/2 * P_limit_Pa * r_i / (eta_j * sigma_allow_limit_Pa)"
+    notes: "Includes joint efficiency eta_j; apply max(t_w_m_min, t_mfg, t_NDE, t_corr)"
 
   - name: "Shell mass (barrel)"
-    expression: "m_barrel = 2 * pi * r_i * t_w * L * rho_mat"
-    notes: "Thin-shell mid-surface approximation"
+    expression: "m_barrel = 2 * pi * r_i * t_w_m * L * rho_mat"
+    notes: "Thin-shell mid-surface approximation; all dimensions in m"
 
   - name: "End-cap mass (hemispherical)"
-    expression: "m_endcap = 4 * pi * r_i^2 * t_w * rho_mat"
+    expression: "m_endcap = 4 * pi * r_i^2 * t_w_m * rho_mat"
     notes: "Two hemispheres = full sphere surface area 4*pi*r^2"
 
   - name: "Total shell mass"
-    expression: "m_total = 2 * pi * rho_mat * t_w * (r_i * L + 2 * r_i^2)"
+    expression: "m_total = 2 * pi * rho_mat * t_w_m * (r_i * L + 2 * r_i^2)"
     notes: "Barrel + endcaps combined"
 
   - name: "Internal volume"
@@ -128,9 +138,17 @@ governing_equations:
     expression: "eta_vol = V_int / V_envelope"
     notes: "V_envelope = bounding box of insulated assembly"
 
-  - name: "Thick-wall hoop stress (Lamé, if t_w/r_i > 0.10)"
-    expression: "sigma_theta(r_i) = P * (r_o^2 + r_i^2) / (r_o^2 - r_i^2)"
-    notes: "r_o = r_i + t_w; use when thin-wall validity gate is violated"
+  - name: "Thick-wall hoop stress at ID (Lamé, if t_w_m/r_i > 0.10)"
+    expression: "sigma_theta_ID = P_Pa * (r_o^2 + r_i^2) / (r_o^2 - r_i^2)"
+    notes: "r_o = r_i + t_w_m; maximum hoop stress occurs at inner radius"
+
+  - name: "Thick-wall radial stress at ID (Lamé)"
+    expression: "sigma_r_ID = -P_Pa"
+    notes: "Equal to negative of internal pressure at the bore"
+
+  - name: "Thick-wall von Mises at ID (Lamé)"
+    expression: "sigma_vM_Lame = sqrt(sigma_theta_ID^2 + sigma_r_ID^2 - sigma_theta_ID * sigma_r_ID)"
+    notes: "Use for sizing when thin-wall gate is violated"
 
 optimisation:
   objective_function: >
@@ -181,10 +199,10 @@ material_candidates:
     notes: "Shuttle ET heritage; good weldability"
 
 outputs:
-  - name: "Optimal radius / length ratio"
-    description: "r_i / L ratio that minimises mass for given volume"
+  - name: "Pareto-derived r/L ratio"
+    description: "r_i / L ratio from multi-objective Pareto front under active constraints (not a unique analytic optimum in stress-limited thin-wall regime)"
   - name: "Wall thickness map"
-    description: "t_w vs P_design for each material candidate"
+    description: "t_w vs P_limit for each material candidate"
   - name: "Mass sensitivity"
     description: "dm/dr_i, dm/dL partial derivatives"
   - name: "Fatigue margin"

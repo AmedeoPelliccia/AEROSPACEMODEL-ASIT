@@ -27,7 +27,8 @@ requirements per CS 25.571.
 | Symbol | Name | Unit | Range | Description |
 |--------|------|------|-------|-------------|
 | $r_i$ | Internal radius | m | 0.3–1.2 | Inner radius of the circular cylindrical shell |
-| $t_w$ | Wall thickness | mm | 1.5–6.0 | Minimum wall driven by von Mises stress and fatigue |
+| $t_w$ | Wall thickness | mm | 1.5–6.0 | Nominal wall thickness; equations use $t_{w,m}$ in meters |
+| $t_{w,m}$ | Wall thickness (SI) | m | derived | $t_{w,m} = t_w \times 10^{-3}$ |
 | $P_{\mathrm{limit}}$ | Limit pressure | bar | 2.0–6.0 | Design max operating pressure incl. margins |
 | $P_{\mathrm{ultimate}}$ | Ultimate pressure | bar | derived | $1.5 \times P_{\mathrm{limit}}$ per CS 25.305 |
 | $L$ | Cylinder length | m | 1.0–6.0 | Barrel length excluding end-caps |
@@ -46,11 +47,14 @@ requirements per CS 25.571.
 - $P_{\mathrm{ultimate}} = 1.5\,P_{\mathrm{limit}}$
 - Allowables defined separately for limit and ultimate checks
 - Pressure conversion: $P\;[\mathrm{Pa}] = P\;[\mathrm{bar}] \times 10^5$
+- Wall thickness conversion: $t_{w,m}\;[\mathrm{m}] = t_w\;[\mathrm{mm}] \times 10^{-3}$
+
+All stress equations below use SI units (Pa, m).
 
 ### Thin-wall validity gate
 
 $$
-\frac{t_w}{r_i} \le 0.10
+\frac{t_{w,m}}{r_i} \le 0.10
 $$
 
 If violated, switch to thick-wall (Lamé) model.
@@ -58,9 +62,9 @@ If violated, switch to thick-wall (Lamé) model.
 ### Membrane stresses (thin-wall, closed ends)
 
 $$
-\sigma_{\theta} = \frac{P\,r_i}{t_w}
+\sigma_{\theta} = \frac{P\,r_i}{t_{w,m}}
 \qquad
-\sigma_{z} = \frac{P\,r_i}{2\,t_w}
+\sigma_{z} = \frac{P\,r_i}{2\,t_{w,m}}
 $$
 
 ### Von Mises equivalent stress
@@ -68,7 +72,7 @@ $$
 $$
 \sigma_{\mathrm{vM}}
 = \sqrt{\sigma_{\theta}^2 + \sigma_{z}^2 - \sigma_{\theta}\,\sigma_{z}}
-= \frac{\sqrt{3}}{2}\,\frac{P\,r_i}{t_w}
+= \frac{\sqrt{3}}{2}\,\frac{P\,r_i}{t_{w,m}}
 $$
 
 Constraints:
@@ -84,27 +88,27 @@ $$
 ### Minimum wall thickness (von Mises, limit, with joint efficiency)
 
 $$
-t_{w,\min} = \frac{\sqrt{3}}{2}\,\frac{P_{\mathrm{limit}}\,r_i}{\eta_j\,\sigma_{\mathrm{allow,limit}}}
+t_{w,m,\min} = \frac{\sqrt{3}}{2}\,\frac{P_{\mathrm{limit}}\,r_i}{\eta_j\,\sigma_{\mathrm{allow,limit}}}
 $$
 
 Applied thickness:
 
 $$
-t_w \ge \max\!\big(t_{w,\min},\; t_{\mathrm{mfg}},\; t_{\mathrm{NDE}},\; t_{\mathrm{corr}}\big)
+t_{w,m} \ge \max\!\big(t_{w,m,\min},\; t_{\mathrm{mfg}},\; t_{\mathrm{NDE}},\; t_{\mathrm{corr}}\big)
 $$
 
 ### Shell mass (barrel + hemispherical end-caps)
 
 $$
-m_{\mathrm{barrel}} = 2\pi\, r_i\, t_w\, L\, \rho_{\mathrm{mat}}
+m_{\mathrm{barrel}} = 2\pi\, r_i\, t_{w,m}\, L\, \rho_{\mathrm{mat}}
 $$
 
 $$
-m_{\mathrm{endcap}} = 4\pi\, r_i^2\, t_w\, \rho_{\mathrm{mat}}
+m_{\mathrm{endcap}} = 4\pi\, r_i^2\, t_{w,m}\, \rho_{\mathrm{mat}}
 $$
 
 $$
-m_{\mathrm{total}} = 2\pi\,\rho_{\mathrm{mat}}\,t_w\!\left(r_i\,L + 2\,r_i^2\right)
+m_{\mathrm{total}} = 2\pi\,\rho_{\mathrm{mat}}\,t_{w,m}\!\left(r_i\,L + 2\,r_i^2\right)
 $$
 
 ### Internal volume
@@ -121,11 +125,26 @@ $$
 
 Relevant for thermal/MLI trade (links to PM-28-10-PM02 / KNU-C2-001).
 
-### Thick-wall option (Lamé, if $t_w/r_i > 0.10$)
+### Thick-wall model (Lamé, if $t_{w,m}/r_i > 0.10$)
+
+With $r_o = r_i + t_{w,m}$:
+
+**Hoop stress at ID:**
 
 $$
-\sigma_{\theta}(r_i) = P\,\frac{r_o^2 + r_i^2}{r_o^2 - r_i^2}
-\qquad (r_o = r_i + t_w)
+\sigma_{\theta,\mathrm{ID}} = P\,\frac{r_o^2 + r_i^2}{r_o^2 - r_i^2}
+$$
+
+**Radial stress at ID:**
+
+$$
+\sigma_{r,\mathrm{ID}} = -P
+$$
+
+**Von Mises at ID (Lamé):**
+
+$$
+\sigma_{\mathrm{vM,Lamé}} = \sqrt{\sigma_{\theta,\mathrm{ID}}^2 + \sigma_{r,\mathrm{ID}}^2 - \sigma_{\theta,\mathrm{ID}}\,\sigma_{r,\mathrm{ID}}}
 $$
 
 ---
@@ -153,8 +172,8 @@ workstream (heat leak scales with $A_{\mathrm{ext}}$ and vacuum/MLI quality).
 
 - $\sigma_{\mathrm{vM}}(P_{\mathrm{limit}}) \le \sigma_{\mathrm{allow,limit}}$
 - $\sigma_{\mathrm{vM}}(P_{\mathrm{ultimate}}) \le \sigma_{\mathrm{allow,ult}}$
-- $t_w / r_i \le 0.10$ (thin-wall validity)
-- $t_w \ge \max(t_{w,\min},\,t_{\mathrm{mfg}},\,t_{\mathrm{NDE}},\,t_{\mathrm{corr}})$
+- $t_w / r_i \le 0.10$ (thin-wall validity; uses $t_{w,m}$)
+- $t_{w,m} \ge \max(t_{w,m,\min},\,t_{\mathrm{mfg}},\,t_{\mathrm{NDE}},\,t_{\mathrm{corr}})$
 - $V_{\mathrm{int}} \ge V_{\mathrm{required}}$
 - Fatigue life $\ge N_{\mathrm{cycles}}$ (CS 25.571 pressure cycle spectrum)
 - $r_i \le r_{\mathrm{envelope}}$ (BWB bay clearance)
@@ -182,8 +201,8 @@ workstream (heat leak scales with $A_{\mathrm{ext}}$ and vacuum/MLI quality).
 
 | Output | Description |
 |--------|-------------|
-| Optimal r/L ratio | Radius-to-length ratio that minimises mass for given volume |
-| Wall thickness map | $t_w$ vs $P_{\mathrm{design}}$ for each material candidate |
+| Pareto-derived r/L ratio | Ratio from multi-objective Pareto front under active constraints (not a unique analytic optimum) |
+| Wall thickness map | $t_w$ vs $P_{\mathrm{limit}}$ for each material candidate |
 | Mass sensitivity | $\partial m / \partial r_i$, $\partial m / \partial L$ partial derivatives |
 | Fatigue margin | Cryogenic cycle count at design thickness vs CS 25.571 target |
 

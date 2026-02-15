@@ -4,7 +4,7 @@
 # AMPEL360 Q100 — C2 Circular Cryogenic Cells
 
 model_id: "PM-28-10-PM02"
-title: "MLI Thermal Stack-Up Model"
+title: "MLI Thermal Stack-Up Model — Vacuum-Jacketed"
 ata_code: "28-10-00"
 technology_domain: "C2"
 aircraft_program: "AMPEL360 Q100"
@@ -12,28 +12,27 @@ lifecycle_phase: "LC05"
 status: "preliminary"
 author: "STK_ENG"
 date: "2026-02-15"
-version: "0.1.0"
+version: "0.1.1"
 
 objective: >
   Define the thermal stack-up model for vacuum-jacketed multi-layer
-  insulation on circular cryogenic cells.  The model predicts total
-  heat leak as a function of MLI layer count, layer density, vacuum
-  level, boundary temperatures, and integration losses (seams and
-  penetrations) to enable boil-off rate estimation and insulation
-  sizing per the selected baseline (TS-28-10-TS03, Option A).
+  insulation (MLI) on circular cryogenic cells.  Predict total heat
+  leak as a function of layer count, installation density, vacuum level,
+  boundary temperatures, and integration losses (seams and penetrations)
+  to estimate boil-off and size insulation per TS-28-10-TS03 (Option A).
 
 parameters:
-  - symbol: "N"
-    name: "Number of reflective shields"
+  - symbol: "N_layers"
+    name: "Number of reflective shields (layers)"
     unit: "–"
     range: [20, 100]
-    description: "Count of aluminised Mylar or DAM reflective layers"
+    description: "Count of reflective shields/spacer pairs (MLI blanket layers)"
 
-  - symbol: "N_star"
-    name: "Layer density"
+  - symbol: "n_density"
+    name: "Layer packing density"
     unit: "layers/cm"
     range: [5, 20]
-    description: "Packing density; optimal typically 8–12 layers/cm"
+    description: "Installed packing density; typical optimum band 8–12 layers/cm"
 
   - symbol: "T_h"
     name: "Warm boundary temperature"
@@ -74,7 +73,8 @@ parameters:
 governing_equations:
   - name: "Radiation heat flux (modified Lockheed MLI model)"
     expression: >
-      q_rad = C_r * epsilon_eff * (T_h^4.67 - T_c^4.67) / N
+      q_rad = C_r * epsilon_eff * (T_h^4.67 - T_c^4.67) / N_layers
+    unit: "W/m²"
     notes: >
       C_r = radiation constant; epsilon_eff = effective emissivity of
       reflector/spacer assembly.  Exponent 4.67 from Lockheed fit
@@ -82,56 +82,64 @@ governing_equations:
 
   - name: "Solid conduction heat flux (Dacron spacer)"
     expression: >
-      q_cond = C_s * N_star^2.63 * (T_h - T_c) / N
+      q_cond = C_s * n_density^2.63 * (T_h - T_c) / N_layers
+    unit: "W/m²"
     notes: >
-      C_s = McIntosh conductivity coefficient; N_star dependence
+      C_s = McIntosh conductivity coefficient; n_density dependence
       captures contact pressure effect on inter-layer conduction.
 
-  - name: "Residual gas conduction"
+  - name: "Residual gas conduction heat flux"
     expression: >
       q_gas = C_g * P_vac * (T_h - T_c)
+    unit: "W/m²"
     notes: >
       Free-molecule regime conduction; linear in pressure.  Dominant
-      only when P_vac > ~1E-4 torr.
+      only when P_vac > ~1E-4 torr.  This is a heat flux term (per
+      unit area), not a total heat rate.
 
   - name: "Total blanket heat flux"
     expression: >
       q_MLI = q_rad + q_cond + q_gas
     unit: "W/m²"
+    notes: "Sum of all areal heat flux contributions through the MLI blanket"
 
-  - name: "Seam heat leak"
+  - name: "Seam heat leak (additive, total rate)"
     expression: >
-      Q_seam = k_seam * L_seam
+      Q_dot_seam = k_seam * L_seam
+    unit: "W"
     notes: >
       k_seam ≈ 0.169 W/m (NASA measured value for 30-layer MLI with
-      LH₂ sink).
+      LH₂ sink).  This is a total heat rate adder, not per-area.
 
-  - name: "Penetration heat leak"
+  - name: "Penetration heat leak (additive, total rate)"
     expression: >
-      Q_pen = n_pen * q_pen_avg
+      Q_dot_pen = n_pen * q_pen_avg
+    unit: "W"
     notes: >
       q_pen_avg ≈ 0.31–0.50 W per penetration (composite–aluminium
-      strut range from NASA calorimetry).
+      strut range from NASA calorimetry).  Total heat rate adder.
 
-  - name: "Total cell heat leak"
+  - name: "Total cell heat leak rate"
     expression: >
-      Q_total = A_CCC * q_MLI + Q_seam + Q_pen
+      Q_dot_total = A_CCC * q_MLI + Q_dot_seam + Q_dot_pen
     unit: "W"
+    notes: "Blanket areal flux × area + integration loss adders"
 
-  - name: "Boil-off rate"
+  - name: "Boil-off mass flow rate"
     expression: >
-      m_dot_boil = Q_total / h_fg
+      m_dot_boil = Q_dot_total / h_fg
+    unit: "kg/s"
     notes: >
       h_fg ≈ 447 kJ/kg for para-hydrogen at 20 K (NIST).
 
 optimisation:
-  objective_function: "Minimise Q_total subject to mass and thickness constraints"
+  objective_function: "Minimise Q_dot_total subject to mass and thickness constraints"
   constraints:
-    - "N <= N_max (envelope thickness limit)"
-    - "N_star within [8, 12] layers/cm (optimal density band)"
+    - "N_layers <= N_max (envelope thickness limit)"
+    - "n_density within [8, 12] layers/cm (optimal density band)"
     - "Boil-off rate <= 0.1 %/h of stored mass under cruise conditions"
     - "Total MLI mass <= m_MLI_budget"
-  design_variables: ["N", "N_star"]
+  design_variables: ["N_layers", "n_density"]
   method: "Parametric sweep + Monte Carlo sensitivity"
 
 reference_cases:
@@ -154,16 +162,16 @@ reference_cases:
     notes: "Sensitivity to vacuum loss"
 
 outputs:
-  - name: "Optimal layer count N*"
-    description: "Layer count at heat-leak knee (~55 ± 15 layers)"
-  - name: "Heat flux vs N curve"
-    description: "q_MLI(N) for each reference case"
+  - name: "Optimal layer count"
+    description: "N_layers at heat-leak knee (~55 ± 15 layers)"
+  - name: "Heat flux vs N_layers curve"
+    description: "q_MLI(N_layers) [W/m²] for each reference case"
   - name: "Boil-off rate map"
-    description: "m_dot_boil vs N for each reference case"
+    description: "m_dot_boil [kg/s] vs N_layers for each reference case"
   - name: "Seam/penetration budget"
-    description: "Maximum allowable seam length and penetration count"
+    description: "Maximum allowable seam length and penetration count to stay within Q_dot budget"
   - name: "Vacuum sensitivity"
-    description: "Q_total vs P_vac at nominal N"
+    description: "Q_dot_total [W] vs P_vac at nominal N_layers"
 
 feeds:
   - lifecycle: "LC06"
