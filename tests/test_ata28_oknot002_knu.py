@@ -61,7 +61,19 @@ class TestKNUPlanFile:
         }
         assert expected == set(rows[0].keys())
 
-
+    def test_expected_locations_exist(self):
+        """Each Expected_Location must resolve to an existing directory relative to the plan file."""
+        rows = _read_csv(self.KNU_PLAN)
+        base_dir = self.KNU_PLAN.parent
+        for row in rows:
+            expected_location = (row.get("Expected_Location") or "").strip()
+            # Ensure the CSV actually provides a location
+            assert expected_location, f"Missing Expected_Location for row: {row}"
+            location_path = base_dir / expected_location
+            assert location_path.is_dir(), (
+                f"Expected_Location does not exist or is not a directory: "
+                f"{expected_location!r} (resolved to {location_path})"
+            )
 # =========================================================================
 # KNU Record Completeness
 # =========================================================================
