@@ -64,11 +64,11 @@ artifact_types:
     description: "EASA CS-25 compliance matrices for LH₂ cryogenic fuel storage with Special Conditions"
 
   method_token_libraries:
-    count: 1
+    count: 2
     location: "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/DEV/mtl/"
     naming_pattern: "MTL-28-11-{SS}_{topic}.yaml"
     formats: ["yaml", "md"]
-    description: "Method Token Library — tokenised subject titles for model programming and automated traceability"
+    description: "Method Token Libraries — subject tokens (MTK-*) and process/scaling tokens (MTP-*) for model programming"
 
   parametric_models:
     count: 3

@@ -1,0 +1,519 @@
+# MTL-28-11-00 — Process and Scaling Method Tokens
+# ATA 28-11-00 LH2 Primary Tank General
+# AMPEL360 Q100 — C2 Circular Cryogenic Cells
+#
+# Purpose: Extracts every standard industry process, analytical method,
+# and empirical scaling relationship embedded in the 28-11-00 YAML
+# artifacts.  Where a closed-form inference boundary exists the token
+# encodes the process; where none exists it encodes a scaling law or
+# empirical correlation.
+#
+# Companion to MTL-28-11-00_method_token_library.yaml which captures
+# subject-level tokens.  This file captures the *methods themselves*.
+
+mtl_id: "MTL-28-11-00-PROC"
+title: "Process and Scaling Method Tokens — ATA 28-11-00 LH₂ Primary Tank"
+ata_code: "28-11-00"
+technology_domain: "C2"
+aircraft_program: "AMPEL360 Q100"
+lifecycle_phase: "LC04"
+status: "preliminary"
+author: "STK_ENG"
+date: "2026-02-16"
+version: "0.1.0"
+
+description: >
+  Encodes standard industry processes and scaling relationships
+  extracted from every YAML file in 28-11-00.  Each token is typed
+  as either 'process' (closed-form analytical method with an
+  inference boundary) or 'scaling' (empirical correlation or
+  range-based relationship where no closed-form inference boundary
+  exists).
+
+token_pattern: "MTP-28-11-{DOMAIN}-{SEQ}"
+
+# =========================================================================
+# Domain: GEOM — Geometry Processes (from TS-28-11-TS01)
+# =========================================================================
+domains:
+
+  - domain_id: "GEOM"
+    domain_name: "Geometry and Sizing"
+    source: "KDB/DEV/trade-studies/TS-28-11-TS01_tank_architecture.yaml"
+    tokens:
+
+      - token: "MTP-28-11-GEOM-001"
+        subject: "LH2 Volume Sizing"
+        type: "process"
+        method: "V = m_fuel / rho_lh2"
+        standard: "First principles — mass-density relation"
+        inputs:
+          - name: "stored_lh2_mass_kg"
+            unit: "kg"
+            reference_value: 5000
+          - name: "lh2_density_kg_per_m3"
+            unit: "kg/m^3"
+            reference_value: 70.8
+        outputs:
+          - name: "required_volume_m3"
+            unit: "m^3"
+            reference_value: 70.6
+        description: >
+          Closed-form volume sizing from stored fuel mass and LH2 bulk
+          density at saturation (~20 K, 1 atm).
+
+      - token: "MTP-28-11-GEOM-002"
+        subject: "Sphere Surface Area"
+        type: "process"
+        method: "A_sphere = (36 * pi * V^2)^(1/3)"
+        standard: "Analytic geometry — minimum surface area for given volume"
+        inputs:
+          - name: "required_volume_m3"
+            unit: "m^3"
+            reference_value: 70.6
+        outputs:
+          - name: "surface_area_m2"
+            unit: "m^2"
+            reference_value: 83
+        description: >
+          Closed-form surface area of a sphere as function of volume.
+          Represents the theoretical minimum area for any tank geometry.
+
+      - token: "MTP-28-11-GEOM-003"
+        subject: "Cylinder Area Penalty Scaling"
+        type: "scaling"
+        method: "A_cyl / A_sphere ≈ 1.11 to 1.32 (aspect-ratio dependent)"
+        standard: "Parametric scaling — no single closed-form; varies with L/D"
+        inputs:
+          - name: "aspect_ratio_L_over_D"
+            unit: "dimensionless"
+            range: [1.5, 4.0]
+        outputs:
+          - name: "area_penalty_factor"
+            unit: "dimensionless"
+            range: [1.11, 1.32]
+        description: >
+          Empirical scaling of cylinder+hemispherical-endcap surface
+          area relative to equivalent sphere.  No single closed-form
+          inference boundary: penalty depends on aspect ratio.
+
+      - token: "MTP-28-11-GEOM-004"
+        subject: "Gravimetric Efficiency"
+        type: "scaling"
+        method: "eta_g = m_fuel / (m_fuel + m_tank + m_system)"
+        standard: "Industry metric — variable definitions per source"
+        inputs:
+          - name: "stored_lh2_mass_kg"
+            unit: "kg"
+          - name: "tank_mass_kg"
+            unit: "kg"
+          - name: "system_mass_kg"
+            unit: "kg"
+        outputs:
+          - name: "gravimetric_efficiency"
+            unit: "dimensionless"
+            range: [0.30, 0.90]
+        description: >
+          Scaling metric for structural efficiency.  Published ranges
+          span 0.3–0.9 for aircraft LH2 tanks.  No single closed-form;
+          depends on material, geometry, insulation, and integration.
+
+  # =========================================================================
+  # Domain: THRM — Thermal and Boil-Off Processes (from TS-28-11-TS03)
+  # =========================================================================
+  - domain_id: "THRM"
+    domain_name: "Thermal and Boil-Off"
+    source: "KDB/DEV/trade-studies/TS-28-11-TS03_insulation_thermal.yaml"
+    tokens:
+
+      - token: "MTP-28-11-THRM-001"
+        subject: "Steady-State Boil-Off Rate"
+        type: "process"
+        method: "m_dot_bo = Q_dot / h_fg"
+        standard: "Cryogenic engineering — latent heat conversion"
+        inputs:
+          - name: "total_heat_leak_W"
+            unit: "W"
+          - name: "lh2_latent_heat_kJ_per_kg"
+            unit: "kJ/kg"
+            reference_value: 445.5
+        outputs:
+          - name: "boil_off_rate_kg_per_s"
+            unit: "kg/s"
+        description: >
+          Closed-form steady-state boil-off rate from total heat leak
+          divided by latent heat of vaporisation.  Industry-standard
+          first-order estimate.
+
+      - token: "MTP-28-11-THRM-002"
+        subject: "Total Heat Leak from Surface Flux"
+        type: "process"
+        method: "Q_dot = q_dot * A_wetted"
+        standard: "Heat transfer — area-integrated heat flux"
+        inputs:
+          - name: "heat_flux_W_per_m2"
+            unit: "W/m^2"
+            reference_value: 1.3
+          - name: "surface_area_m2"
+            unit: "m^2"
+        outputs:
+          - name: "total_heat_leak_W"
+            unit: "W"
+        description: >
+          Closed-form total heat leak from measured system heat flux
+          multiplied by wetted surface area.  Requires q_dot that
+          includes penetration and support contributions.
+
+      - token: "MTP-28-11-THRM-003"
+        subject: "Daily Boil-Off Percentage"
+        type: "process"
+        method: "bo_pct_per_day = (m_dot_bo * 86400 / m_fuel) * 100"
+        standard: "Cryogenic storage metric"
+        inputs:
+          - name: "boil_off_rate_kg_per_s"
+            unit: "kg/s"
+          - name: "stored_lh2_mass_kg"
+            unit: "kg"
+        outputs:
+          - name: "boil_off_pct_per_day"
+            unit: "%/day"
+        description: >
+          Closed-form conversion of mass boil-off rate to daily
+          percentage of stored fuel mass.
+
+      - token: "MTP-28-11-THRM-004"
+        subject: "MLI Vacuum Degradation Scaling"
+        type: "scaling"
+        method: "q_mli = f(P_vacuum); degrades sharply above ~0.266 Pa"
+        standard: "NASA/industry MLI performance — empirical"
+        inputs:
+          - name: "vacuum_pressure_Pa"
+            unit: "Pa"
+            range: [0.0133, 1.33]
+          - name: "mli_layer_count"
+            unit: "dimensionless"
+        outputs:
+          - name: "effective_heat_flux_W_per_m2"
+            unit: "W/m^2"
+        description: >
+          Empirical scaling of MLI thermal performance with vacuum
+          quality.  No single closed-form: performance is a strong
+          nonlinear function of interstitial gas pressure.  Slight
+          degradation from ~0.266 Pa to ~1.33 Pa can materially
+          erode MLI advantage.
+
+      - token: "MTP-28-11-THRM-005"
+        subject: "System Heat Flux Measured Anchor"
+        type: "scaling"
+        method: "q_system ≈ 1.26 to 1.36 W/m^2 (measured, with supports/penetrations)"
+        standard: "NASA IRAS LH2 tank test — measured"
+        inputs:
+          - name: "cold_boundary_K"
+            unit: "K"
+            reference_value: 20.3
+          - name: "operating_pressure_kPa"
+            unit: "kPa"
+            range: [255, 351]
+        outputs:
+          - name: "system_heat_flux_W_per_m2"
+            unit: "W/m^2"
+            range: [1.26, 1.36]
+        description: >
+          Measured system heat flux anchor from NASA IRAS LH2 tank.
+          Includes real penetration and support losses.  Not a single-
+          point process but a measured-range scaling anchor.
+
+      - token: "MTP-28-11-THRM-006"
+        subject: "Thermal Bridge Dominance"
+        type: "scaling"
+        method: "Q_supports + Q_penetrations can exceed Q_mli_broadarea"
+        standard: "NASA IRAS heat-leak decomposition — empirical finding"
+        inputs:
+          - name: "support_count"
+            unit: "dimensionless"
+          - name: "penetration_count"
+            unit: "dimensionless"
+          - name: "support_conductance_W_per_K"
+            unit: "W/K"
+        outputs:
+          - name: "bridge_fraction_of_total"
+            unit: "dimensionless"
+        description: >
+          Empirical finding that support-pad and man-way conduction
+          can be comparable to or exceed the MLI broad-area contribution
+          to total heat leak.  No closed-form inference boundary:
+          depends on specific support and penetration designs.
+
+  # =========================================================================
+  # Domain: MATL — Material Processes (from TS-28-11-TS02)
+  # =========================================================================
+  - domain_id: "MATL"
+    domain_name: "Materials and Structural"
+    source: "KDB/DEV/trade-studies/TS-28-11-TS02_materials.yaml"
+    tokens:
+
+      - token: "MTP-28-11-MATL-001"
+        subject: "Cryogenic Strength Increase (Al-Li 2195)"
+        type: "scaling"
+        method: "sigma_y(20K) / sigma_y(RT) > 1; UTS(20K) / UTS(RT) > 1"
+        standard: "Measured cryogenic material testing"
+        inputs:
+          - name: "temperature_K"
+            unit: "K"
+            reference_value: 20
+        outputs:
+          - name: "yield_strength_MPa"
+            unit: "MPa"
+            reference_value: 724
+          - name: "uts_MPa"
+            unit: "MPa"
+            reference_value: 859
+        description: >
+          Measured scaling: Al-Li 2195-T8 yield and UTS increase at
+          cryogenic temperatures.  Reported values at 20 K.  Must
+          be derated for welds, fatigue, and certification allowables.
+
+      - token: "MTP-28-11-MATL-002"
+        subject: "Pressure Vessel Hoop Stress"
+        type: "process"
+        method: "sigma_hoop = P * r / t"
+        standard: "Thin-shell membrane theory — Barlow's formula"
+        inputs:
+          - name: "operating_pressure_Pa"
+            unit: "Pa"
+          - name: "internal_radius_m"
+            unit: "m"
+          - name: "wall_thickness_m"
+            unit: "m"
+        outputs:
+          - name: "hoop_stress_Pa"
+            unit: "Pa"
+        description: >
+          Closed-form hoop stress for thin-walled cylindrical
+          pressure vessel.  Industry-standard structural sizing method.
+
+      - token: "MTP-28-11-MATL-003"
+        subject: "Membrane Stress (Sphere)"
+        type: "process"
+        method: "sigma_membrane = P * r / (2 * t)"
+        standard: "Thin-shell membrane theory — spherical vessel"
+        inputs:
+          - name: "operating_pressure_Pa"
+            unit: "Pa"
+          - name: "internal_radius_m"
+            unit: "m"
+          - name: "wall_thickness_m"
+            unit: "m"
+        outputs:
+          - name: "membrane_stress_Pa"
+            unit: "Pa"
+        description: >
+          Closed-form membrane stress for thin-walled spherical
+          pressure vessel.  Half the hoop stress of a cylinder at
+          same radius and pressure — best structural efficiency.
+
+      - token: "MTP-28-11-MATL-004"
+        subject: "Weld Strength Derating"
+        type: "scaling"
+        method: "sigma_allow_weld = sigma_parent * k_weld; k_weld < 1.0"
+        standard: "Welding qualification practice — cryogenic alloys"
+        inputs:
+          - name: "parent_strength_MPa"
+            unit: "MPa"
+          - name: "weld_efficiency_factor"
+            unit: "dimensionless"
+            range: [0.60, 0.90]
+        outputs:
+          - name: "weld_allowable_MPa"
+            unit: "MPa"
+        description: >
+          Scaling law for weld zone strength derating.  No single
+          closed-form: depends on weld process, joint design, and
+          material.  Typical efficiency factors 0.6–0.9.
+
+      - token: "MTP-28-11-MATL-005"
+        subject: "Thermal Contraction Mismatch"
+        type: "process"
+        method: "delta_L = alpha * L * delta_T"
+        standard: "Thermoelastic contraction — CTE linear model"
+        inputs:
+          - name: "cte_inner_tank_per_K"
+            unit: "1/K"
+          - name: "cte_jacket_per_K"
+            unit: "1/K"
+          - name: "length_m"
+            unit: "m"
+          - name: "delta_T_K"
+            unit: "K"
+            reference_value: 280
+        outputs:
+          - name: "differential_contraction_mm"
+            unit: "mm"
+        description: >
+          Closed-form differential contraction between inner tank
+          (20 K) and outer jacket (ambient ~300 K).  Drives support
+          design and interface loads.
+
+  # =========================================================================
+  # Domain: CERT — Certification Processes (from CS25_compliance_matrix)
+  # =========================================================================
+  - domain_id: "CERT"
+    domain_name: "Certification and Safety"
+    source: "KDB/DEV/trade-studies/CS25_compliance_matrix.yaml"
+    tokens:
+
+      - token: "MTP-28-11-CERT-001"
+        subject: "Ultimate Pressure Factor"
+        type: "process"
+        method: "P_ultimate = 1.5 * P_limit"
+        standard: "CS 25.305 / 14 CFR 25.305 — ultimate load factor"
+        inputs:
+          - name: "limit_pressure_kPa"
+            unit: "kPa"
+        outputs:
+          - name: "ultimate_pressure_kPa"
+            unit: "kPa"
+        description: >
+          Closed-form ultimate pressure from limit pressure using
+          the regulatory 1.5 factor of safety.
+
+      - token: "MTP-28-11-CERT-002"
+        subject: "ARP4761 Safety Assessment Process"
+        type: "process"
+        method: "FHA -> PSSA -> SSA (DAL/IDAL allocation)"
+        standard: "SAE ARP4761 — Guidelines for Conducting Safety Assessment"
+        inputs:
+          - name: "system_function_list"
+            unit: "list"
+          - name: "failure_condition_severity"
+            unit: "category"
+        outputs:
+          - name: "dal_allocation"
+            unit: "DAL_level"
+          - name: "fault_tree"
+            unit: "structure"
+          - name: "cdccl_list"
+            unit: "list"
+        description: >
+          Industry-standard safety assessment process per ARP4761.
+          Sequential: Functional Hazard Assessment, Preliminary
+          System Safety Assessment, System Safety Assessment.
+
+      - token: "MTP-28-11-CERT-003"
+        subject: "CS 25.571 Damage Tolerance Process"
+        type: "process"
+        method: "a_initial -> da/dN(deltaK, R, T) -> a_critical -> inspection_interval"
+        standard: "CS 25.571 / 14 CFR 25.571 — damage tolerance"
+        inputs:
+          - name: "initial_flaw_size_mm"
+            unit: "mm"
+          - name: "stress_intensity_range_MPa_sqrt_m"
+            unit: "MPa*m^0.5"
+          - name: "temperature_K"
+            unit: "K"
+        outputs:
+          - name: "critical_crack_length_mm"
+            unit: "mm"
+          - name: "inspection_interval_cycles"
+            unit: "cycles"
+        description: >
+          Damage tolerance process for cryogenic pressure vessels.
+          Crack growth analysis from initial flaw to critical length,
+          with inspection intervals sized to detect before failure.
+
+      - token: "MTP-28-11-CERT-004"
+        subject: "Vent Relief Sizing Process"
+        type: "process"
+        method: "A_vent = m_dot_bo_max / (C_d * sqrt(2 * rho * delta_P))"
+        standard: "Pressure relief — orifice flow sizing"
+        inputs:
+          - name: "max_boil_off_rate_kg_per_s"
+            unit: "kg/s"
+          - name: "relief_pressure_differential_Pa"
+            unit: "Pa"
+          - name: "discharge_coefficient"
+            unit: "dimensionless"
+        outputs:
+          - name: "vent_area_m2"
+            unit: "m^2"
+        description: >
+          Closed-form relief valve sizing from maximum boil-off rate
+          and allowable pressure differential.
+
+  # =========================================================================
+  # Domain: EVAL — Evaluation Scaling (from evaluation_criteria)
+  # =========================================================================
+  - domain_id: "EVAL"
+    domain_name: "Evaluation and Scoring"
+    source: "KDB/DEV/trade-studies/evaluation_criteria.yaml"
+    tokens:
+
+      - token: "MTP-28-11-EVAL-001"
+        subject: "Weighted Score Aggregation"
+        type: "process"
+        method: "S_total = sum(w_i * s_i) for i in criteria"
+        standard: "Multi-criteria decision analysis — weighted sum"
+        inputs:
+          - name: "criteria_weights"
+            unit: "list[pct]"
+            constraint: "sum = 100"
+          - name: "criteria_scores"
+            unit: "list[0-10]"
+        outputs:
+          - name: "total_weighted_score"
+            unit: "dimensionless"
+        description: >
+          Closed-form weighted-sum scoring for multi-criteria trade
+          evaluation.  Industry-standard MCDA method.
+
+      - token: "MTP-28-11-EVAL-002"
+        subject: "Risk Likelihood-Consequence Scaling"
+        type: "scaling"
+        method: "risk_level = f(likelihood, consequence); qualitative matrix"
+        standard: "Risk management — qualitative risk matrix"
+        inputs:
+          - name: "likelihood_class"
+            unit: "category"
+          - name: "consequence_class"
+            unit: "category"
+        outputs:
+          - name: "risk_level"
+            unit: "category"
+        description: >
+          Scaling method for risk assessment.  No closed-form
+          inference boundary: uses qualitative likelihood x consequence
+          matrix mapped to risk categories.
+
+# =========================================================================
+# Token Summary
+# =========================================================================
+summary:
+  total_tokens: 21
+  domains: 5
+  domain_counts:
+    GEOM: 4
+    THRM: 6
+    MATL: 5
+    CERT: 4
+    EVAL: 2
+  type_counts:
+    process: 13
+    scaling: 8
+
+# =========================================================================
+# Traceability
+# =========================================================================
+traceability:
+  derives_from:
+    - "TS-28-11-TS01"
+    - "TS-28-11-TS02"
+    - "TS-28-11-TS03"
+    - "CM-28-11-CS25"
+    - "MTL-28-11-00"
+  feeds:
+    - lifecycle: "LC05"
+      artifact: "Parametric model implementation (process tokens as computation kernel)"
+    - lifecycle: "LC05"
+      artifact: "Automated sizing and boil-off estimation pipelines"
+    - lifecycle: "LC06"
+      artifact: "Verification method matrix (process-token-to-test mapping)"
