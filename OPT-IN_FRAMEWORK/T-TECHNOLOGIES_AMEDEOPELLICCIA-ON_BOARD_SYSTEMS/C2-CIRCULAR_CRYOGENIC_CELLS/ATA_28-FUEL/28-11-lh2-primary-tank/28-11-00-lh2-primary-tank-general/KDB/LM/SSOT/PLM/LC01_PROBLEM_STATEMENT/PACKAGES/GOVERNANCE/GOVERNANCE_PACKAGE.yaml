@@ -1,0 +1,14 @@
+governance_package:
+  package_id: "GOV-LC01-ATA28-11"
+  package_title: "LC01 Problem Statement Governance — ATA 28-11 LH2 Primary Tank"
+  program: "AMPEL360 Q100"
+  domain: "C2 Circular Cryogenic Cells"
+  lifecycle_phase: "LC01"
+  ata_scope: ["28-11-00"]
+  status: "SSOT"
+  baseline_state: "baselined"
+  version: "1.0.0"
+  owner_role: "REPOSITORY_STEWARD"
+  governance_authority: "CCB"
+  created_on: "2026-02-16"
+  last_updated_on: "2026-02-16"

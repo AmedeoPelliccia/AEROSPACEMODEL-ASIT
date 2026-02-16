@@ -1,0 +1,13 @@
+change_control:
+  authority: "CCB"
+  update_requires:
+    - "ECR_ID"
+    - "impact_assessment"
+    - "article_impact_map"
+    - "rollback_plan"
+    - "signed_commit"
+  semantic_versioning:
+    major: "changes axiom interpretation, rights, or hard prohibitions"
+    minor: "adds controls without weakening existing constraints"
+    patch: "clarifications/no normative effect"
+  silent_override_allowed: false

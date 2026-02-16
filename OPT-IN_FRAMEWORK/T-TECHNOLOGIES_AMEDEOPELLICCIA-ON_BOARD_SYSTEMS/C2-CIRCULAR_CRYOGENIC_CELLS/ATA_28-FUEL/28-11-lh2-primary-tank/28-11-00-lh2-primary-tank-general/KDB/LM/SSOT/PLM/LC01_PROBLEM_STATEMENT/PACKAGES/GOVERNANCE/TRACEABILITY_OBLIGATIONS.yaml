@@ -1,0 +1,8 @@
+traceability_obligations:
+  mandatory_links:
+    - "LC01 governance clause -> LC04 config/design/interface contract"
+    - "governance decision -> signed commit"
+    - "policy gate -> evidence artifact"
+    - "exception -> ECR + remediation timeline"
+  closure_required: true
+  orphan_policy: "reject_publish"

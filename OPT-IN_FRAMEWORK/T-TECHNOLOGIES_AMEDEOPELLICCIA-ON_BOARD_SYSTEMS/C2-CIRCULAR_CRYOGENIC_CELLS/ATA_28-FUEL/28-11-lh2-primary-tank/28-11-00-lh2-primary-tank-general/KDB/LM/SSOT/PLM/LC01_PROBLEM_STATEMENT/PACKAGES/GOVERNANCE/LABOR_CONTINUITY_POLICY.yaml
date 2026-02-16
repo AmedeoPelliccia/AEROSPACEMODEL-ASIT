@@ -1,0 +1,11 @@
+labor_continuity_policy:
+  principle: "Automation augments human capability; does not displace foundational labor."
+  hard_rules:
+    - "deny_if_net_human_exclusion == true"
+    - "requires_reabsorption_plan_if_role_shift == true"
+    - "skills_transition_plan_required == true"
+  required_evidence:
+    - "role_impact_assessment"
+    - "reabsorption_plan"
+    - "competency_transition_matrix"
+  enforcement_action_on_missing_evidence: "HOLD_RELEASE"

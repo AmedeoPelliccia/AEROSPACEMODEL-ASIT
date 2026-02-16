@@ -1,0 +1,14 @@
+admission_policy_lc01:
+  objective: "Only governance-compliant problem statements may feed LC04 design packages."
+  required_for_admission:
+    - "constitution_binding_complete"
+    - "decision_rights_defined"
+    - "safety_precedence_defined"
+    - "labor_continuity_policy_defined"
+    - "traceability_obligations_defined"
+    - "signed_governance_commit_present"
+  prohibited:
+    - "ambiguous_accountability"
+    - "unbounded_autonomy_language"
+    - "non_auditable_policy_clauses"
+  on_fail: "REJECT_AND_OPEN_ECR"
