@@ -315,6 +315,19 @@ class TestAcceptanceLogic:
     def test_release_rule_present(self, data):
         assert "statement" in data["acceptance_logic"]["release_rule"]
 
+    def test_escalation_path_present(self, data):
+        ep = data["acceptance_logic"]["escalation_path"]
+        assert "on_HOLD" in ep
+        assert "on_FAIL" in ep
+
+    def test_escalation_hold_requires_steward(self, data):
+        ep = data["acceptance_logic"]["escalation_path"]
+        assert "steward" in ep["on_HOLD"].lower()
+
+    def test_escalation_fail_blocks_merge(self, data):
+        ep = data["acceptance_logic"]["escalation_path"]
+        assert "block" in ep["on_FAIL"].lower()
+
 
 # =========================================================================
 # 8. MEANS_OF_COMPLIANCE_PLAN.yaml
@@ -553,6 +566,18 @@ class TestDataPackage:
 
     def test_version(self, data):
         assert data["data_package"]["version"] == "1.0.0"
+
+    def test_constitutional_constraints_present(self, data):
+        cc = data["data_package"]["constitutional_constraints"]
+        assert cc["human_authorization_required_for_override"] is True
+
+    def test_harm_precedence_threshold(self, data):
+        cc = data["data_package"]["constitutional_constraints"]
+        assert cc["harm_precedence_threshold"] >= 0.9
+
+    def test_constitution_version(self, data):
+        cc = data["data_package"]["constitutional_constraints"]
+        assert cc["constitution_version"] == "v1.0"
 
 
 # =========================================================================
@@ -919,6 +944,26 @@ class TestSafetyInterfaceContracts:
     def test_every_contract_has_dal(self, data):
         for c in data["safety_interface_contracts"]["contracts"]:
             assert "dal" in c, f"Contract {c.get('contract_id', '?')} missing DAL"
+
+    def test_dal_a_contracts_have_human_in_the_loop(self, data):
+        for c in data["safety_interface_contracts"]["contracts"]:
+            if c["dal"] == "A":
+                assert "human_in_the_loop" in c, (
+                    f"DAL-A contract {c['contract_id']} missing human_in_the_loop"
+                )
+
+    def test_human_in_the_loop_has_required_fields(self, data):
+        for c in data["safety_interface_contracts"]["contracts"]:
+            if "human_in_the_loop" in c:
+                hitl = c["human_in_the_loop"]
+                assert "autonomous_action_limit" in hitl
+                assert "human_authorization_required_for" in hitl
+                assert "escalation_timeout_seconds" in hitl
+
+    def test_autonomous_action_limit_is_alert_only(self, data):
+        for c in data["safety_interface_contracts"]["contracts"]:
+            if "human_in_the_loop" in c:
+                assert c["human_in_the_loop"]["autonomous_action_limit"] == "alert_only"
 
 
 # =========================================================================
