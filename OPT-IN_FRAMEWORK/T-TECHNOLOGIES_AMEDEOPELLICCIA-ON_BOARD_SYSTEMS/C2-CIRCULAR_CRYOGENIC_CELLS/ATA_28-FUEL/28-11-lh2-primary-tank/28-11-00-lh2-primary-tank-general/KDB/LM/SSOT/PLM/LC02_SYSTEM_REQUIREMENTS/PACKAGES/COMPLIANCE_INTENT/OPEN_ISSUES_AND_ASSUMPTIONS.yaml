@@ -1,0 +1,17 @@
+open_issues_and_assumptions:
+  open_issues:
+    - issue_id: "OI-001"
+      title: "Final EASA alignment on LH2 SC wording"
+      impact: "CINT-001/CINT-002/CINT-003"
+      owner: "STK_CERT"
+      target_phase: "LC04"
+    - issue_id: "OI-002"
+      title: "Final acceptable MoC split analysis vs test for cryogenic shock"
+      impact: "CINT-001"
+      owner: "STK_ENG"
+      target_phase: "LC04"
+
+  assumptions:
+    - asm_id: "ASM-CINT-001"
+      statement: "Current CS-25 references remain applicable with SC overlay"
+      risk_if_false: "re-baselining of intent map required"

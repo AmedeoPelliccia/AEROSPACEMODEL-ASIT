@@ -1,0 +1,15 @@
+traceability:
+  derives_from:
+    - "LC01/PACKAGES/GOVERNANCE"
+    - "LC02 system requirement baseline"
+  feeds:
+    - lifecycle: "LC03"
+      artifact: "safety requirement allocations"
+    - lifecycle: "LC04"
+      artifact: "design compliance matrices and STP compliance flows"
+    - lifecycle: "LC06"
+      artifact: "verification evidence and test closure"
+    - lifecycle: "LC08"
+      artifact: "S1000D compliance-linked procedures"
+  closure_required: true
+  orphan_policy: "reject_publish"

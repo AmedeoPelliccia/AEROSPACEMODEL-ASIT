@@ -1,0 +1,34 @@
+compliance_intent_matrix:
+  policy: "intent_level_only"
+  rows:
+    - cint_id: "CINT-001"
+      req_id: "REQ-28-11-STR-001"
+      intent: "Demonstrate positive structural margins at limit and ultimate conditions"
+      planned_moc: ["analysis", "test", "inspection"]
+      planned_evidence: ["stress_report", "pressure_test_report", "material_allowables_record"]
+      success_condition: "No FAIL finding at requirement level"
+      lifecycle_realization: ["LC04", "LC06"]
+
+    - cint_id: "CINT-002"
+      req_id: "REQ-28-11-PRS-001"
+      intent: "Demonstrate relief sizing and venting performance under worst case boil-off"
+      planned_moc: ["analysis", "test"]
+      planned_evidence: ["relief_sizing_report", "flow_test_record"]
+      success_condition: "Relief and venting intent addressed with bounded assumptions"
+      lifecycle_realization: ["LC04", "LC06"]
+
+    - cint_id: "CINT-003"
+      req_id: "REQ-28-11-IGN-001"
+      intent: "Demonstrate ignition prevention and failure containment per safety objectives"
+      planned_moc: ["safety_assessment", "analysis", "inspection"]
+      planned_evidence: ["FHA", "PSSA", "SSA", "hazard_control_matrix"]
+      success_condition: "No unmitigated hazardous condition remains open"
+      lifecycle_realization: ["LC03", "LC04", "LC06"]
+
+    - cint_id: "CINT-004"
+      req_id: "REQ-28-11-MNT-001"
+      intent: "Demonstrate ICA/CDCCL feasibility and maintainability constraints"
+      planned_moc: ["analysis", "procedure_review"]
+      planned_evidence: ["ICA_draft", "CDCCL_draft", "maintenance_task_analysis"]
+      success_condition: "Maintainability intent is complete and traceable"
+      lifecycle_realization: ["LC04", "LC08", "LC10"]

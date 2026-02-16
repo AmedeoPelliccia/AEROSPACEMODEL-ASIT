@@ -1,0 +1,12 @@
+change_control:
+  authority: "CCB"
+  update_requires:
+    - "ECR_ID"
+    - "regulatory_impact_assessment"
+    - "downstream_impact_map"
+    - "signed_commit"
+  semantic_versioning:
+    major: "regulatory basis or intent semantics change"
+    minor: "new requirement mappings or MoC additions"
+    patch: "clarification/no normative change"
+  silent_override_allowed: false

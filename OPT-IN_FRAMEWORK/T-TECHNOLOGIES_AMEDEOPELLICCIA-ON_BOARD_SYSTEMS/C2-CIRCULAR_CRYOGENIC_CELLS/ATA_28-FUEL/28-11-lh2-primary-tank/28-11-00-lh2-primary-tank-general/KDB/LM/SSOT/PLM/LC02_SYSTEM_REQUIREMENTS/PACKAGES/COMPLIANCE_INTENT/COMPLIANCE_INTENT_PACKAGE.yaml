@@ -1,0 +1,14 @@
+compliance_intent_package:
+  package_id: "CINT-LC02-ATA28-11"
+  package_title: "LC02 System Requirements — Compliance Intent (ATA 28-11)"
+  program: "AMPEL360 Q100"
+  domain: "C2 Circular Cryogenic Cells"
+  ata_scope: ["28-11-00"]
+  lifecycle_phase: "LC02"
+  status: "SSOT"
+  baseline_state: "baselined"
+  version: "1.0.0"
+  owner_role: "STK_CERT"
+  accountable_authority: "CCB"
+  created_on: "2026-02-16"
+  last_updated_on: "2026-02-16"

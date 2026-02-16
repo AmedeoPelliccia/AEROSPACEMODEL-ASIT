@@ -1,0 +1,12 @@
+evidence_intent_schema:
+  required_fields:
+    - "evidence_id"
+    - "linked_req_id"
+    - "linked_cint_id"
+    - "linked_regulation"
+    - "moc_type"
+    - "producing_lifecycle_phase"
+    - "verification_method"
+    - "status"
+  status_values: ["PLANNED", "IN_PROGRESS", "AVAILABLE", "REJECTED"]
+  placeholder_policy: "forbidden_in_ssot_required_fields"

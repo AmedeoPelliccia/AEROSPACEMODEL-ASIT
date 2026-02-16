@@ -1,0 +1,21 @@
+requirement_to_regulation_map:
+  entries:
+    - req_id: "REQ-28-11-STR-001"
+      requirement_title: "Primary tank structural integrity under limit/ultimate loads"
+      regulations: ["CS 25.963", "CS 25.965", "CS 25.571"]
+      special_conditions: ["SC-28-H2-001", "SC-28-CRYO-002"]
+
+    - req_id: "REQ-28-11-PRS-001"
+      requirement_title: "Pressure control, relief, and venting integrity"
+      regulations: ["CS 25.969", "CS 25.975"]
+      special_conditions: ["SC-28-H2-001"]
+
+    - req_id: "REQ-28-11-IGN-001"
+      requirement_title: "Ignition prevention and hazardous failure minimization"
+      regulations: ["CS 25.981", "CS 25.1309"]
+      special_conditions: ["SC-28-H2-001"]
+
+    - req_id: "REQ-28-11-MNT-001"
+      requirement_title: "Continued airworthiness and inspection program definition"
+      regulations: ["CS 25.1529", "CS 25.603", "CS 25.605"]
+      special_conditions: ["SC-28-CRYO-002"]
