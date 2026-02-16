@@ -2,33 +2,38 @@
 from __future__ import annotations
 
 import argparse
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
+from typing import Optional
 
 
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
         prog="Kiss-scaffold",
-        description="Aircraft GenKISS (General Knowledge and Information Standard Systems) Scaffold Generator for aerospace projects",
+        description=(
+            "Aircraft GenKISS (General Knowledge and Information Standard Systems) "
+            "Scaffold Generator for aerospace projects"
+        ),
     )
+
     parser.add_argument(
         "--base",
         type=str,
-        required=True,
-        help="Base directory for scaffold output",
+        default="./OUT",
+        help="Base directory for scaffold output (default: ./OUT)",
     )
     parser.add_argument(
         "--config-dir",
         type=str,
-        required=True,
-        help="Configuration directory containing lifecycle.yaml and atdp.yaml",
+        default="./config",
+        help="Directory containing lifecycle.yaml and atdp.yaml (default: ./config)",
     )
     parser.add_argument(
         "--mode",
         choices=["fail", "safe", "overwrite"],
-        default="fail",
-        help="Write mode: fail on collision (default), safe (skip existing), or overwrite",
+        default="overwrite",
+        help="Write mode: fail on collision, safe (skip existing), or overwrite (default)",
     )
     parser.add_argument(
         "--validate",
@@ -38,13 +43,13 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--manifest",
         action="store_true",
-        help="Write manifest file with list of generated files",
+        help="Write MANIFEST.sha256",
     )
     parser.add_argument(
         "--timestamp",
         type=str,
         default=None,
-        help="ISO timestamp for generation (default: current UTC time)",
+        help="UTC timestamp, e.g. 2026-02-16T10:00:00Z (default: now UTC)",
     )
     parser.add_argument(
         "--log-level",
@@ -52,32 +57,71 @@ def parse_args() -> argparse.Namespace:
         default="INFO",
         help="Logging level (default: INFO)",
     )
-    return parser.parse_args()
+
+    args = parser.parse_args()
+
+    # Normalize paths early for downstream modules.
+    args.base = str(Path(args.base).expanduser())
+    args.config_dir = str(Path(args.config_dir).expanduser())
+
+    return args
 
 
-def parse_timestamp(timestamp_str: str | None) -> datetime:
-    """Parse timestamp string or return current UTC time.
-    
+def parse_timestamp(timestamp_str: Optional[str]) -> datetime:
+    """
+    Parse a timestamp string into a timezone-aware UTC datetime.
+
+    Accepted inputs:
+    - None -> current UTC time
+    - ISO8601 with 'Z' or explicit offset, e.g. '2026-02-16T10:00:00Z'
+    - Naive datetime/date forms:
+        * YYYY-MM-DDTHH:MM:SS
+        * YYYY-MM-DD HH:MM:SS
+        * YYYY-MM-DD
+      (interpreted as UTC)
+
     Args:
-        timestamp_str: ISO format timestamp string or None
-        
+        timestamp_str: ISO-like timestamp string or None.
+
     Returns:
-        datetime object
-        
+        Timezone-aware datetime in UTC.
+
     Raises:
-        ValueError: If timestamp string is invalid
+        ValueError: If the timestamp cannot be parsed.
     """
     if timestamp_str is None:
-        return datetime.utcnow()
-    
-    # Try parsing ISO format
+        return datetime.now(timezone.utc)
+
+    raw = timestamp_str.strip()
+    if not raw:
+        raise ValueError("Empty timestamp string is not valid.")
+
+    # Handle ISO 'Z' suffix explicitly.
+    iso_candidate = raw.replace("Z", "+00:00")
+
+    # 1) Try direct ISO parse first.
     try:
-        return datetime.fromisoformat(timestamp_str.rstrip("Z"))
+        dt = datetime.fromisoformat(iso_candidate)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone(timezone.utc)
     except ValueError:
-        # Try other common formats
-        for fmt in ["%Y-%m-%dT%H:%M:%S", "%Y-%m-%d %H:%M:%S", "%Y-%m-%d"]:
-            try:
-                return datetime.strptime(timestamp_str, fmt)
-            except ValueError:
-                continue
-        raise ValueError(f"Invalid timestamp format: {timestamp_str}")
+        pass
+
+    # 2) Fallback formats.
+    fmts = [
+        "%Y-%m-%dT%H:%M:%S",
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%d",
+    ]
+    for fmt in fmts:
+        try:
+            dt = datetime.strptime(raw, fmt).replace(tzinfo=timezone.utc)
+            return dt
+        except ValueError:
+            continue
+
+    raise ValueError(
+        f"Invalid timestamp format: {timestamp_str}. "
+        "Use ISO8601, e.g. 2026-02-16T10:00:00Z"
+    )
