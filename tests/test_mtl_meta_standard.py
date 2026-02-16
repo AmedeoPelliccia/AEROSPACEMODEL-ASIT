@@ -119,7 +119,7 @@ class TestStandardLayers:
 
 
 class TestTokenContract:
-    """Token contract schema must define required and optional fields."""
+    """Token contract must define core, governance, trace, and layer-specific fields."""
 
     @pytest.fixture()
     def data(self):
@@ -129,15 +129,34 @@ class TestTokenContract:
     def test_has_token_contract(self, data):
         assert "token_contract" in data
 
-    def test_required_fields_exist(self, data):
-        fields = {f["field"] for f in data["token_contract"]["required_fields"]}
+    def test_core_required_fields(self, data):
+        fields = data["token_contract"]["core_required_fields"]
         for name in ("token_id", "layer", "name", "intent", "acceptance_gates", "governance"):
-            assert name in fields, f"Required field '{name}' missing"
+            assert name in fields, f"Core field '{name}' missing"
 
-    def test_optional_fields_exist(self, data):
-        fields = {f["field"] for f in data["token_contract"]["optional_fields"]}
-        assert "method_class" in fields
-        assert "trace" in fields
+    def test_governance_required_fields(self, data):
+        fields = data["token_contract"]["governance_required_fields"]
+        for name in ("owner_role", "status", "version"):
+            assert name in fields, f"Governance field '{name}' missing"
+
+    def test_trace_required_fields(self, data):
+        fields = data["token_contract"]["trace_required_fields"]
+        for name in ("derives_from", "feeds"):
+            assert name in fields, f"Trace field '{name}' missing"
+
+    def test_layer_specific_fields_all_layers(self, data):
+        lsf = data["token_contract"]["layer_specific_fields"]
+        for layer in EXPECTED_LAYERS:
+            assert layer in lsf, f"Layer-specific fields missing for {layer}"
+            assert isinstance(lsf[layer], list) and len(lsf[layer]) >= 1
+
+    def test_l2_requires_method_class(self, data):
+        lsf = data["token_contract"]["layer_specific_fields"]
+        assert "method_class" in lsf["L2"]
+
+    def test_l3_requires_procedure_steps(self, data):
+        lsf = data["token_contract"]["layer_specific_fields"]
+        assert "procedure_steps" in lsf["L3"]
 
 
 # =========================================================================
@@ -261,6 +280,99 @@ class TestBackwardCompatibility:
 
 
 # =========================================================================
+# Standard YAML — Decision States
+# =========================================================================
+
+
+EXPECTED_STATES = ["ALLOW", "HOLD", "REJECT", "ESCALATE"]
+
+
+class TestDecisionStates:
+    """Standard must define a deterministic decision state machine."""
+
+    @pytest.fixture()
+    def data(self):
+        with open(META_DIR / STANDARD_FILE) as f:
+            return yaml.safe_load(f)
+
+    def test_has_decision_states(self, data):
+        assert "decision_states" in data
+
+    def test_four_states(self, data):
+        assert data["decision_states"]["allowed_states"] == EXPECTED_STATES
+
+    def test_has_transition_rules(self, data):
+        rules = data["decision_states"]["transition_rules"]
+        assert isinstance(rules, list) and len(rules) >= 4
+
+    def test_each_transition_has_when_then(self, data):
+        for rule in data["decision_states"]["transition_rules"]:
+            assert "when" in rule, "Transition rule missing 'when'"
+            assert "then" in rule, "Transition rule missing 'then'"
+
+    def test_all_then_values_are_valid_states(self, data):
+        for rule in data["decision_states"]["transition_rules"]:
+            assert rule["then"] in EXPECTED_STATES, f"Invalid state: {rule['then']}"
+
+
+# =========================================================================
+# Standard YAML — Backward Mapping Rules
+# =========================================================================
+
+
+class TestBackwardMappingRules:
+    """Standard must provide regex-based backward mapping for ATA 28-11 IDs."""
+
+    @pytest.fixture()
+    def data(self):
+        with open(META_DIR / STANDARD_FILE) as f:
+            return yaml.safe_load(f)
+
+    def test_has_backward_mapping_rules(self, data):
+        assert "backward_mapping_rules" in data["compatibility"]
+
+    def test_five_mapping_rules(self, data):
+        rules = data["compatibility"]["backward_mapping_rules"]["rules"]
+        assert len(rules) == 5
+
+    def test_each_rule_has_regex_and_pattern(self, data):
+        for rule in data["compatibility"]["backward_mapping_rules"]["rules"]:
+            assert "from_regex" in rule, "Mapping rule missing from_regex"
+            assert "to_pattern" in rule, "Mapping rule missing to_pattern"
+
+    def test_sdr_regex_compiles(self, data):
+        rules = data["compatibility"]["backward_mapping_rules"]["rules"]
+        sdr = [r for r in rules if r["to_pattern"].startswith("CTX-")]
+        assert len(sdr) == 1
+        assert re.compile(sdr[0]["from_regex"])
+
+    def test_sdr_regex_matches_legacy(self, data):
+        rules = data["compatibility"]["backward_mapping_rules"]["rules"]
+        sdr = [r for r in rules if r["to_pattern"].startswith("CTX-")][0]
+        assert re.match(sdr["from_regex"], "SDR-28")
+
+    def test_scr_regex_matches_legacy(self, data):
+        rules = data["compatibility"]["backward_mapping_rules"]["rules"]
+        scr = [r for r in rules if r["to_pattern"].startswith("STR-")][0]
+        assert re.match(scr["from_regex"], "SCR-28-11")
+
+    def test_stp_regex_matches_legacy(self, data):
+        rules = data["compatibility"]["backward_mapping_rules"]["rules"]
+        stp = [r for r in rules if r["to_pattern"].startswith("PRC-")][0]
+        assert re.match(stp["from_regex"], "STP-28-11-001")
+
+    def test_mtp_regex_matches_legacy(self, data):
+        rules = data["compatibility"]["backward_mapping_rules"]["rules"]
+        mtp = [r for r in rules if r["to_pattern"].startswith("XFM-")][0]
+        assert re.match(mtp["from_regex"], "MTP-28-11-GEOM-001")
+
+    def test_mtk_regex_matches_legacy(self, data):
+        rules = data["compatibility"]["backward_mapping_rules"]["rules"]
+        mtk = [r for r in rules if r["to_pattern"].startswith("SBJ-")][0]
+        assert re.match(mtk["from_regex"], "MTK-28-11-TS-001")
+
+
+# =========================================================================
 # Standard YAML — Summary
 # =========================================================================
 
@@ -288,6 +400,16 @@ class TestStandardSummary:
     def test_total_domain_profiles(self, data):
         assert data["summary"]["total_domain_profiles"] == len(
             data["domain_profiles"]["profiles"]
+        )
+
+    def test_total_decision_states(self, data):
+        assert data["summary"]["total_decision_states"] == len(
+            data["decision_states"]["allowed_states"]
+        )
+
+    def test_total_backward_mapping_rules(self, data):
+        assert data["summary"]["total_backward_mapping_rules"] == len(
+            data["compatibility"]["backward_mapping_rules"]["rules"]
         )
 
 
@@ -357,7 +479,7 @@ class TestBREXRuleCategories:
         assert len(data["structure_rules"]) >= 3
 
     def test_has_contract_rules(self, data):
-        assert len(data["contract_rules"]) >= 4
+        assert len(data["contract_rules"]) >= 9
 
     def test_has_traceability_rules(self, data):
         assert len(data["traceability_rules"]) >= 3
@@ -366,7 +488,7 @@ class TestBREXRuleCategories:
         assert len(data["governance_rules"]) >= 4
 
     def test_has_safety_rules(self, data):
-        assert len(data["safety_rules"]) >= 2
+        assert len(data["safety_rules"]) >= 3
 
     def test_has_lifecycle_rules(self, data):
         assert len(data["lifecycle_rules"]) >= 3

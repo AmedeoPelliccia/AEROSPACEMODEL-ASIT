@@ -127,50 +127,56 @@ layers:
 # -----------------------------------------------------------------------------
 token_contract:
   description: |
-    Every token, regardless of domain, must include the following minimum
-    contract so that it is machine-tokenizable and suitable for learning.
-  required_fields:
-    - field: "token_id"
-      type: "string"
-      description: "Unique identifier following layer token pattern"
-    - field: "layer"
-      type: "enum"
-      allowed: ["L1", "L2", "L3", "L4", "L5"]
-      description: "Layer this token belongs to"
-    - field: "name"
-      type: "string"
-      description: "Human-readable name"
-    - field: "intent"
-      type: "string"
-      description: "What the token achieves"
-    - field: "inputs"
-      type: "array"
-      description: "Typed inputs with units"
-    - field: "outputs"
-      type: "array"
-      description: "Typed outputs with units"
-    - field: "acceptance_gates"
-      type: "array"
-      description: "Machine-evaluable pass/fail criteria"
-    - field: "governance"
-      type: "object"
-      description: "Owner role, status, version"
-  optional_fields:
-    - field: "method_class"
-      type: "string"
-      description: "L2-class taxonomy code (e.g. KIN, THRM)"
-    - field: "assumptions"
-      type: "array"
-      description: "Simplifying assumptions"
-    - field: "constraints"
-      type: "array"
-      description: "Hard constraints"
-    - field: "failure_modes"
-      type: "array"
-      description: "Known failure modes"
-    - field: "trace"
-      type: "object"
-      description: "derives_from and feeds references"
+    Every token, regardless of domain, must include the core required fields.
+    Layer-specific fields are mandatory only for the indicated layer.
+    This split avoids BREX invalidations on tokens that do not belong to a
+    given layer (e.g. method_class is only required for L2).
+
+  # Fields required for ALL tokens (L1–L5)
+  core_required_fields:
+    - "token_id"
+    - "layer"
+    - "name"
+    - "intent"
+    - "inputs"
+    - "outputs"
+    - "assumptions"
+    - "constraints"
+    - "acceptance_gates"
+    - "governance"
+    - "trace"
+
+  # Sub-fields required inside governance object
+  governance_required_fields:
+    - "owner_role"
+    - "status"
+    - "version"
+
+  # Sub-fields required inside trace object
+  trace_required_fields:
+    - "derives_from"
+    - "feeds"
+
+  # Fields mandatory ONLY for the specified layer
+  layer_specific_fields:
+    L5:
+      - "domain_scope"
+      - "regulatory_basis"
+    L4:
+      - "resolver_rules"
+      - "target_components"
+    L3:
+      - "procedure_steps"
+      - "handoffs"
+      - "terminal_outputs"
+    L2:
+      - "method_class"
+      - "equation_or_rule"
+      - "validity_range"
+    L1:
+      - "evidence_type"
+      - "source_artifacts"
+      - "confidence"
 
 # -----------------------------------------------------------------------------
 # METHOD CLASS TAXONOMY (L2)
@@ -275,6 +281,29 @@ governance:
       escalation_target: "STK_OPS"
 
 # -----------------------------------------------------------------------------
+# DECISION STATES
+# -----------------------------------------------------------------------------
+decision_states:
+  description: |
+    All policy and gate evaluations resolve to one deterministic state.
+    No safety-relevant flow may transition directly to ALLOW after a failed
+    mandatory gate.
+  allowed_states:
+    - "ALLOW"
+    - "HOLD"
+    - "REJECT"
+    - "ESCALATE"
+  transition_rules:
+    - when: "policy_enforcement == BLOCK and condition_fail == true"
+      then: "REJECT"
+    - when: "policy_enforcement == ESCALATE and condition_fail == true"
+      then: "ESCALATE"
+    - when: "gate_boundary == uncertain"
+      then: "HOLD"
+    - when: "all_required_gates_pass == true"
+      then: "ALLOW"
+
+# -----------------------------------------------------------------------------
 # CANONICAL LEARNING RULE
 # -----------------------------------------------------------------------------
 learning_rule:
@@ -299,6 +328,22 @@ compatibility:
       L2: "D2 / MTP-{ATA}-{SS}-{DOM}-{SEQ}"
       L1: "D1 / MTK-{ATA}-{SS}-{DOM}-{SEQ}"
 
+  backward_mapping_rules:
+    description: |
+      Regex rules for transforming legacy ATA 28-11 token IDs into
+      universal MTL token IDs without ambiguity.
+    rules:
+      - from_regex: "^SDR-(\\d{2})$"
+        to_pattern: "CTX-AERO-{1}"
+      - from_regex: "^SCR-(\\d{2})-(\\d{2})$"
+        to_pattern: "STR-AERO-{1}-{2}"
+      - from_regex: "^STP-(\\d{2})-(\\d{2})-(\\d{3})$"
+        to_pattern: "PRC-AERO-{1}{2}-{3}"
+      - from_regex: "^MTP-(\\d{2})-(\\d{2})-([A-Z]{4})-(\\d{3})$"
+        to_pattern: "XFM-AERO-{1}{2}-{3}-{4}"
+      - from_regex: "^MTK-(\\d{2})-(\\d{2})-([A-Z]{2})-(\\d{3})$"
+        to_pattern: "SBJ-AERO-{1}{2}-{3}-{4}"
+
 # -----------------------------------------------------------------------------
 # SUMMARY
 # -----------------------------------------------------------------------------
@@ -308,3 +353,5 @@ summary:
   total_invariants: 4
   total_governance_policies: 4
   total_domain_profiles: 5
+  total_decision_states: 4
+  total_backward_mapping_rules: 5

@@ -82,9 +82,9 @@ structure_rules:
 # -----------------------------------------------------------------------------
 contract_rules:
   - id: "MTL-CTR-001"
-    condition: "Every token MUST have token_id, layer, name, intent"
+    condition: "Every token MUST have all core_required_fields"
     enforcement: "block"
-    message: "Token contract missing required fields"
+    message: "Token contract missing core required fields"
 
   - id: "MTL-CTR-002"
     condition: "Every token MUST have at least one acceptance_gate"
@@ -106,6 +106,31 @@ contract_rules:
     enforcement: "block"
     pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
     message: "Token version must follow semver (e.g. 0.1.0)"
+
+  - id: "MTL-CTR-005"
+    condition: "L2 tokens MUST include layer_specific_fields for L2 (method_class, equation_or_rule, validity_range)"
+    enforcement: "block"
+    message: "L2 token missing layer-specific fields"
+
+  - id: "MTL-CTR-006"
+    condition: "L3 tokens MUST include layer_specific_fields for L3 (procedure_steps, handoffs, terminal_outputs)"
+    enforcement: "block"
+    message: "L3 token missing layer-specific fields"
+
+  - id: "MTL-CTR-007"
+    condition: "L5 tokens MUST include layer_specific_fields for L5 (domain_scope, regulatory_basis)"
+    enforcement: "block"
+    message: "L5 token missing layer-specific fields"
+
+  - id: "MTL-CTR-008"
+    condition: "L4 tokens MUST include layer_specific_fields for L4 (resolver_rules, target_components)"
+    enforcement: "block"
+    message: "L4 token missing layer-specific fields"
+
+  - id: "MTL-CTR-009"
+    condition: "L1 tokens MUST include layer_specific_fields for L1 (evidence_type, source_artifacts, confidence)"
+    enforcement: "block"
+    message: "L1 token missing layer-specific fields"
 
 # -----------------------------------------------------------------------------
 # TRACEABILITY RULES
@@ -168,6 +193,11 @@ safety_rules:
     enforcement: "escalate"
     escalation_target: "STK_SAF"
     message: "EU AI Act high-risk classification requires assessment"
+
+  - id: "MTL-SAFE-003"
+    condition: "If safety-critical gate fails then decision_state in {HOLD, ESCALATE, REJECT}; never implicit ALLOW"
+    enforcement: "block"
+    message: "Safety gate failure must not resolve to ALLOW"
 
 # -----------------------------------------------------------------------------
 # LIFECYCLE RULES
@@ -245,9 +275,9 @@ audit_requirements:
 # -----------------------------------------------------------------------------
 summary:
   total_structure_rules: 3
-  total_contract_rules: 4
+  total_contract_rules: 9
   total_traceability_rules: 3
   total_governance_rules: 4
-  total_safety_rules: 2
+  total_safety_rules: 3
   total_lifecycle_rules: 3
   total_learning_rules: 3

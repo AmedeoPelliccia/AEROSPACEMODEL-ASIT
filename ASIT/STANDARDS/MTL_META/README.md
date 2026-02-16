@@ -206,4 +206,53 @@ Benefits:
 
 ---
 
+## 14. Decision State Machine
+
+All policy and gate evaluations SHALL resolve to one deterministic state:
+
+| State      | Meaning                                               |
+|------------|-------------------------------------------------------|
+| `ALLOW`    | All required gates pass                               |
+| `HOLD`     | Gate boundary uncertain — needs more data or review   |
+| `REJECT`   | Blocking policy condition failed                      |
+| `ESCALATE` | Escalation-class policy condition failed              |
+
+No safety-relevant flow may transition directly to `ALLOW` after a failed
+mandatory gate.
+
+---
+
+## 15. Layer-Specific Contract Enforcement
+
+The minimum token contract is split into:
+
+* **Core fields** (mandatory for L1–L5): `token_id`, `layer`, `name`, `intent`,
+  `inputs`, `outputs`, `assumptions`, `constraints`, `acceptance_gates`,
+  `governance`, `trace`
+* **Layer-specific fields** (mandatory only for the indicated layer):
+  * L5: `domain_scope`, `regulatory_basis`
+  * L4: `resolver_rules`, `target_components`
+  * L3: `procedure_steps`, `handoffs`, `terminal_outputs`
+  * L2: `method_class`, `equation_or_rule`, `validity_range`
+  * L1: `evidence_type`, `source_artifacts`, `confidence`
+
+This avoids schema ambiguity and guarantees deterministic BREX validation.
+
+---
+
+## 16. Backward Mapping Rules
+
+Legacy ATA 28-11 token IDs can be transformed to universal MTL IDs using
+regex-based rules:
+
+| Legacy Pattern | Universal Pattern   | Example                    |
+|----------------|---------------------|----------------------------|
+| `SDR-{ATA}`    | `CTX-AERO-{ATA}`   | `SDR-28` → `CTX-AERO-28`  |
+| `SCR-{ATA}-{SS}` | `STR-AERO-{ATA}-{SS}` | `SCR-28-11` → `STR-AERO-28-11` |
+| `STP-{ATA}-{SS}-{SEQ}` | `PRC-AERO-{ATA}{SS}-{SEQ}` | `STP-28-11-001` → `PRC-AERO-2811-001` |
+| `MTP-{ATA}-{SS}-{DOM}-{SEQ}` | `XFM-AERO-{ATA}{SS}-{DOM}-{SEQ}` | `MTP-28-11-GEOM-001` → `XFM-AERO-2811-GEOM-001` |
+| `MTK-{ATA}-{SS}-{DOM}-{SEQ}` | `SBJ-AERO-{ATA}{SS}-{DOM}-{SEQ}` | `MTK-28-11-TS-001` → `SBJ-AERO-2811-TS-001` |
+
+---
+
 *End of MTL Meta Standard v1.0.0 README*
