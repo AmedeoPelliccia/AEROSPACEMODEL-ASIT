@@ -217,7 +217,7 @@ method_classes:
 domain_profiles:
   description: |
     Meta Transformation Layers is the global framework.
-    Domain profiles are specialisations that inherit and extend it.
+    Domain profiles are specializations that inherit and extend it.
   profiles:
     - profile_id: "AERO"
       name: "Aerospace (ATA-aligned)"
