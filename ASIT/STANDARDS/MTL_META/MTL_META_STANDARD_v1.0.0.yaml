@@ -275,8 +275,8 @@ governance:
       enforcement: "escalate"
       escalation_target: "STK_SAF"
     - id: "GOV-004"
-      name: "Labour Continuity Constraint"
-      statement: "Operational optimisations must not eliminate labour without review"
+      name: "Labor Continuity Constraint"
+      statement: "Operational optimisations must not eliminate labor without review"
       enforcement: "escalate"
       escalation_target: "STK_OPS"
 
