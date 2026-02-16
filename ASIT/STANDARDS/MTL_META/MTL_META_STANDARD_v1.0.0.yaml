@@ -248,7 +248,7 @@ invariants:
       statement: "Given token_id + version, execution output is deterministic"
     - id: "INV-002"
       name: "Full Traceability"
-      statement: "Every token has a derives_from or feeds reference"
+      statement: "Every token defines derives_from and feeds references"
     - id: "INV-003"
       name: "Machine-Evaluable Gates"
       statement: "All acceptance_gates can be evaluated without human input"
