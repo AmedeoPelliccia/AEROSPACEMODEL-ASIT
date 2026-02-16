@@ -19,10 +19,58 @@ training_objective: >
   LH₂ cryogenic tank engineering procedures — from first-principles
   physics through certification compliance — using the identical
   token structures the AI will orchestrate in production.
-version: "0.1.1"
-date: "2026-02-16"
+version: "0.1.2"
+schema_version: "1.0.0"
+created_on: "2026-02-16"
+last_updated_on: "2026-02-16"
 status: "DEV"
 author: "STK_ENG"
+owner_role: "STK_ENG"
+safety_authority_role: "STK_SAF"
+configuration_authority_role: "STK_CM"
+
+# =========================================================================
+# LIFECYCLE CONTROL
+# =========================================================================
+lifecycle_control:
+  allowed_status_values: ["DEV", "VAL", "SSOT", "DEPRECATED"]
+  current_status: "DEV"
+  baseline_state: "non-baselined"
+
+# =========================================================================
+# ACTUATION POLICY
+# =========================================================================
+actuation_policy:
+  DEV: "forbidden"
+  VAL: "forbidden"
+  SSOT: "allowed_with_human_authorizer_and_all_gates_passed"
+  description: >
+    Direct production actuation is FORBIDDEN in DEV and VAL lifecycle
+    states. SSOT promotion enables actuation only when human authorizer
+    is present and all acceptance gates pass.
+
+# =========================================================================
+# DETERMINISM POLICY
+# =========================================================================
+determinism_policy:
+  float_comparison: "abs_err<=1e-9 OR rel_err<=1e-6"
+  rounding_mode: "half_even"
+  units_normalization_required: true
+  description: >
+    Ensures deterministic replay of procedures across repeated runs.
+    Floating-point comparisons use combined absolute and relative error
+    tolerances to avoid false failures from rounding differences.
+
+# =========================================================================
+# PROVENANCE REQUIREMENTS
+# =========================================================================
+provenance_requirements:
+  source_hash_pattern: "^sha256:[a-f0-9]{64}$"
+  forbid_placeholder_hashes: true
+  description: >
+    All training examples must have valid SHA-256 hashes for source
+    tokens. Placeholder hashes (e.g., "TBD-SHA256") are forbidden for
+    SSOT promotion. Hash format: "sha256:{64 hex chars}".
 
 # =========================================================================
 # GOVERNANCE
@@ -40,11 +88,12 @@ governance:
     - "model_token_version_lock_pass"
   description: >
     Constitutional controls enforce that AI operates within defined
-    governance boundaries. Article A4 (Data Provenance), A5 (Explainability),
-    A6 (Safety Guardrails), A8 (Labor Continuity), A10 (Constitutional
-    Supremacy), and A11 (Transparency) are mandatory for all autonomous
-    operations. Autonomous actuation is DENIED by default and requires
-    explicit enablement conditions to be met.
+    governance boundaries. Article A4 (Commit Legitimacy), A5 (Traceability
+    and Accountability), A6 (Safety Guardrails), A8 (Labor Continuity),
+    A10 (Constitutional Supremacy), and A11 (Capital-vs-Axiom Conflict
+    Resolution) are mandatory for all autonomous operations. Autonomous
+    actuation is DENIED by default and requires explicit enablement
+    conditions to be met.
 
 # =========================================================================
 # MODEL LOCK
@@ -68,11 +117,21 @@ safety_policy:
   prohibited:
     - "unbounded_stochastic_execution_for_harm_sensitive_flows"
     - "silent_override_of_acceptance_gates"
+  uncertainty_thresholds:
+    low: "u < 0.2"
+    medium: "0.2 <= u < 0.5"
+    high: "u >= 0.5"
+  required_action_by_level:
+    low: "DEGRADE"
+    medium: "PAUSE"
+    high: "ESCALATE"
   description: >
     Safety-critical decisions require human oversight. When uncertainty
     exceeds thresholds, the AI must degrade to conservative behavior,
-    pause for human review, or escalate to safety authority. Acceptance
-    gate overrides are prohibited without explicit human authorization.
+    pause for human review, or escalate to safety authority. Uncertainty
+    metric: model prediction confidence (u = 1 - max_softmax_probability).
+    Acceptance gate overrides are prohibited without explicit human
+    authorization.
 
 # =========================================================================
 # LABOR CONTINUITY POLICY
@@ -181,7 +240,13 @@ training_architecture:
         Production optimization under constitutional constraints. Trains
         AI to optimize throughput, quality, and cost while respecting
         safety, labor continuity, and gate integrity.
-      source_tokens: ["PAL-28-11-*", "production_metrics", "optimization_constraints"]
+      source_references:
+        - type: "token_pattern"
+          value: "PAL-28-11-*"
+        - type: "dataset"
+          value: "production_metrics"
+        - type: "dataset"
+          value: "optimization_constraints"
       learning_objective: >
         Optimize production line parameters (cycle time, resource allocation,
         inspection sampling) while satisfying all acceptance gates, safety
@@ -371,33 +436,61 @@ training_datasets:
         
         - example_id: "DS-03-EX-002"
           procedure: "STP-28-11-002"
-          procedure_title: "Material Selection and Cryogenic Strength Validation"
+          procedure_title: "Structural Substantiation — From Geometry to Damage Tolerance"
           inputs:
-            cryogenic_temperature_K: 20
             operating_pressure_kPa: 250
-            fatigue_cycle_count: 10000
+            internal_radius_m: 2.5
+            wall_thickness_m: 0.005
+            parent_strength_MPa: 724
+            weld_efficiency_factor: 0.80
+            cte_inner_per_K: 2.2e-5
+            cte_jacket_per_K: 1.7e-5
+            length_m: 8.0
+            initial_flaw_size_mm: 0.5
           execution_trace:
             - step: 1
-              token: "MTP-28-11-MATL-001"
-              action: "Evaluate candidate materials at 20K"
-              inputs: {cryogenic_temperature_K: 20}
-              output: {candidates: ["Al-Li 2195", "SS 304L", "Composite"]}
-              hand_off: "candidates → step 2"
-            - step: 2
               token: "MTP-28-11-MATL-002"
-              action: "Compute yield strength at 20K"
-              inputs: {candidates: ["Al-Li 2195", "SS 304L"], temperature_K: 20}
-              output: {yield_strength_Al_Li_MPa: 650, yield_strength_SS_MPa: 800}
-              hand_off: "yield_strength → step 3"
+              action: "Compute hoop stress from pressure, radius, and wall thickness"
+              inputs: {operating_pressure_kPa: 250, internal_radius_m: 2.5, wall_thickness_m: 0.005}
+              output: {hoop_stress_Pa: 125000000}
+              hand_off: "hoop_stress_Pa → step 2"
+            - step: 2
+              token: "MTP-28-11-MATL-004"
+              action: "Apply weld derating to derive effective allowable"
+              inputs: {parent_strength_MPa: 724, weld_efficiency_factor: 0.80}
+              output: {weld_allowable_MPa: 579.2}
+              hand_off: "weld_allowable_MPa → step 3"
             - step: 3
-              token: "MTP-28-11-MATL-003"
-              action: "Evaluate fatigue performance"
-              inputs: {fatigue_cycle_count: 10000, candidates: ["Al-Li 2195", "SS 304L"]}
-              output: {selected_material: "Al-Li 2195", rationale: "Optimal strength-to-weight"}
-              hand_off: "selected_material → outputs"
+              token: "MTP-28-11-CERT-001"
+              action: "Apply 1.5 ultimate pressure factor and check ultimate margin"
+              inputs: {hoop_stress_Pa: 125000000, weld_allowable_MPa: 579.2}
+              output: {ultimate_margin: 1.16}
+              hand_off: "ultimate_margin → step 4"
+            - step: 4
+              token: "MTP-28-11-MATL-005"
+              action: "Compute differential thermal contraction"
+              inputs: {cte_inner_per_K: 2.2e-5, cte_jacket_per_K: 1.7e-5, length_m: 8.0}
+              output: {differential_contraction_mm: 1.2}
+              hand_off: "differential_contraction_mm → step 5"
+            - step: 5
+              token: "MTP-28-11-MATL-001"
+              action: "Anchor cryogenic material properties at 20K"
+              inputs: {temperature_K: 20}
+              output: {yield_strength_20K_MPa: 724, uts_20K_MPa: 859}
+              hand_off: "cryogenic_allowables → step 6"
+            - step: 6
+              token: "MTP-28-11-CERT-003"
+              action: "Perform damage tolerance assessment"
+              inputs: {initial_flaw_size_mm: 0.5, hoop_stress_Pa: 125000000}
+              output: {critical_crack_length_mm: 12.5, inspection_interval_cycles: 5000}
+              hand_off: "inspection_interval_cycles → outputs"
           outputs:
-            selected_material: "Al-Li 2195"
-            yield_strength_20K_MPa: 650
+            hoop_stress_Pa: 125000000
+            ultimate_margin: 1.16
+            weld_allowable_MPa: 579.2
+            differential_contraction_mm: 1.2
+            critical_crack_length_mm: 12.5
+            inspection_interval_cycles: 5000
           provenance:
             source_token_id: "STP-28-11-002"
             source_token_version: "0.1.0"
@@ -834,15 +927,19 @@ promotion_criteria:
     
     - gate_id: "PC-02"
       requirement: "Numeric verification error within declared tolerance for all MTP methods"
-      validation: "Automated test: run DS-02 examples, verify ±0.5% accuracy"
+      validation: "Automated test: run DS-02 examples, verify tolerance per determinism_policy"
     
     - gate_id: "PC-03"
       requirement: "STP replay deterministic across repeated runs (same inputs → same outputs)"
-      validation: "Automated test: replay DS-03 examples 10x, verify bit-identical outputs"
+      validation: "Automated test: replay DS-03 examples 10x, verify deterministic per determinism_policy"
     
     - gate_id: "PC-04"
       requirement: "Constitutional controls enforced (A4/A5/A6/A8/A10/A11)"
       validation: "Manual review: verify governance section implementation"
+    
+    - gate_id: "PC-04A"
+      requirement: "Constitution fields present and complete"
+      validation: "Automated schema validation: governance.constitution_id, governance.applicable_articles exist"
     
     - gate_id: "PC-05"
       requirement: "Version lock enforced (ASI == MTL) with automatic HOLD on mismatch"
@@ -852,9 +949,17 @@ promotion_criteria:
       requirement: "Human oversight path validated for all harm-sensitive branches"
       validation: "Manual review: verify escalation routes for safety gates"
     
+    - gate_id: "PC-06A"
+      requirement: "Escalation routes defined for all safety-critical gates"
+      validation: "Automated check: all DS-04 gate examples have escalation_route field"
+    
     - gate_id: "PC-07"
       requirement: "Labor continuity constraints validated for optimization actions"
       validation: "Manual review: verify DS-06 examples satisfy labor continuity policy"
+    
+    - gate_id: "PC-07A"
+      requirement: "Labor continuity fields present in all DS-06 examples"
+      validation: "Automated check: all DS-06 examples reference labor continuity in outcome"
 
 # =========================================================================
 # TRACEABILITY
