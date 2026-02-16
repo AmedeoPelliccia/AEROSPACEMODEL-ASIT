@@ -158,7 +158,7 @@ Benefits:
 | `GOV-001` | Hard version lock                   | Block       |
 | `GOV-002` | Deny by default for autonomy        | Block       |
 | `GOV-003` | No silent gate override (safety)    | Escalate    |
-| `GOV-004` | Labour continuity constraint        | Escalate    |
+| `GOV-004` | Labor continuity constraint         | Escalate    |
 
 ---
 
