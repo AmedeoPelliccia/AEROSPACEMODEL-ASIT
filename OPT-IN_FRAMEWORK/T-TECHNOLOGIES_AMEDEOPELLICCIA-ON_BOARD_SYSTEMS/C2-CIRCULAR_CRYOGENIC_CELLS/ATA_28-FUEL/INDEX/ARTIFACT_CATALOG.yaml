@@ -49,12 +49,19 @@ artifact_types:
     formats: ["yaml", "md"]
     description: "LC04 trade studies for LH₂ storage architecture (geometry, distribution, insulation)"
 
+  trade_studies_28_11:
+    count: 3
+    location: "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/DEV/trade-studies/"
+    naming_pattern: "TS-28-11-TS{NN}_{topic}.yaml"
+    formats: ["yaml", "md"]
+    description: "LC04 trade studies for LH₂ primary tank (architecture, materials, insulation/thermal)"
+
   compliance_matrices:
-    count: 1
+    count: 2
     location: "28-10-storage/28-10-00-fuel-storage-general/KDB/DEV/trade-studies/"
     naming_pattern: "CS25_compliance_matrix.{yaml|md}"
     formats: ["yaml", "md"]
-    description: "EASA CS-25 compliance matrix for LH₂ cryogenic fuel storage with Special Conditions"
+    description: "EASA CS-25 compliance matrices for LH₂ cryogenic fuel storage with Special Conditions"
 
   parametric_models:
     count: 3

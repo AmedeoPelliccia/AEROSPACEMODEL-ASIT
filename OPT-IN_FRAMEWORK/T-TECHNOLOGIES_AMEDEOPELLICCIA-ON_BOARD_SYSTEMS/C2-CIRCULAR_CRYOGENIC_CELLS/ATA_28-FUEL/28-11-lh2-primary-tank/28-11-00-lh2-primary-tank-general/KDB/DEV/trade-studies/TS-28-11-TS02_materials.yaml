@@ -1,0 +1,89 @@
+# Trade Study TS-28-11-TS02
+# Containment Materials: Al-Li vs Stainless vs Composite
+# ATA 28-11-00 LH2 Primary Tank General
+# AMPEL360 Q100 — C2 Circular Cryogenic Cells
+
+trade_study_id: "TS-28-11-TS02"
+title: "Containment Materials — Al-Li vs Austenitic Stainless vs Composite"
+ata_code: "28-11-00"
+technology_domain: "C2"
+aircraft_program: "AMPEL360 Q100"
+lifecycle_phase: "LC04"
+status: "preliminary"
+author: "STK_ENG"
+date: "2026-02-16"
+version: "0.1.0"
+
+objective: >
+  Evaluate inner-vessel containment materials for the LH2 primary
+  tank comparing aluminium-lithium alloys, austenitic stainless
+  steels, and composite overwrap / all-composite concepts for
+  structural efficiency, cryogenic performance, permeation risk,
+  and certification maturity.
+
+options:
+  - id: A
+    name: "Aluminium-Lithium (2195 family)"
+    description: "Al-Li metallic inner vessel"
+    structural_efficiency: "High"
+    cryogenic_performance: "Excellent — strength increases at 20 K"
+    permeation_risk: "Low — metallic impermeability to hydrogen"
+    certification_risk: "Low-Medium"
+    analysis:
+      yield_strength_20K_MPa: 724
+      uts_20K_MPa: 859
+      density_penalty: "Low — lightweight alloy"
+      weld_qualification: "Established but requires cryogenic fatigue/crack-growth allowables"
+      ndi_methods: "Well-known metallic NDI (ultrasonic, radiographic)"
+      heritage: "NASA SLS, prior cryogenic tank programmes"
+
+  - id: B
+    name: "Austenitic Stainless Steel (304L family)"
+    description: "Stainless steel inner vessel"
+    structural_efficiency: "Medium"
+    cryogenic_performance: "Good — notch toughness to ~-250 degC"
+    permeation_risk: "Very Low — excellent hydrogen barrier"
+    certification_risk: "Low"
+    analysis:
+      cryogenic_toughness: "Robust fracture and crack-arrest behaviour to ~-250 degC"
+      density_penalty: "Significant — high density increases OEW"
+      thermal_conductivity: "Higher than Al-Li — increases parasitic heat leak paths"
+      weld_qualification: "Mature cryogenic welding practice"
+      heritage: "Wide cryogenic industry use"
+
+  - id: C
+    name: "Composite Overwrap / All-Composite"
+    description: "Composite or composite-overwrapped pressure vessel"
+    structural_efficiency: "Very High (aspirational)"
+    cryogenic_performance: "Variable — risk of microcracking at cryogenic temperatures"
+    permeation_risk: "High — microcracking-driven infiltration and secondary pressure effects"
+    certification_risk: "High"
+    analysis:
+      gravimetric_efficiency: "0.55-0.85 (aspirational)"
+      microcracking_risk: "Core risk — microcracking enables hydrogen permeation"
+      manufacturing_variability: "Critical failure mode driver"
+      ndi_methods: "Complex multi-physics inspection required"
+      heritage: "NASA Composite Cryotank Technologies and Demonstration (Boeing)"
+
+preliminary_selection:
+  selected_option: "A"
+  baseline_name: "Al-Li 2195 Metallic Inner Vessel"
+  rationale:
+    - "Best specific strength with demonstrated cryogenic performance at 20 K"
+    - "Metallic impermeability eliminates hydrogen permeation risk"
+    - "Well-aligned with metallic pressure vessel certification logic"
+    - "Compatible with established NDI and damage tolerance methodology"
+    - "Weld/fatigue allowables are achievable within near-term certification timeline"
+
+feeds:
+  - lifecycle: "LC05"
+    artifact: "Cryogenic material allowables test programme"
+  - lifecycle: "LC05"
+    artifact: "Weld qualification plan (LH2 tank joints)"
+  - lifecycle: "LC06"
+    artifact: "Material qualification test reports"
+
+traceability:
+  derives_from: "WP-28-05"
+  satisfies: []
+  verifies: []

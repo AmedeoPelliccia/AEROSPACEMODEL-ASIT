@@ -1,0 +1,104 @@
+# Trade Study TS-28-11-TS03
+# Insulation and Thermal Control
+# ATA 28-11-00 LH2 Primary Tank General
+# AMPEL360 Q100 — C2 Circular Cryogenic Cells
+
+trade_study_id: "TS-28-11-TS03"
+title: "Insulation and Thermal Control — Vacuum+MLI vs Foam vs Active Cooling"
+ata_code: "28-11-00"
+technology_domain: "C2"
+aircraft_program: "AMPEL360 Q100"
+lifecycle_phase: "LC04"
+status: "preliminary"
+author: "STK_ENG"
+date: "2026-02-16"
+version: "0.1.0"
+
+objective: >
+  Evaluate insulation and thermal control concepts for the LH2
+  primary tank comparing vacuum-jacketed MLI, foam, and active
+  cooling approaches for heat flux, boil-off performance,
+  system complexity, and vacuum integrity sensitivity.
+
+reference_thermal_data:
+  measured_system_heat_flux_W_per_m2: "1.26-1.36"
+  lh2_latent_heat_kJ_per_kg: 445.5
+  mli_vacuum_requirement_Pa: "0.0133-0.266"
+  degraded_vacuum_threshold_Pa: 1.33
+  warm_boundary_K: 300
+  cold_boundary_K: 20.3
+
+options:
+  - id: A
+    name: "Vacuum Jacket + MLI"
+    description: "Vacuum-jacketed multi-layer insulation"
+    type: "Passive"
+    heat_flux_W_per_m2: "1.26-1.36 (measured system example)"
+    trl: "High"
+    mass: "Medium"
+    maintainability: "Medium"
+    risk: "Medium — vacuum integrity is mission-critical"
+    analysis:
+      vacuum_sensitivity: "High — slight vacuum loss can erode MLI advantage"
+      required_vacuum_Pa: "0.0133-0.266"
+      penetration_impact: "Supports and man-way conduction can dominate heat leak"
+      heritage: "NASA IRAS tank testing, aerospace cryogenic systems"
+      boil_off_driver: "Broad-area MLI + thermal bridges (supports, penetrations)"
+
+  - id: B
+    name: "Foam Insulation"
+    description: "Closed-cell cryogenic foam (no vacuum cavity)"
+    type: "Passive"
+    heat_flux_W_per_m2: "Higher than vacuum systems (trend)"
+    trl: "Medium"
+    mass: "High"
+    maintainability: "High"
+    risk: "Low — no vacuum cavity to maintain"
+    analysis:
+      simplicity: "No vacuum system required"
+      boil_off_penalty: "Markedly higher evaporation than vacuum systems"
+      operational_impact: "May require operational venting or active systems"
+      heritage: "Non-aircraft large-scale LH2 storage evaluations"
+
+  - id: C
+    name: "Hybrid Active Cooling"
+    description: "Cryocooler-assisted active thermal management with MLI"
+    type: "Active"
+    heat_flux_W_per_m2: "Can approach zero boil-off if sized"
+    trl: "Low"
+    mass: "High"
+    maintainability: "Low"
+    risk: "High — power availability, failure mode complexity"
+    analysis:
+      power_requirement: "Significant cryocooler power draw"
+      failure_mode: "Loss of active cooling requires fallback to passive"
+      certification: "Requires MoC for active safety-critical thermal controls"
+      heritage: "NASA zero boil-off research programmes"
+
+critical_design_insight: >
+  Supports and penetrations can dominate heat leak. NASA IRAS analysis
+  shows that despite small conduction areas, support-pad conduction can
+  be comparable to or exceed the MLI contribution, and large man-way
+  penetrations can represent a substantial fraction of total heat leak.
+
+preliminary_selection:
+  selected_option: "A"
+  baseline_name: "Vacuum Jacket + MLI with Engineered Thermal Bridges"
+  rationale:
+    - "Heritage from NASA cryogenic tank programmes"
+    - "Measured system heat flux ~1.3 W/m^2 achievable when thermal bridges are managed"
+    - "Predictable boil-off modelling (steady-state Q/h_fg method)"
+    - "Thermal bridge engineering (supports, penetrations) is the primary design lever"
+
+feeds:
+  - lifecycle: "LC05"
+    artifact: "Thermal transient simulation (mission profile)"
+  - lifecycle: "LC05"
+    artifact: "Support and penetration heat-leak decomposition analysis"
+  - lifecycle: "LC06"
+    artifact: "Vacuum integrity test programme"
+
+traceability:
+  derives_from: "TS-28-10-TS03"
+  satisfies: []
+  verifies: []
