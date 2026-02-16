@@ -1,0 +1,10 @@
+foundational_axiom:
+  statement: "Human labor founds, capital finances, technology serves, the person progresses."
+  interpretation_rules:
+    - "No derivative artifact may negate or override the axiom."
+    - "Efficiency cannot justify human exclusion."
+    - "Automation may augment but not erase accountable human agency."
+  binding_scope:
+    - "LC01 through LC14"
+    - "All ATA 28-11 derived artifacts"
+  violation_action: "HOLD_AND_CCB_ESCALATION"

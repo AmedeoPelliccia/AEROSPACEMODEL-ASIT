@@ -1,0 +1,24 @@
+constitution_binding:
+  constitution_id: "AEROSPACEMODEL-MDC"
+  constitution_version: "1.0.0"
+  applicable_articles: ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11"]
+  enforcement_mode: "deny_by_default"
+
+  controls:
+    - control_id: "MDC-CTL-A4"
+      requirement: "No significant change without responsible human commit + rationale"
+    - control_id: "MDC-CTL-A5"
+      requirement: "All significant behavior traceable to human decision/rule"
+    - control_id: "MDC-CTL-A6"
+      requirement: "If plausible human harm under uncertainty: DEGRADE/PAUSE/ESCALATE"
+    - control_id: "MDC-CTL-A8"
+      requirement: "No net human exclusion by efficiency actions"
+    - control_id: "MDC-CTL-A11"
+      requirement: "No silent override in capital-vs-axiom conflicts"
+
+  deny_conditions:
+    - "missing_signed_commit"
+    - "missing_traceability_chain"
+    - "harm_plausible_without_escalation_path"
+    - "net_human_exclusion_without_reabsorption_plan"
+    - "silent_override_detected"

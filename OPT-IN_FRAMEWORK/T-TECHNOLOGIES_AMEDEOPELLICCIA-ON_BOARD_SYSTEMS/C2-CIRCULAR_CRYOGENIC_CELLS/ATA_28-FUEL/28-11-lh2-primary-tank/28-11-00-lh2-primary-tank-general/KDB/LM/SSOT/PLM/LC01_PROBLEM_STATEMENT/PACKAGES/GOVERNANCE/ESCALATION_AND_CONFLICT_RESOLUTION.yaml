@@ -1,0 +1,19 @@
+escalation_and_conflict_resolution:
+  conflict_types:
+    - id: "CF-001"
+      type: "Capital demand vs foundational axiom"
+      resolution: "A11 pathway only (explicit steward commit OR capital withdrawal)"
+      silent_override_allowed: false
+
+    - id: "CF-002"
+      type: "Safety gate conflict vs schedule/cost"
+      resolution: "Safety precedence; CCB escalation mandatory"
+
+    - id: "CF-003"
+      type: "Labor continuity conflict in automation proposal"
+      resolution: "Require reabsorption plan; otherwise deny"
+
+  escalation_sla:
+    acknowledge_hours: 24
+    decision_days: 5
+    emergency_override: "not_permitted_without_signed_steward_commit"

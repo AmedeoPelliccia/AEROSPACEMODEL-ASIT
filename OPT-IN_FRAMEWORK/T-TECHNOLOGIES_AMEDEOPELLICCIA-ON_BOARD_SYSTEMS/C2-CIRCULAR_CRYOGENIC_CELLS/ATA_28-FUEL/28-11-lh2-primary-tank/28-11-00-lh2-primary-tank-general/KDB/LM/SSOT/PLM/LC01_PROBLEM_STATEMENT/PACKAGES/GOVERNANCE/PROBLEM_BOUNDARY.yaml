@@ -1,0 +1,12 @@
+problem_boundary:
+  in_scope:
+    - "Define legitimacy constraints for LH2 primary tank digital lifecycle"
+    - "Set governance prerequisites for LC04 design and downstream execution"
+    - "Bind accountability, traceability, and safety precedence"
+  out_of_scope:
+    - "Detailed geometric/thermal design values"
+    - "Manufacturing station parameters"
+    - "Tool-specific implementation scripts"
+  success_criteria:
+    - "All downstream packages inherit governance controls"
+    - "No governance ambiguity in safety/labor/accountability decisions"

@@ -1,0 +1,24 @@
+decision_rights_and_raci:
+  roles:
+    - role: "REPOSITORY_STEWARD"
+      rights: ["Axiom deviation acceptance (explicit only)", "final governance sign-off"]
+    - role: "CCB"
+      rights: ["Approve/reject governance-affecting ECRs", "resolve conflicts"]
+    - role: "STK_ENG"
+      rights: ["Technical recommendation", "gate evidence submission"]
+    - role: "STK_SAF"
+      rights: ["Safety veto on harm-plausible changes"]
+    - role: "STK_CM"
+      rights: ["Baseline and configuration enforcement"]
+
+  raci_matrix:
+    - decision: "Constitutional interpretation update"
+      R: ["REPOSITORY_STEWARD"]
+      A: ["CCB"]
+      C: ["STK_SAF", "STK_ENG", "STK_CM"]
+      I: ["All contributors"]
+    - decision: "Safety precedence conflict"
+      R: ["STK_SAF"]
+      A: ["CCB"]
+      C: ["STK_ENG"]
+      I: ["STK_CM"]

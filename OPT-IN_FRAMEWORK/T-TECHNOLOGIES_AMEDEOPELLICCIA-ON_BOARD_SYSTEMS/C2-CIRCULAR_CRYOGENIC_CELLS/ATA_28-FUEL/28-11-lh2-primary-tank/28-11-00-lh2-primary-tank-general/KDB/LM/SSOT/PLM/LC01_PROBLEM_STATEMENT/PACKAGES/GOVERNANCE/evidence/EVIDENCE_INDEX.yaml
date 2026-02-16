@@ -1,0 +1,5 @@
+evidence_index:
+  package_id: "GOV-LC01-ATA28-11"
+  description: "Evidence artifacts supporting governance package"
+  items: []
+  signatures_directory: "signatures/"
