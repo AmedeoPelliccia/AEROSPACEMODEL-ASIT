@@ -100,5 +100,6 @@ def load_configs(config_dir: Path) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     if not isinstance(common_dirs, list) or not all(isinstance(x, str) for x in common_dirs):
         raise ConfigError("atdp.yaml 'common_csdb_dirs' must be a list[str].")
 
-    lifecycle["_ordered_lc_ids"] = CANONICAL_ORDER[:]
+    # Inject ordered LC IDs into the phases dict for generator to use
+    phases["_ordered_lc_ids"] = CANONICAL_ORDER[:]
     return lifecycle, atdp

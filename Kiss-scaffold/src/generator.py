@@ -445,7 +445,7 @@ def gen_csdb_pub(ctx: GenContext, atdp_cfg: Dict[str, Any]) -> None:
         ATDP is umbrella; CSDB is not AMM-only.
         """,
     )
-    _write(ctx, "00-00-general/PUB/ATDP/README.md", "# ATDP — Aircraft Technical Data Product\n")
+    # Note: Full ATDP README is generated later in _gen_atdp_readme()
     _write(
         ctx,
         "00-00-general/PUB/ATDP/COMMON_CSDB/README.md",
@@ -568,9 +568,9 @@ def _gen_common_csdb_dir(ctx: GenContext, dir_name: str) -> None:
 
             **GenKISS**: General Knowledge and Information Standard Systems
             """)
-        _write(ctx, f"{base_path}/dm_index.csv", """\
+        _write(ctx, f"{base_path}/dm_index.csv", f"""\
             DM_ID,Title,Type,Language,Applicability,Source_Type,Source_Ref,Status,Owner_AoR,Last_Updated_UTC,Notes
-            DM-TEMPLATE-COMMON-0001,Common DM Skeleton,TEMPLATE,EN,ALL,SSOT,KNU-00-00-005-LC02-GenKISS-SYS_REQ,ACTIVE,STK_DATA,2026-02-16T10:00:00Z,Seed shared template
+            DM-TEMPLATE-COMMON-0001,Common DM Skeleton,TEMPLATE,EN,ALL,SSOT,KNU-00-00-005-LC02-GenKISS-SYS_REQ,ACTIVE,STK_DATA,{ctx.now_iso},Seed shared template
             """)
         _write(ctx, f"{base_path}/schema/dm_header.schema.yaml", """\
             $schema: "http://json-schema.org/draft-07/schema#"
@@ -683,9 +683,9 @@ def _gen_common_csdb_dir(ctx: GenContext, dir_name: str) -> None:
 
             **GenKISS**: General Knowledge and Information Standard Systems
             """)
-        _write(ctx, f"{base_path}/pm_index.csv", """\
+        _write(ctx, f"{base_path}/pm_index.csv", f"""\
             PM_ID,Title,Type,Language,Applicability,Source_Type,Source_Ref,Status,Owner_AoR,Last_Updated_UTC,Notes
-            PM-TEMPLATE-COMMON-0001,Common PM Skeleton,TEMPLATE,EN,ALL,SSOT,KNU-00-00-005-LC02-GenKISS-SYS_REQ,ACTIVE,STK_DATA,2026-02-16T10:00:00Z,Seed shared publication module template
+            PM-TEMPLATE-COMMON-0001,Common PM Skeleton,TEMPLATE,EN,ALL,SSOT,KNU-00-00-005-LC02-GenKISS-SYS_REQ,ACTIVE,STK_DATA,{ctx.now_iso},Seed shared publication module template
             """)
         _write(ctx, f"{base_path}/schema/pm_header.schema.yaml", """\
             $schema: "http://json-schema.org/draft-07/schema#"
@@ -811,8 +811,8 @@ def _gen_product_structure(ctx: GenContext, product: str) -> None:
     # Generate index
     _write(ctx, f"{base_path}/{product.lower()}_index.csv", f"""\
         Asset_ID,Asset_Type,Path,Status,Source_Type,Source_Ref,Last_Updated_UTC,Owner_AoR,Notes
-        {product}-DM-INTRO-0001,DM,CSDB/DM/{product}-DM-INTRO-0001.md,DRAFT,COMMON_CSDB,DM-TEMPLATE-COMMON-0001,2026-02-16T10:00:00Z,STK_DATA,Seed {product} intro module
-        {product}-PM-MAIN-0001,PM,CSDB/PM/{product}-PM-MAIN-0001.md,DRAFT,COMMON_CSDB,PM-TEMPLATE-COMMON-0001,2026-02-16T10:00:00Z,STK_DATA,Seed {product} main publication module
+        {product}-DM-INTRO-0001,DM,CSDB/DM/{product}-DM-INTRO-0001.md,DRAFT,COMMON_CSDB,DM-TEMPLATE-COMMON-0001,{ctx.now_iso},STK_DATA,Seed {product} intro module
+        {product}-PM-MAIN-0001,PM,CSDB/PM/{product}-PM-MAIN-0001.md,DRAFT,COMMON_CSDB,PM-TEMPLATE-COMMON-0001,{ctx.now_iso},STK_DATA,Seed {product} main publication module
         """)
     
     # CONFIG subdirectories

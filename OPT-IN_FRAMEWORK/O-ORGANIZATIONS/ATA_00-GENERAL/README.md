@@ -38,9 +38,13 @@ OUT/
 │   │   ├── LC02_SYSTEM_REQUIREMENTS/
 │   │   ├── ...
 │   │   └── LC14_END_OF_LIFE/
-│   └── IDB/PUB/              # Publications (AMM, IPC, SRM, CMM)
-│       └── */CSDB/           # S1000D CSDB structure
-└── 00-90-monitoring/         # ATA 00-90 Monitoring
+│   ├── CSDB_REF/             # Atomic reference units
+│   └── PUB/ATDP/             # Publications (AMM, IPC, SRM, CMM)
+│       ├── COMMON_CSDB/      # Shared CSDB components
+│       ├── PRODUCTS/         # Product-specific content
+│       ├── EXPORT/           # Export outputs
+│       └── IETP/             # IETP packaging
+└── 00-90-tables-schemas-index/  # ATA 00-90 governance tables
 ```
 
 ## Example

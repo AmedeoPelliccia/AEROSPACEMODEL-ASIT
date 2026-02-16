@@ -43,7 +43,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--manifest",
         action="store_true",
-        help="Write MANIFEST.sha256",
+        help="Write SCAFFOLD_MANIFEST.txt manifest file",
     )
     parser.add_argument(
         "--timestamp",

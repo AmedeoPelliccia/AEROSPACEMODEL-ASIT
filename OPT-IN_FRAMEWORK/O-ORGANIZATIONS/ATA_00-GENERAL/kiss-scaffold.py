@@ -15,14 +15,11 @@ repo_root = Path(__file__).resolve().parents[3]
 kiss_scaffold_path = repo_root / "Kiss-scaffold"
 sys.path.insert(0, str(kiss_scaffold_path))
 
-# Now we can import from the Kiss-scaffold package
-try:
-    from Kiss_scaffold import main
-except ImportError:
-    # If module import fails, try direct script execution
-    import subprocess
-    script_path = kiss_scaffold_path / "Kiss-scaffold.py"
-    if not script_path.exists():
+# Use subprocess to call the Kiss-scaffold.py script directly
+# (no module import since Kiss-scaffold is a script-based tool)
+import subprocess
+script_path = kiss_scaffold_path / "Kiss-scaffold.py"
+if not script_path.exists():
         print(f"Error: Kiss-scaffold.py not found at {script_path}", file=sys.stderr)
         print(f"Repository root: {repo_root}", file=sys.stderr)
         sys.exit(1)

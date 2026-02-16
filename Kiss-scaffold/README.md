@@ -10,8 +10,9 @@ It creates a complete directory hierarchy including:
 
 - **GENESIS**: Frozen project definitions and templates
 - **SSOT**: Single Source of Truth for lifecycle artifacts (LC01-LC14)
-- **IDB/PUB**: Integrated Database and Publications with S1000D CSDB structure
-- **Monitoring**: ATA 00-90 monitoring and tracking
+- **00-00-general/PUB/ATDP**: S1000D CSDB ATDP structure for publications
+- **CSDB_REF**: Reference repository for cross-linked CSDB objects
+- **00-90-tables-schemas-index**: ATA 00-90 monitoring, schemas, and tracking tables
 
 ## Features
 
@@ -130,8 +131,9 @@ common_csdb_dirs:
 The validator enforces "Locked Rules":
 
 1. **Rule 1**: No `_executions` directories in GENESIS (frozen templates)
-2. **Rule 2**: No `_executions` directories in IDB/PUB (publication source)
-3. **Canonical LC Set**: Exactly 14 lifecycle directories must exist in SSOT
+2. **Rule 2**: `artifact.*` files are only allowed under `SSOT/**/_executions/**`
+3. **Rule 3**: Required `PUB/ATDP` structure must exist (COMMON_CSDB, PRODUCTS, EXPORT, IETP)
+4. **Canonical LC Set**: Exactly 14 lifecycle directories must exist in SSOT
 
 ## Testing
 
