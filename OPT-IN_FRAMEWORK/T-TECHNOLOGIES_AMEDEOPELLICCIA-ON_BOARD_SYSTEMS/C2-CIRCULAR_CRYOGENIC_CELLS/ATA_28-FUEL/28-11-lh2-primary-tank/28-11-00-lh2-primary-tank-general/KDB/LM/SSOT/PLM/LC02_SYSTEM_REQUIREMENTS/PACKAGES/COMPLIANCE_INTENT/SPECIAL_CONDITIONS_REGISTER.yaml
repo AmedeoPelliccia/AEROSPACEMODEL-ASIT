@@ -1,0 +1,11 @@
+special_conditions_register:
+  conditions:
+    - sc_id: "SC-28-H2-001"
+      title: "Hydrogen Storage and Distribution"
+      status: "OPEN"
+      intent: "Define hydrogen-specific containment, leak, ignition prevention expectations"
+    - sc_id: "SC-28-CRYO-002"
+      title: "Cryogenic Temperature Handling"
+      status: "OPEN"
+      intent: "Define cryogenic thermal shock, material behavior, and handling requirements"
+  closure_gate: "All SCs must be ADDRESSED before LC04 compliance freeze"

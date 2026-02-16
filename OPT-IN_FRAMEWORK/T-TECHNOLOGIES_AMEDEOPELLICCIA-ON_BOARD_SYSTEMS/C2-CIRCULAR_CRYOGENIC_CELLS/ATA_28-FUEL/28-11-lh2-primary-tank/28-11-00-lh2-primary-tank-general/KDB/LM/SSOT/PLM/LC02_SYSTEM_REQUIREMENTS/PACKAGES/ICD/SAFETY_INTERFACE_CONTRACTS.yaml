@@ -1,0 +1,31 @@
+safety_interface_contracts:
+  contracts:
+    - contract_id: "SAF-IF-28-11-41-001"
+      if_id: "IF-28-11-41-001"
+      safety_objective: "No undetected H2 leak in monitored zone"
+      failure_condition: "Loss of leak detection capability"
+      dal: "A"
+      requirements:
+        - "Independent sensor paths"
+        - "No single point of failure in alarm chain"
+        - "Silent suppression forbidden"
+      human_in_the_loop:
+        autonomous_action_limit: "alert_only"
+        human_authorization_required_for: ["system_isolation", "zone_evacuation"]
+        escalation_timeout_seconds: 30
+      verification_intent: "Analysis + test at LC06"
+
+    - contract_id: "SAF-IF-28-11-42-001"
+      if_id: "IF-28-11-42-001"
+      safety_objective: "Relief actuation on demand"
+      failure_condition: "Loss of pressure relief capability"
+      dal: "A"
+      requirements:
+        - "Redundant command paths"
+        - "Positive acknowledgement required"
+        - "Fail-safe to OPEN on loss of control"
+      human_in_the_loop:
+        autonomous_action_limit: "alert_only"
+        human_authorization_required_for: ["valve_actuation", "system_isolation"]
+        escalation_timeout_seconds: 30
+      verification_intent: "Analysis + test at LC06"

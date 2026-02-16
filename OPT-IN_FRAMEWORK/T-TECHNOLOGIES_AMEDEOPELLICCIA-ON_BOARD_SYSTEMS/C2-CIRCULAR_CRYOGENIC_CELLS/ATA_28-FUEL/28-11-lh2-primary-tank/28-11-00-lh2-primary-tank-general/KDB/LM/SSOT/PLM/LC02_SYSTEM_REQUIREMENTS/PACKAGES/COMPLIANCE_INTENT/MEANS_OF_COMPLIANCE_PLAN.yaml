@@ -1,0 +1,21 @@
+means_of_compliance_plan:
+  moc_taxonomy:
+    analysis: "deterministic engineering analysis with assumptions declared"
+    test: "qualified test execution with calibrated instrumentation"
+    inspection: "NDE/visual process with acceptance criteria"
+    safety_assessment: "ARP4761 process artifacts"
+    procedure_review: "maintainability/documentation compliance review"
+
+  cluster_plan:
+    structural_cluster:
+      reqs: ["REQ-28-11-STR-001"]
+      moc_mix: ["analysis", "test", "inspection"]
+    pressure_vent_cluster:
+      reqs: ["REQ-28-11-PRS-001"]
+      moc_mix: ["analysis", "test"]
+    ignition_safety_cluster:
+      reqs: ["REQ-28-11-IGN-001"]
+      moc_mix: ["safety_assessment", "analysis", "inspection"]
+    continued_airworthiness_cluster:
+      reqs: ["REQ-28-11-MNT-001"]
+      moc_mix: ["analysis", "procedure_review"]

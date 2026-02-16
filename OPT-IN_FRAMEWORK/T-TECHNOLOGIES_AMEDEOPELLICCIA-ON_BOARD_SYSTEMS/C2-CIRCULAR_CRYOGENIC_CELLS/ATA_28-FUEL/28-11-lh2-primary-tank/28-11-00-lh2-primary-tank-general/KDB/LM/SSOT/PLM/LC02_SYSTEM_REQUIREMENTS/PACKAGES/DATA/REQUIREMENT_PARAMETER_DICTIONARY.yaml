@@ -1,0 +1,46 @@
+requirement_parameter_dictionary:
+  parameters:
+    - param_id: "P-28-11-001"
+      name: "stored_lh2_mass_kg"
+      unit: "kg"
+      data_type: "float"
+      valid_range: [1, 100000]
+      precision: 0.1
+      criticality: "high"
+      description: "Required stored LH2 mass per design mission"
+
+    - param_id: "P-28-11-002"
+      name: "lh2_density_kg_per_m3"
+      unit: "kg/m^3"
+      data_type: "float"
+      valid_range: [60, 80]
+      precision: 0.01
+      criticality: "high"
+      description: "LH2 density at specified reference condition"
+
+    - param_id: "P-28-11-003"
+      name: "system_heat_flux_W_per_m2"
+      unit: "W/m^2"
+      data_type: "float"
+      valid_range: [0.1, 10.0]
+      precision: 0.01
+      criticality: "high"
+      description: "Net heat flux into cryogenic tank system"
+
+    - param_id: "P-28-11-004"
+      name: "operating_pressure_kPa"
+      unit: "kPa"
+      data_type: "float"
+      valid_range: [50, 1000]
+      precision: 0.1
+      criticality: "high"
+      description: "Nominal operating pressure for primary tank"
+
+    - param_id: "P-28-11-005"
+      name: "weld_efficiency_factor"
+      unit: "dimensionless"
+      data_type: "float"
+      valid_range: [0.60, 0.95]
+      precision: 0.01
+      criticality: "medium"
+      description: "Weld efficiency applied to structural allowables"

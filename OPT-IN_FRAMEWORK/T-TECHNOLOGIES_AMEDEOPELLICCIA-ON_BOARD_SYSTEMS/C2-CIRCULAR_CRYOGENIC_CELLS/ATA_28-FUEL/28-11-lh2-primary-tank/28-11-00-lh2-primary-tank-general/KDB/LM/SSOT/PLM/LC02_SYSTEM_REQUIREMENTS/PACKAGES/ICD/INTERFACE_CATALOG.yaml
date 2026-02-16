@@ -1,0 +1,31 @@
+interface_catalog:
+  interfaces:
+    - if_id: "IF-28-11-23-001"
+      name: "Tank Pressure Measurement and Control Link"
+      type: ["data", "functional", "safety"]
+      endpoints: ["ATA28-11", "ATA28-23"]
+      criticality: "high"
+
+    - if_id: "IF-28-11-30-001"
+      name: "Boil-Off Flow and Status Link"
+      type: ["data", "functional"]
+      endpoints: ["ATA28-11", "ATA28-30"]
+      criticality: "high"
+
+    - if_id: "IF-28-11-41-001"
+      name: "Hydrogen Leak Detection Telemetry Link"
+      type: ["data", "safety"]
+      endpoints: ["ATA28-11", "ATA28-41"]
+      criticality: "high"
+
+    - if_id: "IF-28-11-42-001"
+      name: "Relief/Vent Command and Confirmation Link"
+      type: ["functional", "safety"]
+      endpoints: ["ATA28-11", "ATA28-42"]
+      criticality: "high"
+
+    - if_id: "IF-28-11-21-001"
+      name: "Refuel/Defuel Transfer Control Link"
+      type: ["functional", "data"]
+      endpoints: ["ATA28-11", "ATA28-21"]
+      criticality: "medium"

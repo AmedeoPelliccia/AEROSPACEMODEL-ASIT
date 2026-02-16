@@ -1,0 +1,18 @@
+units_and_conversions:
+  canonical_unit_system: "SI"
+  rules:
+    - "All stored numeric values must be in canonical SI units"
+    - "Display conversions are allowed but must not overwrite canonical values"
+    - "Unit field is mandatory for every quantitative parameter"
+  conversions:
+    - quantity: "pressure"
+      canonical: "Pa"
+      accepted_inputs: ["Pa", "kPa", "bar"]
+      normalization:
+        kPa_to_Pa: "value * 1000"
+        bar_to_Pa: "value * 100000"
+    - quantity: "temperature"
+      canonical: "K"
+      accepted_inputs: ["K", "C"]
+      normalization:
+        C_to_K: "value + 273.15"

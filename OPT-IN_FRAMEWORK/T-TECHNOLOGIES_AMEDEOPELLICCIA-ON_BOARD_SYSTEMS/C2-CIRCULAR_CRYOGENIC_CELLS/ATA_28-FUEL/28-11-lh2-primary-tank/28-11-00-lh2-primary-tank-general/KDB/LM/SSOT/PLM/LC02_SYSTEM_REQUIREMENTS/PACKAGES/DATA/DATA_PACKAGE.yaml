@@ -1,0 +1,19 @@
+data_package:
+  package_id: "DATA-LC02-ATA28-11"
+  package_title: "LC02 System Requirements — Data Package (ATA 28-11)"
+  program: "AMPEL360 Q100"
+  domain: "C2 Circular Cryogenic Cells"
+  ata_scope: ["28-11-00"]
+  lifecycle_phase: "LC02"
+  status: "SSOT"
+  baseline_state: "baselined"
+  version: "1.0.0"
+  owner_role: "STK_ENG"
+  data_authority: "STK_CM"
+  quality_authority: "STK_QA"
+  constitutional_constraints:
+    human_authorization_required_for_override: true
+    harm_precedence_threshold: 0.95
+    constitution_version: "v1.0"
+  created_on: "2026-02-16"
+  last_updated_on: "2026-02-16"

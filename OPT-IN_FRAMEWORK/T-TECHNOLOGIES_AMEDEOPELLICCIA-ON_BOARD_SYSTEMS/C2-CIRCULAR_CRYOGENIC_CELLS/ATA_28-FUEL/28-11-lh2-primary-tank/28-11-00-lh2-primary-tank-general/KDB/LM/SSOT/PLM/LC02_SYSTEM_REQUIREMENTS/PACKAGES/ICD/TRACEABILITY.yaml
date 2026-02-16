@@ -1,0 +1,19 @@
+traceability:
+  derives_from:
+    - "LC01/PACKAGES/GOVERNANCE"
+    - "LC02 system requirement baseline"
+    - "LC02/PACKAGES/DATA"
+  feeds:
+    - lifecycle: "LC04"
+      artifact: "DESIGN/INTERFACES implementation"
+    - lifecycle: "LC06"
+      artifact: "integration test procedures and evidence"
+
+  mandatory_links:
+    - "if_id -> if_req_id"
+    - "if_req_id -> acceptance_gate"
+    - "signal_id -> if_id"
+    - "contract_id -> if_id"
+
+  closure_required: true
+  orphan_policy: "reject_publish"

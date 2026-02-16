@@ -1,0 +1,22 @@
+physical_interface_contracts:
+  contracts:
+    - contract_id: "PHY-IF-28-11-21-001"
+      if_id: "IF-28-11-21-001"
+      interface_type: "cryogenic fluid coupling"
+      requirements:
+        - "Material compatibility with LH2 at -253C"
+        - "Leak-tight to H2 at operating pressure"
+        - "Thermal isolation at interface boundary"
+      acceptance_criteria:
+        - "Zero leak at proof pressure"
+        - "Material certification per cryogenic spec"
+
+    - contract_id: "PHY-IF-28-11-23-001"
+      if_id: "IF-28-11-23-001"
+      interface_type: "sensor port"
+      requirements:
+        - "Pressure-rated port with redundant sealing"
+        - "Compatible with cryogenic temperature range"
+      acceptance_criteria:
+        - "Proof pressure test pass"
+        - "Thermal cycle endurance"

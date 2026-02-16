@@ -1,0 +1,20 @@
+traceability:
+  derives_from:
+    - "LC01/PACKAGES/GOVERNANCE"
+    - "LC02 requirement statements"
+  feeds:
+    - lifecycle: "LC02"
+      artifact: "COMPLIANCE_INTENT mappings"
+    - lifecycle: "LC04"
+      artifact: "CONFIG/DESIGN input datasets"
+    - lifecycle: "LC06"
+      artifact: "verification input vectors and tolerances"
+
+  mandatory_links:
+    - "req_id -> param_id"
+    - "param_id -> dataset_id"
+    - "dataset_id -> provenance_ref"
+    - "dataset_id -> export_snapshot_id"
+
+  closure_required: true
+  orphan_policy: "reject_publish"

@@ -1,0 +1,33 @@
+acceptance_gates:
+  gates:
+    - gate_id: "AG-IF-001"
+      if_id: "IF-28-11-23-001"
+      criteria:
+        - "Signal accuracy within specified tolerance"
+        - "Update rate meets minimum requirement"
+        - "Quality flags functional"
+      verification_phase: "LC06"
+
+    - gate_id: "AG-IF-002"
+      if_id: "IF-28-11-41-001"
+      criteria:
+        - "Alarm propagation latency within spec"
+        - "No silent suppression verified"
+        - "Independent paths confirmed"
+      verification_phase: "LC06"
+
+    - gate_id: "AG-IF-003"
+      if_id: "IF-28-11-42-001"
+      criteria:
+        - "Command-response within timeout"
+        - "Fault code generation verified"
+        - "Fail-safe behavior confirmed"
+      verification_phase: "LC06"
+
+    - gate_id: "AG-IF-004"
+      if_id: "IF-28-11-30-001"
+      criteria:
+        - "Rate accuracy within tolerance"
+        - "Validity flag functional"
+        - "Uncertainty bounds provided"
+      verification_phase: "LC06"

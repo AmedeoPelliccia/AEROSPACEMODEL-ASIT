@@ -1,0 +1,23 @@
+acceptance_logic:
+  evaluation_level: "LC02 intent"
+  states: ["PASS", "OPEN", "FAIL", "HOLD"]
+  rules:
+    - rule_id: "AL-001"
+      condition: "all mapped regulations identified AND planned_moc exists"
+      state: "PASS"
+    - rule_id: "AL-002"
+      condition: "regulation mapped but special condition unresolved"
+      state: "OPEN"
+    - rule_id: "AL-003"
+      condition: "requirement has no mapped regulation or no planned_moc"
+      state: "FAIL"
+    - rule_id: "AL-004"
+      condition: "constitution/safety conflict detected"
+      state: "HOLD"
+
+  escalation_path:
+    on_HOLD: "require_steward_signoff"
+    on_FAIL: "block_merge + notify_safety_authority"
+
+  release_rule:
+    statement: "LC02 package releasable only if no FAIL; HOLD requires CCB decision"

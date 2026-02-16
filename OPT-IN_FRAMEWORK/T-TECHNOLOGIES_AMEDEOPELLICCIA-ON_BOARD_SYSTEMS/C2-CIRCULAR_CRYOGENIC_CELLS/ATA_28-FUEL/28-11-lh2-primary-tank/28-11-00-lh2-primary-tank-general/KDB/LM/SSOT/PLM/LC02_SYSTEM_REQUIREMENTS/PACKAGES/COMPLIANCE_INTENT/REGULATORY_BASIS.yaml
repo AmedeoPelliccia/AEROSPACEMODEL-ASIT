@@ -1,0 +1,13 @@
+regulatory_basis:
+  primary:
+    - "EASA CS-25"
+  supporting:
+    - "ARP4754A"
+    - "ARP4761"
+    - "DO-160"
+    - "S1000D 5.0"
+    - "ISO 14687-2"
+  applicability_statement: >
+    CS-25 baseline applies with LH2-specific special conditions for
+    cryogenic storage/distribution hazards not fully covered by legacy fuel assumptions.
+  authority_engagement_required: true

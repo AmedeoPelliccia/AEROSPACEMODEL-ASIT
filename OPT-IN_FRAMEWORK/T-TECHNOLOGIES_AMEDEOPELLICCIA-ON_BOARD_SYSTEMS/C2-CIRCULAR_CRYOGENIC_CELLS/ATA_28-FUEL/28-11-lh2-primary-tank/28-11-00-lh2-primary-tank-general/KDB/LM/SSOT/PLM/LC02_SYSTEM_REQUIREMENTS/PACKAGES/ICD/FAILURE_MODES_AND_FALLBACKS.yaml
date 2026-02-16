@@ -1,0 +1,23 @@
+failure_modes_and_fallbacks:
+  interface_failures:
+    - if_id: "IF-28-11-23-001"
+      failure_mode: "Loss of pressure telemetry"
+      severity: "Hazardous"
+      fallback: "Revert to redundant sensor; crew alert if both lost"
+
+    - if_id: "IF-28-11-41-001"
+      failure_mode: "Loss of leak detection telemetry"
+      severity: "Hazardous"
+      fallback: "Activate backup detection; crew alert; reduce operations"
+
+    - if_id: "IF-28-11-42-001"
+      failure_mode: "Loss of relief command path"
+      severity: "Catastrophic"
+      fallback: "Mechanical relief valve (passive); crew alert"
+
+    - if_id: "IF-28-11-30-001"
+      failure_mode: "Loss of boil-off status"
+      severity: "Major"
+      fallback: "Conservative boil-off assumption; crew alert"
+
+  policy: "No interface failure shall lead to undetected unsafe state"

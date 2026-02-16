@@ -1,0 +1,18 @@
+verification_intent:
+  policy: "All interface requirements must have planned verification method"
+  intents:
+    - if_req_id: "IFR-001"
+      planned_method: ["analysis", "integration_test"]
+      target_phase: "LC06"
+
+    - if_req_id: "IFR-002"
+      planned_method: ["analysis", "integration_test", "inspection"]
+      target_phase: "LC06"
+
+    - if_req_id: "IFR-003"
+      planned_method: ["analysis", "integration_test"]
+      target_phase: "LC06"
+
+    - if_req_id: "IFR-004"
+      planned_method: ["analysis", "integration_test"]
+      target_phase: "LC06"

@@ -1,0 +1,20 @@
+functional_interface_contracts:
+  contracts:
+    - contract_id: "FNC-IF-28-11-42-001"
+      if_id: "IF-28-11-42-001"
+      operations:
+        - op: "REQUEST_RELIEF_OPEN"
+          preconditions:
+            - "pressure_above_threshold == true OR emergency_condition == true"
+          expected_response:
+            - "ACK within timeout"
+            - "state transition to RELIEF_OPEN"
+          on_failure:
+            - "emit fault_code"
+            - "escalate to STK_SAF path"
+
+        - op: "REQUEST_RELIEF_CLOSE"
+          preconditions:
+            - "pressure_within_safe_close_window == true"
+          expected_response:
+            - "ACK with post-state RELIEF_CLOSED"

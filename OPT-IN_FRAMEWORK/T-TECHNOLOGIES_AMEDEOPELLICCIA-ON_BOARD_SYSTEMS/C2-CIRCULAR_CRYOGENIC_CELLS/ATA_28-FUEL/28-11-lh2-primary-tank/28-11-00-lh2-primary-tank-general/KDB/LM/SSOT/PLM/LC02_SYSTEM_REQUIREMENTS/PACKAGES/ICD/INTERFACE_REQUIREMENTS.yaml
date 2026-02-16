@@ -1,0 +1,25 @@
+interface_requirements:
+  requirements:
+    - if_req_id: "IFR-001"
+      if_id: "IF-28-11-23-001"
+      statement: "Pressure telemetry shall be provided with bounded accuracy and unit consistency."
+      rationale: "Supports safe pressurization and vent control."
+      acceptance_ref: "AG-IF-001"
+
+    - if_req_id: "IFR-002"
+      if_id: "IF-28-11-41-001"
+      statement: "Leak detection alarms shall propagate without silent suppression."
+      rationale: "Hydrogen hazard prevention."
+      acceptance_ref: "AG-IF-002"
+
+    - if_req_id: "IFR-003"
+      if_id: "IF-28-11-42-001"
+      statement: "Relief command interface shall provide positive acknowledgement and fault code on failure."
+      rationale: "Safety-critical actuation assurance."
+      acceptance_ref: "AG-IF-003"
+
+    - if_req_id: "IFR-004"
+      if_id: "IF-28-11-30-001"
+      statement: "Boil-off status shall include rate, uncertainty, and validity flag."
+      rationale: "Prevents unsafe decisions from stale/invalid data."
+      acceptance_ref: "AG-IF-004"

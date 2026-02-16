@@ -1,0 +1,15 @@
+change_control:
+  authority: "CCB"
+  update_requires:
+    - "ECR_ID"
+    - "data_impact_assessment"
+    - "downstream_compatibility_assessment"
+    - "rollback_plan"
+    - "signed_commit"
+
+  semantic_versioning:
+    major: "schema/entity or parameter semantic change"
+    minor: "new parameters/datasets backward-compatible"
+    patch: "data correction without semantic change"
+
+  silent_override_allowed: false

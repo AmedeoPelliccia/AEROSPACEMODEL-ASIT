@@ -1,0 +1,38 @@
+data_model:
+  model_id: "DM-LC02-ATA28-11"
+  version: "1.0.0"
+  entities:
+    - entity: "requirement_record"
+      primary_key: "req_id"
+      required_fields:
+        - "req_id"
+        - "title"
+        - "category"
+        - "parameter_refs"
+        - "acceptance_criteria_refs"
+        - "source_ref"
+        - "status"
+
+    - entity: "parameter_record"
+      primary_key: "param_id"
+      required_fields:
+        - "param_id"
+        - "name"
+        - "unit"
+        - "data_type"
+        - "valid_range"
+        - "precision"
+        - "criticality"
+
+    - entity: "dataset_record"
+      primary_key: "dataset_id"
+      required_fields:
+        - "dataset_id"
+        - "scope"
+        - "row_count"
+        - "schema_ref"
+        - "quality_status"
+
+  relations:
+    - "requirement_record.parameter_refs -> parameter_record.param_id"
+    - "requirement_record.source_ref -> dataset_record.dataset_id"

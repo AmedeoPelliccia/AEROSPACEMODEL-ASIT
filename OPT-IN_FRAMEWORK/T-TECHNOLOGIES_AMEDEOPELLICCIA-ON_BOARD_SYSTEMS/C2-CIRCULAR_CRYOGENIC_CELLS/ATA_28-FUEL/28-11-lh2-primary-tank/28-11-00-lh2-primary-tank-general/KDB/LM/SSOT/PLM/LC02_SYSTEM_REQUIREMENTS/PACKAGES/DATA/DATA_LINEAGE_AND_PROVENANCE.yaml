@@ -1,0 +1,22 @@
+data_lineage_and_provenance:
+  provenance_minimum:
+    - "source_system"
+    - "source_artifact_id"
+    - "source_version"
+    - "extraction_method"
+    - "extracted_on"
+    - "responsible_agent"
+    - "checksum"
+
+  lineage_rules:
+    - "Every transformed field must preserve backward pointer to source field"
+    - "Manual edits require signed commit and rationale"
+    - "No orphan transformed records allowed"
+
+  trust_levels:
+    - level: "L1"
+      description: "authoritative SSOT source"
+    - level: "L2"
+      description: "derived, verified source"
+    - level: "L3"
+      description: "provisional input (cannot release without upgrade)"

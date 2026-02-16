@@ -1,0 +1,31 @@
+data_interface_contracts:
+  signals:
+    - signal_id: "SIG-TANK-PRESSURE"
+      if_id: "IF-28-11-23-001"
+      name: "tank_pressure"
+      unit: "kPa"
+      data_type: "float"
+      valid_range: [0, 1000]
+      update_rate_hz: 10
+      max_latency_ms: 100
+      quality_flags: ["valid", "suspect", "invalid"]
+
+    - signal_id: "SIG-BOILOFF-RATE"
+      if_id: "IF-28-11-30-001"
+      name: "boiloff_rate"
+      unit: "kg/s"
+      data_type: "float"
+      valid_range: [0, 1]
+      update_rate_hz: 1
+      max_latency_ms: 500
+      quality_flags: ["valid", "suspect", "invalid"]
+
+    - signal_id: "SIG-H2-LEAK-ALARM"
+      if_id: "IF-28-11-41-001"
+      name: "h2_leak_alarm"
+      unit: "enum"
+      data_type: "integer"
+      valid_range: [0, 3]
+      update_rate_hz: 10
+      max_latency_ms: 50
+      quality_flags: ["valid", "invalid"]

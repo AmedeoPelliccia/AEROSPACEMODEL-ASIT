@@ -1,0 +1,4 @@
+data_coverage_report:
+  package_ref: "DATA-LC02-ATA28-11"
+  coverage_checks: []
+  next_scheduled_check: "LC02 release gate"

@@ -1,0 +1,15 @@
+icd_package:
+  package_id: "ICD-LC02-ATA28-11"
+  package_title: "LC02 System Requirements — Interface Control Document (ATA 28-11)"
+  program: "AMPEL360 Q100"
+  domain: "C2 Circular Cryogenic Cells"
+  ata_scope: ["28-11-00"]
+  lifecycle_phase: "LC02"
+  status: "SSOT"
+  baseline_state: "baselined"
+  version: "1.0.0"
+  owner_role: "STK_SYS"
+  interface_authority: "STK_CM"
+  safety_authority: "STK_SAF"
+  created_on: "2026-02-16"
+  last_updated_on: "2026-02-16"

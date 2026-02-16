@@ -1,0 +1,18 @@
+interface_scope_and_boundary:
+  controlled_interfaces:
+    internal:
+      - "Tank core <-> Pressure Control (28-23)"
+      - "Tank core <-> Boil-Off Management (28-30)"
+      - "Tank core <-> Thermal Management (28-31)"
+      - "Tank core <-> Leak Detection (28-41)"
+      - "Tank core <-> Relief/Venting (28-42)"
+    external:
+      - "Tank core <-> Cryogenic Transfer (28-21)"
+      - "Tank core <-> Insulated Transfer Lines (28-22)"
+      - "Tank core <-> Fire Detection/Suppression (28-43)"
+      - "Tank core <-> Aircraft monitoring/indication domain"
+
+  out_of_scope:
+    - "Detailed CAD mating features"
+    - "Station-level manufacturing process instructions"
+    - "Tool-specific communication middleware implementation"

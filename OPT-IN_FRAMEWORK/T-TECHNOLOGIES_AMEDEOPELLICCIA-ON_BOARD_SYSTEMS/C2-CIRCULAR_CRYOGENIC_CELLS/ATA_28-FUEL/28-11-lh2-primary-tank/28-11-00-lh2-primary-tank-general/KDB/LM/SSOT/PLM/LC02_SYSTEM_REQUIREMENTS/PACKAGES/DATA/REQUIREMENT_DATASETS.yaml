@@ -1,0 +1,34 @@
+requirement_datasets:
+  datasets:
+    - dataset_id: "DS-REQ-28-11-BASE-001"
+      title: "ATA 28-11 Requirement Baseline Dataset"
+      scope: "LC02 requirement inputs and bounded parameters"
+      schema_ref: "DM-LC02-ATA28-11"
+      row_count: 0
+      status: "ACTIVE"
+      quality_status: "PENDING_VALIDATION"
+      source_type: "engineered_baseline"
+      provenance_ref: "PROV-LC02-ATA28-11"
+      export_snapshot_id: "DS-REQ-28-11-BASE-001-SNAPSHOT"
+
+    - dataset_id: "DS-REQ-28-11-ENV-001"
+      title: "Environmental and Thermal Envelope Inputs"
+      scope: "Requirement-level thermal environment constraints"
+      schema_ref: "DM-LC02-ATA28-11"
+      row_count: 0
+      status: "ACTIVE"
+      quality_status: "PENDING_VALIDATION"
+      source_type: "assumption_bounded"
+      provenance_ref: "PROV-LC02-ATA28-11"
+      export_snapshot_id: "DS-REQ-28-11-ENV-001-SNAPSHOT"
+
+    - dataset_id: "DS-REQ-28-11-MATL-001"
+      title: "Material Requirement Inputs (Cryogenic)"
+      scope: "Material property requirements used for LC02 intent"
+      schema_ref: "DM-LC02-ATA28-11"
+      row_count: 0
+      status: "ACTIVE"
+      quality_status: "PENDING_VALIDATION"
+      source_type: "reference_plus_program_constraints"
+      provenance_ref: "PROV-LC02-ATA28-11"
+      export_snapshot_id: "DS-REQ-28-11-MATL-001-SNAPSHOT"
