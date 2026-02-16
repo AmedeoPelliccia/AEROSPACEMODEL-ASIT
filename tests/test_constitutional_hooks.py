@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Test suite for constitutional pre-commit hooks.
 
@@ -9,16 +8,23 @@ Tests validate:
 """
 
 import os
-import sys
 import tempfile
 import subprocess
 from pathlib import Path
 
+try:
+    import pytest
+    PYTEST_AVAILABLE = True
+except ImportError:
+    PYTEST_AVAILABLE = False
+
+# Change to repo root
+repo_root = Path(__file__).parent.parent
+os.chdir(repo_root)
+
 
 def test_commit_validator_valid_message():
     """Test that validator accepts valid constitutional commit message."""
-    print("\n=== Test 1: Valid Constitutional Commit Message ===")
-    
     valid_msg = """INTENT: Test commit validator with valid message
 RATIONALE: Validate that properly formatted messages pass validation
 HUMAN_IMPACT: No workforce impact. Testing infrastructure only.
@@ -36,22 +42,14 @@ AUTHOR: Test Suite"""
             text=True
         )
         
-        if result.returncode == 0:
-            print("✅ PASS: Valid message accepted")
-            print(f"   Output: {result.stdout.strip()}")
-            return True
-        else:
-            print("❌ FAIL: Valid message rejected")
-            print(f"   Error: {result.stderr}")
-            return False
+        assert result.returncode == 0, f"Valid message rejected: {result.stderr}"
+        assert "Constitutional commit validated" in result.stdout
     finally:
         os.unlink(temp_file)
 
 
 def test_commit_validator_missing_sections():
     """Test that validator rejects messages missing required sections."""
-    print("\n=== Test 2: Missing Required Sections ===")
-    
     invalid_msg = """INTENT: Test missing sections
 RATIONALE: This message is incomplete"""
     
@@ -66,26 +64,16 @@ RATIONALE: This message is incomplete"""
             text=True
         )
         
-        if result.returncode != 0:
-            print("✅ PASS: Message with missing sections rejected")
-            print(f"   Error message includes: {['AUTHOR', 'HUMAN_IMPACT', 'REVERSIBILITY']}")
-            if all(section in result.stderr for section in ['AUTHOR', 'HUMAN_IMPACT', 'REVERSIBILITY']):
-                print("✅ PASS: Error message lists all missing sections")
-                return True
-            else:
-                print("⚠️  PARTIAL: Some sections not mentioned in error")
-                return False
-        else:
-            print("❌ FAIL: Message with missing sections accepted")
-            return False
+        assert result.returncode != 0, "Message with missing sections should be rejected"
+        assert 'AUTHOR' in result.stderr, "Error should mention AUTHOR"
+        assert 'HUMAN_IMPACT' in result.stderr, "Error should mention HUMAN_IMPACT"
+        assert 'REVERSIBILITY' in result.stderr, "Error should mention REVERSIBILITY"
     finally:
         os.unlink(temp_file)
 
 
 def test_commit_validator_article_8_violation():
     """Test that validator detects Article 8 violations (workforce reduction)."""
-    print("\n=== Test 3: Article 8 Violation Detection ===")
-    
     violation_msg = """INTENT: Automate manual process
 RATIONALE: Reduce costs through automation
 HUMAN_IMPACT: Workforce reduction of 3 engineers to improve efficiency
@@ -103,21 +91,15 @@ AUTHOR: Automation Team"""
             text=True
         )
         
-        if result.returncode != 0 and 'ARTICLE 8' in result.stderr:
-            print("✅ PASS: Article 8 violation detected")
-            print("   Rejection includes reabsorption requirement")
-            return True
-        else:
-            print("❌ FAIL: Article 8 violation not detected")
-            return False
+        assert result.returncode != 0, "Article 8 violation should be detected"
+        assert 'ARTICLE 8' in result.stderr, "Error should mention Article 8"
+        assert 'reabsorption' in result.stderr.lower(), "Error should mention reabsorption"
     finally:
         os.unlink(temp_file)
 
 
 def test_commit_validator_article_8_with_reabsorption():
     """Test that validator accepts workforce reduction WITH reabsorption plan."""
-    print("\n=== Test 4: Article 8 Compliance (With Reabsorption) ===")
-    
     compliant_msg = """INTENT: Automate manual validation
 RATIONALE: Reduce repetitive work and improve accuracy
 HUMAN_IMPACT: Workforce reduction of 2 validation engineers. Reabsorption plan: Engineers transition to schema governance roles with 6-month training program. New capacity for design review authority.
@@ -135,21 +117,13 @@ AUTHOR: Quality Team with HR reabsorption approval"""
             text=True
         )
         
-        if result.returncode == 0:
-            print("✅ PASS: Workforce reduction with reabsorption accepted")
-            return True
-        else:
-            print("❌ FAIL: Valid reabsorption plan rejected")
-            print(f"   Error: {result.stderr}")
-            return False
+        assert result.returncode == 0, f"Valid reabsorption plan should be accepted: {result.stderr}"
     finally:
         os.unlink(temp_file)
 
 
 def test_commit_validator_article_6_violation():
     """Test that validator detects Article 6 violations (missing harm mitigation)."""
-    print("\n=== Test 5: Article 6 Violation Detection ===")
-    
     violation_msg = """INTENT: Update safety-critical control logic
 RATIONALE: Improve response time by 20%
 HUMAN_IMPACT: No direct workforce impact. Operators use same interface.
@@ -167,21 +141,16 @@ AUTHOR: Control Systems Team"""
             text=True
         )
         
-        if result.returncode != 0 and 'ARTICLE 6' in result.stderr:
-            print("✅ PASS: Article 6 violation detected")
-            print("   Requires degrade/pause/escalate mechanism")
-            return True
-        else:
-            print("❌ FAIL: Article 6 violation not detected")
-            return False
+        assert result.returncode != 0, "Article 6 violation should be detected"
+        assert 'ARTICLE 6' in result.stderr, "Error should mention Article 6"
+        assert any(word in result.stderr.lower() for word in ['degrade', 'pause', 'escalate']), \
+            "Error should mention harm mitigation paths"
     finally:
         os.unlink(temp_file)
 
 
 def test_commit_validator_article_6_compliant():
     """Test that validator accepts messages with proper harm mitigation."""
-    print("\n=== Test 6: Article 6 Compliance ===")
-    
     compliant_msg = """INTENT: Update flight control logic
 RATIONALE: Improve response time while maintaining safety margins
 HUMAN_IMPACT: No workforce impact. Operators retain full override authority.
@@ -199,21 +168,13 @@ AUTHOR: Flight Control Safety Team"""
             text=True
         )
         
-        if result.returncode == 0:
-            print("✅ PASS: Message with harm mitigation accepted")
-            return True
-        else:
-            print("❌ FAIL: Valid harm mitigation rejected")
-            print(f"   Error: {result.stderr}")
-            return False
+        assert result.returncode == 0, f"Message with harm mitigation should be accepted: {result.stderr}"
     finally:
         os.unlink(temp_file)
 
 
 def test_commit_validator_empty_sections():
     """Test that validator rejects messages with empty sections."""
-    print("\n=== Test 7: Empty Sections Detection ===")
-    
     empty_msg = """INTENT: Fix bug
 RATIONALE: Bug
 HUMAN_IMPACT: None
@@ -231,136 +192,141 @@ AUTHOR: Dev"""
             text=True
         )
         
-        if result.returncode != 0 and ('empty' in result.stderr.lower() or 'too short' in result.stderr.lower()):
-            print("✅ PASS: Empty/short sections rejected")
-            return True
-        else:
-            print("❌ FAIL: Empty sections not detected")
-            return False
+        assert result.returncode != 0, "Empty/short sections should be rejected"
+        assert any(word in result.stderr.lower() for word in ['empty', 'short', 'meaningful']), \
+            "Error should mention section content requirements"
     finally:
         os.unlink(temp_file)
 
 
-def test_pylint_plugin_safety_critical():
-    """Test that Pylint plugin detects safety-critical functions without safeguards."""
-    print("\n=== Test 8: Pylint Plugin - Safety Critical Detection ===")
+def test_commit_validator_multiline_sections():
+    """Test that validator correctly parses multi-line sections."""
+    multiline_msg = """INTENT: Test multi-line parsing
+This is line 2 of the intent
+This is line 3 of the intent
+
+RATIONALE: This rationale spans
+multiple lines and includes
+blank lines in between
+
+HUMAN_IMPACT: Multi-line impact description
+with additional context
+on multiple lines
+
+REVERSIBILITY: Can degrade to previous state
+or escalate to human review
+with multiple mitigation paths
+
+AUTHOR: Test Author Team"""
     
-    # Create test Python file with safety-critical function missing safeguards
-    test_code = '''
-def safety_critical_flight_control(altitude):
-    """Safety-critical flight control logic."""
-    if altitude < 1000:
-        return "emergency_descent"
-    return "nominal"
-'''
-    
-    with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.py') as f:
-        f.write(test_code)
+    with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as f:
+        f.write(multiline_msg)
         temp_file = f.name
     
     try:
-        # Check if pylint is available
-        pylint_check = subprocess.run(
-            ['which', 'pylint'],
-            capture_output=True
-        )
-        
-        if pylint_check.returncode != 0:
-            print("⚠️  SKIP: Pylint not installed")
-            return None
-        
-        # Run pylint with constitutional plugin
-        env = os.environ.copy()
-        env['PYTHONPATH'] = '.github/plugins:' + env.get('PYTHONPATH', '')
-        
         result = subprocess.run(
-            [
-                'pylint',
-                '--load-plugins=constitutional_pylint_plugin',
-                '--disable=all',
-                '--enable=constitution-violation-harm-precedence',
-                temp_file
-            ],
+            ['python3', '.github/hooks/constitutional_commit_validator.py', temp_file],
             capture_output=True,
-            text=True,
-            env=env
+            text=True
         )
         
-        if 'constitution-violation-harm-precedence' in result.stdout:
-            print("✅ PASS: Safety-critical function without safeguards detected")
-            return True
-        else:
-            print("⚠️  Note: Pylint plugin may need adjustment or function not flagged")
-            return None
-    except Exception as e:
-        print(f"⚠️  SKIP: Pylint test error: {e}")
-        return None
+        assert result.returncode == 0, f"Multi-line message should be accepted: {result.stderr}"
     finally:
         os.unlink(temp_file)
 
 
-def test_pylint_plugin_compliant():
-    """Test that Pylint plugin accepts safety-critical functions with safeguards."""
-    print("\n=== Test 9: Pylint Plugin - Compliant Safety Function ===")
+def test_labor_scanner_detects_patterns():
+    """Test that labor scanner detects workforce reduction patterns."""
+    content_with_pattern = """This document discusses workforce reduction
+and how we will eliminate positions to improve efficiency."""
     
-    # Create test Python file with safety-critical function WITH safeguards
-    test_code = '''
-def safety_critical_flight_control(altitude):
-    """Safety-critical flight control logic."""
-    if altitude < 1000:
-        escalate_to_human("Low altitude detected", {"altitude": altitude})
-        return degrade_mode("safe_altitude_hold")
-    return "nominal"
-
-def escalate_to_human(msg, data):
-    pass
-
-def degrade_mode(mode):
-    pass
-'''
-    
-    with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.py') as f:
-        f.write(test_code)
+    with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as f:
+        f.write(content_with_pattern)
         temp_file = f.name
     
     try:
-        # Check if pylint is available
-        pylint_check = subprocess.run(
-            ['which', 'pylint'],
-            capture_output=True
-        )
-        
-        if pylint_check.returncode != 0:
-            print("⚠️  SKIP: Pylint not installed")
-            return None
-        
-        # Run pylint with constitutional plugin
-        env = os.environ.copy()
-        env['PYTHONPATH'] = '.github/plugins:' + env.get('PYTHONPATH', '')
-        
         result = subprocess.run(
-            [
-                'pylint',
-                '--load-plugins=constitutional_pylint_plugin',
-                '--disable=all',
-                '--enable=constitution-violation-harm-precedence',
-                temp_file
-            ],
+            ['python3', '.github/hooks/labor_reabsorption_scanner.py', temp_file],
             capture_output=True,
-            text=True,
-            env=env
+            text=True
         )
         
-        if 'constitution-violation-harm-precedence' not in result.stdout:
-            print("✅ PASS: Compliant safety function accepted")
-            return True
-        else:
-            print("❌ FAIL: Compliant function incorrectly flagged")
-            return False
-    except Exception as e:
-        print(f"⚠️  SKIP: Pylint test error: {e}")
-        return None
+        # Scanner warns but doesn't block (returns 0)
+        assert result.returncode == 0
+        assert 'LABOR PATTERN DETECTED' in result.stdout
+        assert 'reabsorption' in result.stdout.lower()
     finally:
         os.unlink(temp_file)
 
 
+def test_labor_scanner_clean_file():
+    """Test that labor scanner passes clean files."""
+    clean_content = """This document discusses improving our processes
+without affecting staffing levels."""
+    
+    with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as f:
+        f.write(clean_content)
+        temp_file = f.name
+    
+    try:
+        result = subprocess.run(
+            ['python3', '.github/hooks/labor_reabsorption_scanner.py', temp_file],
+            capture_output=True,
+            text=True
+        )
+        
+        assert result.returncode == 0
+        assert 'LABOR PATTERN DETECTED' not in result.stdout
+    finally:
+        os.unlink(temp_file)
+
+
+# Standalone test runner (when pytest is not available)
+if __name__ == "__main__":
+    if PYTEST_AVAILABLE:
+        import pytest
+        pytest.main([__file__, '-v'])
+    else:
+        import sys
+        
+        print("=" * 70)
+        print("Constitutional Pre-Commit Hooks Test Suite")
+        print("Note: Install pytest for better output (pip install pytest)")
+        print("=" * 70)
+        
+        tests = [
+            ("Valid message", test_commit_validator_valid_message),
+            ("Missing sections", test_commit_validator_missing_sections),
+            ("Article 8 violation", test_commit_validator_article_8_violation),
+            ("Article 8 compliant", test_commit_validator_article_8_with_reabsorption),
+            ("Article 6 violation", test_commit_validator_article_6_violation),
+            ("Article 6 compliant", test_commit_validator_article_6_compliant),
+            ("Empty sections", test_commit_validator_empty_sections),
+            ("Multi-line sections", test_commit_validator_multiline_sections),
+            ("Labor scanner detects", test_labor_scanner_detects_patterns),
+            ("Labor scanner clean", test_labor_scanner_clean_file),
+        ]
+        
+        passed = 0
+        failed = 0
+        
+        for test_name, test_func in tests:
+            try:
+                print(f"\nTest: {test_name}...", end=" ")
+                test_func()
+                print("✅ PASS")
+                passed += 1
+            except AssertionError as e:
+                print(f"❌ FAIL")
+                print(f"   {e}")
+                failed += 1
+            except Exception as e:
+                print(f"❌ ERROR")
+                print(f"   {e}")
+                failed += 1
+        
+        print("\n" + "=" * 70)
+        print(f"Results: {passed} passed, {failed} failed, {len(tests)} total")
+        print("=" * 70)
+        
+        sys.exit(1 if failed > 0 else 0)

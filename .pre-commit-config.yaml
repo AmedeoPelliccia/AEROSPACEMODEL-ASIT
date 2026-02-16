@@ -48,8 +48,8 @@ repos:
       - id: labor-reabsorption-check
         name: Labor reabsorption pattern scan
         description: Scans for labor-displacing patterns requiring reabsorption plan
-        entry: bash -c 'files=$(grep -l -i "remove.*role\|eliminate.*position\|workforce reduction\|job elimination\|autonomous.*override" "$@" 2>/dev/null || true); if [ -n "$files" ]; then echo "⚠️  LABOR PATTERN DETECTED in:"; echo "$files"; echo ""; echo "Article 1 & 8 require labor reabsorption documentation."; echo "Add LABOR_REABSORPTION_PLAN.md or justify in commit HUMAN_IMPACT."; echo "See Model_Digital_Constitution.md Articles 1, 8, 11."; exit 0; fi' --
-        language: system
+        entry: python3 .github/hooks/labor_reabsorption_scanner.py
+        language: script
         files: \.(py|md|txt|yaml|yml)$
         pass_filenames: true
         stages: [commit]
@@ -61,25 +61,11 @@ repos:
       - id: constitutional-pylint
         name: Constitutional code patterns
         description: Checks Python code for constitutional compliance (safety-critical patterns)
-        entry: bash
-        language: system
+        entry: python3 .github/hooks/constitutional_pylint_wrapper.py
+        language: script
         files: \.py$
         pass_filenames: true
         stages: [commit]
-        args:
-          - -c
-          - |
-            if command -v pylint &> /dev/null; then
-              PYTHONPATH=.github/plugins:$PYTHONPATH pylint \
-                --load-plugins=constitutional_pylint_plugin \
-                --disable=all \
-                --enable=constitution-violation-harm-precedence,constitution-violation-autonomous-override \
-                "$@" || true
-            else
-              echo "⚠️  Pylint not installed - skipping constitutional code checks."
-              echo "   Install with: pip install pylint"
-            fi
-          - --
 
 # Configuration for specific hooks
 default_language_version:
