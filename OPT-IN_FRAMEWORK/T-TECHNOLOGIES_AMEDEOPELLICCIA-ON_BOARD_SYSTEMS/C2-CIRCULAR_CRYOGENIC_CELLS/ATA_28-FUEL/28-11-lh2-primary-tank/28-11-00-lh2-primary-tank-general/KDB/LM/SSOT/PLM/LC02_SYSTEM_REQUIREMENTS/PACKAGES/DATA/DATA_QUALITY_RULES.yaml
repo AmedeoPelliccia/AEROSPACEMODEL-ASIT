@@ -1,0 +1,21 @@
+data_quality_rules:
+  dimensions:
+    - dimension: "completeness"
+      rule: "required_field_null_rate == 0"
+    - dimension: "validity"
+      rule: "all_numeric_values_within_valid_range == true"
+    - dimension: "consistency"
+      rule: "no_unit_conflicts_for_same_param_id == true"
+    - dimension: "uniqueness"
+      rule: "primary_keys_unique == true"
+    - dimension: "traceability"
+      rule: "every_record_has_provenance_ref == true"
+
+  thresholds:
+    completeness_required: 1.00
+    validity_required: 1.00
+    consistency_required: 1.00
+    uniqueness_required: 1.00
+    traceability_required: 1.00
+
+  on_fail: "REJECT_DATASET_AND_OPEN_ECR"

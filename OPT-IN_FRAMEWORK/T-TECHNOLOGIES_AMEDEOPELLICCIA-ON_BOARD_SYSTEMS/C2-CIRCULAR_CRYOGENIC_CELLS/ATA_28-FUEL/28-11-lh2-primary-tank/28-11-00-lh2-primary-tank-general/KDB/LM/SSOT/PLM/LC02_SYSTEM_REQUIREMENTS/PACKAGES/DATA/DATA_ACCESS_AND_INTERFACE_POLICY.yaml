@@ -1,0 +1,18 @@
+data_access_and_interface_policy:
+  access:
+    read_roles: ["STK_ENG", "STK_SAF", "STK_CERT", "STK_CM", "CCB"]
+    write_roles: ["STK_ENG", "STK_CM"]
+    approve_roles: ["STK_CM", "CCB"]
+
+  interfaces:
+    outbound:
+      - target_package: "LC04/PACKAGES/CONFIG"
+        contract: "versioned_schema_export"
+      - target_package: "LC04/PACKAGES/DESIGN"
+        contract: "requirement_data_snapshot"
+      - target_package: "LC02/PACKAGES/COMPLIANCE_INTENT"
+        contract: "requirement_parameter_alignment"
+
+  constraints:
+    - "No direct write from downstream packages"
+    - "All exports are immutable snapshots with checksum"

@@ -1,0 +1,19 @@
+missingness_and_default_policy:
+  policy: "no_silent_defaults_for_critical_fields"
+  critical_fields:
+    - "param_id"
+    - "value"
+    - "unit"
+    - "valid_range"
+    - "provenance_ref"
+
+  allowed_defaults:
+    - field: "status"
+      default: "DRAFT"
+      rationale: "Lifecycle staging only"
+
+  forbidden_defaults:
+    - "numeric engineering parameters"
+    - "safety-relevant categorical fields"
+
+  on_missing_critical: "HOLD_AND_ESCALATE_STK_ENG"

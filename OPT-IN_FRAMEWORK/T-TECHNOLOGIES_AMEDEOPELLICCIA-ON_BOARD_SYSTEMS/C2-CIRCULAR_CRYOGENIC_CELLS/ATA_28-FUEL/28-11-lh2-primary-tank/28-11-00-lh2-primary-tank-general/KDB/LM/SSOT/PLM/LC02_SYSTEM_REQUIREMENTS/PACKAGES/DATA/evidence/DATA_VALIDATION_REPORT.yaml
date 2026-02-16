@@ -1,0 +1,4 @@
+data_validation_report:
+  package_ref: "DATA-LC02-ATA28-11"
+  validations: []
+  next_scheduled_validation: "LC02 release gate"

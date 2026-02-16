@@ -1,0 +1,18 @@
+data_freeze_and_baseline_policy:
+  freeze_points:
+    - lifecycle_gate: "LC02_RELEASE"
+      action: "freeze_dataset_versions"
+    - lifecycle_gate: "LC04_ENTRY"
+      action: "publish_immutable_snapshot"
+
+  baseline_rules:
+    - "Only frozen datasets can be marked BASELINED"
+    - "Baseline bump requires ECR and impact map"
+    - "Patch changes allowed only if non-semantic"
+
+  release_readiness:
+    required:
+      - "all validation rules pass"
+      - "quality thresholds met"
+      - "provenance completeness = 100%"
+      - "traceability closure = pass"

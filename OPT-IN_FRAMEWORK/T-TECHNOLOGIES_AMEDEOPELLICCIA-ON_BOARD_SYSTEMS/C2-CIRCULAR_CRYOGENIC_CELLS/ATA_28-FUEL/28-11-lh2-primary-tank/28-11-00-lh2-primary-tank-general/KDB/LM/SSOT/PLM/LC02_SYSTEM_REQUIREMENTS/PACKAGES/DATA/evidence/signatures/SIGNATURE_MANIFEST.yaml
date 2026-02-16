@@ -1,0 +1,4 @@
+signature_manifest:
+  package_ref: "DATA-LC02-ATA28-11"
+  signatures: []
+  policy: "All baseline releases require STK_CM and CCB signatures"
