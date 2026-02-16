@@ -6,10 +6,10 @@
 #
 # PURPOSE:
 #   Define a domain-agnostic, reusable architecture that converts any learnable
-#   or tokenisable process into verified, traceable, trainable token layers.
+#   or tokenizable process into verified, traceable, trainable token layers.
 #
 # SCOPE:
-#   Universal — applies to ATA aerospace, robotics, MRO, certification,
+#   Universal - applies to ATA aerospace, robotics, MRO, certification,
 #   PAL (Program Assembly Lines), RTM (Requirements Traceability), and
 #   ASI (Artificial Superintelligence) training pipelines.
 #
@@ -64,8 +64,8 @@ definition: |
     4. Atomic transformation methods        (L2)
     5. Subject / evidence units             (L1)
 
-  Every artefact carries full traceability, governance metadata, and is
-  suitable for direct AI-model training, so the model learns on the same
+  Every artifact carries full traceability, governance metadata, and is
+  suitable for direct AI model training, so the model learns on the same
   tokens it later consumes in execution.
 
 # -----------------------------------------------------------------------------
@@ -128,7 +128,7 @@ layers:
 token_contract:
   description: |
     Every token, regardless of domain, must include the following minimum
-    contract so that it is machine-tokenisable and suitable for learning.
+    contract so that it is machine-tokenizable and suitable for learning.
   required_fields:
     - field: "token_id"
       type: "string"
@@ -199,7 +199,7 @@ method_classes:
     - id: "CERT"
       name: "Certification"
     - id: "EVAL"
-      name: "Evaluation / Optimisation"
+      name: "Evaluation / Optimization"
     - id: "OPS"
       name: "Operations"
     - id: "MRO"

@@ -16,11 +16,11 @@
 
 **Meta Transformation Layers (MTL)** is a domain-agnostic architecture that
 transforms operational knowledge into executable, verifiable, and trainable
-tokens organised in five semantic layers.
+tokens organized in five semantic layers.
 
-It generalises the existing *Method Token Library* (ATA 28-11, 5D token
+It generalizes the existing *Method Token Library* (ATA 28-11, 5D token
 architecture) into a reusable meta-framework applicable to **any** learnable
-or tokenisable process — aerospace, robotics, MRO, certification, or AI
+or tokenizable process — aerospace, robotics, MRO, certification, or AI
 training pipelines.
 
 ---
@@ -29,7 +29,7 @@ training pipelines.
 
 > MTL = a system of semantic stratification that converts a process (human,
 > digital, or physical) into five layers with full traceability, governance,
-> and AI-training capability over the same artefacts used in execution.
+> and AI training capability over the same artifacts used in execution.
 
 ---
 
@@ -118,7 +118,7 @@ trace:
 | `QUAL` | Quality / Metrology         |
 | `SAFE` | Safety                      |
 | `CERT` | Certification               |
-| `EVAL` | Evaluation / Optimisation   |
+| `EVAL` | Evaluation / Optimization   |
 | `OPS`  | Operations                  |
 | `MRO`  | Maintenance / Repair        |
 

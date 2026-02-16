@@ -2,7 +2,7 @@
 Tests for the Meta Transformation Layers (MTL) Core Standard.
 
 Validates the MTL_META_STANDARD_v1.0.0.yaml, MTL_META_BREX.yaml,
-and README.md artefacts in ASIT/STANDARDS/MTL_META/.
+and README.md artifacts in ASIT/STANDARDS/MTL_META/.
 """
 
 from __future__ import annotations
