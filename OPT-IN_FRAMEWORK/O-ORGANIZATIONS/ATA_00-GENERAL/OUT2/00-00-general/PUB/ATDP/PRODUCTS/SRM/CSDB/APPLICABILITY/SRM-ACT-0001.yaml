@@ -1,0 +1,6 @@
+# SRM Applicability Table
+act_id: SRM-ACT-0001
+rules:
+  - rule_id: SRM-APP-001
+    description: Default applicability
+    condition: ALL

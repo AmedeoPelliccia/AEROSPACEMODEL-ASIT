@@ -1,0 +1,30 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: "Common PM Header Metadata"
+type: object
+required:
+  - pm_id
+  - title
+  - type
+  - language
+  - applicability
+properties:
+  pm_id:
+    type: string
+    pattern: "^PM-[A-Z0-9\-]+$"
+  title:
+    type: string
+  type:
+    type: string
+    enum: ["TEMPLATE", "ASSEMBLY", "REFERENCE"]
+  language:
+    type: string
+    pattern: "^[A-Z]{2}$"
+  applicability:
+    type: string
+  version:
+    type: string
+  owner_aor:
+    type: ["string", "null"]
+  tags:
+    type: array
+    items: { type: string }

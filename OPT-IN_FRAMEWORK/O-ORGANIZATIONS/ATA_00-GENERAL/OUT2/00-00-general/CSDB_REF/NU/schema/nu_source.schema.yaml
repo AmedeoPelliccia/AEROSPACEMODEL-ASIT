@@ -1,0 +1,24 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: "NU Source Record"
+description: "Traceability record for CSDB_REF atomic units"
+type: object
+required:
+  - nu_id
+  - source_knu_id
+  - source_ssot_execution_path
+  - derived_utc
+properties:
+  nu_id:
+    type: string
+    pattern: "^NU-[A-Z0-9\-]+$"
+  source_knu_id:
+    type: string
+  source_ssot_execution_path:
+    type: string
+    description: "Path to SSOT _executions/<timestamp>/ artifact"
+  derived_utc:
+    type: string
+    format: date-time
+  transformation_contract:
+    type: string
+    description: "Contract ID governing SSOT->NU transformation"

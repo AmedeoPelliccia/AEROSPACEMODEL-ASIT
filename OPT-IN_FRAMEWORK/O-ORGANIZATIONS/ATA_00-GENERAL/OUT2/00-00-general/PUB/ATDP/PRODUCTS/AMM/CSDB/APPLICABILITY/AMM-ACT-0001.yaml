@@ -1,0 +1,6 @@
+# AMM Applicability Table
+act_id: AMM-ACT-0001
+rules:
+  - rule_id: AMM-APP-001
+    description: Default applicability
+    condition: ALL

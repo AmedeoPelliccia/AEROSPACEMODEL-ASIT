@@ -1,0 +1,18 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: "PM Traceability Schema"
+type: object
+required:
+  - pm_id
+  - source_type
+  - source_ref
+properties:
+  pm_id:
+    type: string
+  source_type:
+    type: string
+    enum: ["SSOT", "CSDB_REF", "COMMON_CSDB"]
+  source_ref:
+    type: string
+  derived_utc:
+    type: string
+    format: date-time

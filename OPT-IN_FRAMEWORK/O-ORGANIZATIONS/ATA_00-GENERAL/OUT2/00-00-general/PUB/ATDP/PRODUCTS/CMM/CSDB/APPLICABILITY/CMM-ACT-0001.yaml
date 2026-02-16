@@ -1,0 +1,6 @@
+# CMM Applicability Table
+act_id: CMM-ACT-0001
+rules:
+  - rule_id: CMM-APP-001
+    description: Default applicability
+    condition: ALL

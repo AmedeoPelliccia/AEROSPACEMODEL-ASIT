@@ -1,0 +1,8 @@
+lineage:
+  generated_utc: "2026-02-16T05:25:29Z"
+  source_roots:
+    - "../COMMON_CSDB"
+    - "../PRODUCTS"
+  validation:
+    required: true
+    strict_mode: true

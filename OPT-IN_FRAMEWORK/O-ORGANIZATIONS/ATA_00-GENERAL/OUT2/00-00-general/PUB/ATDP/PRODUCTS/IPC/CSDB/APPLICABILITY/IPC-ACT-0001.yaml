@@ -1,0 +1,6 @@
+# IPC Applicability Table
+act_id: IPC-ACT-0001
+rules:
+  - rule_id: IPC-APP-001
+    description: Default applicability
+    condition: ALL

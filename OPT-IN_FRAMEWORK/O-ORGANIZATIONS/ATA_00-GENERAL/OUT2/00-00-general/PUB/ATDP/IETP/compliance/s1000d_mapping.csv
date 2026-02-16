@@ -1,0 +1,4 @@
+S1000D_Element,IETP_Element,Mapping_Type,Notes
+dataModule,dm_content,DIRECT,1:1 mapping
+publicationModule,pm_assembly,DIRECT,1:1 mapping
+dmodule,navigation_node,TRANSFORM,Flattened for IETP

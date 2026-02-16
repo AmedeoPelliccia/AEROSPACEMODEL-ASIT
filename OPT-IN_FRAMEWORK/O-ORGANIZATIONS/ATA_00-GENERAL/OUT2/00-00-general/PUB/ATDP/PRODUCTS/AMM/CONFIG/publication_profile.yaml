@@ -1,0 +1,5 @@
+# AMM Publication Profile
+product_code: AMM
+language: EN
+output_formats: [PDF, HTML, IETP]
+brex_reference: AMM-BREX-0001

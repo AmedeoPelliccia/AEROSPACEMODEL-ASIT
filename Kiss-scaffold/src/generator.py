@@ -1044,9 +1044,489 @@ def _gen_atdp_readme(ctx: GenContext) -> None:
         """)
 
 
+def _gen_ietp_structure(ctx: GenContext) -> None:
+    """Generate comprehensive IETP structure."""
+    _write(ctx, "00-00-general/PUB/ATDP/IETP/README.md", f"""\
+        # ATDP / IETP — Interactive Electronic Technical Publication
+
+        IETP assembly and runtime packaging surface for ATDP products.
+
+        ## Purpose
+        This directory defines the deterministic packaging contract for interactive delivery
+        of ATDP product content (AMM, IPC, SRM, CMM, etc.) while preserving lineage to
+        SSOT and CSDB_REF.
+
+        ## Inputs
+        - `../COMMON_CSDB/*` shared publication primitives
+        - `../PRODUCTS/*/CSDB/*` product-specific publication assets
+        - `../PRODUCTS/*/TRACE/*` product traceability evidence
+
+        ## Outputs
+        - Package-ready IETP bundles in `packages/`
+        - Navigation and applicability configuration
+        - Search index configuration
+        - Compliance mapping and lineage records
+        """)
+    
+    _write(ctx, "00-00-general/PUB/ATDP/IETP/ietp_manifest.yaml", f"""\
+        ietp:
+          id: "ATDP-IETP-0001"
+          version: "0.1.0"
+          status: "DRAFT"
+          generated_utc: "{ctx.now_iso}"
+          owner_aor: "STK_DATA"
+
+          source_roots:
+            common_csdb: "../COMMON_CSDB"
+            products: "../PRODUCTS"
+            ssot_root: "../../../SSOT"
+            csdb_ref_root: "../../../CSDB_REF/NU"
+
+          products_in_scope:
+            - "AMM"
+            - "IPC"
+            - "SRM"
+            - "CMM"
+
+          packaging:
+            target_dir: "./packages"
+            format: "IETP_PACKAGE"
+            deterministic_build: true
+            include_trace_bundle: true
+        """)
+    
+    _write(ctx, "00-00-general/PUB/ATDP/IETP/profiles/desktop_profile.yaml", """\
+        profile_id: "IETP-DESKTOP-0001"
+        channel: "desktop"
+        ui:
+          navigation_mode: "tree"
+          split_view: true
+          preload_toc: true
+        search:
+          enable_fulltext: true
+          fuzzy: true
+        applicability:
+          mode: "strict"
+        status: "DRAFT"
+        """)
+    
+    _write(ctx, "00-00-general/PUB/ATDP/IETP/profiles/mobile_profile.yaml", """\
+        profile_id: "IETP-MOBILE-0001"
+        channel: "mobile"
+        ui:
+          navigation_mode: "flat"
+          split_view: false
+          preload_toc: false
+        search:
+          enable_fulltext: true
+          fuzzy: false
+        applicability:
+          mode: "filtered"
+        status: "DRAFT"
+        """)
+    
+    _write(ctx, "00-00-general/PUB/ATDP/IETP/navigation/toc_seed.yaml", """\
+        toc:
+          root_title: "ATDP IETP"
+          products:
+            - id: "AMM"
+              title: "Aircraft Maintenance Manual"
+              order: 1
+            - id: "IPC"
+              title: "Illustrated Parts Catalog"
+              order: 2
+            - id: "SRM"
+              title: "Structural Repair Manual"
+              order: 3
+            - id: "CMM"
+              title: "Component Maintenance Manual"
+              order: 4
+        """)
+    
+    _write(ctx, "00-00-general/PUB/ATDP/IETP/applicability/filter_rules.yaml", """\
+        applicability:
+          default_filter: "ALL"
+          rules:
+            - id: "RULE-001"
+              description: "Base aircraft"
+              filter: "MODEL:BASE"
+            - id: "RULE-002"
+              description: "Extended range variant"
+              filter: "MODEL:ER"
+        """)
+    
+    _write(ctx, "00-00-general/PUB/ATDP/IETP/search/index_config.yaml", """\
+        search:
+          indexing:
+            fulltext: true
+            metadata: true
+            illustrations: false
+          ranking:
+            title_boost: 2.0
+            keyword_boost: 1.5
+          filters:
+            - "product"
+            - "ata_chapter"
+            - "effectivity"
+        """)
+    
+    _write(ctx, "00-00-general/PUB/ATDP/IETP/compliance/s1000d_mapping.csv", """\
+        S1000D_Element,IETP_Element,Mapping_Type,Notes
+        dataModule,dm_content,DIRECT,1:1 mapping
+        publicationModule,pm_assembly,DIRECT,1:1 mapping
+        dmodule,navigation_node,TRANSFORM,Flattened for IETP
+        """)
+    
+    _write(ctx, "00-00-general/PUB/ATDP/IETP/trace/lineage.yaml", f"""\
+        lineage:
+          generated_utc: "{ctx.now_iso}"
+          source_roots:
+            - "../COMMON_CSDB"
+            - "../PRODUCTS"
+          validation:
+            required: true
+            strict_mode: true
+        """)
+    
+    for subdir in ["packages", "navigation", "applicability", "search", "compliance", "trace"]:
+        _write(ctx, f"00-00-general/PUB/ATDP/IETP/{subdir}/.gitkeep", "")
+
+
+def _gen_export_structure(ctx: GenContext, products: List[str]) -> None:
+    """Generate comprehensive EXPORT structure."""
+    _write(ctx, "00-00-general/PUB/ATDP/EXPORT/README.md", f"""\
+        # ATDP / EXPORT — Publication Export Surface
+
+        Deterministic export surface for ATDP products (AMM, IPC, SRM, CMM).
+
+        ## Purpose
+        Provide controlled rendering and packaging outputs from governed ATDP inputs:
+        - PDF
+        - HTML
+        - IETP_PACKAGE
+
+        ## Governance
+        - Export artifacts are delivery outputs, not authority sources.
+        - Lineage must point to `PUB/ATDP` sources and upstream SSOT/CSDB_REF.
+        - Rebuilds with identical inputs must produce reproducible outputs.
+
+        ## Operational Areas
+        - `jobs/` queue and retry control
+        - `logs/` export execution history
+        - `trace/` lineage and compliance mapping
+        """)
+    
+    _write(ctx, "00-00-general/PUB/ATDP/EXPORT/export_manifest.yaml", f"""\
+        export:
+          id: "ATDP-EXPORT-0001"
+          version: "0.1.0"
+          status: "DRAFT"
+          generated_utc: "{ctx.now_iso}"
+          owner_aor: "STK_DATA"
+
+          products: {products}
+
+          formats:
+            - "PDF"
+            - "HTML"
+            - "IETP_PACKAGE"
+
+          output_roots:
+            pdf: "./PDF"
+            html: "./HTML"
+            ietp_package: "./IETP_PACKAGE"
+
+          reproducibility:
+            deterministic_build: true
+            manifest_required: true
+        """)
+    
+    # PDF README
+    _write(ctx, "00-00-general/PUB/ATDP/EXPORT/PDF/README.md", """\
+        # EXPORT / PDF
+
+        Rendered PDF outputs for ATDP products.
+
+        ## Conventions
+        - One PDF per product major release
+        - Filename: `{PRODUCT}_{VERSION}_{DATE}.pdf`
+        - Watermarking: DRAFT/RELEASED per publication state
+        """)
+    
+    # HTML README  
+    _write(ctx, "00-00-general/PUB/ATDP/EXPORT/HTML/README.md", """\
+        # EXPORT / HTML
+
+        Rendered HTML outputs for ATDP products.
+
+        ## Structure
+        - Static HTML generation with navigation
+        - Responsive layout for desktop/mobile
+        - Cross-references preserved as hyperlinks
+        """)
+    
+    # IETP_PACKAGE README
+    _write(ctx, "00-00-general/PUB/ATDP/EXPORT/IETP_PACKAGE/README.md", """\
+        # EXPORT / IETP_PACKAGE
+
+        Interactive Electronic Technical Publication packages.
+
+        ## Contents
+        - Self-contained IETP runtime bundles
+        - Embedded navigation and search indices
+        - Applicability filtering metadata
+        """)
+    
+    # Create product subdirectories for each export format
+    for fmt in ["PDF", "HTML", "IETP_PACKAGE"]:
+        for product in products:
+            _write(ctx, f"00-00-general/PUB/ATDP/EXPORT/{fmt}/{product}/.gitkeep", "")
+    
+    _write(ctx, "00-00-general/PUB/ATDP/EXPORT/jobs/export_jobs.csv", """\
+        Job_ID,Product,Format,Status,Created_UTC,Completed_UTC,Output_Path,Notes
+        JOB-001,AMM,PDF,PENDING,,,,"Seed job"
+        """)
+    
+    _write(ctx, "00-00-general/PUB/ATDP/EXPORT/jobs/retry_queue.csv", """\
+        Job_ID,Retry_Count,Last_Attempt_UTC,Next_Retry_UTC,Error_Message
+        """)
+    
+    _write(ctx, "00-00-general/PUB/ATDP/EXPORT/logs/export_log.csv", """\
+        Timestamp_UTC,Job_ID,Product,Format,Status,Duration_Sec,Notes
+        """)
+    
+    _write(ctx, "00-00-general/PUB/ATDP/EXPORT/trace/lineage.yaml", f"""\
+        lineage:
+          generated_utc: "{ctx.now_iso}"
+          source_roots:
+            - "../COMMON_CSDB"
+            - "../PRODUCTS"
+          validation:
+            required: true
+            strict_mode: true
+        """)
+    
+    _write(ctx, "00-00-general/PUB/ATDP/EXPORT/trace/compliance_map.csv", """\
+        Export_Artifact,Source_DM_ID,Source_PM_ID,SSOT_Path,Compliance_Status,Notes
+        """)
+    
+    for subdir in ["jobs", "logs", "trace"]:
+        _write(ctx, f"00-00-general/PUB/ATDP/EXPORT/{subdir}/.gitkeep", "")
+
+
+def _gen_ssot_lc_readmes(ctx: GenContext, phases: Dict[str, Any]) -> None:
+    """Generate comprehensive READMEs for select SSOT LC phases."""
+    # LC02 comprehensive README
+    lc02_spec = phases.get("LC02_SYSTEM_REQUIREMENTS", {})
+    _write(ctx, "00-00-general/SSOT/LC02_SYSTEM_REQUIREMENTS/README.md", f"""\
+        # SSOT / LC02_SYSTEM_REQUIREMENTS — Functional Baseline (FBL)
+
+        LC02 is the authoritative phase for **system requirements** and **interface control intent** in the GenKISS canonical lifecycle.  
+        This phase is the **exclusive producer** of the **Functional Baseline (FBL)**.
+
+        ---
+
+        ## 1) Phase Identity
+
+        | Field | Value |
+        |---|---|
+        | LC ID | LC02 |
+        | Canonical Name | {lc02_spec.get('canonical_name', 'System Requirements')} |
+        | Phase Type | {lc02_spec.get('phase_type', 'PLM')} |
+        | Baseline Produced | **FBL** (Functional Baseline) |
+        | Authority | Systems Engineering (with Configuration Control) |
+
+        ---
+
+        ## 2) Mission
+
+        Define, structure, and govern system-level requirements so downstream phases can execute deterministically:
+
+        - LC03 Safety & Reliability traces to LC02 requirements
+        - LC04 Design Definition realizes LC02 requirements
+        - LC06 Verification confirms requirement satisfaction
+        - LC08 Certification uses LC02-linked evidence chain
+
+        LC02 is where requirement ambiguity is converted into configuration-controlled intent.
+
+        ---
+
+        ## 3) Scope
+
+        ### In Scope
+        - System requirements authoring and control
+        - External/internal interface requirements (ICD intent)
+        - Requirement attributes (verification method, rationale, criticality, effectivity)
+        - Trace seed creation for safety, design, and test
+        - FBL release package assembly
+
+        ### Out of Scope
+        - Detailed design solutions (LC04)
+        - Execution test evidence (LC06)
+        - Certification issuance actions (LC08)
+        - Production release authority (LC10)
+
+        ---
+
+        ## 4) Canonical Outputs
+
+        - Requirement specifications (`REQ`)
+        - Interface control definitions (`ICD`)
+        - Compliance intent mapping (pre-cert trace intent)
+        - FBL package under configuration control
+        - Downstream trace links:
+          - `LC02 REQ → LC03 SAFETY`
+          - `LC02 REQ → LC04 DESIGN`
+          - `LC04 DESIGN → LC06 TEST` (continued chain)
+          - `LC06 TEST → LC08 COMPLIANCE`
+
+        ---
+
+        ## 5) Entry and Exit Criteria
+
+        ### Entry
+        - Program/problem framing approved (LC01 complete/accepted inputs)
+        - Stakeholder requirement capture completed
+        - Governance and AoR assignment active
+
+        ### Exit
+        - All system requirements captured and baselined
+        - FBL package released and configuration controlled
+        - Downstream trace links established
+        - CCB approval obtained
+
+        ---
+
+        ## 6) Governance Rules
+
+        - Requirements must be uniquely identified (REQ-XXXX)
+        - All requirements must include verification method
+        - Changes require ECR/ECO and CCB approval
+        - FBL snapshots are immutable once released
+
+        ---
+
+        **GenKISS**: General Knowledge and Information Standard Systems
+        """)
+
+
 def gen_0090(ctx: GenContext, phases: Dict[str, Any], atdp_cfg: Dict[str, Any]) -> None:
-    """Generate ATA 00-90 tables/index artifacts."""
-    _write(ctx, "00-90-tables-schemas-index/README.md", "# ATA 00-90 — Tables, Schemas & Index\n")
+    """Generate ATA 00-90 tables/index artifacts with comprehensive documentation."""
+    _write(ctx, "00-90-tables-schemas-index/README.md", f"""\
+        # ATA 00-90 — Tables, Schemas, and Canonical Index
+
+        This directory is the governance control plane for the GenKISS scaffold.  
+        It centralizes machine-readable contracts used to validate structure, lifecycle conformance, and publication integrity across:
+
+        - `00-00-general/GENESIS` (Knowledge Determination Space)
+        - `00-00-general/SSOT` (Authoritative Information Source)
+        - `00-00-general/CSDB_REF` (Reference Dataset)
+        - `00-00-general/PUB/ATDP` (Publication umbrella)
+
+        ---
+
+        ## 1) Purpose
+
+        `00-90-tables-schemas-index` provides:
+
+        1. **Canonical lifecycle registry materialization**  
+           LC01–LC14 definitions exported as tabular index for deterministic checks.
+
+        2. **Schema contracts**  
+           Structural validation rules for YAML/CSV/metadata artifacts.
+
+        3. **Controlled vocabularies and enumerations**  
+           AoR, statuses, phase types, product codes, and trace semantics.
+
+        4. **Cross-domain consistency layer**  
+           Single validation reference for generator, validator, CI pipeline, and audits.
+
+        ---
+
+        ## 2) Canonical Contents
+
+        ```text
+        00-90-tables-schemas-index/
+        ├── README.md
+        ├── tables/
+        │   ├── canonical_lifecycle_registry.csv
+        │   ├── atdp_products.csv
+        │   ├── aor_codes.csv
+        │   ├── status_enumerations.csv
+        │   └── epistemic_domains.csv
+        ├── schemas/
+        │   ├── discovery.schema.yaml
+        │   ├── justification.schema.yaml
+        │   ├── framing.schema.yaml
+        │   ├── derivation.schema.yaml
+        │   ├── downstream.schema.yaml
+        │   └── tokenomics.schema.yaml
+        └── index/
+            ├── artifact_catalog.csv
+            └── validation_profile.yaml
+        ```
+
+        If `index/` files are not yet generated, they are optional bootstrap targets and can be created by CI/bootstrap jobs.
+
+        ---
+
+        ## 3) Lifecycle Contract (LC01–LC14)
+
+        `tables/canonical_lifecycle_registry.csv` is the deterministic phase reference used by validators.
+
+        ### Required invariants
+        - Exactly 14 lifecycle IDs (LC01..LC14)
+        - Canonical naming only (no synthetic aliases)
+        - Valid phase type per row: PLM or OPS
+        - Canonical SSOT directory mapping present for each LC
+
+        ### Validation implications
+        - Generator must produce exactly these LC directories in SSOT
+        - Validator rejects extra or missing LC directories
+        - Trace tools use this registry to validate cross-phase references
+
+        ---
+
+        ## 4) Product Contract
+
+        `tables/atdp_products.csv` defines product codes and COMMON_CSDB usage.
+
+        ### Columns
+        - `Product_Code`: AMM, IPC, SRM, CMM, etc.
+        - `Uses_Common_CSDB`: TRUE if product consumes shared primitives
+
+        ### Validation implications
+        - Product directories under `PUB/ATDP/PRODUCTS` must match this list
+        - Products with `Uses_Common_CSDB=TRUE` must reference `../../COMMON_CSDB`
+
+        ---
+
+        ## 5) Schema Directory (Optional Extension)
+
+        Future extensions may include JSON Schema files for:
+        - GENESIS O-KNOT/Y-KNOT/KNOT structures
+        - CSDB_REF NU provenance records
+        - SSOT KNU artifact metadata
+        - PUB/ATDP traceability formats
+
+        Schema files enable automated validation in CI pipelines.
+
+        ---
+
+        ## 6) Usage in Validation
+
+        Validators should:
+        1. Load `canonical_lifecycle_registry.csv`
+        2. Assert SSOT has exactly those LC directories
+        3. Assert no extra/missing directories
+        4. Load `atdp_products.csv`
+        5. Assert `PUB/ATDP/PRODUCTS` matches product list
+        6. Validate product structure against schema (if present)
+
+        ---
+
+        **GenKISS**: General Knowledge and Information Standard Systems
+        """)
 
     ordered_ids = phases.get("_ordered_lc_ids")
     if not isinstance(ordered_ids, list):
@@ -1069,3 +1549,8 @@ def gen_0090(ctx: GenContext, phases: Dict[str, Any], atdp_cfg: Dict[str, Any]) 
     for p in products:
         p_lines.append(f"{p},TRUE")
     _write(ctx, "00-90-tables-schemas-index/tables/atdp_products.csv", "\n".join(p_lines) + "\n")
+    
+    # Generate IETP, EXPORT, and SSOT phase documentation
+    _gen_ietp_structure(ctx)
+    _gen_export_structure(ctx, products)
+    _gen_ssot_lc_readmes(ctx, phases)

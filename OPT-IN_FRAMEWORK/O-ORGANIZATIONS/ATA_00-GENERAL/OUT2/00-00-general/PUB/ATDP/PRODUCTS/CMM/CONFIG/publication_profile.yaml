@@ -1,0 +1,5 @@
+# CMM Publication Profile
+product_code: CMM
+language: EN
+output_formats: [PDF, HTML, IETP]
+brex_reference: CMM-BREX-0001

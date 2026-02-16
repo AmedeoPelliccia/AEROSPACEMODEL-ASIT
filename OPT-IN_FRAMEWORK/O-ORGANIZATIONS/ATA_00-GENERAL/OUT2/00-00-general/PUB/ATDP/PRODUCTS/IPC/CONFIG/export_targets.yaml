@@ -1,0 +1,11 @@
+# IPC Export Targets
+targets:
+  - target_id: IPC-EXPORT-PDF
+    format: PDF
+    output_path: ../EXPORT/PDF
+  - target_id: IPC-EXPORT-HTML
+    format: HTML
+    output_path: ../EXPORT/HTML
+  - target_id: IPC-EXPORT-IETP
+    format: IETP_PACKAGE
+    output_path: ../EXPORT/IETP_PACKAGE

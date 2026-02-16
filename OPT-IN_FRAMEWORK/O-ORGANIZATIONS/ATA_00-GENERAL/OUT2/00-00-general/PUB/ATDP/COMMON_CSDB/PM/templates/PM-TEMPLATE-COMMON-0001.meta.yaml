@@ -1,0 +1,10 @@
+pm_id: PM-TEMPLATE-COMMON-0001
+title: Common PM Skeleton
+type: TEMPLATE
+language: EN
+applicability: ALL
+version: 1.0.0
+owner_aor: STK_DATA
+tags: [template, common, seed]
+source_type: SSOT
+source_ref: KNU-00-00-005-LC02-GenKISS-SYS_REQ
