@@ -137,7 +137,7 @@ class ConstitutionalChecker(BaseChecker):
         
         # Check function body for safety-critical patterns
         body_str = self._get_body_as_string(node)
-        if any(pattern in body_str for pattern in 
+        if any(re.search(pattern, body_str) for pattern in
                ["override.*human", "bypass.*review", "autonomous.*decision"]):
             return True
         
