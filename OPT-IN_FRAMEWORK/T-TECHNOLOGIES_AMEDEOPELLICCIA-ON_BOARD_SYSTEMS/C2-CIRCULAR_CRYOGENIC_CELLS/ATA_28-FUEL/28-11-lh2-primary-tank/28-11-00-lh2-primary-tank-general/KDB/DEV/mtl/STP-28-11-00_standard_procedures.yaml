@@ -1,0 +1,444 @@
+# STP-28-11-00 — Standard Token Procedures
+# ATA 28-11-00 LH2 Primary Tank General
+# AMPEL360 Q100 — C2 Circular Cryogenic Cells
+#
+# Purpose: Composes subject tokens (MTK-*) and process/scaling tokens
+# (MTP-*) into single-token standard procedures.  A model consuming
+# one STP token receives the full end-to-end procedure — inputs,
+# sequenced steps, intermediate hand-offs, outputs, and acceptance
+# gates — enabling a complete standard procedure in a single token
+# call.
+
+stp_id: "STP-28-11-00"
+title: "Standard Token Procedures — ATA 28-11-00 LH₂ Primary Tank"
+ata_code: "28-11-00"
+technology_domain: "C2"
+aircraft_program: "AMPEL360 Q100"
+lifecycle_phase: "LC04"
+status: "preliminary"
+author: "STK_ENG"
+date: "2026-02-16"
+version: "0.1.0"
+
+description: >
+  Composes MTL subject tokens and process/scaling tokens into
+  end-to-end standard procedures.  Each STP is a single consumable
+  token that encodes the full procedure: inputs, sequenced method
+  steps (referencing MTK/MTP tokens), intermediate hand-offs between
+  steps, terminal outputs, and acceptance gates.  Models process a
+  full standard procedure by consuming one STP token.
+
+token_pattern: "STP-28-11-{SEQ}"
+
+# =========================================================================
+# Standard Token Procedures
+# =========================================================================
+procedures:
+
+  # -----------------------------------------------------------------------
+  # STP-28-11-001: LH2 Tank Sizing Procedure
+  # -----------------------------------------------------------------------
+  - token: "STP-28-11-001"
+    title: "LH₂ Tank Sizing — From Fuel Mass to Boil-Off Performance"
+    procedure_class: "sizing"
+    description: >
+      Complete tank sizing procedure: fuel mass requirement through
+      geometry selection, surface area computation, heat leak
+      integration, boil-off rate, daily percentage, and gravimetric
+      efficiency.  Single-token equivalent of the full ATA 28-11
+      preliminary sizing workflow.
+    inputs:
+      - name: "stored_lh2_mass_kg"
+        unit: "kg"
+        description: "Required fuel mass per cell"
+      - name: "lh2_density_kg_per_m3"
+        unit: "kg/m^3"
+        reference_value: 70.8
+      - name: "lh2_latent_heat_kJ_per_kg"
+        unit: "kJ/kg"
+        reference_value: 445.5
+      - name: "system_heat_flux_W_per_m2"
+        unit: "W/m^2"
+        reference_value: 1.3
+      - name: "tank_mass_kg"
+        unit: "kg"
+        description: "Estimated tank structural mass"
+      - name: "system_mass_kg"
+        unit: "kg"
+        description: "Estimated system mass (valves, jacket, instrumentation)"
+    steps:
+      - seq: 1
+        token_ref: "MTP-28-11-GEOM-001"
+        action: "Compute required tank volume from fuel mass and LH2 density"
+        hand_off: "required_volume_m3 → step 2"
+      - seq: 2
+        token_ref: "MTP-28-11-GEOM-002"
+        action: "Compute minimum (spherical) surface area for required volume"
+        hand_off: "surface_area_m2 → step 3a"
+      - seq: 3
+        token_ref: "MTP-28-11-GEOM-003"
+        action: "Apply cylinder area penalty factor for selected aspect ratio"
+        hand_off: "adjusted_area_m2 → step 4"
+      - seq: 4
+        token_ref: "MTP-28-11-THRM-002"
+        action: "Compute total heat leak from system heat flux and surface area"
+        hand_off: "total_heat_leak_W → step 5"
+      - seq: 5
+        token_ref: "MTP-28-11-THRM-001"
+        action: "Convert heat leak to steady-state boil-off mass rate"
+        hand_off: "boil_off_rate_kg_per_s → step 6"
+      - seq: 6
+        token_ref: "MTP-28-11-THRM-003"
+        action: "Convert mass boil-off rate to daily percentage"
+        hand_off: "boil_off_pct_per_day → outputs"
+      - seq: 7
+        token_ref: "MTP-28-11-GEOM-004"
+        action: "Compute gravimetric efficiency from fuel, tank, and system mass"
+        hand_off: "gravimetric_efficiency → outputs"
+    outputs:
+      - name: "required_volume_m3"
+        unit: "m^3"
+      - name: "surface_area_m2"
+        unit: "m^2"
+      - name: "total_heat_leak_W"
+        unit: "W"
+      - name: "boil_off_rate_kg_per_s"
+        unit: "kg/s"
+      - name: "boil_off_pct_per_day"
+        unit: "%/day"
+      - name: "gravimetric_efficiency"
+        unit: "dimensionless"
+    acceptance_gates:
+      - "boil_off_pct_per_day <= 1.0 (target for mission viability)"
+      - "gravimetric_efficiency >= 0.50 (minimum for aircraft application)"
+    tokens_consumed:
+      - "MTP-28-11-GEOM-001"
+      - "MTP-28-11-GEOM-002"
+      - "MTP-28-11-GEOM-003"
+      - "MTP-28-11-THRM-001"
+      - "MTP-28-11-THRM-002"
+      - "MTP-28-11-THRM-003"
+      - "MTP-28-11-GEOM-004"
+
+  # -----------------------------------------------------------------------
+  # STP-28-11-002: Structural Substantiation Procedure
+  # -----------------------------------------------------------------------
+  - token: "STP-28-11-002"
+    title: "Structural Substantiation — From Geometry to Damage Tolerance"
+    procedure_class: "structural"
+    description: >
+      Complete structural substantiation procedure for a cryogenic
+      pressure vessel: stress analysis, weld derating, ultimate
+      factor application, thermal contraction check, cryogenic
+      material anchor, and damage tolerance assessment.  Single-token
+      equivalent of the CS 25 structural compliance path.
+    inputs:
+      - name: "operating_pressure_kPa"
+        unit: "kPa"
+        description: "Maximum operating pressure (limit)"
+      - name: "internal_radius_m"
+        unit: "m"
+      - name: "wall_thickness_m"
+        unit: "m"
+      - name: "parent_strength_MPa"
+        unit: "MPa"
+        description: "Parent material allowable at 20 K"
+      - name: "weld_efficiency_factor"
+        unit: "dimensionless"
+        range: [0.60, 0.90]
+      - name: "cte_inner_per_K"
+        unit: "1/K"
+      - name: "cte_jacket_per_K"
+        unit: "1/K"
+      - name: "length_m"
+        unit: "m"
+      - name: "initial_flaw_size_mm"
+        unit: "mm"
+    steps:
+      - seq: 1
+        token_ref: "MTP-28-11-MATL-002"
+        action: "Compute hoop stress from pressure, radius, and wall thickness"
+        hand_off: "hoop_stress_Pa → step 2"
+      - seq: 2
+        token_ref: "MTP-28-11-MATL-004"
+        action: "Apply weld derating to derive effective allowable"
+        hand_off: "weld_allowable_MPa → step 3"
+      - seq: 3
+        token_ref: "MTP-28-11-CERT-001"
+        action: "Apply 1.5 ultimate pressure factor and check ultimate margin"
+        hand_off: "ultimate_margin → step 4"
+      - seq: 4
+        token_ref: "MTP-28-11-MATL-005"
+        action: "Compute differential thermal contraction between inner tank and jacket"
+        hand_off: "differential_contraction_mm → step 5"
+      - seq: 5
+        token_ref: "MTP-28-11-MATL-001"
+        action: "Anchor cryogenic material properties at 20 K (yield 724 MPa, UTS 859 MPa)"
+        hand_off: "cryogenic_allowables → step 6"
+      - seq: 6
+        token_ref: "MTP-28-11-CERT-003"
+        action: "Perform damage tolerance assessment: crack growth to critical length and inspection interval"
+        hand_off: "inspection_interval_cycles → outputs"
+    outputs:
+      - name: "hoop_stress_Pa"
+        unit: "Pa"
+      - name: "ultimate_margin"
+        unit: "dimensionless"
+      - name: "weld_allowable_MPa"
+        unit: "MPa"
+      - name: "differential_contraction_mm"
+        unit: "mm"
+      - name: "critical_crack_length_mm"
+        unit: "mm"
+      - name: "inspection_interval_cycles"
+        unit: "cycles"
+    acceptance_gates:
+      - "ultimate_margin >= 1.0"
+      - "hoop_stress_Pa < weld_allowable_Pa"
+      - "inspection_interval_cycles meets ICA programme"
+    tokens_consumed:
+      - "MTP-28-11-MATL-001"
+      - "MTP-28-11-MATL-002"
+      - "MTP-28-11-MATL-004"
+      - "MTP-28-11-MATL-005"
+      - "MTP-28-11-CERT-001"
+      - "MTP-28-11-CERT-003"
+
+  # -----------------------------------------------------------------------
+  # STP-28-11-003: Trade Evaluation Procedure
+  # -----------------------------------------------------------------------
+  - token: "STP-28-11-003"
+    title: "Trade Evaluation — From Options to Weighted Selection"
+    procedure_class: "evaluation"
+    description: >
+      Complete trade evaluation procedure: apply three trade study
+      methods (geometry, material, thermal), score against seven
+      weighted criteria, aggregate via MCDA weighted sum, and assess
+      open risks.  Single-token equivalent of the full LC04 trade
+      evaluation workflow.
+    inputs:
+      - name: "trade_study_inputs"
+        description: "Inputs for TS01 (geometry), TS02 (material), TS03 (insulation)"
+      - name: "criteria_weights"
+        unit: "list[pct]"
+        constraint: "sum = 100"
+      - name: "option_scores"
+        unit: "list[0-10] per option per criterion"
+    steps:
+      - seq: 1
+        token_ref: "MTK-28-11-TS-001"
+        action: "Execute geometry trade (spherical vs cylindrical vs conformal)"
+        hand_off: "geometry_selection → step 4"
+      - seq: 2
+        token_ref: "MTK-28-11-TS-002"
+        action: "Execute material trade (Al-Li vs 304L vs composite)"
+        hand_off: "material_selection → step 4"
+      - seq: 3
+        token_ref: "MTK-28-11-TS-003"
+        action: "Execute insulation trade (vacuum+MLI vs foam vs active)"
+        hand_off: "thermal_selection → step 4"
+      - seq: 4
+        token_ref: "MTP-28-11-EVAL-001"
+        action: "Aggregate all option scores using weighted-sum MCDA"
+        hand_off: "total_weighted_scores → step 5"
+      - seq: 5
+        token_ref: "MTP-28-11-EVAL-002"
+        action: "Assess open risks using likelihood-consequence matrix"
+        hand_off: "risk_levels → outputs"
+    outputs:
+      - name: "selected_geometry"
+        description: "Winning geometry option"
+      - name: "selected_material"
+        description: "Winning material option"
+      - name: "selected_insulation"
+        description: "Winning insulation option"
+      - name: "total_weighted_score"
+        unit: "dimensionless"
+      - name: "risk_levels"
+        unit: "list[category]"
+    acceptance_gates:
+      - "total_weighted_score > alternative scores"
+      - "no risk_level == 'unacceptable'"
+    tokens_consumed:
+      - "MTK-28-11-TS-001"
+      - "MTK-28-11-TS-002"
+      - "MTK-28-11-TS-003"
+      - "MTP-28-11-EVAL-001"
+      - "MTP-28-11-EVAL-002"
+
+  # -----------------------------------------------------------------------
+  # STP-28-11-004: Compliance Assessment Procedure
+  # -----------------------------------------------------------------------
+  - token: "STP-28-11-004"
+    title: "CS 25 Compliance Assessment — Full Matrix Evaluation"
+    procedure_class: "compliance"
+    description: >
+      Complete compliance assessment procedure: evaluate tank design
+      against all four CS 25 compliance sections and five LH2 special
+      conditions, apply ARP4761 safety process, and generate CDCCL
+      list.  Single-token equivalent of the full certification
+      compliance check.
+    inputs:
+      - name: "tank_design_package"
+        description: "Geometry, material, insulation selections from STP-28-11-003"
+      - name: "system_function_list"
+        unit: "list"
+      - name: "failure_condition_severity"
+        unit: "category"
+    steps:
+      - seq: 1
+        token_ref: "MTK-28-11-CM-001"
+        action: "Assess structural integrity compliance (CS 25.963, .965, .967, .571)"
+        hand_off: "structural_compliance → step 5"
+      - seq: 2
+        token_ref: "MTK-28-11-CM-002"
+        action: "Assess pressure/venting compliance (CS 25.969, .975)"
+        hand_off: "pressure_compliance → step 5"
+      - seq: 3
+        token_ref: "MTK-28-11-CM-003"
+        action: "Assess fire/ignition prevention compliance (CS 25.981, .1309)"
+        hand_off: "ignition_compliance → step 5"
+      - seq: 4
+        token_ref: "MTK-28-11-CM-004"
+        action: "Assess materials/processes/inspection compliance (CS 25.603, .605, .1529)"
+        hand_off: "materials_compliance → step 5"
+      - seq: 5
+        token_ref: "MTP-28-11-CERT-002"
+        action: "Execute ARP4761 safety assessment process (FHA → PSSA → SSA)"
+        hand_off: "safety_assessment → step 6"
+      - seq: 6
+        token_ref: "MTK-28-11-SC-001"
+        action: "Evaluate SC-LH2-01 boil-off management special condition"
+        hand_off: "sc_boiloff → step 11"
+      - seq: 7
+        token_ref: "MTK-28-11-SC-002"
+        action: "Evaluate SC-LH2-02 hydrogen detection special condition"
+        hand_off: "sc_detection → step 11"
+      - seq: 8
+        token_ref: "MTK-28-11-SC-003"
+        action: "Evaluate SC-LH2-03 cryogenic thermal shock special condition"
+        hand_off: "sc_thermal → step 11"
+      - seq: 9
+        token_ref: "MTK-28-11-SC-004"
+        action: "Evaluate SC-LH2-04 vacuum integrity special condition"
+        hand_off: "sc_vacuum → step 11"
+      - seq: 10
+        token_ref: "MTK-28-11-SC-005"
+        action: "Evaluate SC-LH2-05 crashworthiness special condition"
+        hand_off: "sc_crash → step 11"
+      - seq: 11
+        action: "Aggregate compliance status across all sections and special conditions"
+        hand_off: "compliance_status → outputs"
+    outputs:
+      - name: "compliance_status"
+        description: "Pass/open/fail per requirement"
+      - name: "dal_allocation"
+        unit: "DAL_level"
+      - name: "cdccl_list"
+        unit: "list"
+      - name: "special_condition_status"
+        description: "Status per SC-LH2-01 through SC-LH2-05"
+    acceptance_gates:
+      - "all compliance_status != 'fail'"
+      - "cdccl_list complete and documented"
+      - "all special_condition_status addressed"
+    tokens_consumed:
+      - "MTK-28-11-CM-001"
+      - "MTK-28-11-CM-002"
+      - "MTK-28-11-CM-003"
+      - "MTK-28-11-CM-004"
+      - "MTK-28-11-SC-001"
+      - "MTK-28-11-SC-002"
+      - "MTK-28-11-SC-003"
+      - "MTK-28-11-SC-004"
+      - "MTK-28-11-SC-005"
+      - "MTP-28-11-CERT-002"
+
+  # -----------------------------------------------------------------------
+  # STP-28-11-005: Vent and Relief Sizing Procedure
+  # -----------------------------------------------------------------------
+  - token: "STP-28-11-005"
+    title: "Vent and Relief Sizing — From Boil-Off to Relief Valve Area"
+    procedure_class: "sizing"
+    description: >
+      Complete vent/relief sizing procedure: compute worst-case
+      boil-off rate from thermal environment, size relief valve
+      orifice, and verify against boil-off management special
+      condition.  Single-token equivalent of the pressure
+      relief design workflow.
+    inputs:
+      - name: "surface_area_m2"
+        unit: "m^2"
+      - name: "system_heat_flux_W_per_m2"
+        unit: "W/m^2"
+        reference_value: 1.3
+      - name: "lh2_latent_heat_kJ_per_kg"
+        unit: "kJ/kg"
+        reference_value: 445.5
+      - name: "relief_pressure_differential_Pa"
+        unit: "Pa"
+      - name: "discharge_coefficient"
+        unit: "dimensionless"
+    steps:
+      - seq: 1
+        token_ref: "MTP-28-11-THRM-002"
+        action: "Compute total heat leak from surface area and heat flux"
+        hand_off: "total_heat_leak_W → step 2"
+      - seq: 2
+        token_ref: "MTP-28-11-THRM-001"
+        action: "Compute maximum steady-state boil-off rate"
+        hand_off: "max_boil_off_rate_kg_per_s → step 3"
+      - seq: 3
+        token_ref: "MTP-28-11-CERT-004"
+        action: "Size relief valve orifice area from boil-off and pressure differential"
+        hand_off: "vent_area_m2 → step 4"
+      - seq: 4
+        token_ref: "MTK-28-11-SC-001"
+        action: "Verify against boil-off management special condition (SC-LH2-01)"
+        hand_off: "dispatch_go_no_go → outputs"
+    outputs:
+      - name: "total_heat_leak_W"
+        unit: "W"
+      - name: "max_boil_off_rate_kg_per_s"
+        unit: "kg/s"
+      - name: "vent_area_m2"
+        unit: "m^2"
+      - name: "dispatch_go_no_go"
+        unit: "boolean"
+    acceptance_gates:
+      - "vent_area_m2 within physical packaging constraints"
+      - "dispatch_go_no_go == true for target turnaround time"
+    tokens_consumed:
+      - "MTP-28-11-THRM-001"
+      - "MTP-28-11-THRM-002"
+      - "MTP-28-11-CERT-004"
+      - "MTK-28-11-SC-001"
+
+# =========================================================================
+# Procedure Summary
+# =========================================================================
+summary:
+  total_procedures: 5
+  procedure_classes:
+    sizing: 2
+    structural: 1
+    evaluation: 1
+    compliance: 1
+  total_tokens_composed: 40
+  unique_mtk_tokens_referenced: 12
+  unique_mtp_tokens_referenced: 16
+
+# =========================================================================
+# Traceability
+# =========================================================================
+traceability:
+  derives_from:
+    - "MTL-28-11-00"
+    - "MTL-28-11-00-PROC"
+  feeds:
+    - lifecycle: "LC05"
+      artifact: "Parametric model pipelines (each STP = one model entry point)"
+    - lifecycle: "LC06"
+      artifact: "Verification test sequences (each STP = one test procedure)"
+    - lifecycle: "LC08"
+      artifact: "S1000D procedural data modules (each STP = one DM procedure)"

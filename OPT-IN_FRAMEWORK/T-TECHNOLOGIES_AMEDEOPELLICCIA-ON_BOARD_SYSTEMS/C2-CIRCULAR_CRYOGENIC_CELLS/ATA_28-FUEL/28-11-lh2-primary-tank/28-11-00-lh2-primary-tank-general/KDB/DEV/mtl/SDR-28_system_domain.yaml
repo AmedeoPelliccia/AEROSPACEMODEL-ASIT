@@ -1,0 +1,134 @@
+# SDR-28 — System Domain Resolution (Layer D5)
+# ATA 28 Fuel System — Circular Cryogenic Cells
+# AMPEL360 Q100
+#
+# Purpose: Top-level entry point of the 5-dimensional token model.
+# Resolves which ATA system domain a model request targets, enumerates
+# the available sections (SCR tokens), and provides the system-level
+# context for downstream routing through all five layers.
+
+sdr_id: "SDR-28"
+title: "System Domain Resolver — ATA 28 Fuel System"
+ata_chapter: "28"
+ata_title: "Fuel"
+technology_domain: "C2"
+technology_variant: "CIRCULAR_CRYOGENIC_CELLS"
+aircraft_program: "AMPEL360 Q100"
+lifecycle_phase: "LC04"
+status: "preliminary"
+author: "STK_ENG"
+date: "2026-02-16"
+version: "0.1.0"
+
+description: >
+  Layer D5 (top) of the 5-dimensional token model.  This is the
+  single entry point for the entire ATA 28 Fuel System.  A model
+  consuming the SDR-28 token receives the system-level context —
+  mission, scope, regulatory baseline, special conditions, and the
+  full map of available sections (SCR tokens) — enabling deterministic
+  routing through all five layers down to individual subject tokens.
+
+token_pattern: "SDR-{ATA_CHAPTER}"
+
+# =========================================================================
+# System Context
+# =========================================================================
+system_context:
+  mission: >
+    Provide a safe, certifiable cryogenic hydrogen fuel system for the
+    AMPEL360 Q100 hydrogen-electric aircraft.  The system stores,
+    distributes, and manages liquid hydrogen (LH₂) at -253 deg C using
+    circular cryogenic cell architecture.
+  scope:
+    - "LH₂ storage (primary and auxiliary cryogenic tanks)"
+    - "Distribution (cryogenic transfer, insulated lines, pressure control)"
+    - "Boil-off management (BOG capture, venting, thermal management)"
+    - "Safety systems (H₂ leak detection, pressure relief, fire protection)"
+    - "Ground handling (refuelling, defuelling, purge, warm-up)"
+    - "Indication (fuel quantity, temperature, pressure monitoring)"
+  regulatory_basis:
+    - "CS-25 (airworthiness)"
+    - "S1000D Issue 5.0 (technical data)"
+    - "DO-160 (environmental qualification)"
+    - "ARP4754A (system development assurance)"
+    - "ARP4761 (safety assessment)"
+    - "ISO 14687-2 (hydrogen fuel quality)"
+  special_conditions:
+    - id: "SC-28-H2-001"
+      title: "Hydrogen Storage and Distribution"
+    - id: "SC-28-CRYO-002"
+      title: "Cryogenic Temperature Handling"
+
+# =========================================================================
+# Available Sections (SCR tokens)
+# =========================================================================
+available_sections:
+  - "SCR-28-00"
+  - "SCR-28-10"
+  - "SCR-28-11"
+  - "SCR-28-13"
+  - "SCR-28-21"
+  - "SCR-28-22"
+  - "SCR-28-23"
+  - "SCR-28-30"
+  - "SCR-28-31"
+  - "SCR-28-41"
+  - "SCR-28-42"
+  - "SCR-28-43"
+
+# =========================================================================
+# 5D Architecture Map
+# =========================================================================
+five_d_architecture:
+  D5_system_domain:
+    token_prefix: "SDR-"
+    description: "Resolves which ATA system domain"
+    example: "SDR-28 → ATA 28 Fuel System"
+    routes_to: "D4"
+  D4_section_component:
+    token_prefix: "SCR-"
+    description: "Resolves which section/component within the system"
+    example: "SCR-28-11 → LH₂ Primary Tank"
+    routes_to: "D3"
+  D3_standard_procedure:
+    token_prefix: "STP-"
+    description: "Composed end-to-end standard procedure"
+    example: "STP-28-11-001 → LH₂ Tank Sizing"
+    routes_to: "D2 + D1"
+  D2_process_scaling:
+    token_prefix: "MTP-"
+    description: "Analytical method or empirical scaling law"
+    example: "MTP-28-11-GEOM-001 → Volume from mass/density"
+    routes_to: "execution"
+  D1_subject:
+    token_prefix: "MTK-"
+    description: "Subject-level method identifier"
+    example: "MTK-28-11-TS-001 → Tank Architecture selection"
+    routes_to: "execution"
+
+# =========================================================================
+# Summary
+# =========================================================================
+summary:
+  total_sections: 12
+  total_stps_reachable: 5
+  total_mtp_tokens_reachable: 21
+  total_mtk_tokens_reachable: 19
+  total_tokens_in_model: 58
+
+# =========================================================================
+# Traceability
+# =========================================================================
+traceability:
+  derives_from:
+    - "ATA_28-FUEL/README.md"
+    - "SCR-28"
+  feeds:
+    - layer: "D4"
+      artifact: "Section/Component Resolution (SCR-28-*)"
+    - layer: "D3"
+      artifact: "Standard Token Procedures (STP-*)"
+    - layer: "D2"
+      artifact: "Process/Scaling tokens (MTP-*)"
+    - layer: "D1"
+      artifact: "Subject tokens (MTK-*)"

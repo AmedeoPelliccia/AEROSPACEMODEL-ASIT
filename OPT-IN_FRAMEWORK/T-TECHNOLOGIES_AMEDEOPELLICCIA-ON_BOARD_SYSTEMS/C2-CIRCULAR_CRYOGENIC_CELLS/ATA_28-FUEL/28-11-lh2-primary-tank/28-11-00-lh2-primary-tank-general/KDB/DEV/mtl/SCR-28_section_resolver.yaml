@@ -1,0 +1,160 @@
+# SCR-28 — Section / Component Resolution (Layer D4)
+# ATA 28 Fuel System — Circular Cryogenic Cells
+# AMPEL360 Q100
+#
+# Purpose: Resolves which ATA 28 section/component a model request
+# targets.  Each SCR token maps 1-to-1 to an ATA 28 sub-system
+# section and enumerates the available STP procedures at that section.
+# This is Layer D4 of the 5-dimensional token architecture.
+
+scr_id: "SCR-28"
+title: "Section / Component Resolver — ATA 28 Fuel System"
+ata_code: "28"
+technology_domain: "C2"
+aircraft_program: "AMPEL360 Q100"
+lifecycle_phase: "LC04"
+status: "preliminary"
+author: "STK_ENG"
+date: "2026-02-16"
+version: "0.1.0"
+
+description: >
+  Layer D4 of the 5D token model.  Each SCR token identifies an
+  ATA 28 sub-system section and lists the Standard Token Procedures
+  (STPs) available at that section.  A model consuming one SCR token
+  resolves the target component and can then dispatch to the correct
+  STP layer (D3).
+
+token_pattern: "SCR-28-{SECTION_CODE}"
+
+# =========================================================================
+# Section / Component Tokens
+# =========================================================================
+sections:
+
+  - token: "SCR-28-00"
+    section_code: "28-00"
+    title: "H₂ Cryogenic Fuel — General"
+    description: "System-level fuel architecture and cross-cutting integration"
+    subject_path: "28-00-general/28-00-00-fuel-general-general/"
+    available_stps: []
+    maturity: "scaffold"
+
+  - token: "SCR-28-10"
+    section_code: "28-10"
+    title: "LH₂ Storage — General"
+    description: "Cryogenic tank design, insulation, and structural data (parent section)"
+    subject_path: "28-10-storage/28-10-00-fuel-storage-general/"
+    available_stps: []
+    maturity: "parametric_models"
+
+  - token: "SCR-28-11"
+    section_code: "28-11"
+    title: "LH₂ Primary Tank"
+    description: "Primary cryogenic hydrogen storage tank design and certification"
+    subject_path: "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/"
+    available_stps:
+      - "STP-28-11-001"
+      - "STP-28-11-002"
+      - "STP-28-11-003"
+      - "STP-28-11-004"
+      - "STP-28-11-005"
+    maturity: "trade_studies_complete"
+
+  - token: "SCR-28-13"
+    section_code: "28-13"
+    title: "LH₂ Auxiliary Tank"
+    description: "Auxiliary/extended-range cryogenic hydrogen storage tank"
+    subject_path: "28-13-lh2-auxiliary-tank/28-13-00-lh2-auxiliary-tank-general/"
+    available_stps: []
+    maturity: "scaffold"
+
+  - token: "SCR-28-21"
+    section_code: "28-21"
+    title: "Cryogenic Transfer"
+    description: "Cryogenic transfer pumps and systems"
+    subject_path: "28-21-cryogenic-transfer/28-21-00-cryogenic-transfer-general/"
+    available_stps: []
+    maturity: "scaffold"
+
+  - token: "SCR-28-22"
+    section_code: "28-22"
+    title: "Insulated Transfer Lines"
+    description: "Vacuum-insulated hydrogen distribution piping"
+    subject_path: "28-22-insulated-transfer-lines/28-22-00-insulated-transfer-lines-general/"
+    available_stps: []
+    maturity: "scaffold"
+
+  - token: "SCR-28-23"
+    section_code: "28-23"
+    title: "Pressure Control"
+    description: "Tank pressurisation and pressure regulation"
+    subject_path: "28-23-pressure-control/28-23-00-pressure-control-general/"
+    available_stps: []
+    maturity: "scaffold"
+
+  - token: "SCR-28-30"
+    section_code: "28-30"
+    title: "Boil-Off Management"
+    description: "Boil-off gas capture, venting, and management"
+    subject_path: "28-30-boil-off-management/28-30-00-boil-off-management-general/"
+    available_stps: []
+    maturity: "scaffold"
+
+  - token: "SCR-28-31"
+    section_code: "28-31"
+    title: "Thermal Management"
+    description: "Active/passive cooling and thermal control"
+    subject_path: "28-31-thermal-management/28-31-00-thermal-management-general/"
+    available_stps: []
+    maturity: "scaffold"
+
+  - token: "SCR-28-41"
+    section_code: "28-41"
+    title: "H₂ Leak Detection"
+    description: "Multi-sensor hydrogen leak detection"
+    subject_path: "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/"
+    available_stps: []
+    maturity: "scaffold"
+
+  - token: "SCR-28-42"
+    section_code: "28-42"
+    title: "Pressure Relief and Venting"
+    description: "Over-pressure protection and emergency venting"
+    subject_path: "28-42-pressure-relief-venting/28-42-00-pressure-relief-venting-general/"
+    available_stps: []
+    maturity: "scaffold"
+
+  - token: "SCR-28-43"
+    section_code: "28-43"
+    title: "Fire Detection and Suppression"
+    description: "H₂ fire detection and suppression"
+    subject_path: "28-43-fire-detection-suppression/28-43-00-fire-detection-suppression-general/"
+    available_stps: []
+    maturity: "scaffold"
+
+# =========================================================================
+# Summary
+# =========================================================================
+summary:
+  total_sections: 12
+  sections_with_stps: 1
+  total_stps_available: 5
+  maturity_distribution:
+    scaffold: 10
+    parametric_models: 1
+    trade_studies_complete: 1
+
+# =========================================================================
+# Traceability
+# =========================================================================
+traceability:
+  derives_from:
+    - "SDR-28"
+  feeds:
+    - layer: "D3"
+      artifact: "Standard Token Procedures (STP-*)"
+    - layer: "D2"
+      artifact: "Process/Scaling tokens (MTP-*)"
+    - layer: "D1"
+      artifact: "Subject tokens (MTK-*)"

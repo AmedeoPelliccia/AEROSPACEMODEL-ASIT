@@ -261,4 +261,4 @@ class TestArtifactCatalogComplianceMatrix:
 
     def test_compliance_matrices_count(self, catalog_data):
         cm = catalog_data["artifact_types"]["compliance_matrices"]
-        assert cm["count"] == 1
+        assert cm["count"] == 2

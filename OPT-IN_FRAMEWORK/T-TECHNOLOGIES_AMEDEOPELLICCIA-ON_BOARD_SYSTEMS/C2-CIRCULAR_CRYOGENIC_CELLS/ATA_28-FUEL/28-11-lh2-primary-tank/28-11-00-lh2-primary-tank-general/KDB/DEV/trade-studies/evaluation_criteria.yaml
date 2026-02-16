@@ -1,0 +1,54 @@
+# Evaluation Criteria — Weighted Scoring Matrix
+# ATA 28-11-00 LH2 Primary Tank Trade Studies
+# AMPEL360 Q100 — C2 Circular Cryogenic Cells
+
+ata_code: "28-11-00"
+technology_domain: "C2"
+lifecycle_phase: "LC04"
+date: "2026-02-16"
+version: "0.1.0"
+
+criteria:
+  - name: "Boil-off performance"
+    weight_pct: 20
+  - name: "Structural mass efficiency"
+    weight_pct: 20
+  - name: "Safety"
+    weight_pct: 20
+  - name: "Certification risk"
+    weight_pct: 15
+  - name: "Manufacturability"
+    weight_pct: 10
+  - name: "Maintainability"
+    weight_pct: 10
+  - name: "Cost"
+    weight_pct: 5
+
+summary: >
+  Cylindrical Al-Li Vacuum-MLI configuration scores highest
+  across weighted criteria.  This combines TS-28-11-TS01 Option B
+  (Cylindrical Hemispherical), TS-28-11-TS02 Option A (Al-Li 2195),
+  and TS-28-11-TS03 Option A (Vacuum + MLI with engineered thermal
+  bridges).
+
+open_risks:
+  - id: "RISK-01"
+    description: "Vacuum integrity degradation in service (MLI performance sensitivity to vacuum quality)"
+  - id: "RISK-02"
+    description: "Support-pad and penetration heat leak dominating system thermal budget"
+  - id: "RISK-03"
+    description: "Cryogenic fatigue in Al-Li weld zones under cyclic mission profiles"
+  - id: "RISK-04"
+    description: "Gravimetric efficiency uncertainty (published range 0.3-0.9 for aircraft LH2 tanks)"
+  - id: "RISK-05"
+    description: "Special conditions scope for hydrogen certification (SC timeline uncertainty)"
+
+next_actions:
+  - phase: "LC04 -> LC05"
+    actions:
+      - "FEM comparative analysis (cylindrical vs spherical geometries)"
+      - "Support and penetration heat-leak decomposition analysis"
+      - "Thermal transient simulation (mission profile)"
+      - "Cryogenic material allowables test programme (Al-Li 2195)"
+      - "CG and packaging integration study"
+      - "Weld qualification plan (LH2 tank joints)"

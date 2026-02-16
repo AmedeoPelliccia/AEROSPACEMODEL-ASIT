@@ -1,0 +1,241 @@
+# CS-25 Compliance Matrix — ATA 28-11-00 LH2 Primary Tank (Cryogenic Cells)
+# AMPEL360 Q100 — C2 Circular Cryogenic Cells
+#
+# SSOT PROMOTED COPY
+# ECR: ECR-ATA28-11-CS25-SSOT-001
+# Promoted: 2026-02-16
+# Source: KDB/DEV/trade-studies/CS25_compliance_matrix.yaml
+#
+# NOTE: CS-25 is written for conventional fuels.  LH2 primary tank
+# storage requires an additional package of Special Conditions (SC),
+# Issue Papers, and Means of Compliance agreed with EASA.  Items
+# marked "SC-LH2-*" flag those gaps explicitly.
+
+matrix_id: "CM-28-11-CS25"
+title: "CS-25 Compliance Matrix — ATA 28-11-00 LH2 Primary Tank"
+ata_code: "28-11-00"
+technology_domain: "C2"
+aircraft_program: "AMPEL360 Q100"
+lifecycle_phase: "LC04"
+status: "promoted"
+author: "STK_ENG"
+date: "2026-02-16"
+version: "0.1.0"
+regulation: "EASA CS-25"
+baseline_note: >
+  CS-25 baseline + Special Conditions SC-LH2-XX for hydrogen-specific
+  gaps (boil-off, detection, vent plume, cryogenic shock, permeation,
+  ground operations).  14 CFR 25.981 explosion prevention and 25.963
+  fuel tank structural loads remain applicable via performance-based
+  safety arguments.
+
+# =========================================================================
+# A) Tank Structural Integrity and Loads
+# =========================================================================
+sections:
+  - id: "A"
+    title: "Tank Structural Integrity and Loads"
+    delta_lh2: >
+      Cryogenic contraction mismatch (inner tank at 20 K vs jacket at
+      ambient), hydrogen embrittlement, pressure cycling, and
+      crashworthiness for non-integral tanks.
+    requirements:
+      - req_id: "CM-A-001"
+        cs25_ref: "CS 25.963"
+        topic: "Fuel tanks general — integrity, drainage, ventilation, expansion"
+        applicability: "Very High"
+        moc: "Structural analysis + cryogenic margin definition + leak tests"
+        evidence:
+          - "Tank structural specification"
+          - "Stress report (limit/ultimate with cryogenic loads)"
+          - "Leak test plan"
+          - "Thermal contraction analysis"
+        vv: "Analysis + Test"
+
+      - req_id: "CM-A-002"
+        cs25_ref: "CS 25.965"
+        topic: "Fuel tank tests"
+        applicability: "Very High"
+        moc: "Cryogenic test campaign (pressure, cycles, thermal shock)"
+        evidence:
+          - "Qualification Test Plan/Report"
+          - "Acceptance criteria"
+          - "Instrumentation specification"
+        vv: "Test"
+
+      - req_id: "CM-A-003"
+        cs25_ref: "CS 25.967"
+        topic: "Fuel tank installation — supports, loads, vibration"
+        applicability: "Very High"
+        moc: "FEM + vibration tests + limit/ultimate load analysis"
+        evidence:
+          - "FEM (including thermal contraction mismatch)"
+          - "Loads report"
+          - "Installation drawings"
+          - "Support thermal bridge analysis"
+        vv: "Analysis + Test"
+
+      - req_id: "CM-A-004"
+        cs25_ref: "CS 25.571"
+        topic: "Damage tolerance / fatigue"
+        applicability: "Very High"
+        moc: "Cryogenic fatigue tests/analysis + DT substantiation"
+        evidence:
+          - "Fatigue and DT report"
+          - "Crack growth assumptions (Al-Li at 20 K)"
+          - "Test coupons (parent and weld material)"
+        vv: "Analysis + Test"
+
+  # =========================================================================
+  # B) Pressure, Venting and Boil-Off Management
+  # =========================================================================
+  - id: "B"
+    title: "Pressure, Venting and Boil-Off Management"
+    delta_lh2: >
+      LH2 boil-off phenomenology, pressure control at operating
+      pressures (~255-351 kPa), relief/vent sizing, ullage
+      management, and phase transition behaviour.
+    requirements:
+      - req_id: "CM-B-001"
+        cs25_ref: "CS 25.969"
+        topic: "Fuel tank expansion space"
+        applicability: "High"
+        moc: "Ullage definition + transient analysis + pressure/vent control"
+        evidence:
+          - "Vent/relief sizing"
+          - "Pressure control specification"
+          - "Transient simulation (boil-off budget)"
+        vv: "Analysis"
+
+      - req_id: "CM-B-002"
+        cs25_ref: "CS 25.975"
+        topic: "Fuel tank vents and relief"
+        applicability: "Very High"
+        moc: "Vent/relief sizing + plume analysis"
+        evidence:
+          - "Relief valve sizing"
+          - "Vent routing"
+          - "Plume/ingestion analysis"
+        vv: "Analysis + Test"
+
+  # =========================================================================
+  # C) Fire, Explosion and Ignition Prevention
+  # =========================================================================
+  - id: "C"
+    title: "Fire, Explosion and Ignition Prevention"
+    delta_lh2: >
+      H2 ignition energy and diffusivity; detection, ventilation,
+      and ignition-source elimination.  14 CFR 25.981 requires no
+      ignition source where catastrophic failure could occur.
+    requirements:
+      - req_id: "CM-C-001"
+        cs25_ref: "CS 25.981"
+        topic: "Fuel tank ignition prevention"
+        applicability: "Critical"
+        moc: "FHA/SSA + zonal safety + ignition source control + bonding/earthing"
+        evidence:
+          - "FHA/SSA (ATA 28-11)"
+          - "Zonal Hazard Analysis"
+          - "Ignition source control"
+          - "CDCCLs/limitations"
+        vv: "Analysis + Inspection"
+
+      - req_id: "CM-C-002"
+        cs25_ref: "CS 25.1309"
+        topic: "System safety — catastrophic/hazardous"
+        applicability: "Critical"
+        moc: "ARP4761: FHA -> PSSA -> SSA + DAL/IDAL allocation"
+        evidence:
+          - "FHA/PSSA/SSA pack"
+          - "Fault trees"
+          - "FMEA"
+          - "Requirements trace"
+        vv: "Analysis"
+
+  # =========================================================================
+  # D) Materials, Processes and Inspection
+  # =========================================================================
+  - id: "D"
+    title: "Materials, Processes and Inspection"
+    requirements:
+      - req_id: "CM-D-001"
+        cs25_ref: "CS 25.603 / CS 25.605"
+        topic: "Materials / fabrication"
+        applicability: "Very High"
+        moc: "Cryogenic-compatible material selection (embrittlement, permeation)"
+        evidence:
+          - "Material allowables (Al-Li 2195 at 20 K)"
+          - "M&P specification"
+          - "Welding qualification"
+        vv: "Analysis + Test"
+
+      - req_id: "CM-D-002"
+        cs25_ref: "CS 25.1529"
+        topic: "Instructions for Continued Airworthiness"
+        applicability: "High"
+        moc: "LH2-specific ICA: vacuum checks, inspections, leak checks, sensors"
+        evidence:
+          - "ICA draft"
+          - "Maintenance tasks (vacuum servicing)"
+          - "Inspection intervals"
+        vv: "Inspection + Review"
+
+# =========================================================================
+# Special Conditions — LH2 gaps beyond CS-25 literal text
+# =========================================================================
+special_conditions:
+  - sc_id: "SC-LH2-01"
+    topic: "Boil-off management"
+    description: "Pressure, vent, normal/abnormal modes, dispatch criteria"
+    moc: "Analysis + Test"
+
+  - sc_id: "SC-LH2-02"
+    topic: "Hydrogen detection"
+    description: "Sensor locations, thresholds, alert logic, SIL/DAL allocation"
+    moc: "Analysis + Test + Inspection"
+
+  - sc_id: "SC-LH2-03"
+    topic: "Cryogenic thermal shock"
+    description: "Structure + insulation + interface survivability"
+    moc: "Analysis + Test"
+
+  - sc_id: "SC-LH2-04"
+    topic: "Vacuum integrity maintenance"
+    description: "MLI vacuum monitoring, degradation detection, servicing requirements"
+    moc: "Analysis + Inspection"
+
+  - sc_id: "SC-LH2-05"
+    topic: "Crashworthiness"
+    description: "Two-layer safety approach (crashworthy airframe + crash-safe tank) for non-integral LH2 tanks"
+    moc: "Analysis + Test"
+
+# =========================================================================
+# Minimum Evidence Package (certification-ready)
+# =========================================================================
+evidence_package:
+  - "ATA28-11_LH2_PrimaryTank_StructuralSpec.md"
+  - "CS25_compliance_matrix.yaml"
+  - "FHA_PSSA_SSA_ATA28-11_LH2.pdf"
+  - "Tank_Qualification_TestPlan_Report.pdf"
+  - "VentingAndReliefSizing_Report.pdf"
+  - "MaterialsAndProcesses_Cryogenic_Qualification.pdf"
+  - "ThermalBridge_HeatLeak_Decomposition.pdf"
+  - "ICA_ATA28-11_LH2_PrimaryTank_Draft.pdf"
+
+# =========================================================================
+# Traceability
+# =========================================================================
+traceability:
+  derives_from:
+    - "TS-28-11-TS01"
+    - "TS-28-11-TS02"
+    - "TS-28-11-TS03"
+  feeds:
+    - lifecycle: "LC03"
+      artifact: "FHA/PSSA/SSA safety pack"
+    - lifecycle: "LC05"
+      artifact: "Verification test plans"
+    - lifecycle: "LC06"
+      artifact: "Qualification test reports"
+    - lifecycle: "LC08"
+      artifact: "Type certification documentation"
