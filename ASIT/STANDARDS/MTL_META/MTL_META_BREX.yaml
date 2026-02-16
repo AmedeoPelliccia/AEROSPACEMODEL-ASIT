@@ -1,0 +1,283 @@
+# =============================================================================
+# META TRANSFORMATION LAYERS (MTL) — BREX Rule Set
+# BREX Profile: MTL-META-BREX-001
+# Version: 1.0.0
+# =============================================================================
+#
+# PURPOSE:
+#   Define the authoritative BREX decision rules that govern any system
+#   implementing Meta Transformation Layers.  These rules apply across all
+#   domain profiles (AERO, ROB, MRO, CERT, PAL, etc.).
+#
+# AUTHORITY: ASIT (Aircraft Systems Information Transponder)
+# COMPLIANCE: S1000D 5.0, DO-178C, ARP4754A, ARP4761, EU AI Act
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# METADATA
+# -----------------------------------------------------------------------------
+metadata:
+  brex_id: "MTL-META-BREX-001"
+  title: "Meta Transformation Layers BREX Rule Set"
+  version: "1.0.0"
+  status: "DRAFT"
+  classification: "Governance Specification"
+
+  created_date: "2026-02-16"
+  effective_date: "2026-02-16"
+
+  parent_authority: "ASIT-BREX-MASTER-001"
+  standard_reference: "MTL-META-CORE v1.0.0"
+
+  compliance:
+    - "S1000D Issue 5.0"
+    - "DO-178C"
+    - "ARP4754A"
+    - "ARP4761"
+    - "EU AI Act"
+
+  determinism_level: "strict"
+
+# -----------------------------------------------------------------------------
+# STRUCTURE RULES
+# -----------------------------------------------------------------------------
+structure_rules:
+  - id: "MTL-STRUCT-001"
+    condition: "Every token MUST declare a layer (L1–L5)"
+    enforcement: "block"
+    message: "Token missing layer classification"
+
+  - id: "MTL-STRUCT-002"
+    condition: "token_id MUST follow the layer token pattern"
+    enforcement: "block"
+    patterns:
+      L5: "^CTX-[A-Z]+-[A-Z0-9]+$"
+      L4: "^STR-[A-Z]+-[A-Z0-9]+-[A-Z0-9]+$"
+      L3: "^PRC-[A-Z]+-[A-Z0-9]+-[0-9]{3}$"
+      L2: "^XFM-[A-Z]+-[A-Z0-9]+-[A-Z]+-[0-9]{3}$"
+      L1: "^SBJ-[A-Z]+-[A-Z0-9]+-[A-Z]+-[0-9]{3}$"
+    message: "Token ID does not match layer pattern"
+
+  - id: "MTL-STRUCT-003"
+    condition: "method_class MUST be from the approved taxonomy when layer == L2"
+    enforcement: "block"
+    allowed_classes:
+      - "GEOM"
+      - "KIN"
+      - "DYN"
+      - "THRM"
+      - "MATL"
+      - "CTRL"
+      - "QUAL"
+      - "SAFE"
+      - "CERT"
+      - "EVAL"
+      - "OPS"
+      - "MRO"
+    message: "Unknown method class — must be from MTL taxonomy"
+
+# -----------------------------------------------------------------------------
+# CONTRACT RULES
+# -----------------------------------------------------------------------------
+contract_rules:
+  - id: "MTL-CTR-001"
+    condition: "Every token MUST have all core_required_fields"
+    enforcement: "block"
+    message: "Token contract missing core required fields"
+
+  - id: "MTL-CTR-002"
+    condition: "Every token MUST have at least one acceptance_gate"
+    enforcement: "block"
+    message: "Tokens without acceptance gates cannot be verified"
+
+  - id: "MTL-CTR-003"
+    condition: "Every token MUST have governance.status"
+    enforcement: "block"
+    allowed_statuses:
+      - "DEV"
+      - "VAL"
+      - "PROMOTED"
+      - "DEPRECATED"
+    message: "Token governance status missing or invalid"
+
+  - id: "MTL-CTR-004"
+    condition: "Every token MUST have governance.version in semver format"
+    enforcement: "block"
+    pattern: "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    message: "Token version must follow semver (e.g. 0.1.0)"
+
+  - id: "MTL-CTR-005"
+    condition: "L2 tokens MUST include layer_specific_fields for L2 (method_class, equation_or_rule, validity_range)"
+    enforcement: "block"
+    message: "L2 token missing layer-specific fields"
+
+  - id: "MTL-CTR-006"
+    condition: "L3 tokens MUST include layer_specific_fields for L3 (procedure_steps, handoffs, terminal_outputs)"
+    enforcement: "block"
+    message: "L3 token missing layer-specific fields"
+
+  - id: "MTL-CTR-007"
+    condition: "L5 tokens MUST include layer_specific_fields for L5 (domain_scope, regulatory_basis)"
+    enforcement: "block"
+    message: "L5 token missing layer-specific fields"
+
+  - id: "MTL-CTR-008"
+    condition: "L4 tokens MUST include layer_specific_fields for L4 (resolver_rules, target_components)"
+    enforcement: "block"
+    message: "L4 token missing layer-specific fields"
+
+  - id: "MTL-CTR-009"
+    condition: "L1 tokens MUST include layer_specific_fields for L1 (evidence_type, source_artifacts, confidence)"
+    enforcement: "block"
+    message: "L1 token missing layer-specific fields"
+
+# -----------------------------------------------------------------------------
+# TRACEABILITY RULES
+# -----------------------------------------------------------------------------
+traceability_rules:
+  - id: "MTL-TRACE-001"
+    condition: "Every L1/L2 token MUST have trace.derives_from and trace.feeds"
+    enforcement: "block"
+    message: "Subject and method tokens require derives_from and feeds traceability links"
+
+  - id: "MTL-TRACE-002"
+    condition: "Every L3 token MUST reference at least one L2 or L1 token"
+    enforcement: "block"
+    message: "Procedure tokens must compose lower-layer tokens"
+
+  - id: "MTL-TRACE-003"
+    condition: "Bi-directional trace links must be consistent"
+    enforcement: "warn"
+    message: "derives_from / feeds references should be symmetric"
+
+# -----------------------------------------------------------------------------
+# GOVERNANCE RULES
+# -----------------------------------------------------------------------------
+governance_rules:
+  - id: "MTL-GOV-001"
+    condition: "MODEL.token_version == TOKEN_LIBRARY.version"
+    enforcement: "block"
+    message: "Model and token library versions must match"
+
+  - id: "MTL-GOV-002"
+    condition: "No autonomous execution without explicit approval"
+    enforcement: "block"
+    message: "Deny by default for autonomy"
+
+  - id: "MTL-GOV-003"
+    condition: "Safety/harm-sensitive gates cannot be silently overridden"
+    enforcement: "escalate"
+    escalation_target: "STK_SAF"
+    message: "No silent gate override in safety branches"
+
+  - id: "MTL-GOV-004"
+    condition: "Operational optimizations must preserve labour continuity"
+    enforcement: "escalate"
+    escalation_target: "STK_OPS"
+    message: "Labour continuity constraint applies"
+
+# -----------------------------------------------------------------------------
+# SAFETY RULES
+# -----------------------------------------------------------------------------
+safety_rules:
+  - id: "MTL-SAFE-001"
+    condition: "Tokens in safety-critical domains require human approval"
+    enforcement: "escalate"
+    escalation_target: "STK_SAF"
+    trigger_classes: ["SAFE", "CERT"]
+    message: "Safety/certification tokens require human review"
+
+  - id: "MTL-SAFE-002"
+    condition: "High-risk AI tokens (EU AI Act) require conformity assessment"
+    enforcement: "escalate"
+    escalation_target: "STK_SAF"
+    message: "EU AI Act high-risk classification requires assessment"
+
+  - id: "MTL-SAFE-003"
+    condition: "If safety-critical gate fails then decision_state in {HOLD, ESCALATE, REJECT}; never implicit ALLOW"
+    enforcement: "block"
+    message: "Safety gate failure must not resolve to ALLOW"
+
+# -----------------------------------------------------------------------------
+# LIFECYCLE RULES
+# -----------------------------------------------------------------------------
+lifecycle_rules:
+  - id: "MTL-LC-001"
+    condition: "Token promotion DEV → VAL requires all gates passing"
+    enforcement: "block"
+    message: "Cannot promote token with failing acceptance gates"
+
+  - id: "MTL-LC-002"
+    condition: "Token promotion VAL → PROMOTED requires ECR/CCB approval"
+    enforcement: "require_approval"
+    message: "SSOT promotion requires change control"
+
+  - id: "MTL-LC-003"
+    condition: "DEPRECATED tokens cannot be referenced by active L3 procedures"
+    enforcement: "warn"
+    message: "Active procedures should not depend on deprecated tokens"
+
+# -----------------------------------------------------------------------------
+# LEARNING RULES
+# -----------------------------------------------------------------------------
+learning_rules:
+  - id: "MTL-LEARN-001"
+    condition: "Training data must reference tokens from the same library version"
+    enforcement: "block"
+    message: "Training/deployment token version mismatch"
+
+  - id: "MTL-LEARN-002"
+    condition: "No direct actuation in DEV or VAL status"
+    enforcement: "block"
+    message: "Only PROMOTED tokens may drive actuation"
+
+  - id: "MTL-LEARN-003"
+    condition: "Model outputs must be traceable to input token set"
+    enforcement: "block"
+    message: "Untraceable model decisions are not permitted"
+
+# -----------------------------------------------------------------------------
+# ESCALATION PROCEDURES
+# -----------------------------------------------------------------------------
+escalation_procedures:
+  safety_content:
+    trigger: "MTL-SAFE-001 or MTL-SAFE-002"
+    escalation_target: "STK_SAF"
+    timeout: "72 hours"
+
+  governance_override:
+    trigger: "MTL-GOV-003 or MTL-GOV-004"
+    escalation_target: "CCB"
+    timeout: "5 business days"
+
+  undefined_condition:
+    trigger: "No matching rule"
+    escalation_target: "STK_CM"
+    action: "HALT and wait for rule definition"
+
+# -----------------------------------------------------------------------------
+# AUDIT LOG
+# -----------------------------------------------------------------------------
+audit_requirements:
+  format: "{timestamp} | RULE {rule_id} | {rule_name} | {status} | {context}"
+  required_entries:
+    - "Token contract validation"
+    - "Layer classification check"
+    - "Pattern compliance check"
+    - "Traceability verification"
+    - "Governance policy check"
+    - "Safety impact assessment (if applicable)"
+  retention: "7 years minimum (certification)"
+
+# -----------------------------------------------------------------------------
+# SUMMARY
+# -----------------------------------------------------------------------------
+summary:
+  total_structure_rules: 3
+  total_contract_rules: 9
+  total_traceability_rules: 3
+  total_governance_rules: 4
+  total_safety_rules: 3
+  total_lifecycle_rules: 3
+  total_learning_rules: 3
