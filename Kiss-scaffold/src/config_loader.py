@@ -22,19 +22,53 @@ CANONICAL_ORDER = [
 ]
 
 class ConfigError(Exception):
-    pass
+    """Raised when configuration files are missing or invalid."""
 
 
 def _read_yaml(path: Path) -> Dict[str, Any]:
+    """
+    Read a YAML file and return its root object as a dict.
+
+    Raises:
+        ConfigError: If the file does not exist, cannot be parsed,
+                     or does not contain a mapping at the root.
+    """
     if not path.exists():
         raise ConfigError(f"Config file not found: {path}")
-    data = yaml.safe_load(path.read_text())
+
+    try:
+        data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    except yaml.YAMLError as e:
+        raise ConfigError(f"Invalid YAML syntax in {path}: {e}") from e
+
     if not isinstance(data, dict):
-        raise ConfigError(f"Invalid YAML object at root: {path}")
+        raise ConfigError(f"Invalid YAML root object (expected mapping): {path}")
+
     return data
 
 
 def load_configs(config_dir: Path) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    """
+    Load and validate lifecycle and ATDP configs.
+
+    Required files:
+      - lifecycle.yaml
+      - atdp.yaml
+
+    lifecycle.yaml must contain:
+      - phases: Dict mapping LC01-LC14 IDs to phase specs
+        - Each phase must have: phase_type (PLM/OPS), canonical_name, ssot_dir
+
+    atdp.yaml must contain:
+      - products: List[str] of publication products (e.g., AMM, IPC)
+      - common_csdb_dirs: List[str] of CSDB directories (e.g., DM, PM)
+
+    Returns:
+        Tuple of (lifecycle_config, atdp_config)
+
+    Raises:
+        ConfigError: If files are missing, malformed, or validation fails
+    """
     lifecycle = _read_yaml(config_dir / "lifecycle.yaml")
     atdp = _read_yaml(config_dir / "atdp.yaml")
 
