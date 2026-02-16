@@ -14,10 +14,15 @@
 | File | Trade Study | Selected Baseline |
 |------|-------------|-------------------|
 | `TS-28-11-TS01_tank_architecture.yaml` | Spherical vs Cylindrical vs Conformal | Cylindrical Hemispherical Non-Integral Tank |
+| `TS-28-11-TS01_tank_architecture.md` | *(human-readable companion)* | — |
 | `TS-28-11-TS02_materials.yaml` | Al-Li vs Stainless vs Composite | Al-Li 2195 Metallic Inner Vessel |
+| `TS-28-11-TS02_materials.md` | *(human-readable companion)* | — |
 | `TS-28-11-TS03_insulation_thermal.yaml` | Vacuum+MLI vs Foam vs Active Cooling | Vacuum Jacket + MLI with Engineered Thermal Bridges |
+| `TS-28-11-TS03_insulation_thermal.md` | *(human-readable companion)* | — |
 | `evaluation_criteria.yaml` | Weighted evaluation matrix & open risks | Cylindrical Al-Li Vacuum-MLI |
+| `evaluation_criteria.md` | *(human-readable companion)* | — |
 | `CS25_compliance_matrix.yaml` | EASA CS-25 compliance matrix (YAML, machine-readable) | 10 reqs + 5 Special Conditions |
+| `CS25_compliance_matrix.md` | EASA CS-25 compliance matrix (Markdown, human-readable) | — |
 
 ## Promotion to SSOT
 
