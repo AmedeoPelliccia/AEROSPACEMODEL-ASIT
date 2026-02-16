@@ -1,0 +1,49 @@
+# GitGuardian Configuration
+# Suppress false positives for AEROSPACEMODEL engineering token identifiers
+
+version: 2
+
+# Paths to exclude from scanning
+paths-ignore:
+  # AIT (AI Training Material) files contain MTL token identifiers that look like secrets
+  # but are actually public engineering method identifiers (e.g., MTP-28-11-GEOM-001)
+  - "**/KDB/DEV/ait/*.yaml"
+  - "**/KDB/DEV/mtl/*.yaml"
+  - "**/KDB/LM/SSOT/ait/*.yaml"
+  - "**/KDB/LM/SSOT/mtl/*.yaml"
+
+# Match patterns to ignore
+matches-ignore:
+  # MTL Method Token Pattern: MTP-{ATA}-{DOMAIN}-{SEQ}
+  # Example: MTP-28-11-GEOM-001, MTP-28-11-THRM-002
+  - name: "MTL Process Tokens"
+    match: 'token:\s*"MTP-\d{2}-\d{2}-[A-Z]{4}-\d{3}"'
+  
+  # MTK Subject Token Pattern: MTK-{ATA}-{DOMAIN}-{SEQ}
+  # Example: MTK-28-11-TS-001, MTK-28-11-CM-002
+  - name: "MTL Subject Tokens"
+    match: 'token:\s*"MTK-\d{2}-\d{2}-[A-Z]{2,4}-\d{3}"'
+  
+  # STP Standard Procedure Pattern: STP-{ATA}-{SEQ}
+  # Example: STP-28-11-001, STP-28-11-002
+  - name: "STP Procedure Tokens"
+    match: 'token:\s*"STP-\d{2}-\d{2}-\d{3}"'
+  
+  # Token references in execution traces
+  - name: "Token References in Traces"
+    match: 'token_ref:\s*"(MTP|MTK|STP)-\d{2}-\d{2}(-[A-Z]{2,4})?-\d{3}"'
+  
+  # Source token IDs in provenance
+  - name: "Source Token IDs"
+    match: 'source_token_id:\s*"(MTP|MTK|STP)-\d{2}-\d{2}(-[A-Z]{2,4})?-\d{3}"'
+
+# Detector-specific configuration
+detectors:
+  # Disable generic high entropy secret detector for YAML files with MTL tokens
+  - name: "generic_high_entropy_secret"
+    exclude:
+      paths:
+        - "**/KDB/DEV/ait/*.yaml"
+        - "**/KDB/DEV/mtl/*.yaml"
+        - "**/KDB/LM/SSOT/ait/*.yaml"
+        - "**/KDB/LM/SSOT/mtl/*.yaml"
