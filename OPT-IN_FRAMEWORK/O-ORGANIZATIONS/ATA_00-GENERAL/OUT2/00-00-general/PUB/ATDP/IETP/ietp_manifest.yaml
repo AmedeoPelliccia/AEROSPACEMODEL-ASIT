@@ -1,0 +1,24 @@
+ietp:
+  id: "ATDP-IETP-0001"
+  version: "0.1.0"
+  status: "DRAFT"
+  generated_utc: "2026-02-16T05:25:29Z"
+  owner_aor: "STK_DATA"
+
+  source_roots:
+    common_csdb: "../COMMON_CSDB"
+    products: "../PRODUCTS"
+    ssot_root: "../../../SSOT"
+    csdb_ref_root: "../../../CSDB_REF/NU"
+
+  products_in_scope:
+    - "AMM"
+    - "IPC"
+    - "SRM"
+    - "CMM"
+
+  packaging:
+    target_dir: "./packages"
+    format: "IETP_PACKAGE"
+    deterministic_build: true
+    include_trace_bundle: true

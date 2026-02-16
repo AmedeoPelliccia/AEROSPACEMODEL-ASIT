@@ -1,0 +1,15 @@
+toc:
+  root_title: "ATDP IETP"
+  products:
+    - id: "AMM"
+      title: "Aircraft Maintenance Manual"
+      order: 1
+    - id: "IPC"
+      title: "Illustrated Parts Catalog"
+      order: 2
+    - id: "SRM"
+      title: "Structural Repair Manual"
+      order: 3
+    - id: "CMM"
+      title: "Component Maintenance Manual"
+      order: 4

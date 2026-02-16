@@ -1,0 +1,12 @@
+profile_id: "IETP-DESKTOP-0001"
+channel: "desktop"
+ui:
+  navigation_mode: "tree"
+  split_view: true
+  preload_toc: true
+search:
+  enable_fulltext: true
+  fuzzy: true
+applicability:
+  mode: "strict"
+status: "DRAFT"

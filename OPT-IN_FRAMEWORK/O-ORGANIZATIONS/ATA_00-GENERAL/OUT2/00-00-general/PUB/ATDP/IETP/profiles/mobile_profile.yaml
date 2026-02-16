@@ -1,0 +1,12 @@
+profile_id: "IETP-MOBILE-0001"
+channel: "mobile"
+ui:
+  navigation_mode: "flat"
+  split_view: false
+  preload_toc: false
+search:
+  enable_fulltext: true
+  fuzzy: false
+applicability:
+  mode: "filtered"
+status: "DRAFT"

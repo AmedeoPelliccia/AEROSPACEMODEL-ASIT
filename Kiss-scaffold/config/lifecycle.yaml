@@ -1,0 +1,57 @@
+phases:
+  LC01_PROBLEM_STATEMENT:
+    phase_type: PLM
+    canonical_name: Problem Statement
+    ssot_dir: 00-00-general/SSOT/LC01_PROBLEM_STATEMENT
+  LC02_SYSTEM_REQUIREMENTS:
+    phase_type: PLM
+    canonical_name: System Requirements
+    ssot_dir: 00-00-general/SSOT/LC02_SYSTEM_REQUIREMENTS
+  LC03_SAFETY_RELIABILITY:
+    phase_type: PLM
+    canonical_name: Safety & Reliability
+    ssot_dir: 00-00-general/SSOT/LC03_SAFETY_RELIABILITY
+  LC04_DESIGN_DEFINITION:
+    phase_type: PLM
+    canonical_name: Design Definition
+    ssot_dir: 00-00-general/SSOT/LC04_DESIGN_DEFINITION
+  LC05_ANALYSIS_MODELS:
+    phase_type: PLM
+    canonical_name: Analysis Models
+    ssot_dir: 00-00-general/SSOT/LC05_ANALYSIS_MODELS
+  LC06_VERIFICATION:
+    phase_type: PLM
+    canonical_name: Integration & Test
+    ssot_dir: 00-00-general/SSOT/LC06_VERIFICATION
+  LC07_QA_PROCESS:
+    phase_type: PLM
+    canonical_name: QA & Process Compliance
+    ssot_dir: 00-00-general/SSOT/LC07_QA_PROCESS
+  LC08_CONFIGURATION:
+    phase_type: PLM
+    canonical_name: Certification
+    ssot_dir: 00-00-general/SSOT/LC08_CONFIGURATION
+  LC09_ESG_SUSTAINABILITY:
+    phase_type: PLM
+    canonical_name: ESG & Sustainability
+    ssot_dir: 00-00-general/SSOT/LC09_ESG_SUSTAINABILITY
+  LC10_INDUSTRIAL_SUPPLY:
+    phase_type: PLM
+    canonical_name: Industrial & Supply Chain
+    ssot_dir: 00-00-general/SSOT/LC10_INDUSTRIAL_SUPPLY
+  LC11_OPERATIONS_CUSTOMIZATION:
+    phase_type: OPS
+    canonical_name: Operations Customization
+    ssot_dir: 00-00-general/SSOT/LC11_OPERATIONS_CUSTOMIZATION
+  LC12_MAINTENANCE_REPAIR:
+    phase_type: OPS
+    canonical_name: Continued Airworthiness & MRO
+    ssot_dir: 00-00-general/SSOT/LC12_MAINTENANCE_REPAIR
+  LC13_MAINTENANCE_SOURCE:
+    phase_type: OPS
+    canonical_name: Maintenance Source Data
+    ssot_dir: 00-00-general/SSOT/LC13_MAINTENANCE_SOURCE
+  LC14_END_OF_LIFE:
+    phase_type: OPS
+    canonical_name: End of Life
+    ssot_dir: 00-00-general/SSOT/LC14_END_OF_LIFE

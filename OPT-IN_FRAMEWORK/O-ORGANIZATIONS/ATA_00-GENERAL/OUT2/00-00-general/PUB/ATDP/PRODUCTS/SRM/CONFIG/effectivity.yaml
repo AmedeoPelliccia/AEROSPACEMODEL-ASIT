@@ -1,0 +1,5 @@
+# SRM Effectivity Configuration
+applicability_rules:
+  - rule_id: SRM-EFF-001
+    description: Default applicability for SRM
+    condition: ALL

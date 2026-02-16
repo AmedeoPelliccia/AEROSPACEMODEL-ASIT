@@ -1,0 +1,18 @@
+name: ci
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt
+        working-directory: Kiss-scaffold
+      - run: pytest -q
+        working-directory: Kiss-scaffold
+      - run: python Kiss-scaffold.py --base ./OUT --config-dir ./config --validate --manifest
+        working-directory: Kiss-scaffold

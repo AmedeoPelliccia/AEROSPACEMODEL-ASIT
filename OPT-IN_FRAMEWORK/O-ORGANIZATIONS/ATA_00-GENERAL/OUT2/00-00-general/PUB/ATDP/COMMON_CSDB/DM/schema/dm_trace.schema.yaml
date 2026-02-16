@@ -1,0 +1,18 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+title: "DM Traceability Schema"
+type: object
+required:
+  - dm_id
+  - source_type
+  - source_ref
+properties:
+  dm_id:
+    type: string
+  source_type:
+    type: string
+    enum: ["SSOT", "CSDB_REF", "COMMON_CSDB"]
+  source_ref:
+    type: string
+  derived_utc:
+    type: string
+    format: date-time

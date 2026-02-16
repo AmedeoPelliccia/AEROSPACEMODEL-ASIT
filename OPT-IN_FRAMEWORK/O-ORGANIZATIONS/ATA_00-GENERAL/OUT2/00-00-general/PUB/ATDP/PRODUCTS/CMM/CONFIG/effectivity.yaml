@@ -1,0 +1,5 @@
+# CMM Effectivity Configuration
+applicability_rules:
+  - rule_id: CMM-EFF-001
+    description: Default applicability for CMM
+    condition: ALL

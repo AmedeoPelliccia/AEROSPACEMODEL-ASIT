@@ -1,0 +1,5 @@
+# IPC Publication Profile
+product_code: IPC
+language: EN
+output_formats: [PDF, HTML, IETP]
+brex_reference: IPC-BREX-0001

@@ -1,0 +1,5 @@
+# SRM Publication Profile
+product_code: SRM
+language: EN
+output_formats: [PDF, HTML, IETP]
+brex_reference: SRM-BREX-0001

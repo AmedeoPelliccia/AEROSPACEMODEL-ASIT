@@ -1,0 +1,7 @@
+# CMM Lineage Tracking
+product: CMM
+ssot_sources:
+  - LC02_SYSTEM_REQUIREMENTS
+  - LC04_DESIGN_DEFINITION
+csdb_ref_sources:
+  - NU/*

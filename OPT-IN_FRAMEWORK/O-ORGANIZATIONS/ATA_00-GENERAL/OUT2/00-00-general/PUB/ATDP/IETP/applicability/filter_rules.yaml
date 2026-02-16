@@ -1,0 +1,9 @@
+applicability:
+  default_filter: "ALL"
+  rules:
+    - id: "RULE-001"
+      description: "Base aircraft"
+      filter: "MODEL:BASE"
+    - id: "RULE-002"
+      description: "Extended range variant"
+      filter: "MODEL:ER"

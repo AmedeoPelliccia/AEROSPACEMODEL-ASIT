@@ -1,0 +1,22 @@
+export:
+  id: "ATDP-EXPORT-0001"
+  version: "0.1.0"
+  status: "DRAFT"
+  generated_utc: "2026-02-16T05:25:29Z"
+  owner_aor: "STK_DATA"
+
+  products: ['AMM', 'IPC', 'SRM', 'CMM']
+
+  formats:
+    - "PDF"
+    - "HTML"
+    - "IETP_PACKAGE"
+
+  output_roots:
+    pdf: "./PDF"
+    html: "./HTML"
+    ietp_package: "./IETP_PACKAGE"
+
+  reproducibility:
+    deterministic_build: true
+    manifest_required: true

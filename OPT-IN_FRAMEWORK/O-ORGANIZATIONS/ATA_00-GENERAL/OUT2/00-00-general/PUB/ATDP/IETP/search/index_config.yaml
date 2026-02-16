@@ -1,0 +1,12 @@
+search:
+  indexing:
+    fulltext: true
+    metadata: true
+    illustrations: false
+  ranking:
+    title_boost: 2.0
+    keyword_boost: 1.5
+  filters:
+    - "product"
+    - "ata_chapter"
+    - "effectivity"

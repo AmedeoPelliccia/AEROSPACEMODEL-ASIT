@@ -1,0 +1,9 @@
+products:
+  - AMM
+  - IPC
+  - SRM
+  - CMM
+
+common_csdb_dirs:
+  - DM
+  - PM
