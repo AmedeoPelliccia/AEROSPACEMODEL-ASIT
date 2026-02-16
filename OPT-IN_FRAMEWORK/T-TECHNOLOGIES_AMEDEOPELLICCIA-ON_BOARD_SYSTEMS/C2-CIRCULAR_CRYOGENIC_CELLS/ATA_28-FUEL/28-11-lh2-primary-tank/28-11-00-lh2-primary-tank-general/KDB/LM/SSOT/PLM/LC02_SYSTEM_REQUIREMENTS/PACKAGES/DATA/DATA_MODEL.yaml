@@ -29,9 +29,8 @@ data_model:
       required_fields:
         - "dataset_id"
         - "scope"
-        - "rows"
+        - "row_count"
         - "schema_ref"
-        - "provenance_ref"
         - "quality_status"
 
   relations:

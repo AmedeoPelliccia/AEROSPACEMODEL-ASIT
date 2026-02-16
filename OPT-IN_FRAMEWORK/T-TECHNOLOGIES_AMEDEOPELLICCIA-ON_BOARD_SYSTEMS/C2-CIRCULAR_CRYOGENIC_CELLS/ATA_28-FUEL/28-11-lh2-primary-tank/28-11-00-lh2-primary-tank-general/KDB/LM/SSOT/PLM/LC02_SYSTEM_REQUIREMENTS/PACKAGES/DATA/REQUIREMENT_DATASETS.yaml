@@ -8,6 +8,8 @@ requirement_datasets:
       status: "ACTIVE"
       quality_status: "PENDING_VALIDATION"
       source_type: "engineered_baseline"
+      provenance_ref: "PROV-LC02-ATA28-11"
+      export_snapshot_id: "DS-REQ-28-11-BASE-001-SNAPSHOT"
 
     - dataset_id: "DS-REQ-28-11-ENV-001"
       title: "Environmental and Thermal Envelope Inputs"
@@ -17,6 +19,8 @@ requirement_datasets:
       status: "ACTIVE"
       quality_status: "PENDING_VALIDATION"
       source_type: "assumption_bounded"
+      provenance_ref: "PROV-LC02-ATA28-11"
+      export_snapshot_id: "DS-REQ-28-11-ENV-001-SNAPSHOT"
 
     - dataset_id: "DS-REQ-28-11-MATL-001"
       title: "Material Requirement Inputs (Cryogenic)"
@@ -26,3 +30,5 @@ requirement_datasets:
       status: "ACTIVE"
       quality_status: "PENDING_VALIDATION"
       source_type: "reference_plus_program_constraints"
+      provenance_ref: "PROV-LC02-ATA28-11"
+      export_snapshot_id: "DS-REQ-28-11-MATL-001-SNAPSHOT"

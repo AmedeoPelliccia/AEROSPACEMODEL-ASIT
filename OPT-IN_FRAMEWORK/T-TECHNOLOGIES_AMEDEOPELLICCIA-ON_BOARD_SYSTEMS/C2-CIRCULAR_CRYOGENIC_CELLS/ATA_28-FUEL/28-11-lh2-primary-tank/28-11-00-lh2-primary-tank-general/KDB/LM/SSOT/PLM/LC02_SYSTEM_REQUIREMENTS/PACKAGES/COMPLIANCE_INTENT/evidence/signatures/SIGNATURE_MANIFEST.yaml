@@ -1,4 +1,4 @@
 signature_manifest:
-  package_ref: "CINT-LC02-ATA28-11"
+  package_id: "CINT-LC02-ATA28-11"
   signatures: []
-  policy: "All baseline releases require STK_CERT and CCB signatures"
+  checksum_file: "checksums.sha256"

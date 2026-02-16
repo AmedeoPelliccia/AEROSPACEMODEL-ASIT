@@ -112,7 +112,7 @@ ICD_EVIDENCE_FILES = [
 
 
 def _load(pkg_dir: Path, name: str) -> dict:
-    with open(pkg_dir / name) as f:
+    with open(pkg_dir / name, encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
