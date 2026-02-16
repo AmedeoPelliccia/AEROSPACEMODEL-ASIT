@@ -1,0 +1,321 @@
+# MTL-28-11-00 — Method Token Library
+# ATA 28-11-00 LH2 Primary Tank General
+# AMPEL360 Q100 — C2 Circular Cryogenic Cells
+#
+# Purpose: Tokenises every subject title under 28-11-00 into a
+# deterministic method identifier for model programming, parametric
+# analysis pipelines, and automated traceability.  Each token maps
+# 1-to-1 to a trade-study section, compliance requirement group,
+# evaluation criterion, or special condition from this subject.
+
+mtl_id: "MTL-28-11-00"
+title: "Method Token Library — ATA 28-11-00 LH₂ Primary Tank General"
+ata_code: "28-11-00"
+technology_domain: "C2"
+aircraft_program: "AMPEL360 Q100"
+lifecycle_phase: "LC04"
+status: "preliminary"
+author: "STK_ENG"
+date: "2026-02-16"
+version: "0.1.0"
+
+description: >
+  Tokenises every subject title from the 28-11-00 trade studies,
+  compliance matrix sections, evaluation criteria, and special
+  conditions into a flat method-token namespace.  Tokens use the
+  pattern MTK-28-11-{DOMAIN}-{SEQ} and are unique within the library.
+
+token_pattern: "MTK-28-11-{DOMAIN}-{SEQ}"
+
+# =========================================================================
+# Domain: TS — Trade Study Subjects
+# =========================================================================
+domains:
+
+  - domain_id: "TS"
+    domain_name: "Trade Studies"
+    source: "KDB/DEV/trade-studies/TS-28-11-TS*.yaml"
+    tokens:
+
+      - token: "MTK-28-11-TS-001"
+        subject: "Tank Architecture"
+        source_id: "TS-28-11-TS01"
+        source_title: "Tank Architecture — Spherical vs Cylindrical vs Conformal"
+        method_class: "geometry_selection"
+        inputs:
+          - "stored_lh2_mass_kg"
+          - "lh2_density_kg_per_m3"
+          - "required_volume_m3"
+          - "reference_heat_flux_W_per_m2"
+        outputs:
+          - "selected_geometry"
+          - "surface_area_m2"
+          - "boil_off_pct_per_day"
+          - "gravimetric_efficiency"
+        description: >
+          Geometry trade: compare spherical, cylindrical (hemispherical
+          endcaps), and conformal tank architectures for surface area,
+          boil-off, structural efficiency, and certification risk.
+
+      - token: "MTK-28-11-TS-002"
+        subject: "Containment Materials"
+        source_id: "TS-28-11-TS02"
+        source_title: "Containment Materials — Al-Li vs Austenitic Stainless vs Composite"
+        method_class: "material_selection"
+        inputs:
+          - "cryogenic_temperature_K"
+          - "operating_pressure_kPa"
+          - "fatigue_cycle_count"
+        outputs:
+          - "selected_material"
+          - "yield_strength_20K_MPa"
+          - "uts_20K_MPa"
+          - "permeation_risk_class"
+        description: >
+          Material trade: compare Al-Li 2195, austenitic stainless 304L,
+          and composite overwrap for cryogenic strength, permeation,
+          and certification maturity.
+
+      - token: "MTK-28-11-TS-003"
+        subject: "Insulation and Thermal Control"
+        source_id: "TS-28-11-TS03"
+        source_title: "Insulation and Thermal Control — Vacuum+MLI vs Foam vs Active Cooling"
+        method_class: "thermal_selection"
+        inputs:
+          - "warm_boundary_K"
+          - "cold_boundary_K"
+          - "surface_area_m2"
+          - "penetration_count"
+        outputs:
+          - "selected_insulation"
+          - "heat_flux_W_per_m2"
+          - "boil_off_rate_kg_per_day"
+          - "vacuum_requirement_Pa"
+        description: >
+          Insulation trade: compare vacuum-jacket MLI, foam, and hybrid
+          active cooling for heat flux, boil-off, vacuum sensitivity,
+          and support/penetration thermal bridge impact.
+
+  # =========================================================================
+  # Domain: CM — Compliance Matrix Sections
+  # =========================================================================
+  - domain_id: "CM"
+    domain_name: "Compliance Matrix"
+    source: "KDB/DEV/trade-studies/CS25_compliance_matrix.yaml"
+    tokens:
+
+      - token: "MTK-28-11-CM-001"
+        subject: "Tank Structural Integrity and Loads"
+        source_id: "CM-28-11-CS25 § A"
+        source_title: "Tank Structural Integrity and Loads"
+        method_class: "structural_compliance"
+        inputs:
+          - "tank_geometry"
+          - "operating_pressure_kPa"
+          - "material_allowables"
+          - "cryogenic_contraction_delta"
+        outputs:
+          - "structural_margin"
+          - "fatigue_life"
+          - "damage_tolerance_status"
+        cs25_refs: ["CS 25.963", "CS 25.965", "CS 25.967", "CS 25.571"]
+        description: >
+          Structural compliance method: integrity under cryogenic
+          contraction mismatch, pressure cycling, crashworthiness,
+          and hydrogen embrittlement.
+
+      - token: "MTK-28-11-CM-002"
+        subject: "Pressure Venting and Boil-Off Management"
+        source_id: "CM-28-11-CS25 § B"
+        source_title: "Pressure, Venting and Boil-Off Management"
+        method_class: "pressure_vent_compliance"
+        inputs:
+          - "boil_off_rate_kg_per_day"
+          - "ullage_fraction"
+          - "relief_pressure_kPa"
+        outputs:
+          - "vent_sizing"
+          - "pressure_control_status"
+          - "boil_off_budget_compliance"
+        cs25_refs: ["CS 25.969", "CS 25.975"]
+        description: >
+          Pressure/vent compliance method: ullage management,
+          relief sizing, plume analysis, and boil-off dispatch criteria.
+
+      - token: "MTK-28-11-CM-003"
+        subject: "Fire Explosion and Ignition Prevention"
+        source_id: "CM-28-11-CS25 § C"
+        source_title: "Fire, Explosion and Ignition Prevention"
+        method_class: "ignition_prevention_compliance"
+        inputs:
+          - "zone_hazard_classification"
+          - "ignition_source_inventory"
+          - "bonding_earthing_status"
+        outputs:
+          - "fha_ssa_status"
+          - "cdccl_list"
+          - "ignition_source_control_status"
+        cs25_refs: ["CS 25.981", "CS 25.1309"]
+        description: >
+          Fire/ignition compliance method: FHA/SSA, zonal hazard
+          analysis, ignition source control, and CDCCLs.
+
+      - token: "MTK-28-11-CM-004"
+        subject: "Materials Processes and Inspection"
+        source_id: "CM-28-11-CS25 § D"
+        source_title: "Materials, Processes and Inspection"
+        method_class: "materials_inspection_compliance"
+        inputs:
+          - "material_specification"
+          - "weld_qualification_status"
+          - "inspection_programme"
+        outputs:
+          - "material_allowables_status"
+          - "ica_status"
+          - "maintenance_interval_schedule"
+        cs25_refs: ["CS 25.603", "CS 25.605", "CS 25.1529"]
+        description: >
+          Materials/processes compliance method: cryogenic material
+          selection, welding qualification, and ICA for vacuum checks,
+          leak inspections, and sensor maintenance.
+
+  # =========================================================================
+  # Domain: SC — Special Conditions (LH2-specific)
+  # =========================================================================
+  - domain_id: "SC"
+    domain_name: "Special Conditions"
+    source: "KDB/DEV/trade-studies/CS25_compliance_matrix.yaml#special_conditions"
+    tokens:
+
+      - token: "MTK-28-11-SC-001"
+        subject: "Boil-Off Management"
+        source_id: "SC-LH2-01"
+        method_class: "boil_off_management"
+        inputs: ["boil_off_rate_kg_per_day", "dispatch_mode"]
+        outputs: ["venting_schedule", "dispatch_go_no_go"]
+        description: "Pressure, vent, normal/abnormal modes, dispatch criteria."
+
+      - token: "MTK-28-11-SC-002"
+        subject: "Hydrogen Detection"
+        source_id: "SC-LH2-02"
+        method_class: "h2_detection"
+        inputs: ["sensor_locations", "threshold_ppm"]
+        outputs: ["alert_logic_status", "sil_dal_allocation"]
+        description: "Sensor locations, thresholds, alert logic, SIL/DAL allocation."
+
+      - token: "MTK-28-11-SC-003"
+        subject: "Cryogenic Thermal Shock"
+        source_id: "SC-LH2-03"
+        method_class: "thermal_shock"
+        inputs: ["thermal_gradient_K_per_s", "interface_materials"]
+        outputs: ["survivability_status", "inspection_interval"]
+        description: "Structure + insulation + interface survivability."
+
+      - token: "MTK-28-11-SC-004"
+        subject: "Vacuum Integrity Maintenance"
+        source_id: "SC-LH2-04"
+        method_class: "vacuum_integrity"
+        inputs: ["vacuum_pressure_Pa", "mli_layer_count"]
+        outputs: ["degradation_status", "servicing_interval"]
+        description: "MLI vacuum monitoring, degradation detection, servicing requirements."
+
+      - token: "MTK-28-11-SC-005"
+        subject: "Crashworthiness"
+        source_id: "SC-LH2-05"
+        method_class: "crashworthiness"
+        inputs: ["crash_load_g", "tank_mount_configuration"]
+        outputs: ["leakage_status", "two_layer_safety_compliance"]
+        description: "Two-layer safety approach (crashworthy airframe + crash-safe tank)."
+
+  # =========================================================================
+  # Domain: EC — Evaluation Criteria
+  # =========================================================================
+  - domain_id: "EC"
+    domain_name: "Evaluation Criteria"
+    source: "KDB/DEV/trade-studies/evaluation_criteria.yaml"
+    tokens:
+
+      - token: "MTK-28-11-EC-001"
+        subject: "Boil-Off Performance"
+        method_class: "scoring_boiloff"
+        weight_pct: 20
+        inputs: ["boil_off_pct_per_day"]
+        outputs: ["boiloff_score"]
+        description: "Weighted score for boil-off performance."
+
+      - token: "MTK-28-11-EC-002"
+        subject: "Structural Mass Efficiency"
+        method_class: "scoring_mass"
+        weight_pct: 20
+        inputs: ["gravimetric_efficiency"]
+        outputs: ["mass_score"]
+        description: "Weighted score for structural mass efficiency."
+
+      - token: "MTK-28-11-EC-003"
+        subject: "Safety"
+        method_class: "scoring_safety"
+        weight_pct: 20
+        inputs: ["fha_ssa_status", "ignition_source_control_status"]
+        outputs: ["safety_score"]
+        description: "Weighted score for safety compliance."
+
+      - token: "MTK-28-11-EC-004"
+        subject: "Certification Risk"
+        method_class: "scoring_certification"
+        weight_pct: 15
+        inputs: ["special_condition_count", "heritage_level"]
+        outputs: ["certification_score"]
+        description: "Weighted score for certification risk."
+
+      - token: "MTK-28-11-EC-005"
+        subject: "Manufacturability"
+        method_class: "scoring_manufacturing"
+        weight_pct: 10
+        inputs: ["weld_complexity", "qa_burden"]
+        outputs: ["manufacturing_score"]
+        description: "Weighted score for manufacturability."
+
+      - token: "MTK-28-11-EC-006"
+        subject: "Maintainability"
+        method_class: "scoring_maintainability"
+        weight_pct: 10
+        inputs: ["inspection_access", "servicing_interval"]
+        outputs: ["maintainability_score"]
+        description: "Weighted score for maintainability."
+
+      - token: "MTK-28-11-EC-007"
+        subject: "Cost"
+        method_class: "scoring_cost"
+        weight_pct: 5
+        inputs: ["material_cost", "process_cost"]
+        outputs: ["cost_score"]
+        description: "Weighted score for cost."
+
+# =========================================================================
+# Token Summary
+# =========================================================================
+summary:
+  total_tokens: 19
+  domains: 4
+  domain_counts:
+    TS: 3
+    CM: 4
+    SC: 5
+    EC: 7
+
+# =========================================================================
+# Traceability
+# =========================================================================
+traceability:
+  derives_from:
+    - "TS-28-11-TS01"
+    - "TS-28-11-TS02"
+    - "TS-28-11-TS03"
+    - "CM-28-11-CS25"
+  feeds:
+    - lifecycle: "LC05"
+      artifact: "Parametric model integration (method tokens as API)"
+    - lifecycle: "LC05"
+      artifact: "Automated trade-study scoring pipelines"
+    - lifecycle: "LC06"
+      artifact: "Verification test matrix (token-to-test mapping)"
