@@ -1,10 +1,12 @@
 # Kiss-scaffold
 
-**KISS (Keep It Super Simple) Scaffold Generator** for aerospace project structures.
+**Aircraft GenKISS (General Knowledge and Information Standard Systems) Scaffold Generator** for aerospace project structures.
 
 ## Overview
 
-Kiss-scaffold generates standard aerospace project structures with lifecycle phases compliant with industry standards. It creates a complete directory hierarchy including:
+Kiss-scaffold generates standard aerospace project structures with lifecycle phases compliant with industry standards. GenKISS provides a deterministic, traceable framework for organizing aerospace technical data following the "Keep It Super Simple" principle while maintaining rigorous governance.
+
+It creates a complete directory hierarchy including:
 
 - **GENESIS**: Frozen project definitions and templates
 - **SSOT**: Single Source of Truth for lifecycle artifacts (LC01-LC14)

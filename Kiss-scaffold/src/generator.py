@@ -70,12 +70,14 @@ def gen_root(ctx: GenContext) -> None:
         ctx,
         "00-00-general/README.md",
         f"""\
-        # ATA 00-00 — KISS
+        # ATA 00-00 — GenKISS
 
         - `GENESIS/` — Knowledge Determination Space
         - `SSOT/` — Authoritative Information Source
         - `PUB/ATDP/` — Aircraft Technical Data Product umbrella
 
+        **GenKISS**: General Knowledge and Information Standard Systems
+        
         Generated: {ctx.date_short}
         """,
     )
@@ -110,7 +112,7 @@ def gen_genesis(ctx: GenContext) -> None:
         "00-00-general/GENESIS/_registry/o-knot_registry.csv",
         """\
         O_KNOT_ID,Title,ATA_Chapter,ATA_Section,Status,Discovery_Date,Owner_AoR,Heritage_Ref,Notes
-        O-KNOT-00-00-001,KISS Ontology Foundation,00,00,OPEN,,STK_DATA,,Seed
+        O-KNOT-00-00-001,GenKISS Ontology Foundation,00,00,OPEN,,STK_DATA,,Seed
         """,
     )
 
@@ -136,7 +138,7 @@ def gen_ssot(ctx: GenContext, phases: Dict[str, Any]) -> None:
         "00-00-general/SSOT/LC01_PROBLEM_STATEMENT/KNOTS.csv",
         """\
         KNOT_ID,Title,Status
-        KNOT-00-00-005,KISS Baseline Definition,OPEN
+        KNOT-00-00-005,GenKISS Baseline Definition,OPEN
         """,
     )
 
@@ -144,7 +146,7 @@ def gen_ssot(ctx: GenContext, phases: Dict[str, Any]) -> None:
     _write(
         ctx,
         f"00-00-general/SSOT/LC02_SYSTEM_REQUIREMENTS/"
-        f"KNU-00-00-005-LC02-KISS-SYS_REQ/_executions/{safe_ts}/artifact.md",
+        f"KNU-00-00-005-LC02-GenKISS-SYS_REQ/_executions/{safe_ts}/artifact.md",
         f"""\
         # Execution
         Execution: {ctx.now_iso}

@@ -584,6 +584,7 @@ AEROSPACEMODEL serves as the **transformation and intelligence engine** for the 
 | 18 | **State Collapse** | Authorised resolution of lifecycle ambiguity into a concrete artifact |
 | 19 | **Provenance Vector** | Machine-readable output → source → contract → context → human decision link |
 | 20 | **Revolution Without Disruption** | Governed integration, not replacement, of certified tools |
+| 21 | **GenKISS** | General Knowledge and Information Standard Systems — deterministic aerospace project structure following "Keep It Super Simple" governance principles |
 
 ---
 

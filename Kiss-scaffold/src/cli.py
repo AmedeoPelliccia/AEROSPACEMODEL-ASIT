@@ -10,7 +10,7 @@ def parse_args() -> argparse.Namespace:
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(
         prog="Kiss-scaffold",
-        description="KISS (Keep It Super Simple) Scaffold Generator for aerospace projects",
+        description="Aircraft GenKISS (General Knowledge and Information Standard Systems) Scaffold Generator for aerospace projects",
     )
     parser.add_argument(
         "--base",
