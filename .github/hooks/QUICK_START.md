@@ -175,9 +175,9 @@ GitHub merge commits are excepted (see `.constitution-ignore`). The PR itself co
 
 ## Learn More
 
-- **Full Documentation**: [.github/hooks/README.md](.github/hooks/README.md)
-- **Sample Messages**: [.github/hooks/SAMPLE_COMMIT_MESSAGES.md](.github/hooks/SAMPLE_COMMIT_MESSAGES.md)
-- **Constitution**: [Model_Digital_Constitution.md](../Model_Digital_Constitution.md)
+- **Full Documentation**: [README.md](README.md)
+- **Sample Messages**: [SAMPLE_COMMIT_MESSAGES.md](SAMPLE_COMMIT_MESSAGES.md)
+- **Constitution**: [Model_Digital_Constitution.md](../../Model_Digital_Constitution.md)
 - **Pre-commit Framework**: https://pre-commit.com/
 
 ## Philosophy (30 seconds)
