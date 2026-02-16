@@ -344,7 +344,8 @@ class TestBackwardMappingRules:
         rules = data["compatibility"]["backward_mapping_rules"]["rules"]
         sdr = [r for r in rules if r["to_pattern"].startswith("CTX-")]
         assert len(sdr) == 1
-        assert re.compile(sdr[0]["from_regex"])
+        compiled = re.compile(sdr[0]["from_regex"])
+        assert compiled.groups >= 1, "Regex must have at least one capture group"
 
     def test_sdr_regex_matches_legacy(self, data):
         rules = data["compatibility"]["backward_mapping_rules"]["rules"]
