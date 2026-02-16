@@ -21,7 +21,7 @@ from .generator import (
     gen_0090,
 )
 from .validator import ValidationError, validate_locked_rules_and_lifecycle
-from .utils import iter_files, sha256_file, write_manifest
+from .utils import write_manifest
 
 __all__ = [
     # metadata
@@ -47,8 +47,6 @@ __all__ = [
     "ValidationError",
     "validate_locked_rules_and_lifecycle",
     # utils
-    "iter_files",
-    "sha256_file",
     "write_manifest",
 ]
 
