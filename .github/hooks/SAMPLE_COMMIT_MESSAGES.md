@@ -164,9 +164,9 @@ AUTHOR: <Accountable human agent(s) with name and role>
 
 1. **Section Order:** Order doesn't matter as long as all sections are present.
 
-2. **Multi-line Sections:** Sections can span multiple lines. Content is captured until the next section header.
+2. **Multi-line Sections:** Sections may span multiple lines for human readability, but the current validator only reliably checks the first line of each section. Put the key information for each section on its first line.
 
-3. **Additional Sections:** You can add extra sections (e.g., `REFERENCES:`, `TESTING:`) but the five required sections must be present.
+3. **Additional Sections:** You can add extra sections (e.g., `REFERENCES:`, `TESTING:`); they will be parsed using the same "first-line-checked" behavior, and the five required sections must still be present.
 
 4. **Article 11 Exceptions:** If a commit violates the foundational axiom (e.g., unavoidable workforce reduction), the repository steward must issue an "axiom-responsibility commit" explicitly accepting responsibility, documenting rationale, scope, and remediation timeline.
 
