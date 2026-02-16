@@ -16,7 +16,7 @@
 |------|-------------|
 | `MTL-28-11-00_method_token_library.yaml` | Subject-level token library (19 tokens across 4 domains) |
 | `MTL-28-11-00_method_token_library.md` | Human-readable companion |
-| `MTL-28-11-00_process_methods.yaml` | Process and scaling method tokens (20 tokens across 5 domains) |
+| `MTL-28-11-00_process_methods.yaml` | Process and scaling method tokens (21 tokens across 5 domains) |
 | `MTL-28-11-00_process_methods.md` | Human-readable companion |
 
 ## What Is an MTL?
