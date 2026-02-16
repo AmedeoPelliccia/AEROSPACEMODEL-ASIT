@@ -14,7 +14,7 @@ def validate_locked_rules_and_lifecycle(base: Path, phases: Dict[str, Any], atdp
 
     genesis = base / "00-00-general" / "GENESIS"
     ssot = base / "00-00-general" / "SSOT"
-    pub = base / "00-00-general" / "IDB" / "PUB"
+    pub = base / "00-00-general" / "PUB"
 
     for root in [genesis, ssot, pub]:
         if not root.exists():
@@ -29,7 +29,7 @@ def validate_locked_rules_and_lifecycle(base: Path, phases: Dict[str, Any], atdp
             if "_executions" in p.parts:
                 errs.append(f"Locked Rule 1 violation: {p}")
 
-    # Rule 2: no _executions in IDB/PUB
+    # Rule 2: no _executions in PUB
     if pub.exists():
         for p in pub.rglob("*"):
             if "_executions" in p.parts:
