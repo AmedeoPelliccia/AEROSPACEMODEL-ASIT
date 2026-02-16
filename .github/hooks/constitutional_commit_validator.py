@@ -42,7 +42,8 @@ def parse_commit_message(msg: str) -> dict[str, str]:
     sections = {}
     
     # Match section headers followed by content (up to next header or end)
-    pattern = r'^([A-Z_]+):\s*(.*?)$(?=\n[A-Z_]+:|\Z)'
+    # Use lookahead to capture everything until next section header or end of string
+    pattern = r'^([A-Z_]+):\s*(.*?)(?=^[A-Z_]+:|\Z)'
     
     for match in re.finditer(pattern, msg, re.MULTILINE | re.DOTALL):
         section_name = match.group(1)

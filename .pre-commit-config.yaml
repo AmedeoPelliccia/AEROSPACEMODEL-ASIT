@@ -41,7 +41,6 @@ repos:
         language: script
         stages: [commit-msg]
         always_run: true
-        pass_filenames: true
         args: []
       
       # Hook 2: Labor Reabsorption Pattern Scan

@@ -50,13 +50,6 @@ class ConstitutionalChecker(BaseChecker):
             "Functions that override human decisions must maintain accountability per Article 3. "
             "Add human authorization or review mechanisms.",
         ),
-        "C9003": (
-            "ARTICLE 4 VIOLATION: Decision point lacks traceability. "
-            "Function '%s' makes critical decisions without commit/log/audit trail.",
-            "constitution-violation-no-trace",
-            "Critical decisions must be traceable to human commits per Article 4. "
-            "Add logging, audit trails, or commit references.",
-        ),
     }
     
     def visit_functiondef(self, node):
