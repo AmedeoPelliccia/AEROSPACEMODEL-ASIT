@@ -28,12 +28,12 @@ formats:
 - tooling_bom_CSV
 - tool_calibration_register_YAML
 files:
-- file: LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/tooling/TLG-28-11-00-drawings.pdf
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/tooling/TLG-28-11-00-drawings.pdf
   id: TLG-28-11-00-drawings
   type: DOCUMENT
-- file: LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/tooling/TLG-28-11-00-bom.csv
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/tooling/TLG-28-11-00-bom.csv
   id: TLG-28-11-00-bom
   type: DATA_FILE
-- file: LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/tooling/TLG-28-11-00-calibration-register.yaml
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/tooling/TLG-28-11-00-calibration-register.yaml
   id: TLG-28-11-00-calibration-register
   type: DATA_FILE

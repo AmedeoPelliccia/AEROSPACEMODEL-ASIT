@@ -28,12 +28,12 @@ formats:
 - work_instruction_MD
 - work_instruction_PDF
 files:
-- file: LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/manufacturing/MFG-28-11-00-process-flow.pdf
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/manufacturing/MFG-28-11-00-process-flow.pdf
   id: MFG-28-11-00-process-flow
   type: DOCUMENT
-- file: LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/manufacturing/MFG-28-11-00-work-instruction.md
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/manufacturing/MFG-28-11-00-work-instruction.md
   id: MFG-28-11-00-work-instruction
   type: DOCUMENT
-- file: LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/manufacturing/MFG-28-11-00-work-instruction.pdf
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/manufacturing/MFG-28-11-00-work-instruction.pdf
   id: MFG-28-11-00-work-instruction
   type: DOCUMENT

@@ -170,9 +170,9 @@ work_packages:
       - id: qualification_report
         formats: [qualification_report_PDF, traceability_matrix_CSV]
         files:
-          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-qualification-report.pdf"
-          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-traceability-matrix.csv"
-        meta_file: "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-qualification-report.meta.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-04/materials/MAT-28-11-00-qualification-report.pdf"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-04/materials/MAT-28-11-00-traceability-matrix.csv"
+        meta_file: "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-04/materials/MAT-28-11-00-qualification-report.meta.yaml"
     verification:
       - { id: lab_data_integrity_check, applies_to: [qualification_dataset] }
       - { id: allowables_board_approval, applies_to: [qualification_report] }
@@ -192,18 +192,18 @@ work_packages:
       - id: manufacturing_flow_definition
         formats: [process_flow_PDF, work_instruction_MD, work_instruction_PDF]
         files:
-          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/manufacturing/MFG-28-11-00-process-flow.pdf"
-          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/manufacturing/MFG-28-11-00-work-instruction.md"
-          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/manufacturing/MFG-28-11-00-work-instruction.pdf"
-        meta_file: "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/manufacturing/MFG-28-11-00-process-flow.meta.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/manufacturing/MFG-28-11-00-process-flow.pdf"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/manufacturing/MFG-28-11-00-work-instruction.md"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/manufacturing/MFG-28-11-00-work-instruction.pdf"
+        meta_file: "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/manufacturing/MFG-28-11-00-process-flow.meta.yaml"
 
       - id: tooling_package
         formats: [tooling_drawings_PDF, tooling_bom_CSV, tool_calibration_register_YAML]
         files:
-          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/tooling/TLG-28-11-00-drawings.pdf"
-          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/tooling/TLG-28-11-00-bom.csv"
-          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/tooling/TLG-28-11-00-calibration-register.yaml"
-        meta_file: "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/tooling/TLG-28-11-00-package.meta.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/tooling/TLG-28-11-00-drawings.pdf"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/tooling/TLG-28-11-00-bom.csv"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/tooling/TLG-28-11-00-calibration-register.yaml"
+        meta_file: "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-05/tooling/TLG-28-11-00-package.meta.yaml"
 
       - id: fai_plan
         formats: [FAI_plan_PDF, FAI_checklist_CSV, FAIR_template_MD]
