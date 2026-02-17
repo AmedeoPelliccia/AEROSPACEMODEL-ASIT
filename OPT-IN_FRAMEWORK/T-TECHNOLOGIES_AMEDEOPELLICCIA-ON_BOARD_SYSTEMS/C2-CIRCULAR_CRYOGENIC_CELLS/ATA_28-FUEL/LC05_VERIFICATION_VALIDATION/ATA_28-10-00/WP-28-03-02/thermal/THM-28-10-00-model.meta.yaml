@@ -1,0 +1,43 @@
+output_id: thermal_performance_model
+work_package: WP-28-03-02
+title: Insulation - thermal_performance_model
+owner: STK_ENG
+revision: 0.1.0
+status: draft
+lc_phase: LC05_VERIFICATION_VALIDATION
+ata: 28-10-00
+domain: C2-CIRCULAR_CRYOGENIC_CELLS
+created_on: '2026-02-17T19:15:04.793912'
+last_updated_on: '2026-02-17T19:15:04.793917'
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+links:
+  reqs: []
+  safety: []
+  work_package: WP-28-03-02
+  verification:
+  - thermal_model_review
+  - insulation_performance_validation
+tags:
+- MLI
+- vacuum_jacket
+- cryogenic
+formats:
+- thermal_model_input_YAML
+- thermal_model_input_CSV
+- sensitivity_matrix_CSV
+- thermal_analysis_report_PDF
+files:
+- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-model-input.yaml
+  id: THM-28-10-00-model-input
+  type: DATA_FILE
+- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-model-input.csv
+  id: THM-28-10-00-model-input
+  type: DATA_FILE
+- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-sensitivity-matrix.csv
+  id: THM-28-10-00-sensitivity-matrix
+  type: DATA_FILE
+- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-analysis-report.pdf
+  id: THM-28-10-00-analysis-report
+  type: DOCUMENT

@@ -1,0 +1,39 @@
+output_id: insulation_test_plan
+work_package: WP-28-03-02
+title: Insulation - insulation_test_plan
+owner: STK_ENG
+revision: 0.1.0
+status: draft
+lc_phase: LC05_VERIFICATION_VALIDATION
+ata: 28-10-00
+domain: C2-CIRCULAR_CRYOGENIC_CELLS
+created_on: '2026-02-17T19:15:04.795798'
+last_updated_on: '2026-02-17T19:15:04.795801'
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+links:
+  reqs: []
+  safety: []
+  work_package: WP-28-03-02
+  verification:
+  - thermal_model_review
+  - insulation_performance_validation
+tags:
+- MLI
+- vacuum_jacket
+- cryogenic
+formats:
+- test_plan_MD
+- test_plan_PDF
+- test_matrix_CSV
+files:
+- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.md
+  id: ITP-28-10-00-insulation-test-plan
+  type: DOCUMENT
+- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.pdf
+  id: ITP-28-10-00-insulation-test-plan
+  type: DOCUMENT
+- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-test-matrix.csv
+  id: ITP-28-10-00-test-matrix
+  type: DATA_FILE

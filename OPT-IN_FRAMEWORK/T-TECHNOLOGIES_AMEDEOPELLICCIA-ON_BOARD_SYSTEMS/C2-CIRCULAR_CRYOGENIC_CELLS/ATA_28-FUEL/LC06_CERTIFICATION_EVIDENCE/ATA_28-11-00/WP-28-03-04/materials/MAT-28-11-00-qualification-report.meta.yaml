@@ -1,0 +1,35 @@
+output_id: qualification_report
+work_package: WP-28-03-04
+title: Materials Qualification - qualification_report
+owner: STK_ENG
+revision: 0.1.0
+status: draft
+lc_phase: LC06_CERTIFICATION_EVIDENCE
+ata: 28-11-00
+domain: C2-CIRCULAR_CRYOGENIC_CELLS
+created_on: '2026-02-17T19:15:04.805432'
+last_updated_on: '2026-02-17T19:15:04.805435'
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+links:
+  reqs: []
+  safety: []
+  work_package: WP-28-03-04
+  verification:
+  - lab_data_integrity_check
+  - allowables_board_approval
+tags:
+- materials
+- cryogenic_test
+- allowables
+formats:
+- qualification_report_PDF
+- traceability_matrix_CSV
+files:
+- file: LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-qualification-report.pdf
+  id: MAT-28-11-00-qualification-report
+  type: DOCUMENT
+- file: LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-traceability-matrix.csv
+  id: MAT-28-11-00-traceability-matrix
+  type: DATA_FILE

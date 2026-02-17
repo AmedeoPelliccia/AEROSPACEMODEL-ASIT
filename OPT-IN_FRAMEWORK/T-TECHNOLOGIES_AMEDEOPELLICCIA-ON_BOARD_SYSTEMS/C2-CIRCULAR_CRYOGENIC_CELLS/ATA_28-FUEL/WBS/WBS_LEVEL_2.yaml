@@ -1,62 +1,345 @@
 # WBS Level 2 – ATA 28 LH₂ Fuel System (AMPEL360 Q100)
-# Decomposition of WP-28-03 (Tank Development) and WP-28-06 (Leak Detection)
+# Expanded package specification (outputs + formats + file lists + verification)
 # Version: 1.0.0
 
 work_packages:
-  # --- WP-28-03 Tank Development ---
+
+  # =========================================================
+  # WP-28-03 Tank Development
+  # =========================================================
+
   - id: WP-28-03-01
+    type: work_package
     parent: WP-28-03
     title: Cell Design
-    description: Detailed design of C2 circular cryogenic cells including geometry, structural analysis, and interface definitions.
+    description: >
+      Detailed design of C2 circular cryogenic cells including geometry,
+      structural analysis, and interface definitions.
     owner: STK_ENG
+    status: draft
+    revision: 0.1.0
+    ata: "28-11-00"
+    domain: C2-CIRCULAR_CRYOGENIC_CELLS
     lc_phases: [LC03, LC04]
+    outputs:
+      - id: geometry_definition
+        formats: [CAD_STEP_AP242, parameter_table_YAML, parameter_table_CSV, drawing_set_PDF]
+        files:
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL.step"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL.params.yaml"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL.params.csv"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL-drawing-set.pdf"
+        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL.meta.yaml"
+
+      - id: structural_model
+        formats: [FEM_input_deck_NASTRAN, FEM_input_deck_ABAQUS, material_property_cards_YAML, material_property_cards_CSV, loadcase_matrix_CSV, analysis_report_PDF]
+        files:
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-C2-CELL.nas"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-C2-CELL.inp"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-material-cards.yaml"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-material-cards.csv"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-loadcase-matrix.csv"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-analysis-report.pdf"
+        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-C2-CELL.meta.yaml"
+
+      - id: interface_control_definition
+        formats: [ICD_document_MD, ICD_document_PDF, interface_register_YAML, interface_register_CSV, control_drawings_PDF, connector_pinout_protocol_map_YAML, connector_pinout_protocol_map_CSV]
+        files:
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-C2-CELL.md"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-C2-CELL.pdf"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-interface-register.yaml"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-interface-register.csv"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-control-drawings.pdf"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-pinout-protocol-map.yaml"
+          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-pinout-protocol-map.csv"
+        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-C2-CELL.meta.yaml"
+    verification:
+      - { id: analysis_review, applies_to: [structural_model] }
+      - { id: interface_validation, applies_to: [geometry_definition, structural_model, interface_control_definition] }
+    tags: [cryogenic, LH2, C2, ATA28]
 
   - id: WP-28-03-02
+    type: work_package
     parent: WP-28-03
     title: Insulation
     description: Vacuum-jacketed multi-layer insulation (MLI) design and thermal performance analysis.
     owner: STK_ENG
+    status: draft
+    revision: 0.1.0
+    ata: "28-10-00"
+    domain: C2-CIRCULAR_CRYOGENIC_CELLS
     lc_phases: [LC03, LC04, LC05]
+    outputs:
+      - id: insulation_architecture_definition
+        formats: [insulation_stack_spec_YAML, insulation_stack_spec_CSV, design_note_MD, design_note_PDF]
+        files:
+          - "LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-MLI-stack.yaml"
+          - "LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-MLI-stack.csv"
+          - "LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-architecture.md"
+          - "LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-architecture.pdf"
+        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-MLI-stack.meta.yaml"
+
+      - id: thermal_performance_model
+        formats: [thermal_model_input_YAML, thermal_model_input_CSV, sensitivity_matrix_CSV, thermal_analysis_report_PDF]
+        files:
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-model-input.yaml"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-model-input.csv"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-sensitivity-matrix.csv"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-analysis-report.pdf"
+        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-model.meta.yaml"
+
+      - id: insulation_test_plan
+        formats: [test_plan_MD, test_plan_PDF, test_matrix_CSV]
+        files:
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.md"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.pdf"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-test-matrix.csv"
+        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.meta.yaml"
+    verification:
+      - { id: thermal_model_review, applies_to: [thermal_performance_model] }
+      - { id: insulation_performance_validation, applies_to: [thermal_performance_model, insulation_test_plan] }
+    tags: [MLI, vacuum_jacket, cryogenic]
 
   - id: WP-28-03-03
+    type: work_package
     parent: WP-28-03
     title: Pressure Systems
     description: Pressurization, pressure relief valves, burst discs, and venting system design.
     owner: STK_ENG
+    status: draft
+    revision: 0.1.0
+    ata: "28-20-00"
     lc_phases: [LC03, LC04, LC05]
+    outputs:
+      - id: pressurization_architecture
+        formats: [system_schematic_PDF, system_schematic_SVG, requirements_YAML]
+        files:
+          - "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/pressure/PRS-28-20-00-architecture.pdf"
+          - "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/pressure/PRS-28-20-00-architecture.svg"
+          - "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/pressure/PRS-28-20-00-requirements.yaml"
+        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/pressure/PRS-28-20-00-architecture.meta.yaml"
+
+      - id: relief_and_vent_sizing
+        formats: [sizing_calc_XLSX, sizing_summary_CSV, sizing_report_PDF]
+        files:
+          - "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/relief/RLV-28-20-00-sizing.xlsx"
+          - "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/relief/RLV-28-20-00-sizing-summary.csv"
+          - "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/relief/RLV-28-20-00-sizing-report.pdf"
+        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/relief/RLV-28-20-00-sizing.meta.yaml"
+
+      - id: pressure_system_fmea
+        formats: [FMEA_sheet_XLSX, FMEA_export_CSV, safety_assessment_PDF]
+        files:
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure.xlsx"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure.csv"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure-assessment.pdf"
+        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure.meta.yaml"
+    verification:
+      - { id: vent_relief_design_review, applies_to: [relief_and_vent_sizing] }
+      - { id: pressure_safety_assessment_review, applies_to: [pressure_system_fmea] }
+    tags: [pressurization, relief_valve, burst_disc, venting]
 
   - id: WP-28-03-04
+    type: work_package
     parent: WP-28-03
     title: Materials Qualification
     description: Cryogenic material testing and qualification (SS 304/316, Al 5083, Inconel, PTFE seals).
     owner: STK_ENG
+    status: draft
+    revision: 0.1.0
+    ata: "28-11-00"
     lc_phases: [LC04, LC05, LC06]
+    outputs:
+      - id: material_test_plan
+        formats: [test_plan_MD, test_plan_PDF, test_matrix_CSV]
+        files:
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-test-plan.md"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-test-plan.pdf"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-test-matrix.csv"
+        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-test-plan.meta.yaml"
+
+      - id: qualification_dataset
+        formats: [raw_data_CSV, processed_data_CSV, allowables_YAML, allowables_PDF]
+        files:
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-raw-data.csv"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-processed-data.csv"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-allowables.yaml"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-allowables.pdf"
+        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-allowables.meta.yaml"
+
+      - id: qualification_report
+        formats: [qualification_report_PDF, traceability_matrix_CSV]
+        files:
+          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-qualification-report.pdf"
+          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-traceability-matrix.csv"
+        meta_file: "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-qualification-report.meta.yaml"
+    verification:
+      - { id: lab_data_integrity_check, applies_to: [qualification_dataset] }
+      - { id: allowables_board_approval, applies_to: [qualification_report] }
+    tags: [materials, cryogenic_test, allowables]
 
   - id: WP-28-03-05
+    type: work_package
     parent: WP-28-03
     title: Manufacturing Process
     description: Manufacturing process development, tooling, and first-article inspection planning.
     owner: STK_ENG
+    status: draft
+    revision: 0.1.0
+    ata: "28-11-00"
     lc_phases: [LC05, LC06, LC07]
+    outputs:
+      - id: manufacturing_flow_definition
+        formats: [process_flow_PDF, work_instruction_MD, work_instruction_PDF]
+        files:
+          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/manufacturing/MFG-28-11-00-process-flow.pdf"
+          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/manufacturing/MFG-28-11-00-work-instruction.md"
+          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/manufacturing/MFG-28-11-00-work-instruction.pdf"
+        meta_file: "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/manufacturing/MFG-28-11-00-process-flow.meta.yaml"
 
-  # --- WP-28-06 Leak Detection ---
+      - id: tooling_package
+        formats: [tooling_drawings_PDF, tooling_bom_CSV, tool_calibration_register_YAML]
+        files:
+          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/tooling/TLG-28-11-00-drawings.pdf"
+          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/tooling/TLG-28-11-00-bom.csv"
+          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/tooling/TLG-28-11-00-calibration-register.yaml"
+        meta_file: "LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-05/tooling/TLG-28-11-00-package.meta.yaml"
+
+      - id: fai_plan
+        formats: [FAI_plan_PDF, FAI_checklist_CSV, FAIR_template_MD]
+        files:
+          - "LC07_INDUSTRIALIZATION/ATA_28-11-00/WP-28-03-05/fai/FAI-28-11-00-plan.pdf"
+          - "LC07_INDUSTRIALIZATION/ATA_28-11-00/WP-28-03-05/fai/FAI-28-11-00-checklist.csv"
+          - "LC07_INDUSTRIALIZATION/ATA_28-11-00/WP-28-03-05/fai/FAI-28-11-00-fair-template.md"
+        meta_file: "LC07_INDUSTRIALIZATION/ATA_28-11-00/WP-28-03-05/fai/FAI-28-11-00-plan.meta.yaml"
+    verification:
+      - { id: process_readiness_review, applies_to: [manufacturing_flow_definition, tooling_package] }
+      - { id: fai_gate_review, applies_to: [fai_plan] }
+    tags: [manufacturing, tooling, FAI]
+
+  # =========================================================
+  # WP-28-06 Leak Detection
+  # =========================================================
+
   - id: WP-28-06-01
+    type: work_package
     parent: WP-28-06
     title: Sensor Selection
     description: Trade study and selection of H₂ leak detection sensors (electrochemical, thermal conductivity, optical).
     owner: STK_SAF
+    status: draft
+    revision: 0.1.0
+    ata: "28-41-00"
     lc_phases: [LC03, LC04]
+    outputs:
+      - id: sensor_trade_study
+        formats: [trade_study_MD, trade_study_PDF, criteria_matrix_CSV]
+        files:
+          - "LC03_SAFETY_RELIABILITY/ATA_28-41-00/WP-28-06-01/sensors/SEN-28-41-00-trade-study.md"
+          - "LC03_SAFETY_RELIABILITY/ATA_28-41-00/WP-28-06-01/sensors/SEN-28-41-00-trade-study.pdf"
+          - "LC03_SAFETY_RELIABILITY/ATA_28-41-00/WP-28-06-01/sensors/SEN-28-41-00-criteria-matrix.csv"
+        meta_file: "LC03_SAFETY_RELIABILITY/ATA_28-41-00/WP-28-06-01/sensors/SEN-28-41-00-trade-study.meta.yaml"
+
+      - id: selected_sensor_baseline
+        formats: [selection_record_YAML, datasheet_bundle_PDF, qualification_requirements_CSV]
+        files:
+          - "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-01/sensors/SEN-28-41-00-selection-record.yaml"
+          - "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-01/sensors/SEN-28-41-00-datasheet-bundle.pdf"
+          - "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-01/sensors/SEN-28-41-00-qualification-requirements.csv"
+        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-01/sensors/SEN-28-41-00-selection-record.meta.yaml"
+    verification:
+      - { id: trade_study_methodology_review, applies_to: [sensor_trade_study] }
+      - { id: sensor_baseline_board_approval, applies_to: [selected_sensor_baseline] }
+    tags: [leak_detection, hydrogen_sensor, trade_study]
 
   - id: WP-28-06-02
+    type: work_package
     parent: WP-28-06
     title: System Architecture
     description: Leak detection system architecture, sensor placement, and redundancy design.
     owner: STK_SAF
+    status: draft
+    revision: 0.1.0
+    ata: "28-41-00"
     lc_phases: [LC03, LC04, LC05]
+    outputs:
+      - id: leak_detection_architecture
+        formats: [architecture_doc_MD, architecture_doc_PDF, block_diagram_SVG, block_diagram_PDF]
+        files:
+          - "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-02/architecture/LDS-28-41-00-architecture.md"
+          - "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-02/architecture/LDS-28-41-00-architecture.pdf"
+          - "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-02/architecture/LDS-28-41-00-block-diagram.svg"
+          - "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-02/architecture/LDS-28-41-00-block-diagram.pdf"
+        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-02/architecture/LDS-28-41-00-architecture.meta.yaml"
+
+      - id: sensor_placement_definition
+        formats: [placement_map_CAD_DXF, placement_register_CSV, zoning_definition_YAML]
+        files:
+          - "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-02/placement/LDS-28-41-00-placement-map.dxf"
+          - "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-02/placement/LDS-28-41-00-placement-register.csv"
+          - "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-02/placement/LDS-28-41-00-zoning-definition.yaml"
+        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-02/placement/LDS-28-41-00-placement.meta.yaml"
+
+      - id: redundancy_and_fault_tolerance_analysis
+        formats: [fault_tree_PDF, reliability_model_CSV, safety_case_note_MD]
+        files:
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-02/reliability/LDS-28-41-00-fault-tree.pdf"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-02/reliability/LDS-28-41-00-reliability-model.csv"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-02/reliability/LDS-28-41-00-safety-case-note.md"
+        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-02/reliability/LDS-28-41-00-redundancy.meta.yaml"
+    verification:
+      - { id: architecture_design_review, applies_to: [leak_detection_architecture, sensor_placement_definition] }
+      - { id: safety_redundancy_review, applies_to: [redundancy_and_fault_tolerance_analysis] }
+    tags: [architecture, redundancy, sensor_placement, ATA28-41]
 
   - id: WP-28-06-03
+    type: work_package
     parent: WP-28-06
     title: Threshold Calibration
     description: Detection threshold definition, calibration procedures, and false-alarm rate analysis.
     owner: STK_SAF
+    status: draft
+    revision: 0.1.0
+    ata: "28-41-00"
     lc_phases: [LC04, LC05, LC06]
+    outputs:
+      - id: threshold_definition
+        formats: [threshold_spec_YAML, threshold_spec_PDF, parameter_table_CSV]
+        files:
+          - "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-threshold-spec.yaml"
+          - "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-threshold-spec.pdf"
+          - "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-parameter-table.csv"
+        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-threshold-spec.meta.yaml"
+
+      - id: calibration_procedure
+        formats: [procedure_MD, procedure_PDF, calibration_log_template_CSV]
+        files:
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-procedure.md"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-procedure.pdf"
+          - "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-log-template.csv"
+        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-procedure.meta.yaml"
+
+      - id: false_alarm_performance_report
+        formats: [performance_dataset_CSV, roc_analysis_PDF, compliance_summary_PDF]
+        files:
+          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-41-00/WP-28-06-03/performance/CAL-28-41-00-performance-dataset.csv"
+          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-41-00/WP-28-06-03/performance/CAL-28-41-00-roc-analysis.pdf"
+          - "LC06_CERTIFICATION_EVIDENCE/ATA_28-41-00/WP-28-06-03/performance/CAL-28-41-00-compliance-summary.pdf"
+        meta_file: "LC06_CERTIFICATION_EVIDENCE/ATA_28-41-00/WP-28-06-03/performance/CAL-28-41-00-performance.meta.yaml"
+    verification:
+      - { id: calibration_procedure_audit, applies_to: [calibration_procedure] }
+      - { id: false_alarm_rate_acceptance_review, applies_to: [false_alarm_performance_report] }
+    tags: [calibration, threshold, false_alarm, safety]
+
+# ---------------------------------------------------------
+# Global output format registry (optional normalization layer)
+# ---------------------------------------------------------
+format_registry:
+  CAD_STEP_AP242: "3D CAD neutral model (STEP AP242)"
+  FEM_input_deck_NASTRAN: "Finite element input deck (NASTRAN)"
+  FEM_input_deck_ABAQUS: "Finite element input deck (ABAQUS)"
+  parameter_table_YAML: "Parameter table in YAML"
+  parameter_table_CSV: "Parameter table in CSV"
+  drawing_set_PDF: "Engineering drawing set in PDF"
+  ICD_document_MD: "Interface Control Document in Markdown"
+  ICD_document_PDF: "Interface Control Document in PDF"

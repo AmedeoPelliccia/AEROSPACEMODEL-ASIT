@@ -1,0 +1,43 @@
+output_id: qualification_dataset
+work_package: WP-28-03-04
+title: Materials Qualification - qualification_dataset
+owner: STK_ENG
+revision: 0.1.0
+status: draft
+lc_phase: LC05_VERIFICATION_VALIDATION
+ata: 28-11-00
+domain: C2-CIRCULAR_CRYOGENIC_CELLS
+created_on: '2026-02-17T19:15:04.803792'
+last_updated_on: '2026-02-17T19:15:04.803795'
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+links:
+  reqs: []
+  safety: []
+  work_package: WP-28-03-04
+  verification:
+  - lab_data_integrity_check
+  - allowables_board_approval
+tags:
+- materials
+- cryogenic_test
+- allowables
+formats:
+- raw_data_CSV
+- processed_data_CSV
+- allowables_YAML
+- allowables_PDF
+files:
+- file: LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-raw-data.csv
+  id: MAT-28-11-00-raw-data
+  type: DATA_FILE
+- file: LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-processed-data.csv
+  id: MAT-28-11-00-processed-data
+  type: DATA_FILE
+- file: LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-allowables.yaml
+  id: MAT-28-11-00-allowables
+  type: DATA_FILE
+- file: LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-allowables.pdf
+  id: MAT-28-11-00-allowables
+  type: DOCUMENT
