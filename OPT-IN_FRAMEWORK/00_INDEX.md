@@ -13,7 +13,6 @@
 | **T-TECHNOLOGIES** | `T-TECHNOLOGIES_AMEDEOPELLICCIA-ON_BOARD_SYSTEMS/` | ATA 20–80, 95–97 | Complete on-board systems (15 subdomains) |
 | **I-INFRASTRUCTURES** | `I-INFRASTRUCTURES/` | Infrastructure | Ground support and supply chain |
 | **N-NEURAL_NETWORKS** | `N-NEURAL_NETWORKS/` | Governance | AI governance and traceability |
-| **ENGINEERING_SSOT** | `ENGINEERING_SSOT/` | All Domains | Front-end for posting completed SSOT & Custom Information Data Sheets |
 
 ---
 
