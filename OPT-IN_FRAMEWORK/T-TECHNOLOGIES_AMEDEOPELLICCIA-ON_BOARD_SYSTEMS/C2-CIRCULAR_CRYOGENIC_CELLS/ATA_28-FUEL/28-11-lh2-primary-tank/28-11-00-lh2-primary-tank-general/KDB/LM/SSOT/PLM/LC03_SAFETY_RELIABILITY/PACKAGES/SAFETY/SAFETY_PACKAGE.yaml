@@ -1,0 +1,56 @@
+safety_package:
+  package_id: "SAF-LC03-ATA28-11"
+  package_title: "LC03 Safety Assessment — ATA 28-11 LH₂ Primary Tank"
+  program: "AMPEL360 Q100"
+  domain: "C2 Circular Cryogenic Cells"
+  lifecycle_phase: "LC03"
+  ata_scope: ["28-11-00"]
+  status: "DEV"
+  baseline_state: "pending"
+  version: "0.1.0"
+  owner_role: "STK_SAF"
+  governance_authority: "CCB"
+  created_on: "2026-02-16"
+  last_updated_on: "2026-02-16"
+  
+  methodology:
+    standard: "ARP4761"
+    phases:
+      - id: "FHA"
+        title: "Functional Hazard Assessment"
+        scope: "Aircraft and system level"
+      - id: "PSSA"
+        title: "Preliminary System Safety Assessment"
+        scope: "During design (LC04)"
+      - id: "SSA"
+        title: "System Safety Assessment"
+        scope: "During verification (LC05)"
+
+  regulatory_basis:
+    primary: "EASA CS-25"
+    supplementary:
+      - "14 CFR 25.981 (fuel tank explosion prevention)"
+      - "ARP4754A (development assurance)"
+      - "ARP4761 (safety assessment)"
+      - "DO-160 (environmental conditions)"
+    special_conditions:
+      - "SC-LH2-01: Boil-off management"
+      - "SC-LH2-02: Hydrogen detection"
+      - "SC-LH2-03: Cryogenic thermal shock"
+      - "SC-LH2-04: Vacuum integrity maintenance"
+      - "SC-LH2-05: Crashworthiness"
+
+  safety_precedence:
+    inherits: "GOV-LC01-ATA28-11/SAFETY_AND_HUMAN_HARM_PRECEDENCE"
+    order:
+      1: "Human harm avoidance"
+      2: "Safety and airworthiness integrity"
+      3: "Accountability/traceability completeness"
+      4: "Performance and efficiency"
+      5: "Cost and schedule"
+
+  escalation_policy:
+    safety_content_generation: "SAFETY-H2-001"
+    uncertainty_actions: ["DEGRADE", "PAUSE", "ESCALATE"]
+    autonomous_harm_tradeoff: "forbidden"
+    human_authorizer_required: true

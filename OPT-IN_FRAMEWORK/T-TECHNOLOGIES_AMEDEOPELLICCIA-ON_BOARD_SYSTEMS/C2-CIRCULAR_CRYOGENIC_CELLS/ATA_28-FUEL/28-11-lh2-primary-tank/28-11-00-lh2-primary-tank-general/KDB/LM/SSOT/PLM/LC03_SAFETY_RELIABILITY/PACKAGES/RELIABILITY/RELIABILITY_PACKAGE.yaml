@@ -1,0 +1,63 @@
+reliability_package:
+  package_id: "REL-LC03-ATA28-11"
+  package_title: "LC03 Reliability Assessment — ATA 28-11 LH₂ Primary Tank"
+  program: "AMPEL360 Q100"
+  ata_scope: ["28-11-00"]
+  status: "DEV"
+  version: "0.1.0"
+  date: "2026-02-16"
+  owner: "STK_SAF"
+
+  critical_items:
+    - item: "Tank structure (Al-Li 2195 inner vessel)"
+      key_parameters:
+        - "Fatigue life at 20 K (cyclic mission profiles)"
+        - "Crack growth rate data (parent + weld at 20 K)"
+        - "DT substantiation (CM-A-004)"
+      source: ["TS-28-11-TS02", "CM-A-004"]
+      open_risks: ["RISK-03"]
+
+    - item: "MLI vacuum jacket system"
+      key_parameters:
+        - "MTBF for vacuum degradation"
+        - "Monitoring interval (vacuum quality sensor)"
+        - "Required vacuum: 0.0133–0.266 Pa"
+        - "Degraded threshold: ~1.33 Pa"
+      source: ["TS-28-11-TS03", "SC-LH2-04"]
+      open_risks: ["RISK-01"]
+
+    - item: "Pressure relief valves"
+      key_parameters:
+        - "Failure rate target: < 1E-7/FH"
+        - "Redundancy architecture (TBD)"
+        - "Cryo-compatible seal reliability"
+      source: ["CM-B-002", "SC-LH2-01"]
+
+    - item: "H₂ detection sensors"
+      key_parameters:
+        - "SIL/DAL allocation (per SC-LH2-02)"
+        - "Sensor coverage zones"
+        - "Detection threshold and response time"
+      source: ["SC-LH2-02", "CM-C-001"]
+
+    - item: "Support pads / thermal bridges"
+      key_parameters:
+        - "Thermal cycling reliability (20 K ↔ 300 K)"
+        - "Penetration heat leak budget allocation"
+        - "Fatigue under thermal contraction mismatch"
+      source: ["TS-28-11-TS03"]
+      open_risks: ["RISK-02"]
+
+    - item: "Tank weld joints"
+      key_parameters:
+        - "Cryogenic weld qualification program"
+        - "NDE inspection intervals"
+        - "Hydrogen permeation at weld interfaces"
+      source: ["TS-28-11-TS02", "CM-D-001"]
+      open_risks: ["RISK-03"]
+
+  pending_analyses:
+    - "FMEA (Failure Mode and Effects Analysis)"
+    - "Reliability block diagram"
+    - "Common cause failure analysis"
+    - "Zonal safety analysis (tank bay)"
