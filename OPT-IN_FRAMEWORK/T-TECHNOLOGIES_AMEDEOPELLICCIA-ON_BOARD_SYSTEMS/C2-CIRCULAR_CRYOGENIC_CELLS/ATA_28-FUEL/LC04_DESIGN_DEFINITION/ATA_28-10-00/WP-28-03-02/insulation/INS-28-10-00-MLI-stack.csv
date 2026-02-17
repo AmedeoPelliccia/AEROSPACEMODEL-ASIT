@@ -1,0 +1,105 @@
+Parameter,Value,Unit,Description,Notes
+Stack ID,INS-28-10-00-MLI-stack,-,MLI stack identifier,C2 circular cryogenic cells
+Revision,0.1.0,-,Document revision,Initial draft
+Status,draft,-,Configuration status,Under development
+Application,C2-CIRCULAR_CRYOGENIC_CELLS,-,Target application,Cryogenic hydrogen storage
+ATA Chapter,28-10-00,-,ATA classification,Fuel system insulation
+,,,,
+Design Parameters,,,,
+Cold Temperature,20,K,LH₂ temperature,Liquid hydrogen at 1 atm
+Hot Temperature,293,K,Ambient temperature,Room temperature
+Design Heat Flux,1.5,W/m²,Target heat flux,Maximum allowable
+Vacuum Requirement,1.0E-04,Pa,Required vacuum level,< 10⁻⁴ Pa for optimal performance
+,,,,
+Stack Configuration,,,,
+Total Layers,40,-,Number of layers,20-60 typical for cryogenic
+Layer Density,8,layers/cm,Packing density,Compressed stack
+Total Thickness,50,mm,Stack thickness,Compressed
+Reflective Layers,40,-,Radiation shields,Double-aluminized Mylar
+Spacer Layers,39,-,Separation layers,Polyester netting
+,,,,
+Materials - Reflective,,,,
+Material Type,Double Aluminized Mylar,-,Primary reflector,DuPont DAM-6.35
+Thickness,6.35,μm,Film thickness,0.25 mil
+Emissivity (Al side),0.03,-,Aluminum emissivity,Low-ε surface
+Emissivity (Mylar side),0.65,-,Polyester emissivity,High-ε surface
+Temperature Range,4 to 400,K,Operating range,Cryogenic to ambient
+Tensile Strength,172,MPa,Mechanical strength,ASTM D882
+,,,,
+Materials - Spacer,,,,
+Spacer Type,Polyester Netting,-,Primary spacer,Cerex Advanced Fabrics
+Mesh Size,1.0,mm,Net opening,Open structure
+Thickness,0.3,mm,Layer thickness,Compressed
+Density,0.05,g/cm³,Material density,Very low density
+Thermal Conductivity,0.02,W/(m·K),At 150 K,Low conductivity
+,,,,
+Performance Predictions,,,,
+Effective k,0.15,mW/(m·K),MLI conductivity,At design conditions
+Predicted Heat Flux,1.2,W/m²,Expected performance,With margins
+Insulation Quality Factor,7.5,W/(m²·K),IQF metric,< 10 target
+Layer Efficiency,0.92,-,Accounting for imperfections,Seams and joints
+,,,,
+Vacuum Requirements,,,,
+Max Cold Vacuum Pressure,1.0E-03,Pa,CVP limit,For acceptable performance
+Max Outgassing Rate,1.0E-09,Pa·m³/(s·m²),Material outgassing,After bakeout
+Max Leak Rate,1.0E-07,Pa·m³/s,System leak rate,Vacuum jacket
+Pumpdown Time,48,hours,Initial evacuation,To operating vacuum
+,,,,
+Installation Method,,,,
+Wrap Method,helical_wrap,-,Application technique,Circumferential wrapping
+Wrap Direction,circumferential,-,Primary orientation,Around tank
+Layer Tension,low,-,Installation tension,Minimize compression
+Seam Overlap,50,mm,Joint overlap,At seams
+Seam Type,staggered,-,Seam configuration,Minimize thermal shorts
+Attachment,spot_adhesive,-,Layer fixing,Minimal adhesive
+,,,,
+Thermal Bridges,,,,
+Support Struts - Quantity,6,-,Number of struts,G-10 fiberglass
+Support Struts - Area,100,mm²,Cross-section,Per strut
+Support Struts - Length,50,mm,Effective length,Through MLI
+Support Struts - k,0.3,W/(m·K),At 150 K,G-10 property
+Support Struts - Q per strut,0.45,W,Heat leak,Per strut
+Support Struts - Q total,2.7,W,Total heat leak,All struts
+,,,,
+Piping Penetrations - Quantity,4,-,Number of pipes,LH₂ fill and vent
+Piping Penetrations - Q each,0.3,W,Heat leak,Per penetration
+Piping Penetrations - Q total,1.2,W,Total heat leak,All penetrations
+,,,,
+Seam Treatment,,,,
+Seam Method,overlap_and_tape,-,Joint technique,Standard practice
+Overlap Distance,50,mm,Overlap length,At each seam
+Tape Material,aluminized_kapton,-,Sealing tape,Low-ε adhesive
+Tape Width,25,mm,Tape dimension,Standard width
+Thermal Penalty,1.15,-,Heat flux multiplier,15% increase at joints
+,,,,
+Verification Requirements,,,,
+Layer Count Check,required,-,QC inspection,Visual + manual count
+Vacuum Leak Test,required,-,Acceptance test,Helium leak detection
+Thermal Performance Test,required,-,Validation test,Calorimetry
+Max Acceptable Heat Flux,2.0,W/m²,Acceptance criterion,With margin
+Min Vacuum Level,1.0E-03,Pa,Acceptance criterion,After pumpdown
+Max Boiloff Rate,0.5,%/day,System requirement,For 500 L tank
+,,,,
+Test Plan,,,,
+Calorimetry Method,LN2_boiloff,-,Test technique,Liquid nitrogen
+Test Duration,24,hours,Measurement period,Steady-state
+Measurement Accuracy,5,%,Expected accuracy,Heat flux measurement
+Thermal Cycles,10,-,Cycling test,Cool-down/warm-up
+Cycle Temp Range,20 to 300,K,Temperature extremes,LH₂ to ambient
+Hold Time,4,hours,At each extreme,Thermal soak
+,,,,
+Quality Control,,,,
+Cleanliness,Class 100,-,Clean room requirement,Particle control
+Handling,Lint-free gloves,-,Personnel requirement,Contamination control
+Inspection,Visual + thermography,-,QC methods,IR imaging
+Documentation,As-built layer count,-,Records requirement,Actual configuration
+,,,,
+Safety,,,,
+Flammability,Per ASTM E84,-,Fire safety,Material qualification
+Outgassing Toxicity,Per ASTM E595,-,Contamination,Space-qualified materials
+Handling Precautions,No puncture/contamination,-,Installation safety,Care required
+,,,,
+Document References,,,,
+Architecture Document,INS-28-10-00-architecture.md,-,Design notes,Detailed analysis
+Thermal Model,THM-28-10-00-model-input.yaml,-,Performance model,FEA input
+Test Plan,ITP-28-10-00-insulation-test-plan.md,-,Validation plan,Test procedures

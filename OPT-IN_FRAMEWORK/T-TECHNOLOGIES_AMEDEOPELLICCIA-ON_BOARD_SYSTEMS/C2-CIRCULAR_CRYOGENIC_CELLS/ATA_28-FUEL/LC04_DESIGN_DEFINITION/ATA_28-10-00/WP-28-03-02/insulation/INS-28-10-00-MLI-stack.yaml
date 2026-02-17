@@ -1,0 +1,197 @@
+# MLI Stack Specification for C2 Circular Cryogenic Cells
+# Multi-Layer Insulation (MLI) Design Configuration
+# Work Package: WP-28-03-02
+# ATA: 28-10-00
+# Owner: STK_ENG
+# Revision: 0.1.0
+
+mli_stack:
+  id: INS-28-10-00-MLI-stack
+  revision: 0.1.0
+  status: draft
+  application: C2-CIRCULAR_CRYOGENIC_CELLS
+  ata_chapter: 28-10-00
+  
+  design_parameters:
+    target_temperature_cold: 20  # K (LH₂ temperature)
+    target_temperature_hot: 293  # K (ambient)
+    design_heat_flux: 1.5  # W/m² (target)
+    vacuum_requirement: 1.0e-4  # Pa (< 10⁻⁴ Pa)
+    
+  stack_configuration:
+    total_layers: 40
+    layer_density: 8  # layers/cm
+    total_thickness: 50  # mm (compressed)
+    reflective_layers: 40
+    spacer_layers: 39
+    
+  layers:
+    - layer_id: 1
+      type: reflective_shield
+      material: double_aluminized_mylar
+      thickness_um: 6.35  # 0.25 mil
+      emissivity_alum_side: 0.03
+      emissivity_mylar_side: 0.65
+      orientation: alum_facing_cold
+      
+    - layer_id: 2
+      type: spacer
+      material: polyester_netting
+      thickness_mm: 0.3
+      density: 0.05  # g/cm³
+      thermal_conductivity: 0.02  # W/(m·K) at 150 K
+      
+    - layer_id: 3
+      type: reflective_shield
+      material: double_aluminized_mylar
+      thickness_um: 6.35
+      emissivity_alum_side: 0.03
+      emissivity_mylar_side: 0.65
+      orientation: alum_facing_hot
+      
+    # Pattern repeats for all 40 layers
+    # Layers 4-79 follow alternating reflective/spacer pattern
+    
+  materials:
+    double_aluminized_mylar:
+      description: Mylar film with aluminum coating on both sides
+      manufacturer: DuPont
+      product_code: DAM-6.35
+      thickness: 6.35  # μm
+      emissivity_aluminum: 0.03
+      emissivity_mylar: 0.65
+      tensile_strength: 172  # MPa
+      temperature_range: [4, 400]  # K
+      
+    single_aluminized_mylar:
+      description: Mylar film with aluminum coating on one side
+      manufacturer: DuPont
+      product_code: SAM-6.35
+      thickness: 6.35  # μm
+      emissivity_aluminum: 0.03
+      emissivity_mylar: 0.65
+      
+    polyester_netting:
+      description: Low-density polyester spacer netting
+      manufacturer: Cerex Advanced Fabrics
+      mesh_size: 1.0  # mm
+      thickness: 0.3  # mm
+      density: 0.05  # g/cm³
+      thermal_conductivity: 0.02  # W/(m·K)
+      
+    silk_netting:
+      description: Natural silk spacer material
+      thickness: 0.2  # mm
+      density: 0.03  # g/cm³
+      thermal_conductivity: 0.015  # W/(m·K)
+      
+  performance:
+    effective_thermal_conductivity: 0.15  # mW/(m·K) predicted
+    heat_flux_predicted: 1.2  # W/m² at design conditions
+    insulation_quality_factor: 7.5  # W/(m²·K)
+    layer_efficiency: 0.92  # accounting for seams and imperfections
+    
+  vacuum_requirements:
+    cold_vacuum_pressure_max: 1.0e-3  # Pa
+    outgassing_rate_max: 1.0e-9  # Pa·m³/s per m²
+    leak_rate_max: 1.0e-7  # Pa·m³/s
+    pumpdown_time: 48  # hours
+    
+  installation:
+    method: helical_wrap
+    wrap_direction: circumferential
+    layer_tension: low  # minimize compression
+    seam_overlap: 50  # mm
+    seam_type: staggered
+    attachment: spot_adhesive
+    
+  integration:
+    substrate: inner_vessel_surface
+    vacuum_jacket: outer_shell
+    support_penetrations: 
+      - type: strut
+        quantity: 6
+        thermal_isolation: G10_fiberglass
+      - type: piping
+        quantity: 4
+        thermal_isolation: vacuum_gap
+    instrumentation:
+      - type: temperature_sensor
+        quantity: 8
+        location: [inner, mid, outer]
+      - type: vacuum_gauge
+        quantity: 2
+        location: vacuum_jacket
+        
+  seams_and_joints:
+    seam_treatment: overlap_and_tape
+    overlap_distance: 50  # mm
+    tape_material: aluminized_kapton
+    tape_width: 25  # mm
+    joint_thermal_penalty: 1.15  # 15% increase in local heat flux
+    
+  thermal_bridges:
+    support_struts:
+      quantity: 6
+      material: G10_fiberglass
+      cross_section_area: 100  # mm²
+      length: 50  # mm
+      thermal_conductivity: 0.3  # W/(m·K) at 150 K
+      heat_leak_per_strut: 0.45  # W
+      total_heat_leak: 2.7  # W
+      
+    piping_penetrations:
+      quantity: 4
+      description: LH₂ fill and vent lines
+      heat_leak_per_penetration: 0.3  # W
+      total_heat_leak: 1.2  # W
+      
+  verification_requirements:
+    layer_count_check: required
+    vacuum_leak_test: required
+    thermal_performance_test: required
+    acceptance_criteria:
+      max_heat_flux: 2.0  # W/m²
+      min_vacuum_level: 1.0e-3  # Pa
+      max_boiloff_rate: 0.5  # % per day for 500 L tank
+      
+  test_plan:
+    calorimetry_test:
+      method: liquid_nitrogen_boiloff
+      duration: 24  # hours
+      measurement_accuracy: 5  # percent
+      
+    thermal_cycling:
+      cycles: 10
+      temperature_range: [20, 300]  # K
+      hold_time: 4  # hours at each extreme
+      
+  quality_control:
+    cleanliness: class_100_cleanroom
+    handling: lint_free_gloves
+    inspection: visual_plus_thermography
+    documentation: as_built_layer_count
+    
+  safety_considerations:
+    material_flammability: per_ASTM_E84
+    outgassing_toxicity: per_ASTM_E595
+    handling_precautions: avoid_puncture_and_contamination
+    
+  related_documents:
+    - INS-28-10-00-architecture.md
+    - INS-28-10-00-architecture.pdf
+    - THM-28-10-00-model-input.yaml
+    - ITP-28-10-00-insulation-test-plan.md
+    
+  notes:
+    - All dimensions are nominal; actual values may vary within tolerances
+    - Layer count represents minimum requirement; additional layers may be added for margin
+    - Thermal performance assumes high vacuum (< 10⁻⁴ Pa)
+    - Seam and penetration effects included in overall performance predictions
+    - Material properties at cryogenic temperatures
+    
+  revision_history:
+    - version: 0.1.0
+      date: 2026-02-17
+      author: STK_ENG
+      changes: Initial draft specification
