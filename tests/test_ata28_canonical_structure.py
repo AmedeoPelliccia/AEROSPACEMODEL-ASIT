@@ -242,6 +242,64 @@ class TestSubjectKDB:
         assert (phase / "PACKAGES").is_dir(), f"{lc_dir}/PACKAGES must exist"
 
 
+class TestLC04InsulationPackage:
+    """Insulation artifacts must reside under LC04 DESIGN package."""
+
+    INS = (
+        SUBJECT
+        / "KDB"
+        / "LM"
+        / "SSOT"
+        / "PLM"
+        / "LC04_DESIGN_DEFINITION_DMU"
+        / "PACKAGES"
+        / "DESIGN"
+        / "insulation"
+    )
+
+    def test_insulation_directory_exists(self):
+        assert self.INS.is_dir(), "insulation directory must exist under DESIGN package"
+
+    @pytest.mark.parametrize(
+        "filename",
+        [
+            "INS-28-10-00-MLI-stack.yaml",
+            "INS-28-10-00-MLI-stack.csv",
+            "INS-28-10-00-architecture.md",
+            "INS-28-10-00-MLI-stack.meta.yaml",
+        ],
+    )
+    def test_insulation_file_exists(self, filename):
+        assert (self.INS / filename).exists(), f"{filename} must exist in insulation dir"
+
+    def test_meta_file_is_valid_yaml(self):
+        path = self.INS / "INS-28-10-00-MLI-stack.meta.yaml"
+        with open(path) as f:
+            data = yaml.safe_load(f)
+        assert data is not None
+        assert data["output_id"] == "insulation_architecture_definition"
+        assert data["ata"] == "28-10-00"
+
+    def test_meta_file_paths_point_to_canonical_location(self):
+        path = self.INS / "INS-28-10-00-MLI-stack.meta.yaml"
+        with open(path) as f:
+            data = yaml.safe_load(f)
+        for entry in data["files"]:
+            assert "28-10-storage/28-10-00-fuel-storage-general" in entry["file"], (
+                f"File path must reference canonical subject location: {entry['file']}"
+            )
+
+    def test_old_location_does_not_contain_insulation(self):
+        old = (
+            ATA28
+            / "LC04_DESIGN_DEFINITION"
+            / "ATA_28-10-00"
+            / "WP-28-03-02"
+            / "insulation"
+        )
+        assert not old.exists(), "insulation must no longer exist at old WP path"
+
+
 class TestSubjectContracts:
     """Subject CONTRACTS structure."""
 

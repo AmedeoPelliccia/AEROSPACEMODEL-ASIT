@@ -1,0 +1,56 @@
+output_id: interface_control_definition
+work_package: WP-28-03-01
+title: Cell Design - interface_control_definition
+owner: STK_ENG
+revision: 0.1.0
+status: draft
+lc_phase: LC04_DESIGN_DEFINITION
+ata: 28-11-00
+domain: C2-CIRCULAR_CRYOGENIC_CELLS
+created_on: to be set during baseline finalization
+last_updated_on: to be set during baseline finalization
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+links:
+  reqs: []
+  safety: []
+  work_package: WP-28-03-01
+  verification:
+  - analysis_review
+  - interface_validation
+tags:
+- cryogenic
+- LH2
+- C2
+- ATA28
+formats:
+- ICD_document_MD
+- ICD_document_PDF
+- interface_register_YAML
+- interface_register_CSV
+- control_drawings_PDF
+- connector_pinout_protocol_map_YAML
+- connector_pinout_protocol_map_CSV
+files:
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-C2-CELL.md
+  id: ICD-28-11-00-C2-CELL
+  type: DOCUMENT
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-C2-CELL.pdf
+  id: ICD-28-11-00-C2-CELL
+  type: DOCUMENT
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-interface-register.yaml
+  id: ICD-28-11-00-interface-register
+  type: DATA_FILE
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-interface-register.csv
+  id: ICD-28-11-00-interface-register
+  type: DATA_FILE
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-control-drawings.pdf
+  id: ICD-28-11-00-control-drawings
+  type: DOCUMENT
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-pinout-protocol-map.yaml
+  id: ICD-28-11-00-pinout-protocol-map
+  type: DATA_FILE
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-pinout-protocol-map.csv
+  id: ICD-28-11-00-pinout-protocol-map
+  type: DATA_FILE
