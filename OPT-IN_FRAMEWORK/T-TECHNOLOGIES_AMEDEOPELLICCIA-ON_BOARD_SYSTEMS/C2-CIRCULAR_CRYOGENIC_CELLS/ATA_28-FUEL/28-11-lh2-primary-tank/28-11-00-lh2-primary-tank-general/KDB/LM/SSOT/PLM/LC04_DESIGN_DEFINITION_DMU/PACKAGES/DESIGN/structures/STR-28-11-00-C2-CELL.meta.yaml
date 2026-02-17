@@ -32,21 +32,21 @@ formats:
 - loadcase_matrix_CSV
 - analysis_report_PDF
 files:
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-C2-CELL.nas
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/structures/STR-28-11-00-C2-CELL.nas
   id: STR-28-11-00-C2-CELL
   type: FEM_MODEL
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-C2-CELL.inp
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/structures/STR-28-11-00-C2-CELL.inp
   id: STR-28-11-00-C2-CELL
   type: FEM_MODEL
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-material-cards.yaml
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/structures/STR-28-11-00-material-cards.yaml
   id: STR-28-11-00-material-cards
   type: DATA_FILE
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-material-cards.csv
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/structures/STR-28-11-00-material-cards.csv
   id: STR-28-11-00-material-cards
   type: DATA_FILE
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-loadcase-matrix.csv
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/structures/STR-28-11-00-loadcase-matrix.csv
   id: STR-28-11-00-loadcase-matrix
   type: DATA_FILE
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-analysis-report.pdf
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/structures/STR-28-11-00-analysis-report.pdf
   id: STR-28-11-00-analysis-report
   type: DOCUMENT

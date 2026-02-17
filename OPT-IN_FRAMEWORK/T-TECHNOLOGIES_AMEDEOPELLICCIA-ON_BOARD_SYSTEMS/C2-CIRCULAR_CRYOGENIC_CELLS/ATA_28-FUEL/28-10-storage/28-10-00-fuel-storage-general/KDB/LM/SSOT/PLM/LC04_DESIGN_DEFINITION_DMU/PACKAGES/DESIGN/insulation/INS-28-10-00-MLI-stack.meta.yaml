@@ -29,15 +29,15 @@ formats:
 - design_note_MD
 - design_note_PDF
 files:
-- file: LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-MLI-stack.yaml
+- file: 28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/insulation/INS-28-10-00-MLI-stack.yaml
   id: INS-28-10-00-MLI-stack
   type: DATA_FILE
-- file: LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-MLI-stack.csv
+- file: 28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/insulation/INS-28-10-00-MLI-stack.csv
   id: INS-28-10-00-MLI-stack
   type: DATA_FILE
-- file: LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-architecture.md
+- file: 28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/insulation/INS-28-10-00-architecture.md
   id: INS-28-10-00-architecture
   type: DOCUMENT
-- file: LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-architecture.pdf
+- file: 28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/insulation/INS-28-10-00-architecture.pdf
   id: INS-28-10-00-architecture
   type: DOCUMENT

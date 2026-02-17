@@ -12,10 +12,10 @@ subjects:
     description: "General h₂ leak detection system artifacts"
 
 metrics:
-  total_artifacts: 0
+  total_artifacts: 3
   requirements_count: 0
   design_count: 0
-  safety_count: 0
+  safety_count: 3
   test_count: 0
   publication_count: 0
 

@@ -92,33 +92,32 @@ python scripts/generate_wbs_meta_files.py --wbs-file path/to/WBS.yaml --base-pat
 
 ### 3. Generated Meta Files
 
-**Count**: 23 `.meta.yaml` files  
-**Total Size**: ~2.5 KB per file, ~57.5 KB total
+**Count**: 16 `.meta.yaml` files  
+**Total Size**: ~2.5 KB per file, ~40 KB total
 
 **Distribution by Lifecycle Phase**:
 - LC03 (Safety & Reliability): 1 file
-- LC04 (Design Definition): 11 files
-- LC05 (Verification & Validation): 7 files
+- LC04 (Design Definition): 6 files
+- LC05 (Verification & Validation): 5 files
 - LC06 (Certification Evidence): 3 files
 - LC07 (Industrialization): 1 file
 
 **Directory Structure Created**:
 ```
 ATA_28-FUEL/
-├── LC03_SAFETY_RELIABILITY/ATA_28-41-00/WP-28-06-01/sensors/
+├── 28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/WP-28-06-01/sensors/
 ├── LC04_DESIGN_DEFINITION/
 │   ├── ATA_28-10-00/WP-28-03-02/insulation/
-│   ├── ATA_28-11-00/WP-28-03-01/{geometry,structures,icd}/
+│   │   (ATA_28-11-00/WP-28-03-01 relocated to 28-11-lh2-primary-tank/.../LC04_DESIGN_DEFINITION_DMU/PACKAGES/)
 │   ├── ATA_28-20-00/WP-28-03-03/{pressure,relief}/
 │   └── ATA_28-41-00/WP-28-06-{01,02,03}/{sensors,architecture,placement,calibration}/
 ├── LC05_VERIFICATION_VALIDATION/
 │   ├── ATA_28-10-00/WP-28-03-02/{thermal,tests}/
 │   ├── ATA_28-11-00/WP-28-03-04/materials/
-│   ├── ATA_28-20-00/WP-28-03-03/safety/
 │   └── ATA_28-41-00/WP-28-06-{02,03}/{reliability,calibration}/
+│   └── ATA_28-20-00/WP-28-03-03/safety/
 ├── LC06_CERTIFICATION_EVIDENCE/
-│   ├── ATA_28-11-00/WP-28-03-{04,05}/{materials,manufacturing,tooling}/
-│   └── ATA_28-41-00/WP-28-06-03/performance/
+│   └── ATA_28-11-00/WP-28-03-{04,05}/{materials,manufacturing,tooling}/
 └── LC07_INDUSTRIALIZATION/ATA_28-11-00/WP-28-03-05/fai/
 ```
 

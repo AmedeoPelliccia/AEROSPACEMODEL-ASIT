@@ -30,15 +30,15 @@ formats:
 - parameter_table_CSV
 - drawing_set_PDF
 files:
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL.step
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/geometry/GEOM-28-11-00-C2-CELL.step
   id: GEOM-28-11-00-C2-CELL
   type: CAD_MODEL
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL.params.yaml
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/geometry/GEOM-28-11-00-C2-CELL.params.yaml
   id: GEOM-28-11-00-C2-CELL
   type: DATA_FILE
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL.params.csv
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/geometry/GEOM-28-11-00-C2-CELL.params.csv
   id: GEOM-28-11-00-C2-CELL
   type: DATA_FILE
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL-drawing-set.pdf
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/geometry/GEOM-28-11-00-C2-CELL-drawing-set.pdf
   id: GEOM-28-11-00-C2-CELL-drawing-set
   type: DOCUMENT
