@@ -4,7 +4,7 @@ title: Insulation - thermal_performance_model
 owner: STK_ENG
 revision: 0.1.0
 status: draft
-lc_phase: LC05_VERIFICATION_VALIDATION
+lc_phase: LC05_ANALYSIS_MODELS_CAE
 ata: 28-10-00
 domain: C2-CIRCULAR_CRYOGENIC_CELLS
 created_on: to be set during baseline finalization
@@ -29,15 +29,15 @@ formats:
 - sensitivity_matrix_CSV
 - thermal_analysis_report_PDF
 files:
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-model-input.yaml
+- file: 28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/thermal/THM-28-10-00-model-input.yaml
   id: THM-28-10-00-model-input
   type: DATA_FILE
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-model-input.csv
+- file: 28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/thermal/THM-28-10-00-model-input.csv
   id: THM-28-10-00-model-input
   type: DATA_FILE
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-sensitivity-matrix.csv
+- file: 28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/thermal/THM-28-10-00-sensitivity-matrix.csv
   id: THM-28-10-00-sensitivity-matrix
   type: DATA_FILE
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-analysis-report.pdf
+- file: 28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/thermal/THM-28-10-00-analysis-report.pdf
   id: THM-28-10-00-analysis-report
   type: DOCUMENT

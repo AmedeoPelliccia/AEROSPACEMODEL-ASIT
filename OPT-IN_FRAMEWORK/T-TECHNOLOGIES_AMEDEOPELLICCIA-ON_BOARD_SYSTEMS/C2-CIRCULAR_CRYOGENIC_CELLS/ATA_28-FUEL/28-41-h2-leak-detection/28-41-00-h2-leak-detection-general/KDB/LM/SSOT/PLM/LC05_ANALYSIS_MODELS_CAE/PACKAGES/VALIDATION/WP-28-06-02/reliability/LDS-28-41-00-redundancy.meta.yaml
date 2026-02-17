@@ -4,7 +4,7 @@ title: System Architecture - redundancy_and_fault_tolerance_analysis
 owner: STK_SAF
 revision: 0.1.0
 status: draft
-lc_phase: LC05_VERIFICATION_VALIDATION
+lc_phase: LC05_ANALYSIS_MODELS_CAE
 ata: 28-41-00
 domain: C2-CIRCULAR_CRYOGENIC_CELLS
 created_on: to be set during baseline finalization
@@ -29,12 +29,12 @@ formats:
 - reliability_model_CSV
 - safety_case_note_MD
 files:
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-02/reliability/LDS-28-41-00-fault-tree.pdf
+- file: 28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-02/reliability/LDS-28-41-00-fault-tree.pdf
   id: LDS-28-41-00-fault-tree
   type: DOCUMENT
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-02/reliability/LDS-28-41-00-reliability-model.csv
+- file: 28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-02/reliability/LDS-28-41-00-reliability-model.csv
   id: LDS-28-41-00-reliability-model
   type: DATA_FILE
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-02/reliability/LDS-28-41-00-safety-case-note.md
+- file: 28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-02/reliability/LDS-28-41-00-safety-case-note.md
   id: LDS-28-41-00-safety-case-note
   type: DOCUMENT

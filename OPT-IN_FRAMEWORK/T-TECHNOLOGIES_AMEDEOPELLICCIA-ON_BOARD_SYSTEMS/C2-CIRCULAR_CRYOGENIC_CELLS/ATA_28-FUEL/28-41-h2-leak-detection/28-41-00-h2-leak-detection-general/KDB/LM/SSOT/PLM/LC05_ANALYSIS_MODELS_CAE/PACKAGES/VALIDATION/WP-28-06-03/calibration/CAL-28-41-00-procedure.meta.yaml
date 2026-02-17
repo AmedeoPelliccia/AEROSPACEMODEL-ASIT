@@ -4,7 +4,7 @@ title: Threshold Calibration - calibration_procedure
 owner: STK_SAF
 revision: 0.1.0
 status: draft
-lc_phase: LC05_VERIFICATION_VALIDATION
+lc_phase: LC05_ANALYSIS_MODELS_CAE
 ata: 28-41-00
 domain: C2-CIRCULAR_CRYOGENIC_CELLS
 created_on: to be set during baseline finalization
@@ -29,12 +29,12 @@ formats:
 - procedure_PDF
 - calibration_log_template_CSV
 files:
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-procedure.md
+- file: 28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-03/calibration/CAL-28-41-00-procedure.md
   id: CAL-28-41-00-procedure
   type: DOCUMENT
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-procedure.pdf
+- file: 28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-03/calibration/CAL-28-41-00-procedure.pdf
   id: CAL-28-41-00-procedure
   type: DOCUMENT
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-log-template.csv
+- file: 28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-03/calibration/CAL-28-41-00-log-template.csv
   id: CAL-28-41-00-log-template
   type: DATA_FILE

@@ -82,19 +82,19 @@ work_packages:
       - id: thermal_performance_model
         formats: [thermal_model_input_YAML, thermal_model_input_CSV, sensitivity_matrix_CSV, thermal_analysis_report_PDF]
         files:
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-model-input.yaml"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-model-input.csv"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-sensitivity-matrix.csv"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-analysis-report.pdf"
-        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/thermal/THM-28-10-00-model.meta.yaml"
+          - "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/thermal/THM-28-10-00-model-input.yaml"
+          - "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/thermal/THM-28-10-00-model-input.csv"
+          - "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/thermal/THM-28-10-00-sensitivity-matrix.csv"
+          - "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/thermal/THM-28-10-00-analysis-report.pdf"
+        meta_file: "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/thermal/THM-28-10-00-model.meta.yaml"
 
       - id: insulation_test_plan
         formats: [test_plan_MD, test_plan_PDF, test_matrix_CSV]
         files:
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.md"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.pdf"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-test-matrix.csv"
-        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.meta.yaml"
+          - "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.md"
+          - "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.pdf"
+          - "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/tests/ITP-28-10-00-test-matrix.csv"
+        meta_file: "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.meta.yaml"
     verification:
       - { id: thermal_model_review, applies_to: [thermal_performance_model] }
       - { id: insulation_performance_validation, applies_to: [thermal_performance_model, insulation_test_plan] }
@@ -130,10 +130,10 @@ work_packages:
       - id: pressure_system_fmea
         formats: [FMEA_sheet_XLSX, FMEA_export_CSV, safety_assessment_PDF]
         files:
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure.xlsx"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure.csv"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure-assessment.pdf"
-        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure.meta.yaml"
+          - "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-03/safety/FMEA-28-20-00-pressure.xlsx"
+          - "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-03/safety/FMEA-28-20-00-pressure.csv"
+          - "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-03/safety/FMEA-28-20-00-pressure-assessment.pdf"
+        meta_file: "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-03/safety/FMEA-28-20-00-pressure.meta.yaml"
     verification:
       - { id: vent_relief_design_review, applies_to: [relief_and_vent_sizing] }
       - { id: pressure_safety_assessment_review, applies_to: [pressure_system_fmea] }
@@ -153,19 +153,19 @@ work_packages:
       - id: material_test_plan
         formats: [test_plan_MD, test_plan_PDF, test_matrix_CSV]
         files:
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-test-plan.md"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-test-plan.pdf"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-test-matrix.csv"
-        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-test-plan.meta.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-04/materials/MAT-28-11-00-test-plan.md"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-04/materials/MAT-28-11-00-test-plan.pdf"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-04/materials/MAT-28-11-00-test-matrix.csv"
+        meta_file: "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-04/materials/MAT-28-11-00-test-plan.meta.yaml"
 
       - id: qualification_dataset
         formats: [raw_data_CSV, processed_data_CSV, allowables_YAML, allowables_PDF]
         files:
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-raw-data.csv"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-processed-data.csv"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-allowables.yaml"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-allowables.pdf"
-        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-allowables.meta.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-04/materials/MAT-28-11-00-raw-data.csv"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-04/materials/MAT-28-11-00-processed-data.csv"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-04/materials/MAT-28-11-00-allowables.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-04/materials/MAT-28-11-00-allowables.pdf"
+        meta_file: "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-04/materials/MAT-28-11-00-allowables.meta.yaml"
 
       - id: qualification_report
         formats: [qualification_report_PDF, traceability_matrix_CSV]
@@ -283,10 +283,10 @@ work_packages:
       - id: redundancy_and_fault_tolerance_analysis
         formats: [fault_tree_PDF, reliability_model_CSV, safety_case_note_MD]
         files:
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-02/reliability/LDS-28-41-00-fault-tree.pdf"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-02/reliability/LDS-28-41-00-reliability-model.csv"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-02/reliability/LDS-28-41-00-safety-case-note.md"
-        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-02/reliability/LDS-28-41-00-redundancy.meta.yaml"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-02/reliability/LDS-28-41-00-fault-tree.pdf"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-02/reliability/LDS-28-41-00-reliability-model.csv"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-02/reliability/LDS-28-41-00-safety-case-note.md"
+        meta_file: "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-02/reliability/LDS-28-41-00-redundancy.meta.yaml"
     verification:
       - { id: architecture_design_review, applies_to: [leak_detection_architecture, sensor_placement_definition] }
       - { id: safety_redundancy_review, applies_to: [redundancy_and_fault_tolerance_analysis] }
@@ -314,10 +314,10 @@ work_packages:
       - id: calibration_procedure
         formats: [procedure_MD, procedure_PDF, calibration_log_template_CSV]
         files:
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-procedure.md"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-procedure.pdf"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-log-template.csv"
-        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-41-00/WP-28-06-03/calibration/CAL-28-41-00-procedure.meta.yaml"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-03/calibration/CAL-28-41-00-procedure.md"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-03/calibration/CAL-28-41-00-procedure.pdf"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-03/calibration/CAL-28-41-00-log-template.csv"
+        meta_file: "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-06-03/calibration/CAL-28-41-00-procedure.meta.yaml"
 
       - id: false_alarm_performance_report
         formats: [performance_dataset_CSV, roc_analysis_PDF, compliance_summary_PDF]
