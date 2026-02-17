@@ -7,8 +7,8 @@ status: draft
 lc_phase: LC04_DESIGN_DEFINITION
 ata: 28-20-00
 domain: C2-CIRCULAR_CRYOGENIC_CELLS
-created_on: '2026-02-17T19:15:04.797370'
-last_updated_on: '2026-02-17T19:15:04.797374'
+created_on: '2026-02-17T20:33:54.014404'
+last_updated_on: '2026-02-17T20:33:54.014408'
 integrity:
   checksum: to be generated upon baseline finalization
   algorithm: sha256

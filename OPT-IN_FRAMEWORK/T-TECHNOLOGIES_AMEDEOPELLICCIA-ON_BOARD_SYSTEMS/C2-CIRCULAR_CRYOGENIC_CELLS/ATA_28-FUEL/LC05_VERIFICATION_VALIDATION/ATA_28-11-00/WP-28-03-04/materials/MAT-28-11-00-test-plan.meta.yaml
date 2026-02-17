@@ -7,8 +7,8 @@ status: draft
 lc_phase: LC05_VERIFICATION_VALIDATION
 ata: 28-11-00
 domain: C2-CIRCULAR_CRYOGENIC_CELLS
-created_on: '2026-02-17T19:15:04.802207'
-last_updated_on: '2026-02-17T19:15:04.802211'
+created_on: '2026-02-17T20:33:54.020338'
+last_updated_on: '2026-02-17T20:33:54.020358'
 integrity:
   checksum: to be generated upon baseline finalization
   algorithm: sha256
