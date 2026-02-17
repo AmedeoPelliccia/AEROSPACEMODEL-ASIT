@@ -344,6 +344,64 @@ def test_hazard_classifications():
             f"Hazard {hazard_id} has incorrect classification"
 
 
+def test_hazard_register_has_methodology():
+    """Verify HAZARD_REGISTER.yaml includes methodology section."""
+    file_path = HAZARD_DIR / "HAZARD_REGISTER.yaml"
+    with open(file_path, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f)
+    
+    assert "methodology" in data["hazard_register"], "HAZARD_REGISTER.yaml missing 'methodology'"
+    methodology = data["hazard_register"]["methodology"]
+    assert methodology["standard"] == "ARP4761", "HAZARD_REGISTER.yaml methodology must be 'ARP4761'"
+    assert "severity_scale" in methodology, "HAZARD_REGISTER.yaml missing severity_scale"
+    assert "rate_basis" in methodology, "HAZARD_REGISTER.yaml missing rate_basis"
+
+
+def test_hazard_register_has_approval_gate():
+    """Verify HAZARD_REGISTER.yaml includes approval gate section."""
+    file_path = HAZARD_DIR / "HAZARD_REGISTER.yaml"
+    with open(file_path, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f)
+    
+    assert "approval_gate" in data["hazard_register"], "HAZARD_REGISTER.yaml missing 'approval_gate'"
+    gate = data["hazard_register"]["approval_gate"]
+    assert gate["reviewer"] == "STK_SAF", "HAZARD_REGISTER.yaml reviewer must be 'STK_SAF'"
+    assert gate["authority"] == "CCB", "HAZARD_REGISTER.yaml authority must be 'CCB'"
+    assert gate["status"] == "Pending", "HAZARD_REGISTER.yaml approval status must be 'Pending'"
+
+
+@pytest.mark.parametrize("hazard_id", [f"HAZ-28-11-{i:03d}" for i in range(1, 7)])
+def test_hazard_has_enhanced_fields(hazard_id):
+    """Verify each hazard has enhanced schema fields (title, causes, effects, etc.)."""
+    file_path = HAZARD_DIR / "HAZARD_REGISTER.yaml"
+    with open(file_path, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f)
+    
+    hazards = {h["id"]: h for h in data["hazard_register"]["hazards"]}
+    assert hazard_id in hazards, f"Hazard not found: {hazard_id}"
+    
+    hazard = hazards[hazard_id]
+    enhanced_fields = ["title", "phase_applicability", "causes", "effects", "detection_controls", "verification", "residual_risk"]
+    
+    for field in enhanced_fields:
+        assert field in hazard, f"Hazard {hazard_id} missing enhanced field: {field}"
+
+
+def test_hazard_004_has_saf_003_trace():
+    """Verify HAZ-28-11-004 includes SAF-28-11-003 in safety traces."""
+    file_path = HAZARD_DIR / "HAZARD_REGISTER.yaml"
+    with open(file_path, "r", encoding="utf-8") as f:
+        data = yaml.safe_load(f)
+    
+    hazards = {h["id"]: h for h in data["hazard_register"]["hazards"]}
+    haz_004 = hazards["HAZ-28-11-004"]
+    
+    assert "safety" in haz_004["trace_to"], "HAZ-28-11-004 missing safety traces"
+    safety_traces = haz_004["trace_to"]["safety"]
+    assert "SAF-28-11-003" in safety_traces, "HAZ-28-11-004 must include SAF-28-11-003 in safety traces"
+    assert "SAF-28-11-005" in safety_traces, "HAZ-28-11-004 must include SAF-28-11-005 in safety traces"
+
+
 # ── Reliability Package schema tests ──────────────────────────────────────
 
 def test_reliability_package_required_fields():
@@ -422,15 +480,15 @@ def test_trace_csv_has_required_columns():
         assert col in columns, f"TRACE_LC03.csv missing required column: {col}"
 
 
-def test_trace_csv_has_30_rows():
-    """Verify TRACE_LC03.csv has exactly 30 traceability rows."""
+def test_trace_csv_has_31_rows():
+    """Verify TRACE_LC03.csv has exactly 31 traceability rows."""
     file_path = LC03_DIR / "TRACE_LC03.csv"
     
     with open(file_path, "r", encoding="utf-8") as f:
         reader = csv.DictReader(f)
         rows = list(reader)
     
-    assert len(rows) == 30, f"TRACE_LC03.csv must have 30 rows, found {len(rows)}"
+    assert len(rows) == 31, f"TRACE_LC03.csv must have 31 rows, found {len(rows)}"
 
 
 def test_trace_csv_all_hazards_traced():

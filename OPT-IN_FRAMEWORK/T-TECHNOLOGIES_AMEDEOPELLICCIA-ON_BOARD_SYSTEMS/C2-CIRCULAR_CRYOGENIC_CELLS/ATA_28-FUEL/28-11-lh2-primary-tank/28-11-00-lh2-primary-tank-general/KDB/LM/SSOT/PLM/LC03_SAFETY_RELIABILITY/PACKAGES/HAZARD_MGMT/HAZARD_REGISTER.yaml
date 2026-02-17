@@ -2,90 +2,214 @@ hazard_register:
   register_id: "HR-28-11-00-001"
   ata_scope: "28-11-00"
   program: "AMPEL360 Q100"
-  version: "0.1.0"
+  version: "0.2.0"
   status: "DEV"
-  date: "2026-02-16"
+  date: "2026-02-17"
   owner: "STK_SAF"
+
+  methodology:
+    standard: "ARP4761"
+    severity_scale:
+      Catastrophic: "< 1E-9/FH"
+      Hazardous: "< 1E-7/FH"
+      Major: "< 1E-5/FH"
+    rate_basis: "Per flight hour"
+
+  approval_gate:
+    reviewer: "STK_SAF"
+    authority: "CCB"
+    status: "Pending"
 
   hazards:
     - id: "HAZ-28-11-001"
+      title: "Loss of containment of LH2 primary tank"
       function: "Containment integrity"
       failure_condition: "Tank rupture / structural leak"
       classification: "Catastrophic"
       rate_target: "< 1E-9/FH"
+      phase_applicability: ["LC03", "LC04", "LC05"]
+      causes:
+        - "Cryogenic fatigue crack growth (parent or weld HAZ)"
+        - "Thermal shock from rapid transients"
+        - "Overstress under limit/ultimate loads"
+        - "Manufacturing defect escaping NDE"
+      effects:
+        - "Hydrogen release in tank bay"
+        - "Potential ignition/explosion precursor"
+        - "Loss of mission fuel / potential catastrophic outcome"
       mitigation:
         - "Structural analysis + cryogenic margin definition (CM-A-001)"
-        - "Cryogenic test campaign — pressure, cycles, thermal shock (CM-A-002)"
+        - "Cryogenic test campaign: pressure, cycles, thermal shock (CM-A-002)"
         - "FEM + vibration tests + limit/ultimate load analysis (CM-A-003)"
         - "Cryogenic fatigue tests/analysis + DT substantiation (CM-A-004)"
+      detection_controls:
+        - "Leak detection and pressure trend monitoring"
+        - "Mass-balance anomaly monitoring"
+        - "Periodic NDE at defined intervals"
+      verification:
+        - "Analysis package approved (stress/fatigue substantiation)"
+        - "Cryogenic proof + cycle + transient test reports approved"
+        - "Inspection acceptance criteria satisfied"
+      residual_risk:
+        status: "Open"
+        linked_risks: ["RISK-03"]
       trace_to:
         requirements: ["CM-A-001", "CM-A-002", "CM-A-003", "CM-A-004"]
         design: ["TS-28-11-TS01", "TS-28-11-TS02"]
         safety: ["SAF-28-11-001"]
 
     - id: "HAZ-28-11-002"
+      title: "Hydrogen ignition/explosion in tank bay"
       function: "Ignition prevention"
-      failure_condition: "H₂ ignition / explosion in tank bay"
+      failure_condition: "H2 ignition / explosion in tank bay"
       classification: "Catastrophic"
       rate_target: "< 1E-9/FH"
+      phase_applicability: ["LC03", "LC04", "LC05"]
+      causes:
+        - "Ignition source present in flammable atmosphere"
+        - "Insufficient ventilation/dilution"
+        - "Inadequate sensor coverage or threshold configuration"
+      effects:
+        - "Fire/explosion event"
+        - "Severe structural and system damage"
       mitigation:
         - "FHA/SSA + zonal safety + ignition source control (CM-C-001)"
         - "ARP4761 (FHA→PSSA→SSA) + DAL/IDAL allocation (CM-C-002)"
-        - "H₂ sensors — location, threshold, alert logic (SC-LH2-02)"
+        - "H2 sensors: location, threshold, alert logic (SC-LH2-02)"
+      detection_controls:
+        - "Continuous H2 concentration monitoring"
+        - "Fault monitoring for detection channel failures"
+      verification:
+        - "Sensor coverage verification and response-time tests"
+        - "Zonal safety analysis closure"
+        - "Ignition source control compliance inspection"
+      residual_risk:
+        status: "Open"
+        linked_risks: []
       trace_to:
         requirements: ["CM-C-001", "CM-C-002"]
         special_conditions: ["SC-LH2-02"]
         safety: ["SAF-28-11-002"]
 
     - id: "HAZ-28-11-003"
+      title: "Pressure control failure in LH2 tank system"
       function: "Pressure management"
       failure_condition: "Over-pressure / relief valve failure"
       classification: "Hazardous"
       rate_target: "< 1E-7/FH"
+      phase_applicability: ["LC03", "LC04", "LC05"]
+      causes:
+        - "Relief valve malfunction or blockage"
+        - "Incorrect vent sizing"
+        - "Unmanaged transient pressure excursions"
+      effects:
+        - "Tank/system overstress"
+        - "Vent path overload and unsafe release"
       mitigation:
         - "Vent/relief sizing + plume analysis (CM-B-002)"
         - "Ullage definition + transient analysis (CM-B-001)"
         - "Pressure control at 255–351 kPa operating range"
+      detection_controls:
+        - "Pressure transducer monitoring with limits/alerts"
+        - "Valve health diagnostics and periodic proof tests"
+      verification:
+        - "Transient pressure model validation"
+        - "Relief valve qualification and functional tests"
+      residual_risk:
+        status: "Open"
+        linked_risks: []
       trace_to:
         requirements: ["CM-B-001", "CM-B-002"]
         special_conditions: ["SC-LH2-01"]
         safety: ["SAF-28-11-004"]
 
     - id: "HAZ-28-11-004"
+      title: "Thermal insulation degradation from vacuum loss"
       function: "Thermal protection"
-      failure_condition: "Vacuum loss → MLI degradation → excessive boil-off"
+      failure_condition: "Vacuum loss -> MLI degradation -> excessive boil-off"
       classification: "Major"
       rate_target: "< 1E-5/FH"
+      phase_applicability: ["LC03", "LC04", "LC05"]
+      causes:
+        - "Vacuum jacket leakage/permeation"
+        - "Seal degradation over life"
+        - "Thermal bridge growth at supports/penetrations"
+      effects:
+        - "Increased heat leak and boil-off"
+        - "Reduced endurance / potential fuel availability impacts"
       mitigation:
         - "Vacuum monitoring + degradation detection (SC-LH2-04)"
         - "Required vacuum: 0.0133–0.266 Pa; degraded threshold ~1.33 Pa"
         - "Support/penetration heat-leak decomposition"
+      detection_controls:
+        - "Vacuum quality trending"
+        - "Boil-off rate monitoring against envelope"
+      verification:
+        - "Thermal-vacuum qualification tests"
+        - "Insulation performance acceptance criteria"
+      residual_risk:
+        status: "Open"
+        linked_risks: ["RISK-01", "RISK-02"]
       trace_to:
         trade_studies: ["TS-28-11-TS03"]
         special_conditions: ["SC-LH2-04"]
         risks: ["RISK-01", "RISK-02"]
-        safety: ["SAF-28-11-005"]
+        safety: ["SAF-28-11-005", "SAF-28-11-003"]
 
     - id: "HAZ-28-11-005"
+      title: "Tank damage or release in crash scenario"
       function: "Crash protection"
       failure_condition: "Tank release / perforation in crash event"
       classification: "Catastrophic"
       rate_target: "< 1E-9/FH"
+      phase_applicability: ["LC03", "LC04", "LC05"]
+      causes:
+        - "Insufficient crash load path robustness"
+        - "Inadequate mounting retention under impact"
+      effects:
+        - "Tank breach and hydrogen release"
+        - "Post-crash fire/explosion escalation risk"
       mitigation:
         - "Two-layer safety approach: crashworthy airframe + crash-safe tank"
+      detection_controls:
+        - "Post-impact structural integrity inspection criteria"
+      verification:
+        - "Crash load substantiation analysis"
+        - "Representative impact/retention test evidence"
+      residual_risk:
+        status: "Open"
+        linked_risks: []
       trace_to:
         special_conditions: ["SC-LH2-05"]
         safety: ["SAF-28-11-006"]
 
     - id: "HAZ-28-11-006"
+      title: "Cryogenic material degradation of Al-Li system"
       function: "Material degradation"
       failure_condition: "Embrittlement / fatigue crack growth under cryogenic cycling"
       classification: "Hazardous"
       rate_target: "< 1E-7/FH"
+      phase_applicability: ["LC03", "LC04", "LC05"]
+      causes:
+        - "Hydrogen-assisted embrittlement susceptibility"
+        - "Weld-zone microstructural sensitivity at 20 K"
+        - "Cycle-driven crack initiation/propagation"
+      effects:
+        - "Local loss of structural margin"
+        - "Progression to leak/rupture precursor"
       mitigation:
         - "Cryogenic fatigue tests/analysis + DT substantiation (CM-A-004)"
         - "Crack growth assumptions for Al-Li 2195 at 20 K"
-        - "Test coupons — parent and weld material"
+        - "Test coupons: parent and weld material"
+      detection_controls:
+        - "NDE intervals for weld-critical zones"
+        - "Fracture mechanics trend monitoring inputs"
+      verification:
+        - "Material allowables and weld qualification closure"
+        - "Crack growth model correlation with test data"
+      residual_risk:
+        status: "Open"
+        linked_risks: ["RISK-03"]
       trace_to:
         requirements: ["CM-A-004", "CM-D-001"]
         trade_studies: ["TS-28-11-TS02"]
