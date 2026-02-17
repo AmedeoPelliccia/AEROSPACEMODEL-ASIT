@@ -214,4 +214,4 @@ hazard_register:
         requirements: ["CM-A-004", "CM-D-001"]
         trade_studies: ["TS-28-11-TS02"]
         risks: ["RISK-03"]
-        safety: ["SAF-28-11-008"]
+        safety: ["SAF-28-11-007", "SAF-28-11-008"]
