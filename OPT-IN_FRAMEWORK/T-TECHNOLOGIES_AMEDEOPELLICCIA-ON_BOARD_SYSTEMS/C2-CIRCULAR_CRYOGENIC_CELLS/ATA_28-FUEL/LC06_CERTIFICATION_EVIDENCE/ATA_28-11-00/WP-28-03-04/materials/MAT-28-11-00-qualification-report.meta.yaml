@@ -7,8 +7,8 @@ status: draft
 lc_phase: LC06_CERTIFICATION_EVIDENCE
 ata: 28-11-00
 domain: C2-CIRCULAR_CRYOGENIC_CELLS
-created_on: '2026-02-17T20:33:54.023659'
-last_updated_on: '2026-02-17T20:33:54.023662'
+created_on: to be set during baseline finalization
+last_updated_on: to be set during baseline finalization
 integrity:
   checksum: to be generated upon baseline finalization
   algorithm: sha256

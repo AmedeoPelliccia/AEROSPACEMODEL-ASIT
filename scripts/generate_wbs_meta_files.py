@@ -76,8 +76,8 @@ def generate_meta_content(
         'work_package': work_package['id'],
         'ata': work_package.get('ata', '28-00-00'),
         'domain': work_package.get('domain', 'C2-CIRCULAR_CRYOGENIC_CELLS'),
-        'created_on': datetime.now().isoformat(),
-        'last_updated_on': datetime.now().isoformat(),
+        'created_on': 'to be set during baseline finalization',
+        'last_updated_on': 'to be set during baseline finalization',
         'integrity': {
             'checksum': 'to be generated upon baseline finalization',
             'algorithm': 'sha256'
@@ -135,8 +135,8 @@ def process_work_package(
             'lc_phase': extract_lc_phase_from_path(output['meta_file']),
             'ata': work_package.get('ata', '28-00-00'),
             'domain': work_package.get('domain', 'C2-CIRCULAR_CRYOGENIC_CELLS'),
-            'created_on': datetime.now().isoformat(),
-            'last_updated_on': datetime.now().isoformat(),
+            'created_on': 'to be set during baseline finalization',
+            'last_updated_on': 'to be set during baseline finalization',
             'integrity': {
                 'checksum': 'to be generated upon baseline finalization',
                 'algorithm': 'sha256'
