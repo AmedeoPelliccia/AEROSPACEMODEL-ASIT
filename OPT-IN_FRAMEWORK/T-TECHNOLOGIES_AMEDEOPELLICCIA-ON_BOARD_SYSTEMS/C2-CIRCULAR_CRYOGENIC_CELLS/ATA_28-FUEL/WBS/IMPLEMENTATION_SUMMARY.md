@@ -108,7 +108,7 @@ ATA_28-FUEL/
 ├── LC03_SAFETY_RELIABILITY/ATA_28-41-00/WP-28-06-01/sensors/
 ├── LC04_DESIGN_DEFINITION/
 │   ├── ATA_28-10-00/WP-28-03-02/insulation/
-│   ├── ATA_28-11-00/WP-28-03-01/{geometry,structures,icd}/
+│   │   (ATA_28-11-00/WP-28-03-01 relocated to 28-11-lh2-primary-tank/.../LC04_DESIGN_DEFINITION_DMU/PACKAGES/)
 │   ├── ATA_28-20-00/WP-28-03-03/{pressure,relief}/
 │   └── ATA_28-41-00/WP-28-06-{01,02,03}/{sensors,architecture,placement,calibration}/
 ├── LC05_VERIFICATION_VALIDATION/

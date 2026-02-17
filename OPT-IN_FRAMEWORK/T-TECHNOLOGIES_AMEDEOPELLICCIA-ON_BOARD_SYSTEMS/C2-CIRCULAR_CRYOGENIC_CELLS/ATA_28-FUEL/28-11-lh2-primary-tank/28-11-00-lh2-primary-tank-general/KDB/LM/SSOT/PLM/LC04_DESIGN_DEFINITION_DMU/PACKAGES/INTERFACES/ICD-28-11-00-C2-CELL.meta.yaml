@@ -33,24 +33,24 @@ formats:
 - connector_pinout_protocol_map_YAML
 - connector_pinout_protocol_map_CSV
 files:
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-C2-CELL.md
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-C2-CELL.md
   id: ICD-28-11-00-C2-CELL
   type: DOCUMENT
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-C2-CELL.pdf
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-C2-CELL.pdf
   id: ICD-28-11-00-C2-CELL
   type: DOCUMENT
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-interface-register.yaml
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-interface-register.yaml
   id: ICD-28-11-00-interface-register
   type: DATA_FILE
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-interface-register.csv
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-interface-register.csv
   id: ICD-28-11-00-interface-register
   type: DATA_FILE
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-control-drawings.pdf
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-control-drawings.pdf
   id: ICD-28-11-00-control-drawings
   type: DOCUMENT
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-pinout-protocol-map.yaml
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-pinout-protocol-map.yaml
   id: ICD-28-11-00-pinout-protocol-map
   type: DATA_FILE
-- file: LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-pinout-protocol-map.csv
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-pinout-protocol-map.csv
   id: ICD-28-11-00-pinout-protocol-map
   type: DATA_FILE

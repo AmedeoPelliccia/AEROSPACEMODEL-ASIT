@@ -25,34 +25,34 @@ work_packages:
       - id: geometry_definition
         formats: [CAD_STEP_AP242, parameter_table_YAML, parameter_table_CSV, drawing_set_PDF]
         files:
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL.step"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL.params.yaml"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL.params.csv"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL-drawing-set.pdf"
-        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/geometry/GEOM-28-11-00-C2-CELL.meta.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/geometry/GEOM-28-11-00-C2-CELL.step"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/geometry/GEOM-28-11-00-C2-CELL.params.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/geometry/GEOM-28-11-00-C2-CELL.params.csv"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/geometry/GEOM-28-11-00-C2-CELL-drawing-set.pdf"
+        meta_file: "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/geometry/GEOM-28-11-00-C2-CELL.meta.yaml"
 
       - id: structural_model
         formats: [FEM_input_deck_NASTRAN, FEM_input_deck_ABAQUS, material_property_cards_YAML, material_property_cards_CSV, loadcase_matrix_CSV, analysis_report_PDF]
         files:
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-C2-CELL.nas"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-C2-CELL.inp"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-material-cards.yaml"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-material-cards.csv"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-loadcase-matrix.csv"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-analysis-report.pdf"
-        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/structures/STR-28-11-00-C2-CELL.meta.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/structures/STR-28-11-00-C2-CELL.nas"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/structures/STR-28-11-00-C2-CELL.inp"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/structures/STR-28-11-00-material-cards.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/structures/STR-28-11-00-material-cards.csv"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/structures/STR-28-11-00-loadcase-matrix.csv"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/structures/STR-28-11-00-analysis-report.pdf"
+        meta_file: "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/structures/STR-28-11-00-C2-CELL.meta.yaml"
 
       - id: interface_control_definition
         formats: [ICD_document_MD, ICD_document_PDF, interface_register_YAML, interface_register_CSV, control_drawings_PDF, connector_pinout_protocol_map_YAML, connector_pinout_protocol_map_CSV]
         files:
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-C2-CELL.md"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-C2-CELL.pdf"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-interface-register.yaml"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-interface-register.csv"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-control-drawings.pdf"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-pinout-protocol-map.yaml"
-          - "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-pinout-protocol-map.csv"
-        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-11-00/WP-28-03-01/icd/ICD-28-11-00-C2-CELL.meta.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-C2-CELL.md"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-C2-CELL.pdf"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-interface-register.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-interface-register.csv"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-control-drawings.pdf"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-pinout-protocol-map.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-pinout-protocol-map.csv"
+        meta_file: "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/INTERFACES/ICD-28-11-00-C2-CELL.meta.yaml"
     verification:
       - { id: analysis_review, applies_to: [structural_model] }
       - { id: interface_validation, applies_to: [geometry_definition, structural_model, interface_control_definition] }
