@@ -73,11 +73,11 @@ work_packages:
       - id: insulation_architecture_definition
         formats: [insulation_stack_spec_YAML, insulation_stack_spec_CSV, design_note_MD, design_note_PDF]
         files:
-          - "LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-MLI-stack.yaml"
-          - "LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-MLI-stack.csv"
-          - "LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-architecture.md"
-          - "LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-architecture.pdf"
-        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-10-00/WP-28-03-02/insulation/INS-28-10-00-MLI-stack.meta.yaml"
+          - "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/insulation/INS-28-10-00-MLI-stack.yaml"
+          - "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/insulation/INS-28-10-00-MLI-stack.csv"
+          - "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/insulation/INS-28-10-00-architecture.md"
+          - "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/insulation/INS-28-10-00-architecture.pdf"
+        meta_file: "28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/insulation/INS-28-10-00-MLI-stack.meta.yaml"
 
       - id: thermal_performance_model
         formats: [thermal_model_input_YAML, thermal_model_input_CSV, sensitivity_matrix_CSV, thermal_analysis_report_PDF]
