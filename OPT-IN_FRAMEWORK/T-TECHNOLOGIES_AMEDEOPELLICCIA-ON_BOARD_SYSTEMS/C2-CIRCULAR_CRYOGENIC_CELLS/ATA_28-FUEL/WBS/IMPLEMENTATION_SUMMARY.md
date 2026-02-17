@@ -119,7 +119,7 @@ ATA_28-FUEL/
 ├── LC06_CERTIFICATION_EVIDENCE/
 │   ├── ATA_28-11-00/WP-28-03-{04,05}/{materials,manufacturing,tooling}/
 │   └── ATA_28-41-00/WP-28-06-03/performance/
-└── LC07_INDUSTRIALIZATION/ATA_28-11-00/WP-28-03-05/fai/
+└── 28-11-lh2-primary-tank/.../LC07_QUALITY/PACKAGES/ACCEPTANCE/WP-28-03-05/fai/
 ```
 
 **Meta File Schema**:

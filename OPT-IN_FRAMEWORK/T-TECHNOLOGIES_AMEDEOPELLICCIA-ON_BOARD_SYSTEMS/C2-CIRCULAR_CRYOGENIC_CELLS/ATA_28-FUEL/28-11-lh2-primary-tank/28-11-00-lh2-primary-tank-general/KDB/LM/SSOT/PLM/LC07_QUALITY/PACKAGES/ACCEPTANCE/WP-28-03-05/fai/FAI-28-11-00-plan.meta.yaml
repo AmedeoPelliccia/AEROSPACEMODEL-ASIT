@@ -4,7 +4,7 @@ title: Manufacturing Process - fai_plan
 owner: STK_ENG
 revision: 0.1.0
 status: draft
-lc_phase: LC07_INDUSTRIALIZATION
+lc_phase: LC07_QUALITY
 ata: 28-11-00
 domain: C2-CIRCULAR_CRYOGENIC_CELLS
 created_on: to be set during baseline finalization
@@ -28,12 +28,12 @@ formats:
 - FAI_checklist_CSV
 - FAIR_template_MD
 files:
-- file: LC07_INDUSTRIALIZATION/ATA_28-11-00/WP-28-03-05/fai/FAI-28-11-00-plan.pdf
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC07_QUALITY/PACKAGES/ACCEPTANCE/WP-28-03-05/fai/FAI-28-11-00-plan.pdf
   id: FAI-28-11-00-plan
   type: DOCUMENT
-- file: LC07_INDUSTRIALIZATION/ATA_28-11-00/WP-28-03-05/fai/FAI-28-11-00-checklist.csv
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC07_QUALITY/PACKAGES/ACCEPTANCE/WP-28-03-05/fai/FAI-28-11-00-checklist.csv
   id: FAI-28-11-00-checklist
   type: DATA_FILE
-- file: LC07_INDUSTRIALIZATION/ATA_28-11-00/WP-28-03-05/fai/FAI-28-11-00-fair-template.md
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC07_QUALITY/PACKAGES/ACCEPTANCE/WP-28-03-05/fai/FAI-28-11-00-fair-template.md
   id: FAI-28-11-00-fair-template
   type: DOCUMENT

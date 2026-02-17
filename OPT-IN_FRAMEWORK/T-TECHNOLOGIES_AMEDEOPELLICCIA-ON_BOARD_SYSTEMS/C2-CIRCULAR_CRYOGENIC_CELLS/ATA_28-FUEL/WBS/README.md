@@ -119,8 +119,8 @@ ATA_28-FUEL/
 ├── LC06_CERTIFICATION_EVIDENCE/
 │   ├── ATA_28-11-00/
 │   └── ATA_28-41-00/
-└── LC07_INDUSTRIALIZATION/
-    └── ATA_28-11-00/
+└── 28-11-lh2-primary-tank/.../LC07_QUALITY/PACKAGES/ACCEPTANCE/
+    └── WP-28-03-05/fai/
 ```
 
 ## Meta File Fields

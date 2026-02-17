@@ -208,10 +208,10 @@ work_packages:
       - id: fai_plan
         formats: [FAI_plan_PDF, FAI_checklist_CSV, FAIR_template_MD]
         files:
-          - "LC07_INDUSTRIALIZATION/ATA_28-11-00/WP-28-03-05/fai/FAI-28-11-00-plan.pdf"
-          - "LC07_INDUSTRIALIZATION/ATA_28-11-00/WP-28-03-05/fai/FAI-28-11-00-checklist.csv"
-          - "LC07_INDUSTRIALIZATION/ATA_28-11-00/WP-28-03-05/fai/FAI-28-11-00-fair-template.md"
-        meta_file: "LC07_INDUSTRIALIZATION/ATA_28-11-00/WP-28-03-05/fai/FAI-28-11-00-plan.meta.yaml"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC07_QUALITY/PACKAGES/ACCEPTANCE/WP-28-03-05/fai/FAI-28-11-00-plan.pdf"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC07_QUALITY/PACKAGES/ACCEPTANCE/WP-28-03-05/fai/FAI-28-11-00-checklist.csv"
+          - "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC07_QUALITY/PACKAGES/ACCEPTANCE/WP-28-03-05/fai/FAI-28-11-00-fair-template.md"
+        meta_file: "28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC07_QUALITY/PACKAGES/ACCEPTANCE/WP-28-03-05/fai/FAI-28-11-00-plan.meta.yaml"
     verification:
       - { id: process_readiness_review, applies_to: [manufacturing_flow_definition, tooling_package] }
       - { id: fai_gate_review, applies_to: [fai_plan] }
