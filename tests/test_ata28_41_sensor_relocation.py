@@ -69,7 +69,7 @@ class TestSensorFilesExistInNewLocation:
 
 
 class TestOldLocationRemoved:
-    """Verify old flat LC03 path no longer exists."""
+    """Verify old flat LC paths for ATA 28-41-00 no longer exist."""
 
     def test_old_sensors_directory_removed(self):
         assert not os.path.exists(OLD_SENSORS), \
@@ -79,6 +79,29 @@ class TestOldLocationRemoved:
         old_lc03 = os.path.join(ATA28_FUEL, "LC03_SAFETY_RELIABILITY")
         assert not os.path.exists(old_lc03), \
             f"Old flat LC03_SAFETY_RELIABILITY still exists: {old_lc03}"
+
+    def test_old_lc04_ata28_41_removed(self):
+        old = os.path.join(ATA28_FUEL, "LC04_DESIGN_DEFINITION", "ATA_28-41-00")
+        assert not os.path.exists(old), \
+            f"Old flat LC04 ATA_28-41-00 still exists: {old}"
+
+    def test_old_lc05_ata28_41_removed(self):
+        old = os.path.join(ATA28_FUEL, "LC05_VERIFICATION_VALIDATION", "ATA_28-41-00")
+        assert not os.path.exists(old), \
+            f"Old flat LC05 ATA_28-41-00 still exists: {old}"
+
+    def test_old_lc06_ata28_41_removed(self):
+        old = os.path.join(ATA28_FUEL, "LC06_CERTIFICATION_EVIDENCE", "ATA_28-41-00")
+        assert not os.path.exists(old), \
+            f"Old flat LC06 ATA_28-41-00 still exists: {old}"
+
+    def test_no_flat_lc_paths_for_ata28_41(self):
+        """No ATA_28-41-00 directories should exist under any flat LC path."""
+        import glob
+        pattern = os.path.join(ATA28_FUEL, "LC0*", "ATA_28-41-00")
+        matches = glob.glob(pattern)
+        assert len(matches) == 0, \
+            f"Found ATA_28-41-00 in flat LC paths: {matches}"
 
 
 class TestMetaYamlPaths:
