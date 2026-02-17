@@ -58,9 +58,6 @@ AI governance, traceability systems, Digital Product Passport (DPP), and ledger 
 - **A — AI Governance & Assurance**: Certification pathway, ethics, human authority protocols, explainability
 - **P\* — Program Reserved** (ATA 98): Expansion slot for future systems
 
-### 6. **ENGINEERING_SSOT** (Front-End)
-Posting location for completed **Engineering SSOT** entries and **Custom Information Data Sheets**. Includes an interactive HTML front-end (`index.html`) for browsing the SSOT registry and generating structured data sheets. All posted entries are ASIT-governed, BREX-compliant, and traceable to KDB sources and baselines.
-
 ---
 
 ## Novel Technology Subdomains
@@ -88,17 +85,7 @@ Three subdomains are designated as **Novel Technology** with full LC01–LC14 li
 - **Lifecycle:** Full LC01–LC14 activation
 - **Key Technologies:** Model training, inference, explainability, adversarial testing
 
----
-
-## Engineering SSOT Front-End
-
-The `ENGINEERING_SSOT/` directory provides the front-end posting location for completed engineering knowledge:
-
-- **`index.html`** — Interactive web page for browsing SSOT entries and generating Custom Information Data Sheets
-- **`00_SSOT_REGISTRY.yaml`** — Machine-readable registry of all posted entries
-- **`README.md`** — Usage documentation
-
-All SSOT entries are validated through ASIT governance (contracts, baselines, BREX rules) before posting.
+ASIT governance (contracts, baselines, BREX rules) before posting.
 
 ---
 
