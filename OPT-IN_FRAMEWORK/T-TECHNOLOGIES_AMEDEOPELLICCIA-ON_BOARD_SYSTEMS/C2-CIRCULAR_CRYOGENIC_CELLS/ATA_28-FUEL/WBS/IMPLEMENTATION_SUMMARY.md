@@ -109,12 +109,10 @@ ATA_28-FUEL/
 ├── LC04_DESIGN_DEFINITION/
 │   ├── ATA_28-10-00/WP-28-03-02/insulation/
 │   ├── ATA_28-11-00/WP-28-03-01/{geometry,structures,icd}/
-│   ├── ATA_28-20-00/WP-28-03-03/{pressure,relief}/
 │   └── ATA_28-41-00/WP-28-06-{01,02,03}/{sensors,architecture,placement,calibration}/
 ├── LC05_VERIFICATION_VALIDATION/
 │   ├── ATA_28-10-00/WP-28-03-02/{thermal,tests}/
 │   ├── ATA_28-11-00/WP-28-03-04/materials/
-│   ├── ATA_28-20-00/WP-28-03-03/safety/
 │   └── ATA_28-41-00/WP-28-06-{02,03}/{reliability,calibration}/
 ├── LC06_CERTIFICATION_EVIDENCE/
 │   ├── ATA_28-11-00/WP-28-03-{04,05}/{materials,manufacturing,tooling}/

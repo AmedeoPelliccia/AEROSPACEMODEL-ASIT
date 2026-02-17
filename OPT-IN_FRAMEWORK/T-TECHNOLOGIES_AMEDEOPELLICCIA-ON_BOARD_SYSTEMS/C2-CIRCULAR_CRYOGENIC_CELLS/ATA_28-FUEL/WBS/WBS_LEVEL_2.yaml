@@ -108,32 +108,32 @@ work_packages:
     owner: STK_ENG
     status: draft
     revision: 0.1.0
-    ata: "28-20-00"
+    ata: "28-23-00"
     lc_phases: [LC03, LC04, LC05]
     outputs:
       - id: pressurization_architecture
         formats: [system_schematic_PDF, system_schematic_SVG, requirements_YAML]
         files:
-          - "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/pressure/PRS-28-20-00-architecture.pdf"
-          - "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/pressure/PRS-28-20-00-architecture.svg"
-          - "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/pressure/PRS-28-20-00-requirements.yaml"
-        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/pressure/PRS-28-20-00-architecture.meta.yaml"
+          - "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/pressure/PRS-28-23-00-architecture.pdf"
+          - "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/pressure/PRS-28-23-00-architecture.svg"
+          - "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/pressure/PRS-28-23-00-requirements.yaml"
+        meta_file: "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/pressure/PRS-28-23-00-architecture.meta.yaml"
 
       - id: relief_and_vent_sizing
         formats: [sizing_calc_XLSX, sizing_summary_CSV, sizing_report_PDF]
         files:
-          - "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/relief/RLV-28-20-00-sizing.xlsx"
-          - "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/relief/RLV-28-20-00-sizing-summary.csv"
-          - "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/relief/RLV-28-20-00-sizing-report.pdf"
-        meta_file: "LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/relief/RLV-28-20-00-sizing.meta.yaml"
+          - "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/relief/RLV-28-23-00-sizing.xlsx"
+          - "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/relief/RLV-28-23-00-sizing-summary.csv"
+          - "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/relief/RLV-28-23-00-sizing-report.pdf"
+        meta_file: "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/relief/RLV-28-23-00-sizing.meta.yaml"
 
       - id: pressure_system_fmea
         formats: [FMEA_sheet_XLSX, FMEA_export_CSV, safety_assessment_PDF]
         files:
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure.xlsx"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure.csv"
-          - "LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure-assessment.pdf"
-        meta_file: "LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure.meta.yaml"
+          - "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/WP-28-03-03/safety/FMEA-28-23-00-pressure.xlsx"
+          - "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/WP-28-03-03/safety/FMEA-28-23-00-pressure.csv"
+          - "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/WP-28-03-03/safety/FMEA-28-23-00-pressure-assessment.pdf"
+        meta_file: "28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/WP-28-03-03/safety/FMEA-28-23-00-pressure.meta.yaml"
     verification:
       - { id: vent_relief_design_review, applies_to: [relief_and_vent_sizing] }
       - { id: pressure_safety_assessment_review, applies_to: [pressure_system_fmea] }

@@ -5,7 +5,7 @@ owner: STK_ENG
 revision: 0.1.0
 status: draft
 lc_phase: LC05_VERIFICATION_VALIDATION
-ata: 28-20-00
+ata: 28-23-00
 domain: C2-CIRCULAR_CRYOGENIC_CELLS
 created_on: to be set during baseline finalization
 last_updated_on: to be set during baseline finalization
@@ -29,12 +29,12 @@ formats:
 - FMEA_export_CSV
 - safety_assessment_PDF
 files:
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure.xlsx
-  id: FMEA-28-20-00-pressure
+- file: 28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/WP-28-03-03/safety/FMEA-28-23-00-pressure.xlsx
+  id: FMEA-28-23-00-pressure
   type: SPREADSHEET
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure.csv
-  id: FMEA-28-20-00-pressure
+- file: 28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/WP-28-03-03/safety/FMEA-28-23-00-pressure.csv
+  id: FMEA-28-23-00-pressure
   type: DATA_FILE
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-20-00/WP-28-03-03/safety/FMEA-28-20-00-pressure-assessment.pdf
-  id: FMEA-28-20-00-pressure-assessment
+- file: 28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/WP-28-03-03/safety/FMEA-28-23-00-pressure-assessment.pdf
+  id: FMEA-28-23-00-pressure-assessment
   type: DOCUMENT

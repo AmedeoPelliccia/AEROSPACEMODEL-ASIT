@@ -5,7 +5,7 @@ owner: STK_ENG
 revision: 0.1.0
 status: draft
 lc_phase: LC04_DESIGN_DEFINITION
-ata: 28-20-00
+ata: 28-23-00
 domain: C2-CIRCULAR_CRYOGENIC_CELLS
 created_on: to be set during baseline finalization
 last_updated_on: to be set during baseline finalization
@@ -29,12 +29,12 @@ formats:
 - system_schematic_SVG
 - requirements_YAML
 files:
-- file: LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/pressure/PRS-28-20-00-architecture.pdf
-  id: PRS-28-20-00-architecture
+- file: 28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/pressure/PRS-28-23-00-architecture.pdf
+  id: PRS-28-23-00-architecture
   type: DOCUMENT
-- file: LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/pressure/PRS-28-20-00-architecture.svg
-  id: PRS-28-20-00-architecture
+- file: 28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/pressure/PRS-28-23-00-architecture.svg
+  id: PRS-28-23-00-architecture
   type: DIAGRAM
-- file: LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/pressure/PRS-28-20-00-requirements.yaml
-  id: PRS-28-20-00-requirements
+- file: 28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/pressure/PRS-28-23-00-requirements.yaml
+  id: PRS-28-23-00-requirements
   type: DATA_FILE

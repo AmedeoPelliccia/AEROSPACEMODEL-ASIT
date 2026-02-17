@@ -5,7 +5,7 @@ owner: STK_ENG
 revision: 0.1.0
 status: draft
 lc_phase: LC04_DESIGN_DEFINITION
-ata: 28-20-00
+ata: 28-23-00
 domain: C2-CIRCULAR_CRYOGENIC_CELLS
 created_on: to be set during baseline finalization
 last_updated_on: to be set during baseline finalization
@@ -29,12 +29,12 @@ formats:
 - sizing_summary_CSV
 - sizing_report_PDF
 files:
-- file: LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/relief/RLV-28-20-00-sizing.xlsx
-  id: RLV-28-20-00-sizing
+- file: 28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/relief/RLV-28-23-00-sizing.xlsx
+  id: RLV-28-23-00-sizing
   type: SPREADSHEET
-- file: LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/relief/RLV-28-20-00-sizing-summary.csv
-  id: RLV-28-20-00-sizing-summary
+- file: 28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/relief/RLV-28-23-00-sizing-summary.csv
+  id: RLV-28-23-00-sizing-summary
   type: DATA_FILE
-- file: LC04_DESIGN_DEFINITION/ATA_28-20-00/WP-28-03-03/relief/RLV-28-20-00-sizing-report.pdf
-  id: RLV-28-20-00-sizing-report
+- file: 28-23-pressure-control/28-23-00-pressure-control-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-03-03/relief/RLV-28-23-00-sizing-report.pdf
+  id: RLV-28-23-00-sizing-report
   type: DOCUMENT
