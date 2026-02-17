@@ -121,7 +121,7 @@ hazard_register:
       trace_to:
         requirements: ["CM-B-001", "CM-B-002"]
         special_conditions: ["SC-LH2-01"]
-        safety: ["SAF-28-11-004"]
+        safety: ["SAF-28-11-003", "SAF-28-11-004"]
 
     - id: "HAZ-28-11-004"
       title: "Thermal insulation degradation from vacuum loss"
