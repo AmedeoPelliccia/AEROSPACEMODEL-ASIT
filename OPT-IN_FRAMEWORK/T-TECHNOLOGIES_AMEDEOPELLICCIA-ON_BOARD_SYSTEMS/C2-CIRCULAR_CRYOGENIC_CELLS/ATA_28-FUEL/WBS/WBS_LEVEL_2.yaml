@@ -243,10 +243,10 @@ work_packages:
       - id: selected_sensor_baseline
         formats: [selection_record_YAML, datasheet_bundle_PDF, qualification_requirements_CSV]
         files:
-          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-01/sensors/SEN-28-41-00-selection-record.yaml"
-          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-01/sensors/SEN-28-41-00-datasheet-bundle.pdf"
-          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-01/sensors/SEN-28-41-00-qualification-requirements.csv"
-        meta_file: "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-01/sensors/SEN-28-41-00-selection-record.meta.yaml"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/sensors/SEN-28-41-00-selection-record.yaml"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/sensors/SEN-28-41-00-datasheet-bundle.pdf"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/sensors/SEN-28-41-00-qualification-requirements.csv"
+        meta_file: "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/sensors/SEN-28-41-00-selection-record.meta.yaml"
     verification:
       - { id: trade_study_methodology_review, applies_to: [sensor_trade_study] }
       - { id: sensor_baseline_board_approval, applies_to: [selected_sensor_baseline] }
@@ -266,19 +266,19 @@ work_packages:
       - id: leak_detection_architecture
         formats: [architecture_doc_MD, architecture_doc_PDF, block_diagram_SVG, block_diagram_PDF]
         files:
-          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-02/architecture/LDS-28-41-00-architecture.md"
-          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-02/architecture/LDS-28-41-00-architecture.pdf"
-          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-02/architecture/LDS-28-41-00-block-diagram.svg"
-          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-02/architecture/LDS-28-41-00-block-diagram.pdf"
-        meta_file: "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-02/architecture/LDS-28-41-00-architecture.meta.yaml"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/architecture/LDS-28-41-00-architecture.md"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/architecture/LDS-28-41-00-architecture.pdf"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/architecture/LDS-28-41-00-block-diagram.svg"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/architecture/LDS-28-41-00-block-diagram.pdf"
+        meta_file: "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/architecture/LDS-28-41-00-architecture.meta.yaml"
 
       - id: sensor_placement_definition
         formats: [placement_map_CAD_DXF, placement_register_CSV, zoning_definition_YAML]
         files:
-          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-02/placement/LDS-28-41-00-placement-map.dxf"
-          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-02/placement/LDS-28-41-00-placement-register.csv"
-          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-02/placement/LDS-28-41-00-zoning-definition.yaml"
-        meta_file: "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-02/placement/LDS-28-41-00-placement.meta.yaml"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/placement/LDS-28-41-00-placement-map.dxf"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/placement/LDS-28-41-00-placement-register.csv"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/placement/LDS-28-41-00-zoning-definition.yaml"
+        meta_file: "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/placement/LDS-28-41-00-placement.meta.yaml"
 
       - id: redundancy_and_fault_tolerance_analysis
         formats: [fault_tree_PDF, reliability_model_CSV, safety_case_note_MD]
@@ -306,10 +306,10 @@ work_packages:
       - id: threshold_definition
         formats: [threshold_spec_YAML, threshold_spec_PDF, parameter_table_CSV]
         files:
-          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-03/calibration/CAL-28-41-00-threshold-spec.yaml"
-          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-03/calibration/CAL-28-41-00-threshold-spec.pdf"
-          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-03/calibration/CAL-28-41-00-parameter-table.csv"
-        meta_file: "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/WP-28-06-03/calibration/CAL-28-41-00-threshold-spec.meta.yaml"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/calibration/CAL-28-41-00-threshold-spec.yaml"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/calibration/CAL-28-41-00-threshold-spec.pdf"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/calibration/CAL-28-41-00-parameter-table.csv"
+        meta_file: "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC04_DESIGN_DEFINITION_DMU/PACKAGES/DESIGN/calibration/CAL-28-41-00-threshold-spec.meta.yaml"
 
       - id: calibration_procedure
         formats: [procedure_MD, procedure_PDF, calibration_log_template_CSV]
