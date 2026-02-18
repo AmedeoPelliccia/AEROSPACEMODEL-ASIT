@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "CONTRIBUTING Guide"
+    url: https://github.com/AmedeoPelliccia/AEROSPACEMODEL/blob/main/CONTRIBUTING.md
+    about: "Read the CoDevOps contribution guidelines before opening an issue."
+  - name: "Digital Constitution"
+    url: https://github.com/AmedeoPelliccia/AEROSPACEMODEL/blob/main/Model_Digital_Constitution.md
+    about: "Review the constitutional principles that govern all contributions."
+  - name: "Governance"
+    url: https://github.com/AmedeoPelliccia/AEROSPACEMODEL/blob/main/GOVERNANCE.md
+    about: "Understand the project governance model (CoDevOps / CoOpS)."
