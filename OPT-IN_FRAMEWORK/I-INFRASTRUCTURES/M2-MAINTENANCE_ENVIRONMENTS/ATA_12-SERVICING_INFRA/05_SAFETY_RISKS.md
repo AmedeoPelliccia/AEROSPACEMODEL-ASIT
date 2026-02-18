@@ -13,7 +13,7 @@
 
 | Attribute | Detail |
 |---|---|
-| **Hazard** | H₂ leak during fuelling accumulates to explosive concentration (4–75% LEL) |
+| **Hazard** | H₂ leak during fuelling accumulates to explosive concentration (4–75% vol in air) |
 | **Severity** | Catastrophic |
 | **Probability** | Very Low with Zone 1/2 classification and controls |
 | **Root causes** | Defective coupling, hose rupture, overpressure, coupling connect/disconnect error |
