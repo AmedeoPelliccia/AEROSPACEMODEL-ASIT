@@ -154,5 +154,5 @@ Preferred design for line stations: underground conduit to pit-mounted outlets:
 - [ATA 12I Requirements](01_REQUIREMENTS.md)
 - [ATA 12I Services Catalog](03_SERVICES.md)
 - [ATA 12I Safety Risks](05_SAFETY_RISKS.md)
-- [ATA 28 H₂ Cryogenic Instructions](../../../../../.github/instructions/ata28_h2_cryogenic.instructions.md)
+- [ATA 28 H₂ Cryogenic Instructions](../../../../.github/instructions/ata28_h2_cryogenic.instructions.md)
 - [O-OPERATIONS H₂ GSE](../../O-OPERATIONS_SERVICE_STRUCTURES/ATA_IN_H2_GSE_AND_SUPPLY_CHAIN/)
