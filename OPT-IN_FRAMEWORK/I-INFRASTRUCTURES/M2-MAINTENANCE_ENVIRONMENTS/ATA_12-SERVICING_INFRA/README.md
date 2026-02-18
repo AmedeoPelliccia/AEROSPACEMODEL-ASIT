@@ -76,6 +76,6 @@ For the AMPEL360 Q100 with LH₂ cryogenic propulsion and hydrogen fuel cell sys
 - [M2-MAINTENANCE_ENVIRONMENTS Index](../00_INDEX.md)
 - [I-INFRASTRUCTURES README](../../README.md)
 - [O-OPERATIONS H₂ GSE](../../O-OPERATIONS_SERVICE_STRUCTURES/ATA_IN_H2_GSE_AND_SUPPLY_CHAIN/)
-- [ATA 28 H₂ Cryogenic Instructions](../../../../../.github/instructions/ata28_h2_cryogenic.instructions.md)
-- [ATA 71 Fuel Cell Instructions](../../../../../.github/instructions/ata71_fuel_cell.instructions.md)
+- [ATA 28 H₂ Cryogenic Instructions](../../../../.github/instructions/ata28_h2_cryogenic.instructions.md)
+- [ATA 71 Fuel Cell Instructions](../../../../.github/instructions/ata71_fuel_cell.instructions.md)
 - [P-PROGRAMS ATA 12 Service Instruction](../../../P-PROGRAMS/S-SERVICE_INSTRUCTION/ATA_12-SERVICING/)
