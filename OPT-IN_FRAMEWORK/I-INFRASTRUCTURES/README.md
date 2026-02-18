@@ -10,24 +10,45 @@ The I-INFRASTRUCTURES domain contains documentation for ground-based infrastruct
 
 ---
 
+## Subdomain Structure
+
+The I-INFRASTRUCTURES domain is organized into three subdomains following the physical environments where infrastructure exists:
+
+### M1 — Manufacturing Facilities
+**Factory floor** — Production lines, test rigs, and assembly benches. Aligns with manufacturing investment decisions and industrial permits.
+
+### M2 — Maintenance Environments
+**Maintenance ecosystem** — Line stations, heavy-maintenance hangars, and component shops. Aligns with maintenance facility certification and regulatory requirements.
+
+### O — Operations & Service Structures
+**Airport and logistics** — Operational airport infrastructure including the H₂ supply chain. Aligns with airport facility planning and fuel logistics permits.
+
+---
+
 ## Infrastructure Categories
 
-### ATA 03 – Support Infrastructure
-Ground support equipment and tooling infrastructure.
+### M1 — Manufacturing Facilities
 
-### ATA 08 – Leveling and Weighing Infrastructure
-Leveling and weighing equipment and facilities.
-
-### ATA 10 – Parking, Mooring, Storage, RTS Infrastructure
-Ground handling infrastructure for parking, mooring, and storage.
-
-### ATA 12 – Servicing Infrastructure
-Servicing equipment and fluid handling infrastructure.
-
-### ATA 85 – Fuel Cell Systems Infrastructure
+#### ATA 85 – Fuel Cell Systems Infrastructure
 Ground support for fuel cell systems including testing and maintenance equipment.
 
-### ATA IN – H2 GSE and Supply Chain
+### M2 — Maintenance Environments
+
+#### ATA 08 – Leveling and Weighing Infrastructure
+Leveling and weighing equipment and facilities.
+
+#### ATA 10 – Parking, Mooring, Storage, RTS Infrastructure
+Ground handling infrastructure for parking, mooring, and storage.
+
+#### ATA 12 – Servicing Infrastructure
+Servicing equipment and fluid handling infrastructure.
+
+### O — Operations & Service Structures
+
+#### ATA 03 – Support Infrastructure
+Ground support equipment and tooling infrastructure.
+
+#### ATA IN – H2 GSE and Supply Chain
 **Novel Technology Infrastructure:**
 - Hydrogen ground support equipment (GSE)
 - Cryogenic refueling infrastructure

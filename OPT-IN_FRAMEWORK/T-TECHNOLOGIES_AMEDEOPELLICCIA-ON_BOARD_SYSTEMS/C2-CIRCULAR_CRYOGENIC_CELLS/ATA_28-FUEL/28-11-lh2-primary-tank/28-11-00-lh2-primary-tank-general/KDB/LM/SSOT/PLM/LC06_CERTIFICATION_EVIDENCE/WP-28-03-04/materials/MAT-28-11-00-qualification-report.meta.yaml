@@ -27,9 +27,9 @@ formats:
 - qualification_report_PDF
 - traceability_matrix_CSV
 files:
-- file: LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-qualification-report.pdf
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-04/materials/MAT-28-11-00-qualification-report.pdf
   id: MAT-28-11-00-qualification-report
   type: DOCUMENT
-- file: LC06_CERTIFICATION_EVIDENCE/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-traceability-matrix.csv
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC06_CERTIFICATION_EVIDENCE/WP-28-03-04/materials/MAT-28-11-00-traceability-matrix.csv
   id: MAT-28-11-00-traceability-matrix
   type: DATA_FILE

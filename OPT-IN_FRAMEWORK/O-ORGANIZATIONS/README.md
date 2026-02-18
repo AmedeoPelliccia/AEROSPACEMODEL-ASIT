@@ -10,25 +10,41 @@ The O-ORGANIZATIONS domain contains organizational, governance, and policy-level
 
 ---
 
+## Subdomain Structure
+
+The O-ORGANIZATIONS domain is organized into two subdomains that separate regulatory authority from business enforcement:
+
+### A — Authoritative
+**Agency, regulatory, and legal-derived** — Chapters rooted in certification authority requirements, airworthiness directives, and regulatory mandates. These define the legal framework within which the aircraft must operate.
+
+### B — Business Enforcement
+**Operator business policies and enforcement** — Chapters driven by the operator's business decisions for maintenance programs, organizational structure, and support logistics. These translate regulatory requirements into actionable business processes.
+
+---
+
 ## ATA Chapters
 
-### ATA 00 – General
+### A — Authoritative
+
+#### ATA 00 – General
 General information, abbreviations, and introductory material applicable to all aircraft systems.
 
-### ATA 01 – Maintenance Policy
-Maintenance program policies, scheduled maintenance requirements, and maintenance planning documents.
-
-### ATA 02 – Operations Organization
-Operational procedures, flight operations manual content, and operational policies.
-
-### ATA 03 – Support Information
-Support equipment, tooling, and support infrastructure information.
-
-### ATA 04 – Airworthiness Limitations
+#### ATA 04 – Airworthiness Limitations
 Mandatory airworthiness limitations, life-limited parts, and certification maintenance requirements.
 
-### ATA 05 – Time Limits / Maintenance Checks
+#### ATA 05 – Time Limits / Maintenance Checks
 Time limits, maintenance check intervals, and inspection program definitions.
+
+### B — Business Enforcement
+
+#### ATA 01 – Maintenance Policy
+Maintenance program policies, scheduled maintenance requirements, and maintenance planning documents.
+
+#### ATA 02 – Operations Organization
+Operational procedures, flight operations manual content, and operational policies.
+
+#### ATA 03 – Support Information
+Support equipment, tooling, and support infrastructure information.
 
 ---
 

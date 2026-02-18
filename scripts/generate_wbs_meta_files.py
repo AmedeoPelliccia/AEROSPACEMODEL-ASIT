@@ -37,10 +37,9 @@ def get_file_type_from_extension(file_path: str) -> str:
 def extract_lc_phase_from_path(file_path: str) -> str:
     """Extract lifecycle phase from file path."""
     path_parts = file_path.split('/')
-    if path_parts:
-        first_part = path_parts[0]
-        if first_part.startswith('LC'):
-            return first_part
+    for part in path_parts:
+        if part.startswith('LC'):
+            return part
     return 'LC04'  # default
 
 
