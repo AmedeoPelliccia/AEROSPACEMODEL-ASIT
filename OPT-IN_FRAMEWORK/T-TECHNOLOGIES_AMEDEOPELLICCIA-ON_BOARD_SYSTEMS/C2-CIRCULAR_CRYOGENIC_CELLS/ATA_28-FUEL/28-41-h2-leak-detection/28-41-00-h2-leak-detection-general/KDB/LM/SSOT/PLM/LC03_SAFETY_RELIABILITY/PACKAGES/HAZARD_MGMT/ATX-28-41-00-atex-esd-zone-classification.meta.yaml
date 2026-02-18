@@ -1,0 +1,42 @@
+output_id: atex_esd_zone_classification
+work_package: WP-28-07-01
+title: ATEX Zone Classification and ESD Control — H₂ Leak Detection System
+owner: STK_SAF
+revision: 0.1.0
+status: draft
+lc_phase: LC03_SAFETY_RELIABILITY
+ata: 28-41-00
+domain: C2-CIRCULAR_CRYOGENIC_CELLS
+created_on: to be set during baseline finalization
+last_updated_on: to be set during baseline finalization
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+links:
+  reqs: []
+  safety:
+    - ATX-001
+    - ATX-002
+    - ESD-001
+  work_package: WP-28-07-01
+  verification:
+    - atex_zone_classification_review
+    - esd_bonding_acceptance_test
+tags:
+  - atex
+  - esd
+  - zone_classification
+  - hydrogen_safety
+  - explosive_atmosphere
+  - bonding_grounding
+  - future_proofing
+formats:
+  - hazard_mgmt_MD
+  - hazard_mgmt_PDF
+files:
+  - file: 28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/PACKAGES/HAZARD_MGMT/ATX-28-41-00-atex-esd-zone-classification.md
+    id: ATX-28-41-00-atex-esd-zone-classification
+    type: DOCUMENT
+  - file: 28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/PACKAGES/HAZARD_MGMT/ATX-28-41-00-atex-esd-zone-classification.pdf
+    id: ATX-28-41-00-atex-esd-zone-classification
+    type: DOCUMENT

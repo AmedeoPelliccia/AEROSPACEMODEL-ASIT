@@ -60,6 +60,8 @@ hydrogen (LH₂) at –253 °C using circular cryogenic cell architecture.
 |----|-------|-------------|
 | SC-28-H2-001 | Hydrogen Storage and Distribution | Special conditions for H₂ fuel storage and distribution |
 | SC-28-CRYO-002 | Cryogenic Temperature Handling | Special conditions for systems at cryogenic temperatures |
+| SC-28-ATEX-003 | ATEX Zone Classification | ATEX/IECEx zone classification for all H₂ explosive atmosphere areas (see ATX-28-41-00) |
+| SC-28-ESD-004 | ESD Bonding and Grounding | Electrostatic discharge control for H₂ system components (see ESD-28-00-00) |
 
 These special conditions apply in addition to CS-25 standard requirements.
 
@@ -84,6 +86,10 @@ governed by BREX decision rules. No free-form autonomy is permitted.
 | ARP4761 | Safety assessment (FHA, FMEA, FTA) |
 | ISO 14687-2 | Hydrogen fuel quality |
 | CS-25 + Special Conditions | Airworthiness certification |
+| ATEX 2014/34/EU | Equipment in explosive atmospheres (EU) |
+| IEC 60079 series | Explosive-atmosphere equipment and installation |
+| SAE ARP 1489 | Aircraft fuel system ESD bonding and grounding |
+| NFPA 2 | Hydrogen technologies code — aircraft operations |
 
 ## 8. Quick Reference
 

@@ -178,10 +178,10 @@ class TestSectionIndexUpdated:
             return yaml.safe_load(f)
 
     def test_safety_count_updated(self, section_index):
-        assert section_index["metrics"]["safety_count"] == 3
+        assert section_index["metrics"]["safety_count"] == 5
 
     def test_total_artifacts_updated(self, section_index):
-        assert section_index["metrics"]["total_artifacts"] == 3
+        assert section_index["metrics"]["total_artifacts"] == 5
 
 
 class TestContentIntegrity:
