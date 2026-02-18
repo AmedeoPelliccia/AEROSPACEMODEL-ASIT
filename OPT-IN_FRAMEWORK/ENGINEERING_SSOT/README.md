@@ -1,6 +1,5 @@
-# ENGINEERING_SSOT
+# Engineering SSOT Front-End
 
-**Engineering Single Source of Truth (SSOT) Front-End**  
 **Program:** AMPEL360 Q100  
 **Authority:** ASIT (Aircraft Systems Information Transponder)
 
@@ -8,59 +7,52 @@
 
 ## Overview
 
-The **ENGINEERING_SSOT** directory provides the authoritative registry of engineering data sources and a self-contained front-end interface for the AMPEL360 Q100 program.
+The **Engineering SSOT** (Single Source of Truth) front-end provides a web-based interface for navigating and querying engineering SSOT registry entries across all technology domains of the AMPEL360 Q100 program.
 
-It serves as the single point of reference for all engineering data — linking ATA chapter artifacts, lifecycle phases, technology domains, and Custom Information Data Sheets to their canonical locations within the OPT-IN_FRAMEWORK.
+It is a self-contained, CDN-free HTML front-end that resides within the OPT-IN_FRAMEWORK and enables:
+
+- Browsing the SSOT registry (`00_SSOT_REGISTRY.yaml`) in a structured table
+- Filtering entries by free-text (ID/title), technology domain, and status
+- Submitting Custom Information Data Sheets linked to SSOT entries
+- Cross-referencing novel-technology entries with their special conditions
 
 ---
 
-## Contents
+## Files
 
-| File | Description |
-|------|-------------|
-| `index.html` | Self-contained front-end for browsing the SSOT registry |
-| `00_SSOT_REGISTRY.yaml` | Authoritative YAML registry of all SSOT entries |
+| File | Purpose |
+|------|---------|
+| `index.html` | Self-contained front-end with SSOT registry table and data-sheet form |
+| `00_SSOT_REGISTRY.yaml` | SSOT registry with all program engineering SSOT entries |
 | `README.md` | This file |
 
 ---
 
-## SSOT Registry Structure
+## SSOT Registry (`00_SSOT_REGISTRY.yaml`)
 
-The `00_SSOT_REGISTRY.yaml` file contains:
+The registry captures the canonical SSOT entries for the AMPEL360 Q100 program. Each entry includes:
 
-- **metadata** — Program identification and version information
-- **ssot_entries** — One entry per ATA chapter / technology domain combination
-- **custom_data_sheets** — Custom Information Data Sheet (CIDS) index
-
-Each SSOT entry provides:
-- Unique identifier (`id`)
-- Title and ATA chapter reference
-- Technology domain classification
-- Baseline reference and lifecycle phase
-- Status (`draft`, `in_review`, or `approved`)
-- Special conditions (where applicable)
+- `id` — Unique SSOT identifier (e.g., `SSOT-Q100-C2-001`)
+- `title` — Human-readable title
+- `ata_chapter` — ATA chapter (e.g., `28`)
+- `technology_domain` — Technology subdomain (e.g., `C2-CIRCULAR_CRYOGENIC_CELLS`)
+- `baseline_ref` — Reference to the controlling baseline
+- `lifecycle_phase` — Primary lifecycle phase (LC01–LC14)
+- `status` — `draft`, `in_review`, or `approved`
+- `special_conditions` — Applicable special conditions (if any)
 
 ---
 
-## Front-End Usage
+## Usage
 
-Open `index.html` directly in a browser — no server or external dependencies required.
-
-The front-end provides:
-- Browsable SSOT registry table
-- Custom Information Data Sheet submission form
-- Links to canonical OPT-IN_FRAMEWORK paths
+Open `index.html` in a web browser. No server or external dependencies required.
 
 ---
 
-## Related Documentation
+## Related Documents
 
-| Document | Path |
-|----------|------|
-| OPT-IN_FRAMEWORK Index | `../00_INDEX.md` |
-| OPT-IN_FRAMEWORK README | `../README.md` |
-| LC Phase Registry | `../../lifecycle/LC_PHASE_REGISTRY.yaml` |
+- [OPT-IN_FRAMEWORK README](../README.md)
+- [OPT-IN_FRAMEWORK Index](../00_INDEX.md)
+- [Lifecycle Phase Registry](../../lifecycle/LC_PHASE_REGISTRY.yaml)
 
 ---
-
-*End of ENGINEERING_SSOT README*

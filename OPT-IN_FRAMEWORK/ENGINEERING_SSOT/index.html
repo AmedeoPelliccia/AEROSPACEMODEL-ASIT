@@ -3,223 +3,333 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Engineering SSOT — AMPEL360 Q100</title>
+  <title>Engineering SSOT – AMPEL360 Q100 | OPT-IN_FRAMEWORK</title>
   <style>
-    /* Self-contained styles — no external dependencies */
+    /* ── Reset & Base ──────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: #f4f6f9;
-      color: #1a1a2e;
-      line-height: 1.6;
-    }
+    body { font-family: system-ui, sans-serif; background: #f5f7fa; color: #1a1a2e; }
+
+    /* ── Header ────────────────────────────────────────────────────── */
     header {
-      background: #1a1a2e;
-      color: #e0e0ff;
-      padding: 1.5rem 2rem;
-      border-bottom: 3px solid #4a90e2;
+      background: #1a1a2e; color: #e8eaf6; padding: 1.2rem 2rem;
+      display: flex; align-items: center; gap: 1.5rem;
     }
-    header h1 { font-size: 1.6rem; }
-    header p  { font-size: 0.9rem; opacity: 0.8; margin-top: 0.25rem; }
-    main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-    section { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;
-              box-shadow: 0 2px 8px rgba(0,0,0,.07); }
-    h2 { font-size: 1.2rem; color: #1a1a2e; margin-bottom: 1rem;
-         border-bottom: 2px solid #4a90e2; padding-bottom: 0.4rem; }
-    /* Table */
-    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-    th { background: #1a1a2e; color: #e0e0ff; padding: 0.6rem 0.8rem; text-align: left; }
-    td { padding: 0.55rem 0.8rem; border-bottom: 1px solid #e8eaed; }
-    tr:last-child td { border-bottom: none; }
-    tr:hover td { background: #f0f4ff; }
-    .status-approved  { color: #22863a; font-weight: 600; }
-    .status-in_review { color: #b08800; font-weight: 600; }
-    .status-draft     { color: #6a737d; font-weight: 600; }
-    /* Badge */
-    .badge {
-      display: inline-block; padding: 0.15rem 0.5rem; border-radius: 3px;
-      font-size: 0.75rem; font-weight: 600; color: #fff;
+    header h1 { font-size: 1.4rem; font-weight: 700; }
+    header .badge {
+      background: #4a90d9; color: #fff; border-radius: 4px;
+      padding: 0.2rem 0.6rem; font-size: 0.75rem; font-weight: 600;
     }
-    .badge-c2 { background: #0075ca; }
-    .badge-p  { background: #e36209; }
-    .badge-i2 { background: #6f42c1; }
-    /* Form */
-    form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    form label { font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem; }
-    form input, form select, form textarea {
-      width: 100%; padding: 0.45rem 0.6rem; border: 1px solid #d1d5db;
-      border-radius: 4px; font-size: 0.9rem;
+
+    /* ── Main Layout ───────────────────────────────────────────────── */
+    main { max-width: 1200px; margin: 1.5rem auto; padding: 0 1.5rem; }
+    h2 { font-size: 1.15rem; margin-bottom: 0.75rem; color: #1a1a2e; }
+
+    /* ── Cards ─────────────────────────────────────────────────────── */
+    .card {
+      background: #fff; border-radius: 8px; padding: 1.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08); margin-bottom: 1.5rem;
     }
-    form .full { grid-column: 1 / -1; }
-    form button {
-      grid-column: 1 / -1; padding: 0.6rem 1.2rem; background: #1a1a2e;
-      color: #fff; border: none; border-radius: 4px; cursor: pointer;
-      font-size: 0.95rem; font-weight: 600;
+
+    /* ── Filters ───────────────────────────────────────────────────── */
+    .filters {
+      display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;
     }
-    form button:hover { background: #4a90e2; }
+    .filters input, .filters select {
+      border: 1px solid #ccd; border-radius: 4px; padding: 0.4rem 0.7rem;
+      font-size: 0.9rem; background: #f5f7fa;
+    }
+
+    /* ── SSOT Registry Table ──────────────────────────────────────── */
+    .table-wrapper { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.87rem; }
+    thead th {
+      background: #1a1a2e; color: #e8eaf6; text-align: left;
+      padding: 0.6rem 0.8rem; font-weight: 600; white-space: nowrap;
+    }
+    tbody tr:nth-child(even) { background: #f5f7fa; }
+    tbody td { padding: 0.55rem 0.8rem; vertical-align: top; }
+    .tag {
+      display: inline-block; border-radius: 4px; padding: 0.15rem 0.45rem;
+      font-size: 0.76rem; font-weight: 600; margin: 0.1rem 0.1rem 0.1rem 0;
+    }
+    .tag-novel  { background: #ffe0b2; color: #bf360c; }
+    .tag-sc     { background: #e3f2fd; color: #0d47a1; }
+    .tag-draft  { background: #f3e5f5; color: #6a1b9a; }
+    .tag-review { background: #fff9c4; color: #f57f17; }
+    .tag-ok     { background: #e8f5e9; color: #1b5e20; }
+    .monospace  { font-family: monospace; }
+
+    /* ── Custom Information Data Sheet Form ──────────────────────── */
+    form label { display: block; margin-top: 0.8rem; font-weight: 600; font-size: 0.9rem; }
+    form input[type="text"], form select, form textarea {
+      width: 100%; border: 1px solid #ccd; border-radius: 4px;
+      padding: 0.4rem 0.7rem; font-size: 0.9rem; margin-top: 0.25rem;
+      background: #f5f7fa;
+    }
+    form textarea { min-height: 80px; resize: vertical; }
+    .btn {
+      margin-top: 1rem; background: #4a90d9; color: #fff; border: none;
+      border-radius: 4px; padding: 0.55rem 1.4rem; font-size: 0.95rem;
+      cursor: pointer; font-weight: 600;
+    }
+    .btn:hover { background: #2d72bf; }
+
+    /* ── Footer ────────────────────────────────────────────────────── */
     footer {
-      text-align: center; padding: 1.5rem; font-size: 0.8rem; color: #6a737d;
-      border-top: 1px solid #e8eaed; margin-top: 2rem;
+      text-align: center; font-size: 0.78rem; color: #888;
+      padding: 1.5rem; margin-top: 1rem;
     }
+
+    /* ── Utility ───────────────────────────────────────────────────── */
+    .hidden { display: none; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Engineering SSOT — AMPEL360 Q100</h1>
-  <p>Single Source of Truth Registry &nbsp;|&nbsp; OPT-IN_FRAMEWORK &nbsp;|&nbsp; Authority: ASIT</p>
+  <div>
+    <h1>Engineering SSOT Registry</h1>
+    <div style="font-size:0.82rem; margin-top:0.25rem; opacity:0.8;">
+      AMPEL360 Q100 &nbsp;|&nbsp; OPT-IN_FRAMEWORK
+    </div>
+  </div>
+  <span class="badge">ASIT v1.0</span>
 </header>
 
 <main>
 
-  <!-- SSOT Registry Table -->
-  <section>
-    <h2>SSOT Registry</h2>
-    <table id="ssot-registry" aria-label="Engineering SSOT Registry">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th>ATA Chapter</th>
-          <th>Technology Domain</th>
-          <th>Lifecycle Phase</th>
-          <th>Baseline Ref</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><code>SSOT-Q100-C2-001</code></td>
-          <td>LH2 Primary Tank — Cryogenic Storage Design</td>
-          <td>28-11</td>
-          <td><span class="badge badge-c2">C2-CIRCULAR_CRYOGENIC_CELLS</span></td>
-          <td>LC04</td>
-          <td>BL-ATA28-C2-001</td>
-          <td class="status-approved">approved</td>
-        </tr>
-        <tr>
-          <td><code>SSOT-Q100-C2-002</code></td>
-          <td>H2 Leak Detection System — Sensor Architecture</td>
-          <td>28-41</td>
-          <td><span class="badge badge-c2">C2-CIRCULAR_CRYOGENIC_CELLS</span></td>
-          <td>LC04</td>
-          <td>BL-ATA28-C2-002</td>
-          <td class="status-approved">approved</td>
-        </tr>
-        <tr>
-          <td><code>SSOT-Q100-P-001</code></td>
-          <td>Fuel Cell Power Plant — Stack Architecture</td>
-          <td>71-11</td>
-          <td><span class="badge badge-p">P-PROPULSION</span></td>
-          <td>LC04</td>
-          <td>BL-ATA71-P-001</td>
-          <td class="status-approved">approved</td>
-        </tr>
-        <tr>
-          <td><code>SSOT-Q100-P-002</code></td>
-          <td>Fuel Cell Thermal Management System</td>
-          <td>71-24</td>
-          <td><span class="badge badge-p">P-PROPULSION</span></td>
-          <td>LC04</td>
-          <td>BL-ATA71-P-002</td>
-          <td class="status-in_review">in_review</td>
-        </tr>
-        <tr>
-          <td><code>SSOT-Q100-I2-001</code></td>
-          <td>Predictive Maintenance AI Model — Architecture</td>
-          <td>95-10</td>
-          <td><span class="badge badge-i2">I2-INTELLIGENCE</span></td>
-          <td>LC04</td>
-          <td>BL-ATA95-I2-001</td>
-          <td class="status-draft">draft</td>
-        </tr>
-        <tr>
-          <td><code>SSOT-Q100-I2-002</code></td>
-          <td>Flight Data Analysis AI Model — Training Data Governance</td>
-          <td>95-20</td>
-          <td><span class="badge badge-i2">I2-INTELLIGENCE</span></td>
-          <td>LC03</td>
-          <td>BL-ATA95-I2-002</td>
-          <td class="status-draft">draft</td>
-        </tr>
-      </tbody>
-    </table>
+  <!-- ── SSOT Registry ───────────────────────────────────────────── -->
+  <section class="card" id="ssot-registry">
+    <h2>SSOT Registry – AMPEL360 Q100</h2>
+    <p style="font-size:0.85rem;color:#555;margin-bottom:1rem;">
+      Single Source of Truth entries for all technology domains.
+      Manually mirrored from <span class="monospace">ENGINEERING_SSOT/00_SSOT_REGISTRY.yaml</span>;
+      updates require editing the embedded SSOT entries in this page.
+
+    <div class="filters">
+      <input type="text" id="filter-text" placeholder="Search by ID, title…" oninput="filterTable()">
+      <select id="filter-domain" onchange="filterTable()">
+        <option value="">All Domains</option>
+        <option value="C2-CIRCULAR_CRYOGENIC_CELLS">C2 – Cryogenic Cells</option>
+        <option value="P-PROPULSION">P – Propulsion</option>
+        <option value="I2-INTELLIGENCE">I2 – Intelligence</option>
+        <option value="M-MECHANICS">M – Mechanics</option>
+      </select>
+      <select id="filter-status" onchange="filterTable()">
+        <option value="">All Statuses</option>
+        <option value="approved">Approved</option>
+        <option value="in_review">In Review</option>
+        <option value="draft">Draft</option>
+      </select>
+    </div>
+
+    <div class="table-wrapper">
+      <table id="registry-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>ATA</th>
+            <th>Domain</th>
+            <th>Lifecycle</th>
+            <th>Status</th>
+            <th>Special Conditions</th>
+          </tr>
+        </thead>
+        <tbody id="registry-body">
+          <!-- Rows populated by inline script below -->
+        </tbody>
+      </table>
+    </div>
   </section>
 
-  <!-- Custom Information Data Sheet Form -->
-  <section id="data-sheet">
-    <h2>Custom Information Data Sheet</h2>
-    <p style="margin-bottom:1rem; font-size:0.9rem; color:#444;">
-      Submit a new Custom Information Data Sheet (CIDS) for novel technology components
-      not fully covered by standard ATA iSpec 2200 chapters.
+  <!-- ── Custom Information Data Sheet Form ─────────────────────── -->
+  <section class="card" id="data-sheet">
+    <h2>Submit Custom Information Data Sheet</h2>
+    <p style="font-size:0.85rem;color:#555;margin-bottom:0.5rem;">
+      Link a Custom Information Data Sheet to an existing SSOT entry.
     </p>
-    <form id="cids-form" onsubmit="submitDataSheet(event)">
-      <div>
-        <label for="ds-id">Data Sheet ID</label>
-        <input type="text" id="ds-id" placeholder="CIDS-XX-000" required>
-      </div>
-      <div>
-        <label for="ds-title">Title</label>
-        <input type="text" id="ds-title" placeholder="Component — Custom Information Data Sheet" required>
-      </div>
-      <div>
-        <label for="ds-domain">Technology Domain</label>
-        <select id="ds-domain">
-          <option value="C2-CIRCULAR_CRYOGENIC_CELLS">C2 — Circular Cryogenic Cells</option>
-          <option value="P-PROPULSION">P — Propulsion</option>
-          <option value="I2-INTELLIGENCE">I2 — Intelligence</option>
-        </select>
-      </div>
-      <div>
-        <label for="ds-ata">ATA Chapter</label>
-        <input type="text" id="ds-ata" placeholder="e.g. 28-11">
-      </div>
-      <div>
-        <label for="ds-linked-ssot">Linked SSOT Entry</label>
-        <input type="text" id="ds-linked-ssot" placeholder="SSOT-Q100-XX-000">
-      </div>
-      <div>
-        <label for="ds-status">Status</label>
-        <select id="ds-status">
-          <option value="draft">Draft</option>
-          <option value="in_review">In Review</option>
-          <option value="approved">Approved</option>
-        </select>
-      </div>
-      <div class="full">
-        <label for="ds-description">Description</label>
-        <textarea id="ds-description" rows="3" placeholder="Describe this Custom Information Data Sheet..."></textarea>
-      </div>
-      <button type="submit">Submit Data Sheet</button>
+    <form id="ds-form" onsubmit="submitDataSheet(event)">
+      <label for="ds-id">Data Sheet ID</label>
+      <input type="text" id="ds-id" name="ds-id" placeholder="e.g. CDS-Q100-001" required>
+
+      <label for="ds-ssot-ref">SSOT Reference</label>
+      <select id="ds-ssot-ref" name="ds-ssot-ref" required>
+        <option value="">Select SSOT entry…</option>
+        <!-- Populated by script -->
+      </select>
+
+      <label for="ds-title">Title</label>
+      <input type="text" id="ds-title" name="ds-title" placeholder="Custom Information Data Sheet title" required>
+
+      <label for="ds-description">Description</label>
+      <textarea id="ds-description" name="ds-description" placeholder="Describe the custom data sheet content…"></textarea>
+
+      <label for="ds-author">Author</label>
+      <input type="text" id="ds-author" name="ds-author" placeholder="Author or organization">
+
+      <button type="submit" class="btn">Submit Data Sheet</button>
+      <div id="ds-feedback" style="margin-top:0.6rem;font-size:0.88rem;"></div>
     </form>
-  </section>
-
-  <!-- Navigation Links -->
-  <section>
-    <h2>OPT-IN Framework Navigation</h2>
-    <p style="margin:0 0 0.5rem; font-size:0.85rem; color:#555;">
-      The following links point to Markdown and YAML source files in the OPT-IN_FRAMEWORK repository
-      and may display as raw text when opened directly in a browser.
-    </p>
-    <ul style="list-style:none; padding:0; display:flex; gap:1rem; flex-wrap:wrap;">
-      <li><a href="../00_INDEX.md">OPT-IN_FRAMEWORK Index</a></li>
-      <li><a href="../README.md">OPT-IN_FRAMEWORK README</a></li>
-      <li><a href="00_SSOT_REGISTRY.yaml">SSOT Registry (YAML)</a></li>
-    </ul>
   </section>
 
 </main>
 
 <footer>
-  <p>AMPEL360 Q100 &nbsp;|&nbsp; Engineering SSOT Front-End &nbsp;|&nbsp; Authority: ASIT &nbsp;|&nbsp; OPT-IN_FRAMEWORK v2.1</p>
+  OPT-IN_FRAMEWORK &nbsp;|&nbsp; AMPEL360 Q100 &nbsp;|&nbsp;
+  Authority: ASIT &nbsp;|&nbsp; No external dependencies
 </footer>
 
 <script>
-  function submitDataSheet(e) {
-    e.preventDefault();
-    var id = document.getElementById('ds-id').value;
-    alert('Data Sheet ' + id + ' submitted for review. See 00_SSOT_REGISTRY.yaml for the canonical record.');
+/* ── SSOT Registry Data (sourced from 00_SSOT_REGISTRY.yaml) ─────── */
+const SSOT_ENTRIES = [
+  {
+    id: "SSOT-Q100-C2-001",
+    title: "LH2 Primary Tank \u2013 System SSOT",
+    ata: "28",
+    domain: "C2-CIRCULAR_CRYOGENIC_CELLS",
+    lifecycle: "LC04",
+    status: "approved",
+    sc: ["SC-28-H2-001", "SC-28-CRYO-002"],
+    novel: true
+  },
+  {
+    id: "SSOT-Q100-C2-002",
+    title: "H2 Leak Detection \u2013 System SSOT",
+    ata: "28",
+    domain: "C2-CIRCULAR_CRYOGENIC_CELLS",
+    lifecycle: "LC04",
+    status: "approved",
+    sc: ["SC-28-H2-001"],
+    novel: true
+  },
+  {
+    id: "SSOT-Q100-C2-003",
+    title: "Boil-Off Management \u2013 System SSOT",
+    ata: "28",
+    domain: "C2-CIRCULAR_CRYOGENIC_CELLS",
+    lifecycle: "LC04",
+    status: "in_review",
+    sc: ["SC-28-H2-001", "SC-28-CRYO-002"],
+    novel: true
+  },
+  {
+    id: "SSOT-Q100-P-001",
+    title: "Fuel Cell Power Plant \u2013 System SSOT",
+    ata: "71",
+    domain: "P-PROPULSION",
+    lifecycle: "LC04",
+    status: "approved",
+    sc: ["SC-71-FUELCELL-001"],
+    novel: true
+  },
+  {
+    id: "SSOT-Q100-P-002",
+    title: "Engine Fuel and Control \u2013 System SSOT",
+    ata: "73",
+    domain: "P-PROPULSION",
+    lifecycle: "LC04",
+    status: "in_review",
+    sc: [],
+    novel: true
+  },
+  {
+    id: "SSOT-Q100-I2-001",
+    title: "AI/ML Models \u2013 System SSOT",
+    ata: "95",
+    domain: "I2-INTELLIGENCE",
+    lifecycle: "LC04",
+    status: "draft",
+    sc: ["SC-AI-ASSURANCE-001"],
+    novel: true
+  },
+  {
+    id: "SSOT-Q100-I2-002",
+    title: "Synthetic Data Validation \u2013 System SSOT",
+    ata: "97",
+    domain: "I2-INTELLIGENCE",
+    lifecycle: "LC05",
+    status: "draft",
+    sc: [],
+    novel: true
+  },
+  {
+    id: "SSOT-Q100-M-001",
+    title: "Flight Controls \u2013 System SSOT",
+    ata: "27",
+    domain: "M-MECHANICS",
+    lifecycle: "LC04",
+    status: "approved",
+    sc: [],
+    novel: false
   }
+];
+
+/* ── Render registry table ─────────────────────────────────────────── */
+function statusTag(s) {
+  const cls = s === "approved" ? "tag-ok" : s === "in_review" ? "tag-review" : "tag-draft";
+  return `<span class="tag ${cls}">${s}</span>`;
+}
+
+function renderTable(entries) {
+  const tbody = document.getElementById("registry-body");
+  tbody.innerHTML = entries.map(e => {
+    const scTags = e.sc.map(s => `<span class="tag tag-sc">${s}</span>`).join(" ");
+    const novelTag = e.novel ? `<span class="tag tag-novel">\u2605 Novel</span> ` : "";
+    return `<tr data-domain="${e.domain}" data-status="${e.status}">
+      <td class="monospace">${e.id}</td>
+      <td>${e.title}</td>
+      <td>${e.ata}</td>
+      <td>${novelTag}<span style="font-size:0.82rem">${e.domain}</span></td>
+      <td>${e.lifecycle}</td>
+      <td>${statusTag(e.status)}</td>
+      <td>${scTags || "<span style='color:#aaa'>—</span>"}</td>
+    </tr>`;
+  }).join("");
+}
+
+function filterTable() {
+  const txt = document.getElementById("filter-text").value.toLowerCase();
+  const domain = document.getElementById("filter-domain").value;
+  const status = document.getElementById("filter-status").value;
+  const filtered = SSOT_ENTRIES.filter(e => {
+    const matchTxt = !txt || e.id.toLowerCase().includes(txt) || e.title.toLowerCase().includes(txt);
+    const matchDomain = !domain || e.domain === domain;
+    const matchStatus = !status || e.status === status;
+    return matchTxt && matchDomain && matchStatus;
+  });
+  renderTable(filtered);
+}
+
+/* ── Populate SSOT ref dropdown ────────────────────────────────────── */
+function populateRefDropdown() {
+  const sel = document.getElementById("ds-ssot-ref");
+  // Clear all options except the placeholder (index 0) before populating
+  while (sel.options.length > 1) {
+    sel.remove(1);
+  }
+  SSOT_ENTRIES.forEach(e => {
+    const opt = document.createElement("option");
+    opt.value = e.id;
+    opt.textContent = `${e.id} – ${e.title}`;
+    sel.appendChild(opt);
+  });
+}
+
+/* ── Data Sheet submit handler ─────────────────────────────────────── */
+function submitDataSheet(evt) {
+  evt.preventDefault();
+  const id = document.getElementById("ds-id").value.trim();
+  const ref = document.getElementById("ds-ssot-ref").value;
+  const fb = document.getElementById("ds-feedback");
+  fb.style.color = "#1b5e20";
+  fb.textContent = `\u2713 Data sheet \u201c${id}\u201d linked to ${ref}. (Submission captured in-session only \u2014 persist to 00_SSOT_REGISTRY.yaml manually.)`;
+  document.getElementById("ds-form").reset();
+}
+
+/* ── Init ──────────────────────────────────────────────────────────── */
+renderTable(SSOT_ENTRIES);
+populateRefDropdown();
 </script>
 
 </body>

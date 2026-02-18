@@ -168,10 +168,25 @@ The OPT-IN_FRAMEWORK is designed to support:
 
 ---
 
+## Engineering SSOT Front-End
+
+The **ENGINEERING_SSOT** directory provides a self-contained front-end for navigating program SSOT entries:
+
+- **Location:** `ENGINEERING_SSOT/`
+- **Entry point:** `ENGINEERING_SSOT/index.html` — open in any browser (no server required)
+- **Registry:** `ENGINEERING_SSOT/00_SSOT_REGISTRY.yaml` — all SSOT entries for AMPEL360 Q100
+
+The front-end displays the SSOT Registry table with filtering by text search, domain, and status,
+and includes a Custom Information Data Sheet submission form.
+
+---
+
 ## Related Documentation
 
 | Document | Path | Purpose |
 |----------|------|---------|
+| Engineering SSOT Front-End | `ENGINEERING_SSOT/index.html` | SSOT registry browser (front-end) |
+| SSOT Registry | `ENGINEERING_SSOT/00_SSOT_REGISTRY.yaml` | SSOT entries for AMPEL360 Q100 |
 | LC Phase Registry | `lifecycle/LC_PHASE_REGISTRY.yaml` | Canonical LC01–LC14 definitions |
 | Gate Rulebook | `lifecycle/TLI_GATE_RULEBOOK.yaml` | Gate logic and compliance rules |
 | T-Subdomain Activation | `lifecycle/T_SUBDOMAIN_LC_ACTIVATION.yaml` | Technology lifecycle activation |
