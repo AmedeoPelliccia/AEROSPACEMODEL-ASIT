@@ -98,28 +98,6 @@ files:
     type: <file type>
 ```
 
-## Directory Structure
-
-Generated files are organized by lifecycle phase and ATA chapter:
-
-```
-ATA_28-FUEL/
-├── LC03_SAFETY_RELIABILITY/
-│   └── ATA_28-41-00/
-├── LC04_DESIGN_DEFINITION/
-│   ├── ATA_28-10-00/
-│   ├── ATA_28-11-00/
-│   └── ATA_28-41-00/
-├── LC05_VERIFICATION_VALIDATION/
-│   ├── ATA_28-10-00/
-│   ├── ATA_28-11-00/
-│   └── ATA_28-41-00/
-├── LC06_CERTIFICATION_EVIDENCE/
-│   ├── ATA_28-11-00/
-│   └── ATA_28-41-00/
-└── 28-11-lh2-primary-tank/.../LC07_QUALITY/PACKAGES/ACCEPTANCE/
-    └── WP-28-03-05/fai/
-```
 
 ## Meta File Fields
 

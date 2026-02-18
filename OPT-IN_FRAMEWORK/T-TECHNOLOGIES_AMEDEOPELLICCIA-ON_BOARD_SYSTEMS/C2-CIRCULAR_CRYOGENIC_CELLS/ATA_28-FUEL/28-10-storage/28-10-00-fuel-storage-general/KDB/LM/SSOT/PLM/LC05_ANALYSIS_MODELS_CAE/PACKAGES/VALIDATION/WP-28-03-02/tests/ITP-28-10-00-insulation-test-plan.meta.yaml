@@ -4,7 +4,7 @@ title: Insulation - insulation_test_plan
 owner: STK_ENG
 revision: 0.1.0
 status: draft
-lc_phase: LC05_VERIFICATION_VALIDATION
+lc_phase: LC05_ANALYSIS_MODELS_CAE
 ata: 28-10-00
 domain: C2-CIRCULAR_CRYOGENIC_CELLS
 created_on: to be set during baseline finalization
@@ -28,12 +28,12 @@ formats:
 - test_plan_PDF
 - test_matrix_CSV
 files:
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.md
+- file: 28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.md
   id: ITP-28-10-00-insulation-test-plan
   type: DOCUMENT
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.pdf
+- file: 28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/tests/ITP-28-10-00-insulation-test-plan.pdf
   id: ITP-28-10-00-insulation-test-plan
   type: DOCUMENT
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-10-00/WP-28-03-02/tests/ITP-28-10-00-test-matrix.csv
+- file: 28-10-storage/28-10-00-fuel-storage-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-02/tests/ITP-28-10-00-test-matrix.csv
   id: ITP-28-10-00-test-matrix
   type: DATA_FILE

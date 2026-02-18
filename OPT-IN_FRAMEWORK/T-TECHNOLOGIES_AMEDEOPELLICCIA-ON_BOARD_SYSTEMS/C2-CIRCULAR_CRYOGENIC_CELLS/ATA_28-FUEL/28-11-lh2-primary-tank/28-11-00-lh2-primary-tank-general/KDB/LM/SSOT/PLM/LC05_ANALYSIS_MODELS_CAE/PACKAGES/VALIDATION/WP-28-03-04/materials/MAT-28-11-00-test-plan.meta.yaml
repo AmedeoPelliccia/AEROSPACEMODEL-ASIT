@@ -4,7 +4,7 @@ title: Materials Qualification - material_test_plan
 owner: STK_ENG
 revision: 0.1.0
 status: draft
-lc_phase: LC05_VERIFICATION_VALIDATION
+lc_phase: LC05_ANALYSIS_MODELS_CAE
 ata: 28-11-00
 domain: C2-CIRCULAR_CRYOGENIC_CELLS
 created_on: to be set during baseline finalization
@@ -28,12 +28,12 @@ formats:
 - test_plan_PDF
 - test_matrix_CSV
 files:
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-test-plan.md
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-04/materials/MAT-28-11-00-test-plan.md
   id: MAT-28-11-00-test-plan
   type: DOCUMENT
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-test-plan.pdf
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-04/materials/MAT-28-11-00-test-plan.pdf
   id: MAT-28-11-00-test-plan
   type: DOCUMENT
-- file: LC05_VERIFICATION_VALIDATION/ATA_28-11-00/WP-28-03-04/materials/MAT-28-11-00-test-matrix.csv
+- file: 28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/LM/SSOT/PLM/LC05_ANALYSIS_MODELS_CAE/PACKAGES/VALIDATION/WP-28-03-04/materials/MAT-28-11-00-test-matrix.csv
   id: MAT-28-11-00-test-matrix
   type: DATA_FILE
