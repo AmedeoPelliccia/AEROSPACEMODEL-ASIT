@@ -37,7 +37,7 @@ This document captures the step-by-step operational procedures for servicing the
 
 > **⭐ Special Condition — Hydrogen Hazard:** This procedure involves cryogenic liquid hydrogen at −253 °C. Personnel must have completed H₂ safety training. Read full hazard assessment in [`05_SAFETY_RISKS.md`](05_SAFETY_RISKS.md) before starting.
 
-> **DANGER:** Hydrogen is extremely flammable (4–75% LEL in air). No open flames or ignition sources within 7.5 m. Ensure forced ventilation is operating. Use approved ATEX equipment only.
+> **DANGER:** Hydrogen is extremely flammable (flammable in air between 4% and 75% by volume). No open flames or ignition sources within 7.5 m. Ensure forced ventilation is operating. Use approved ATEX equipment only.
 
 ### Prerequisites
 - [ ] LH₂ fuelling bay ventilation confirmed running (≥ 15 ACH).
