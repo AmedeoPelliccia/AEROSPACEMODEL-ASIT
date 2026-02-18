@@ -85,7 +85,7 @@ All changes to M2 structure, standards, or controls require:
 | OPT-IN_FRAMEWORK README | `../README.md` | Canonical architecture overview |
 | I-INFRASTRUCTURES Index | `../00_INDEX.md` | I-INFRASTRUCTURES subdomain index |
 | M1 README | `../M1-MANUFACTURING_FACILITIES/README.md` | Manufacturing Facilities subdomain |
-| O README | `../O-OPERATIONS_SERVICE_STRUCTURES/` | Operations & Service Structures subdomain |
+| O subdomain directory | `../O-OPERATIONS_SERVICE_STRUCTURES/` | Operations & Service Structures subdomain |
 | LC Phase Registry | `../../../lifecycle/LC_PHASE_REGISTRY.yaml` | Lifecycle phase definitions |
 | T-Subdomain LC Activation | `../../../lifecycle/T_SUBDOMAIN_LC_ACTIVATION.yaml` | Lifecycle activation rules |
 | Master BREX Authority | `../../../ASIT/GOVERNANCE/master_brex_authority.yaml` | BREX decision rules |
