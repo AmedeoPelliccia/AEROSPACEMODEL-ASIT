@@ -51,7 +51,7 @@ The AMPEL360 Q100 LH₂ propulsion system introduces a qualitatively different s
 |---|---|
 | T/C2-CIRCULAR_CRYOGENIC_CELLS (ATA 28) | LH₂ system interface: pressures, purities, coupling specs |
 | T/P-PROPULSION (ATA 71) | Fuel cell fluid servicing (coolant, air filter) |
-| I/O/ATA_IN_H2_GSE_AND_SUPPLY_CHAIN | LH₂ delivery from airport supply to servicing cart |
+| [`I-INFRASTRUCTURES/O-OPERATIONS_SERVICE_STRUCTURES/ATA_IN_H2_GSE_AND_SUPPLY_CHAIN`](../../O-OPERATIONS_SERVICE_STRUCTURES/ATA_IN_H2_GSE_AND_SUPPLY_CHAIN/) | LH₂ delivery from airport supply to servicing cart |
 | P/S-SERVICE_INSTRUCTION/ATA_12 | Aircraft-side servicing procedures |
 
 ---
