@@ -1,0 +1,64 @@
+id: M1-STD-TEMPLATE
+type: STANDARD_RECORD
+title: Standard Record Template for M1 Manufacturing Facilities
+owner: ASIT
+revision: 0.1.0
+status: draft
+lc_phase: LC07_QA_PROCESS
+work_package: M1-TEMPLATE
+ata: 85-00-00
+domain: I-INFRASTRUCTURES/M1
+created_on: to be set during baseline finalization
+last_updated_on: to be set during baseline finalization
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+standard:
+  id: <STANDARD_ID>
+  full_title: <Full Standard/Regulation Title>
+  issuing_body: <ISO, EASA, FAA, OSHA, NFPA, etc.>
+  norm_type: system_management
+  edition: <Edition/Version>
+  url: <Official standard URL>
+  scope: |
+    <Brief description of what the standard covers>
+  why_it_applies_to_M1: |
+    <Justification for why this standard is applicable to M1 Manufacturing Facilities domain>
+  evidence_expected:
+    - <Evidence type 1 (e.g., certification, manual, procedure, audit record)>
+    - <Evidence type 2>
+    - <Evidence type 3>
+  audit_questions:
+    - <Audit question 1 to verify compliance>
+    - <Audit question 2>
+    - <Audit question 3>
+  interfaces:
+    lc_phases:
+      - LC07_QA_PROCESS
+      - LC10_INDUSTRIAL_SUPPLY_CHAIN
+      - LC12_MRO_CONTINUED_AIRWORTHINESS
+    ata_chapters:
+      - 85-00-00
+    opt_in_domains:
+      - I-INFRASTRUCTURES/M1
+      - T/C2-CIRCULAR_CRYOGENIC_CELLS
+      - T/P-PROPULSION
+links:
+  reqs: []
+  safety: []
+  verification: []
+tags:
+  - M1
+  - manufacturing
+  - ATA85
+  - standard
+
+# Usage Instructions:
+# 1. Copy this template to standards/ subdirectory (e.g., 01_QUALITY/standards/ISO_9001.meta.yaml)
+# 2. Replace all <placeholders> with actual values
+# 3. Update norm_type enum: system_management | regulation | technical_process | control
+# 4. Add specific evidence_expected for the standard
+# 5. Add audit_questions relevant to M1 context
+# 6. Update interfaces (lc_phases, ata_chapters, opt_in_domains) as needed
+# 7. Update tags as appropriate
+# 8. Update id to match format: M1-STD-<CODE> (e.g., M1-STD-ISO9001, M1-STD-AS9100)
