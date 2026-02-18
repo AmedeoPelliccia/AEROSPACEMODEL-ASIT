@@ -250,7 +250,7 @@ to avoid costly redesign:
 
 4. **EASA CS-25 H₂ SC revision:** When formal EASA special conditions for H₂ aircraft are
    published, this document will be reviewed against the new requirements within 3 months
-   of publication, per WP-28-07-02 action ATX-004.
+   of publication, per WP-28-07-02 action FUT-003.
 
 5. **Digital continuity checks:** Provisions for in-flight bonding resistance monitoring
    (via embedded resistance sensors at key bond points) are reserved in the system
