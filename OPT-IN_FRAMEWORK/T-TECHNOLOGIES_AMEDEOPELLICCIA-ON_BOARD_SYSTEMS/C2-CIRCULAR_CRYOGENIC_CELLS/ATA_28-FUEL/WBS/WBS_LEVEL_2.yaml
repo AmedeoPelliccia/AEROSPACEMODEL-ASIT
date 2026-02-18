@@ -331,6 +331,94 @@ work_packages:
       - { id: false_alarm_rate_acceptance_review, applies_to: [false_alarm_performance_report] }
     tags: [calibration, threshold, false_alarm, safety]
 
+  - id: WP-28-07
+    type: work_package_group
+    title: ATEX, ESD, and Future-Proofing — H₂ Infrastructure
+    description: >
+      Work packages covering ATEX zone classification, ESD bonding and grounding,
+      and future-proofing documentation for the complete ATA 28 LH₂ cryogenic fuel
+      system and ATA 71 fuel cell power plant interface.
+    owner: STK_SAF
+    status: draft
+    revision: 0.1.0
+    ata: "28-00-00"
+    lc_phases: [LC03, LC04, LC05, LC07]
+
+  - id: WP-28-07-01
+    type: work_package
+    parent: WP-28-07
+    title: ATEX Zone Classification — H₂ Leak Detection System
+    description: >
+      ATEX/IECEx zone classification for all explosive atmosphere areas associated
+      with the H₂ leak detection system (ATA 28-41) and the complete LH₂ fuel system.
+      Includes zone extent maps, equipment marking requirements, and compliance matrix.
+    owner: STK_SAF
+    status: draft
+    revision: 0.1.0
+    ata: "28-41-00"
+    lc_phases: [LC03, LC04]
+    outputs:
+      - id: atex_esd_zone_classification
+        formats: [hazard_mgmt_MD, hazard_mgmt_PDF]
+        files:
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/PACKAGES/HAZARD_MGMT/ATX-28-41-00-atex-esd-zone-classification.md"
+          - "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/PACKAGES/HAZARD_MGMT/ATX-28-41-00-atex-esd-zone-classification.pdf"
+        meta_file: "28-41-h2-leak-detection/28-41-00-h2-leak-detection-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/PACKAGES/HAZARD_MGMT/ATX-28-41-00-atex-esd-zone-classification.meta.yaml"
+    verification:
+      - { id: atex_zone_classification_review, applies_to: [atex_esd_zone_classification] }
+      - { id: esd_bonding_acceptance_test, applies_to: [atex_esd_zone_classification] }
+    tags: [atex, esd, zone_classification, hydrogen_safety, explosive_atmosphere]
+
+  - id: WP-28-07-02
+    type: work_package
+    parent: WP-28-07
+    title: ESD Bonding and Grounding — LH₂ Fuel System
+    description: >
+      System-level ESD bonding and grounding requirements for all ATA 28 LH₂ cryogenic
+      fuel system components. Covers structural bonds, composite airframe provisions,
+      ground handling ESD procedures, and airborne static management.
+    owner: STK_SAF
+    status: draft
+    revision: 0.1.0
+    ata: "28-00-00"
+    lc_phases: [LC03, LC04, LC05]
+    outputs:
+      - id: esd_bonding_grounding
+        formats: [hazard_mgmt_MD, hazard_mgmt_PDF]
+        files:
+          - "28-00-general/28-00-00-general-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/PACKAGES/HAZARD_MGMT/ESD-28-00-00-bonding-grounding.md"
+          - "28-00-general/28-00-00-general-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/PACKAGES/HAZARD_MGMT/ESD-28-00-00-bonding-grounding.pdf"
+        meta_file: "28-00-general/28-00-00-general-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/PACKAGES/HAZARD_MGMT/ESD-28-00-00-bonding-grounding.meta.yaml"
+    verification:
+      - { id: esd_bonding_design_review, applies_to: [esd_bonding_grounding] }
+      - { id: bonding_continuity_acceptance_test, applies_to: [esd_bonding_grounding] }
+    tags: [esd, bonding, grounding, hydrogen_safety, composite_airframe]
+
+  - id: WP-28-07-03
+    type: work_package
+    parent: WP-28-07
+    title: Future Standards Watch — H₂ and Fuel Cell Infrastructure
+    description: >
+      Living document tracking emerging standards and regulatory developments relevant
+      to hydrogen and fuel cell infrastructure (ATA 28, ATA 71). Provides design
+      provisions to accommodate anticipated standard evolution and ensures future-proofing
+      of ATEX zone classification, ESD requirements, and airworthiness compliance.
+    owner: STK_SAF
+    status: draft
+    revision: 0.1.0
+    ata: "28-00-00"
+    lc_phases: [LC03, LC04, LC06, LC08]
+    outputs:
+      - id: future_standards_watch
+        formats: [safety_watch_MD, safety_watch_PDF]
+        files:
+          - "28-00-general/28-00-00-general-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/PACKAGES/SAFETY/FUT-28-00-00-future-standards.md"
+          - "28-00-general/28-00-00-general-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/PACKAGES/SAFETY/FUT-28-00-00-future-standards.pdf"
+        meta_file: "28-00-general/28-00-00-general-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/PACKAGES/SAFETY/FUT-28-00-00-future-standards.meta.yaml"
+    verification:
+      - { id: future_standards_review_gate, applies_to: [future_standards_watch] }
+    tags: [future_proofing, standards_watch, atex, esd, hydrogen_safety, fuel_cell]
+
 # ---------------------------------------------------------
 # Global output format registry (optional normalization layer)
 # ---------------------------------------------------------

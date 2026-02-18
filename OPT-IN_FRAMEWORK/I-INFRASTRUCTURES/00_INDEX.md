@@ -12,11 +12,23 @@
 
 ## M1 — Manufacturing Facilities
 
-Factory-floor infrastructure for production and assembly.
+Factory-floor infrastructure for production and assembly organized by functional standards and regulations.
 
-| Category | Directory | Description |
-|----------|-----------|-------------|
-| Fuel Cell | `M1-MANUFACTURING_FACILITIES/ATA_85-FUEL_CELL_SYSTEMS_INFRA/` | Fuel cell ground support equipment, production lines, test rigs |
+| Subdomain | Code | Description |
+|-----------|------|-------------|
+| Quality | 01 | Quality Management System (ISO 9001, AS9100, NADCAP, AS9102) |
+| OHS Safety Workplace | 02 | Occupational Health & Safety (ISO 45001, OSHA, ES RD 486/1997) |
+| Environment HAZMAT | 03 | Environmental & Hazardous Materials (ISO 14001, REACH/CLP, NFPA 2/55) |
+| Machinery Process Safety | 04 | Machinery & Process Safety (ISO 12100, ISO 13849) |
+| Warehouse Inventory | 05 | Inventory & Logistics (RFID/QR Traceability, ISO 17025) |
+| Additive Manufacturing | 06 | AM Quality Gates, Powder Traceability, NADCAP |
+| Airworthiness Production | 07 | POA/PC (EASA Part 21 Subpart G, FAA 14 CFR Part 21) |
+| Templates Meta | 90 | `.meta.yaml` templates and JSON Schema |
+| References | 99 | External standards and regulations links |
+
+**ATA Designation:** 85-00-00 (Manufacturing Facilities)  
+**Structure:** Standards-based subdomains (01-07, 90, 99) rather than ATA-chapter directories  
+**Details:** See `M1-MANUFACTURING_FACILITIES/README.md` and `M1-MANUFACTURING_FACILITIES/00_INDEX.md`
 
 ## M2 — Maintenance Environments
 

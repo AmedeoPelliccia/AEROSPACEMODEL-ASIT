@@ -1,0 +1,180 @@
+name: "New Infrastructure Spec"
+description: "Propose a new infrastructure specification for the I-INFRASTRUCTURES domain (M1 Manufacturing, M2 Maintenance, or O Operations)."
+title: "[INFRA-SPEC] <Short title of the proposed spec>"
+labels: ["infrastructure", "spec-proposal"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## New Infrastructure Specification Proposal
+
+        Use this template to propose a new infrastructure spec within any
+        **I-INFRASTRUCTURES** subdomain (M1 – Manufacturing Facilities, M2 – Maintenance
+        Environments, or O – Operations & Service Structures).
+
+        All proposals must comply with the **CoDevOps principles** (see [CONTRIBUTING.md](../../CONTRIBUTING.md))
+        and must satisfy the **BREX governance rules** applicable to the target subdomain.
+
+        > **Note:** Safety-critical content (SAFETY-002) will
+        > be escalated to **STK_SAF** before merge and requires a 72-hour review window.
+
+  - type: dropdown
+    id: subdomain
+    attributes:
+      label: "Target Subdomain"
+      description: "Which I-INFRASTRUCTURES subdomain does this spec belong to?"
+      options:
+        - "M1 – Manufacturing Facilities (ATA 85)"
+        - "M2 – Maintenance Environments (ATA 08I / 10I / 12I)"
+        - "O – Operations & Service Structures (ATA 03I / ATA IN H2 GSE)"
+    validations:
+      required: true
+
+  - type: input
+    id: ata_reference
+    attributes:
+      label: "ATA Chapter / Reference"
+      description: "Primary ATA chapter or section (e.g. 85-00-00, 08I, 03I, ATA IN H2 GSE)."
+      placeholder: "e.g. 85-10-00"
+    validations:
+      required: true
+
+  - type: input
+    id: spec_id
+    attributes:
+      label: "Proposed Spec ID"
+      description: "Follow the subdomain ID pattern: M1-STD-<CODE>, M2-STD-<CODE>, or O-STD-<CODE>."
+      placeholder: "e.g. M1-STD-ISO9001"
+    validations:
+      required: false
+
+  - type: textarea
+    id: declared_intent
+    attributes:
+      label: "Declared Intent"
+      description: |
+        Per CoDevOps Principle 1 — state *why* this spec is needed, what problem it addresses,
+        and what assumptions it relies on.
+      placeholder: |
+        - **Problem addressed:** …
+        - **Why it matters:** …
+        - **Assumptions:** …
+    validations:
+      required: true
+
+  - type: textarea
+    id: spec_description
+    attributes:
+      label: "Specification Description"
+      description: "Describe the infrastructure specification: scope, issuing body, edition/version, and URL (if public)."
+      placeholder: |
+        - **Standard/Regulation title:** …
+        - **Issuing body:** …
+        - **Edition/Version:** …
+        - **URL:** …
+        - **Scope summary:** …
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: lifecycle_phases
+    attributes:
+      label: "Applicable Lifecycle Phases"
+      description: "Select all lifecycle phases where this spec is active."
+      options:
+        - label: "LC04 – Design Definition"
+        - label: "LC06 – Integration & Test"
+        - label: "LC07 – QA & Process Compliance"
+        - label: "LC08 – Certification"
+        - label: "LC09 – ESG & Sustainability"
+        - label: "LC10 – Industrial & Supply Chain"
+        - label: "LC11 – Operations Customization"
+        - label: "LC12 – Continued Airworthiness & MRO"
+        - label: "LC14 – End of Life"
+
+  - type: textarea
+    id: evidence_expected
+    attributes:
+      label: "Evidence Expected"
+      description: "List the compliance evidence artefacts this spec will require (e.g., certifications, audit records, procedures, test reports)."
+      placeholder: |
+        - Certification document
+        - Audit record
+        - Process procedure
+    validations:
+      required: false
+
+  - type: dropdown
+    id: safety_critical
+    attributes:
+      label: "Safety-Critical Content?"
+      description: "Does this spec contain or generate safety-critical content that requires STK_SAF escalation?"
+      options:
+        - "No — not safety-critical"
+        - "Yes — requires STK_SAF review (72-hour window)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: safety_impact
+    attributes:
+      label: "Safety Impact Assessment"
+      description: "If safety-critical, describe the impact and escalation plan. Otherwise state 'N/A'."
+      placeholder: "N/A — not safety-critical"
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: brex_compliance
+    attributes:
+      label: "BREX Compliance Checks"
+      description: "Confirm the following BREX rules are satisfied for this proposal."
+      options:
+        - label: "STRUCT-001 – ATA domain classification is present"
+          required: true
+        - label: "AUTHOR-002 – A valid ASIT-approved contract exists (or will be created)"
+          required: true
+        - label: "LC-001 – Content will enter a valid lifecycle state"
+          required: true
+        - label: "PIPELINE-004 – Any content transformation will be contract-approved"
+          required: true
+
+  - type: checkboxes
+    id: constitutional_compliance
+    attributes:
+      label: "Constitutional Compliance"
+      description: "Per the Digital Constitution and CoDevOps principles."
+      options:
+        - label: "This proposal preserves human labor as foundation (Art. 1)"
+          required: true
+        - label: "Declared intent and rationale are documented above (Art. 4)"
+          required: true
+        - label: "Spec content remains traceable to human decisions (Art. 5)"
+          required: true
+        - label: "No plausible human harm introduced without escalation (Art. 6)"
+          required: true
+        - label: "Knowledge remains accessible and auditable (Art. 9)"
+          required: true
+
+  - type: textarea
+    id: labor_reabsorption
+    attributes:
+      label: "LABOR-REABSORPTION Assessment"
+      description: |
+        Per Digital Constitution Art. 1, 8, and 11. If this spec affects human roles or
+        workflows, complete the fields below. If no roles are affected, state "N/A".
+      placeholder: |
+        - **Roles displaced (FTE-equivalent):** N/A
+        - **Roles created or capacity expanded:** N/A
+        - **Transition pathway:** N/A
+        - **Net displacement:** 0
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: "Additional Context / Reviewer Notes"
+      description: "Any links to related issues, PRs, standards, or reference documents."
+    validations:
+      required: false

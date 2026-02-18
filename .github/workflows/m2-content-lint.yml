@@ -1,0 +1,125 @@
+name: M2 Content Lint
+
+on:
+  push:
+    paths:
+      - 'OPT-IN_FRAMEWORK/I-INFRASTRUCTURES/M2-MAINTENANCE_ENVIRONMENTS/**'
+      - '.markdownlint.json'
+      - '.github/workflows/m2-content-lint.yml'
+      - '.github/markdown-link-check.json'
+  pull_request:
+    paths:
+      - 'OPT-IN_FRAMEWORK/I-INFRASTRUCTURES/M2-MAINTENANCE_ENVIRONMENTS/**'
+      - '.markdownlint.json'
+      - '.github/workflows/m2-content-lint.yml'
+      - '.github/markdown-link-check.json'
+
+jobs:
+  structure-check:
+    name: M2 Directory Structure
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate M2 directory structure
+        run: |
+          python3 - <<'EOF'
+          import sys
+          from pathlib import Path
+
+          M2_ROOT = Path("OPT-IN_FRAMEWORK/I-INFRASTRUCTURES/M2-MAINTENANCE_ENVIRONMENTS")
+
+          errors = []
+
+          # Top-level index must exist
+          index_file = M2_ROOT / "00_INDEX.md"
+          if not index_file.exists():
+              errors.append(f"Missing top-level index: {index_file}")
+          else:
+              print(f"  ✓ {index_file}")
+
+          # Each ATA directory must contain a README.md
+          ata_dirs = sorted(
+              d for d in M2_ROOT.iterdir()
+              if d.is_dir() and d.name.startswith("ATA_")
+          )
+
+          if not ata_dirs:
+              errors.append(f"No ATA_ subdirectories found under {M2_ROOT}")
+          else:
+              for ata_dir in ata_dirs:
+                  readme = ata_dir / "README.md"
+                  if not readme.exists():
+                      errors.append(f"Missing README.md in {ata_dir}")
+                  else:
+                      print(f"  ✓ {readme}")
+
+          if errors:
+              print(f"\n❌ {len(errors)} structure error(s):")
+              for e in errors:
+                  print(f"  - {e}")
+              sys.exit(1)
+
+          print(f"\n✓ M2 structure valid ({len(ata_dirs)} ATA directories)")
+          EOF
+
+  markdown-lint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install markdownlint-cli2
+        run: npm install -g markdownlint-cli2@0.17.2
+
+      - name: Lint M2 markdown files
+        run: |
+          markdownlint-cli2 \
+            "OPT-IN_FRAMEWORK/I-INFRASTRUCTURES/M2-MAINTENANCE_ENVIRONMENTS/**/*.md" \
+            --config .markdownlint.json
+
+  link-check:
+    name: Internal Link Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install markdown-link-check
+        run: npm install -g markdown-link-check@3.12.2
+
+      - name: Check links in M2 markdown files
+        run: |
+          set -euo pipefail
+
+          status=0
+
+          while IFS= read -r file; do
+            echo "Checking: $file"
+            if ! markdown-link-check "$file" \
+              --config .github/markdown-link-check.json \
+              --quiet; then
+              echo "Link check failed for: $file"
+              status=1
+            fi
+          done < <(find OPT-IN_FRAMEWORK/I-INFRASTRUCTURES/M2-MAINTENANCE_ENVIRONMENTS \
+            -name "*.md" | sort)
+
+          exit "$status"

@@ -540,12 +540,62 @@ class BaseGenerator(ABC):
         
         return dm_address
     
+    @staticmethod
+    def _parse_ref_entry(entry: Any) -> Tuple[str, str]:
+        """Parse a ref entry into a (code, title) tuple.
+
+        Accepts either a plain string (returned as the code with an empty
+        title) or a dict whose code is read from the first *present and
+        non-empty* key among ``standard``, ``code``, and ``name``, and whose
+        title comes from the first *present and non-empty* key among ``title``
+        and ``description``.  Returns ``('', '')`` for any other type.
+
+        Key lookup uses explicit ``None`` and empty-string checks so that a
+        key whose value is ``None`` or ``""`` is treated as absent rather than
+        masking a later key that carries a real value.
+
+        .. note::
+            ElementTree automatically escapes special characters (``&``, ``<``,
+            ``>``, etc.) when serialising text content, so callers need not
+            pre-escape the returned strings before passing them to
+            :meth:`create_sub_element`.
+        """
+        if isinstance(entry, str):
+            return entry, ""
+        if isinstance(entry, dict):
+            code = ""
+            for key in ("standard", "code", "name"):
+                val = entry.get(key)
+                if val is not None and val != "":
+                    code = str(val)
+                    break
+            title = ""
+            for key in ("title", "description"):
+                val = entry.get(key)
+                if val is not None and val != "":
+                    title = str(val)
+                    break
+            return code, title
+        return "", ""
+
     def create_dm_status(
-        self, 
-        parent: ET.Element, 
-        metadata: DMMetadata
+        self,
+        parent: ET.Element,
+        metadata: DMMetadata,
+        regulatory_refs: Optional[List[Any]] = None,
+        best_practices: Optional[List[Any]] = None,
     ) -> ET.Element:
-        """Create dmStatus element."""
+        """Create dmStatus element.
+
+        Args:
+            parent: Parent element to append ``dmStatus`` to.
+            metadata: Data module metadata.
+            regulatory_refs: Regulatory reference entries to emit as
+                ``<refs>/<externalPubRef>`` elements, positioned before
+                ``brexDmRef`` per S1000D Issue 5.0 schema ordering.
+            best_practices: Additional best-practice entries appended to
+                *regulatory_refs* in the same ``<refs>`` block.
+        """
         dm_status = self.create_sub_element(parent, "dmStatus", attrib={
             "issueType": metadata.issue_type
         })
@@ -572,6 +622,9 @@ class BaseGenerator(ABC):
         display_text = self.create_sub_element(applic, "displayText")
         self.create_sub_element(display_text, "simplePara", text=metadata.applicability_text)
         
+        # refs – positioned here, before brexDmRef, per S1000D Issue 5.0 schema ordering
+        self.create_regulatory_refs(dm_status, regulatory_refs or [], best_practices)
+
         # brexDmRef
         if self.config.brex_dm_ref:
             brex_ref = self.create_sub_element(dm_status, "brexDmRef")
@@ -586,6 +639,49 @@ class BaseGenerator(ABC):
         
         return dm_status
     
+    def create_regulatory_refs(
+        self,
+        dm_status: ET.Element,
+        regulatory_refs: List[Any],
+        best_practices: Optional[List[Any]] = None,
+    ) -> Optional[ET.Element]:
+        """
+        Create a ``refs`` element inside *dm_status* for regulatory references
+        and industry best-practice citations.
+
+        Each entry in *regulatory_refs* may be either a plain string
+        (treated as the publication code) or a dict with optional keys
+        ``standard`` / ``code`` and ``title``.
+
+        Args:
+            dm_status: The ``dmStatus`` parent element.
+            regulatory_refs: Regulatory references to emit.
+            best_practices: Optional additional best-practice references.
+
+        Returns:
+            The created ``refs`` element, or ``None`` if no refs were added.
+        """
+        all_refs: List[Any] = list(regulatory_refs or [])
+        all_refs.extend(best_practices or [])
+
+        if not all_refs:
+            return None
+
+        refs_elem = self.create_sub_element(dm_status, "refs")
+
+        for ref in all_refs:
+            code, title = self._parse_ref_entry(ref)
+            if not code:
+                continue
+            ext_pub_ref = self.create_sub_element(refs_elem, "externalPubRef")
+            ext_pub_ref_ident = self.create_sub_element(ext_pub_ref, "externalPubRefIdent")
+            # ElementTree automatically escapes XML special characters in text content.
+            self.create_sub_element(ext_pub_ref_ident, "externalPubCode", text=code)
+            if title:
+                self.create_sub_element(ext_pub_ref_ident, "externalPubTitle", text=title)
+
+        return refs_elem
+
     def create_trace_link(
         self,
         source: SourceArtifact,
@@ -663,8 +759,20 @@ class DescriptiveDMGenerator(BaseGenerator):
             # Ident and status section
             ident_status = self.create_sub_element(dmodule, "identAndStatusSection")
             self.create_dm_address(ident_status, metadata)
-            self.create_dm_status(ident_status, metadata)
-            
+            # Collect regulatory references; both 'regulatory_refs' and 'standards' are
+            # merged so neither is silently ignored when both fields are present.
+            reg_refs_raw = content.get("regulatory_refs")
+            standards_raw = content.get("standards")
+            if reg_refs_raw is not None:
+                regulatory_refs: List[Any] = list(reg_refs_raw) + list(standards_raw or [])
+            else:
+                regulatory_refs = list(standards_raw or [])
+            best_practices: List[Any] = list(content.get("best_practices") or [])
+
+            # Pass refs into create_dm_status so <refs> is emitted at the correct
+            # S1000D schema position (before <brexDmRef>).
+            dm_status = self.create_dm_status(ident_status, metadata, regulatory_refs, best_practices)
+
             # Content section
             content_elem = self.create_sub_element(dmodule, "content")
             description = self.create_sub_element(content_elem, "description")
@@ -798,6 +906,27 @@ class DescriptiveDMGenerator(BaseGenerator):
             self.create_sub_element(location, "title", text="Location and Access")
             self.create_sub_element(location, "para", text=content["location_access"])
 
+        # Regulatory references and industry best practices – inline citations.
+        # Both 'regulatory_refs' and 'standards' are merged so neither is silently ignored.
+        reg_refs_raw = content.get("regulatory_refs")
+        standards_raw = content.get("standards")
+        if reg_refs_raw is not None:
+            _reg_refs: List[Any] = list(reg_refs_raw) + list(standards_raw or [])
+        else:
+            _reg_refs = list(standards_raw or [])
+        _best_practices: List[Any] = list(content.get("best_practices") or [])
+        all_citations = _reg_refs + _best_practices
+        if all_citations:
+            citations_para = self.create_sub_element(description, "levelledPara")
+            self.create_sub_element(citations_para, "title",
+                                    text="Regulatory References and Industry Best Practices")
+            for entry in all_citations:
+                code, title = self._parse_ref_entry(entry)
+                if not code:
+                    continue
+                citation_text = f"[{code}]" if not title else f"[{code}] {title}"
+                self.create_sub_element(citations_para, "para", text=citation_text)
+
 
 # =============================================================================
 # DATA MODULE GENERATOR - PROCEDURAL
@@ -866,8 +995,20 @@ class ProceduralDMGenerator(BaseGenerator):
             # Ident and status section
             ident_status = self.create_sub_element(dmodule, "identAndStatusSection")
             self.create_dm_address(ident_status, metadata)
-            self.create_dm_status(ident_status, metadata)
-            
+            # Collect regulatory references; both 'regulatory_refs' and 'standards' are
+            # merged so neither is silently ignored when both fields are present.
+            reg_refs_raw = content.get("regulatory_refs")
+            standards_raw = content.get("standards")
+            if reg_refs_raw is not None:
+                regulatory_refs: List[Any] = list(reg_refs_raw) + list(standards_raw or [])
+            else:
+                regulatory_refs = list(standards_raw or [])
+            best_practices: List[Any] = list(content.get("best_practices") or [])
+
+            # Pass refs into create_dm_status so <refs> is emitted at the correct
+            # S1000D schema position (before <brexDmRef>).
+            dm_status = self.create_dm_status(ident_status, metadata, regulatory_refs, best_practices)
+
             # Content section
             content_elem = self.create_sub_element(dmodule, "content")
             procedure = self.create_sub_element(content_elem, "procedure")

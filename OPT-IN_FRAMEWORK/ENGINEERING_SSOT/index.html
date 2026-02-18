@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engineering SSOT — AMPEL360 Q100</title>
+  <style>
+    /* Self-contained styles — no external dependencies */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f4f6f9;
+      color: #1a1a2e;
+      line-height: 1.6;
+    }
+    header {
+      background: #1a1a2e;
+      color: #e0e0ff;
+      padding: 1.5rem 2rem;
+      border-bottom: 3px solid #4a90e2;
+    }
+    header h1 { font-size: 1.6rem; }
+    header p  { font-size: 0.9rem; opacity: 0.8; margin-top: 0.25rem; }
+    main { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+    section { background: #fff; border-radius: 8px; padding: 1.5rem; margin-bottom: 2rem;
+              box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+    h2 { font-size: 1.2rem; color: #1a1a2e; margin-bottom: 1rem;
+         border-bottom: 2px solid #4a90e2; padding-bottom: 0.4rem; }
+    /* Table */
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th { background: #1a1a2e; color: #e0e0ff; padding: 0.6rem 0.8rem; text-align: left; }
+    td { padding: 0.55rem 0.8rem; border-bottom: 1px solid #e8eaed; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f0f4ff; }
+    .status-approved  { color: #22863a; font-weight: 600; }
+    .status-in_review { color: #b08800; font-weight: 600; }
+    .status-draft     { color: #6a737d; font-weight: 600; }
+    /* Badge */
+    .badge {
+      display: inline-block; padding: 0.15rem 0.5rem; border-radius: 3px;
+      font-size: 0.75rem; font-weight: 600; color: #fff;
+    }
+    .badge-c2 { background: #0075ca; }
+    .badge-p  { background: #e36209; }
+    .badge-i2 { background: #6f42c1; }
+    /* Form */
+    form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    form label { font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.25rem; }
+    form input, form select, form textarea {
+      width: 100%; padding: 0.45rem 0.6rem; border: 1px solid #d1d5db;
+      border-radius: 4px; font-size: 0.9rem;
+    }
+    form .full { grid-column: 1 / -1; }
+    form button {
+      grid-column: 1 / -1; padding: 0.6rem 1.2rem; background: #1a1a2e;
+      color: #fff; border: none; border-radius: 4px; cursor: pointer;
+      font-size: 0.95rem; font-weight: 600;
+    }
+    form button:hover { background: #4a90e2; }
+    footer {
+      text-align: center; padding: 1.5rem; font-size: 0.8rem; color: #6a737d;
+      border-top: 1px solid #e8eaed; margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Engineering SSOT — AMPEL360 Q100</h1>
+  <p>Single Source of Truth Registry &nbsp;|&nbsp; OPT-IN_FRAMEWORK &nbsp;|&nbsp; Authority: ASIT</p>
+</header>
+
+<main>
+
+  <!-- SSOT Registry Table -->
+  <section>
+    <h2>SSOT Registry</h2>
+    <table id="ssot-registry" aria-label="Engineering SSOT Registry">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Title</th>
+          <th>ATA Chapter</th>
+          <th>Technology Domain</th>
+          <th>Lifecycle Phase</th>
+          <th>Baseline Ref</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>SSOT-Q100-C2-001</code></td>
+          <td>LH2 Primary Tank — Cryogenic Storage Design</td>
+          <td>28-11</td>
+          <td><span class="badge badge-c2">C2-CIRCULAR_CRYOGENIC_CELLS</span></td>
+          <td>LC04</td>
+          <td>BL-ATA28-C2-001</td>
+          <td class="status-approved">approved</td>
+        </tr>
+        <tr>
+          <td><code>SSOT-Q100-C2-002</code></td>
+          <td>H2 Leak Detection System — Sensor Architecture</td>
+          <td>28-41</td>
+          <td><span class="badge badge-c2">C2-CIRCULAR_CRYOGENIC_CELLS</span></td>
+          <td>LC04</td>
+          <td>BL-ATA28-C2-002</td>
+          <td class="status-approved">approved</td>
+        </tr>
+        <tr>
+          <td><code>SSOT-Q100-P-001</code></td>
+          <td>Fuel Cell Power Plant — Stack Architecture</td>
+          <td>71-11</td>
+          <td><span class="badge badge-p">P-PROPULSION</span></td>
+          <td>LC04</td>
+          <td>BL-ATA71-P-001</td>
+          <td class="status-approved">approved</td>
+        </tr>
+        <tr>
+          <td><code>SSOT-Q100-P-002</code></td>
+          <td>Fuel Cell Thermal Management System</td>
+          <td>71-24</td>
+          <td><span class="badge badge-p">P-PROPULSION</span></td>
+          <td>LC04</td>
+          <td>BL-ATA71-P-002</td>
+          <td class="status-in_review">in_review</td>
+        </tr>
+        <tr>
+          <td><code>SSOT-Q100-I2-001</code></td>
+          <td>Predictive Maintenance AI Model — Architecture</td>
+          <td>95-10</td>
+          <td><span class="badge badge-i2">I2-INTELLIGENCE</span></td>
+          <td>LC04</td>
+          <td>BL-ATA95-I2-001</td>
+          <td class="status-draft">draft</td>
+        </tr>
+        <tr>
+          <td><code>SSOT-Q100-I2-002</code></td>
+          <td>Flight Data Analysis AI Model — Training Data Governance</td>
+          <td>95-20</td>
+          <td><span class="badge badge-i2">I2-INTELLIGENCE</span></td>
+          <td>LC03</td>
+          <td>BL-ATA95-I2-002</td>
+          <td class="status-draft">draft</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Custom Information Data Sheet Form -->
+  <section id="data-sheet">
+    <h2>Custom Information Data Sheet</h2>
+    <p style="margin-bottom:1rem; font-size:0.9rem; color:#444;">
+      Submit a new Custom Information Data Sheet (CIDS) for novel technology components
+      not fully covered by standard ATA iSpec 2200 chapters.
+    </p>
+    <form id="cids-form" onsubmit="submitDataSheet(event)">
+      <div>
+        <label for="ds-id">Data Sheet ID</label>
+        <input type="text" id="ds-id" placeholder="CIDS-XX-000" required>
+      </div>
+      <div>
+        <label for="ds-title">Title</label>
+        <input type="text" id="ds-title" placeholder="Component — Custom Information Data Sheet" required>
+      </div>
+      <div>
+        <label for="ds-domain">Technology Domain</label>
+        <select id="ds-domain">
+          <option value="C2-CIRCULAR_CRYOGENIC_CELLS">C2 — Circular Cryogenic Cells</option>
+          <option value="P-PROPULSION">P — Propulsion</option>
+          <option value="I2-INTELLIGENCE">I2 — Intelligence</option>
+        </select>
+      </div>
+      <div>
+        <label for="ds-ata">ATA Chapter</label>
+        <input type="text" id="ds-ata" placeholder="e.g. 28-11">
+      </div>
+      <div>
+        <label for="ds-linked-ssot">Linked SSOT Entry</label>
+        <input type="text" id="ds-linked-ssot" placeholder="SSOT-Q100-XX-000">
+      </div>
+      <div>
+        <label for="ds-status">Status</label>
+        <select id="ds-status">
+          <option value="draft">Draft</option>
+          <option value="in_review">In Review</option>
+          <option value="approved">Approved</option>
+        </select>
+      </div>
+      <div class="full">
+        <label for="ds-description">Description</label>
+        <textarea id="ds-description" rows="3" placeholder="Describe this Custom Information Data Sheet..."></textarea>
+      </div>
+      <button type="submit">Submit Data Sheet</button>
+    </form>
+  </section>
+
+  <!-- Navigation Links -->
+  <section>
+    <h2>OPT-IN Framework Navigation</h2>
+    <p style="margin:0 0 0.5rem; font-size:0.85rem; color:#555;">
+      The following links point to Markdown and YAML source files in the OPT-IN_FRAMEWORK repository
+      and may display as raw text when opened directly in a browser.
+    </p>
+    <ul style="list-style:none; padding:0; display:flex; gap:1rem; flex-wrap:wrap;">
+      <li><a href="../00_INDEX.md">OPT-IN_FRAMEWORK Index</a></li>
+      <li><a href="../README.md">OPT-IN_FRAMEWORK README</a></li>
+      <li><a href="00_SSOT_REGISTRY.yaml">SSOT Registry (YAML)</a></li>
+    </ul>
+  </section>
+
+</main>
+
+<footer>
+  <p>AMPEL360 Q100 &nbsp;|&nbsp; Engineering SSOT Front-End &nbsp;|&nbsp; Authority: ASIT &nbsp;|&nbsp; OPT-IN_FRAMEWORK v2.1</p>
+</footer>
+
+<script>
+  function submitDataSheet(e) {
+    e.preventDefault();
+    var id = document.getElementById('ds-id').value;
+    alert('Data Sheet ' + id + ' submitted for review. See 00_SSOT_REGISTRY.yaml for the canonical record.');
+  }
+</script>
+
+</body>
+</html>

@@ -180,6 +180,16 @@ The OPT-IN_FRAMEWORK is designed to support:
 | ATA 95 BREX Instructions | `.github/instructions/ata95_ai_ml.instructions.md` | AI/ML systems domain |
 | ATA 28 H2 BREX Instructions | `.github/instructions/ata28_h2_cryogenic.instructions.md` | H2 cryogenic domain |
 | ATA 71 BREX Instructions | `.github/instructions/ata71_fuel_cell.instructions.md` | Fuel-cell propulsion domain |
+| Engineering SSOT Front-End | `ENGINEERING_SSOT/index.html` | Self-contained SSOT front-end browser |
+| SSOT Registry | `ENGINEERING_SSOT/00_SSOT_REGISTRY.yaml` | Authoritative SSOT registry for all entries |
+
+---
+
+## Engineering SSOT
+
+The `ENGINEERING_SSOT/` directory provides the authoritative registry and self-contained front-end for the AMPEL360 Q100 Engineering Single Source of Truth.
+
+Open `ENGINEERING_SSOT/index.html` directly in a browser — no server or external dependencies required.
 
 ---
 
@@ -199,7 +209,7 @@ The OPT-IN_FRAMEWORK is designed to support:
 | 1.0.0 | 2026-02-12 | ASIT | Initial OPT-IN_FRAMEWORK creation for TLI v2.1 |
 | 1.1.0 | 2026-02-17 | ASIT | Added P/I/N subdomain structure (P/S, M1/M2/O, D/A/P*) |
 | 1.2.0 | 2026-02-17 | ASIT | Added O-ORGANIZATIONS subdomain split (A/B) |
-| 1.3.0 | 2026-02-18 | ASIT | Enforced 5-domain scope (O/P/T/I/N), removed SSOT-frontend references, wording normalization |
+| 1.3.0 | 2026-02-18 | ASIT | Enforced 5-domain scope (O/P/T/I/N), added ENGINEERING_SSOT front-end |
 
 ---
 

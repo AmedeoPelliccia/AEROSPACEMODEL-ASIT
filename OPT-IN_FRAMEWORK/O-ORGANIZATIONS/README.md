@@ -56,9 +56,30 @@ Standard lifecycle profile applies to this domain:
 
 ---
 
+## Cross-Domain Integration
+
+### O-ORGANIZATIONS → P-PROGRAMS
+Organizational maintenance policies (ATA 01) and airworthiness limitations (ATA 04/05) establish the governance baseline that P-PROGRAMS service instructions must comply with. Time limits and inspection intervals (ATA 05) directly constrain servicing procedures (ATA 12) and storage requirements (ATA 10).
+
+### O-ORGANIZATIONS → T-TECHNOLOGIES
+Airworthiness limitations (ATA 04) and time limits (ATA 05) apply across all T-TECHNOLOGIES on-board systems. All technology subdomain content must trace to organizational airworthiness mandates defined here, particularly Novel Technology subdomains (C2, I2, P-PROPULSION) which carry additional Special Conditions.
+
+### O-ORGANIZATIONS → I-INFRASTRUCTURES
+Maintenance program policies (ATA 01) drive the infrastructure requirements for M2-MAINTENANCE_ENVIRONMENTS (hangars, shops). Support information (ATA 03) defines the ground support equipment and tooling catalogued in I-INFRASTRUCTURES/O-OPERATIONS_SERVICE_STRUCTURES.
+
+### O-ORGANIZATIONS → N-NEURAL_NETWORKS
+General documentation conventions (ATA 00) define abbreviation and data governance standards referenced by the Digital Thread & Traceability subdomain (ATA 96). AI Governance & Assurance policies align with the organizational compliance framework (ATA 02 — Operations Organization).
+
+---
+
 ## Related Documents
 
 - [OPT-IN_FRAMEWORK Main README](../README.md)
-- [Lifecycle Phase Registry](../lifecycle/LC_PHASE_REGISTRY.yaml)
+- [P-PROGRAMS Domain](../P-PROGRAMS/README.md)
+- [T-TECHNOLOGIES Domain](../T-TECHNOLOGIES_AMEDEOPELLICCIA-ON_BOARD_SYSTEMS/README.md)
+- [I-INFRASTRUCTURES Domain](../I-INFRASTRUCTURES/README.md)
+- [N-NEURAL_NETWORKS Domain](../N-NEURAL_NETWORKS/README.md)
+- [Lifecycle Phase Registry](../../lifecycle/LC_PHASE_REGISTRY.yaml)
+- [T-Subdomain LC Activation Rules](../../lifecycle/T_SUBDOMAIN_LC_ACTIVATION.yaml)
 
 ---

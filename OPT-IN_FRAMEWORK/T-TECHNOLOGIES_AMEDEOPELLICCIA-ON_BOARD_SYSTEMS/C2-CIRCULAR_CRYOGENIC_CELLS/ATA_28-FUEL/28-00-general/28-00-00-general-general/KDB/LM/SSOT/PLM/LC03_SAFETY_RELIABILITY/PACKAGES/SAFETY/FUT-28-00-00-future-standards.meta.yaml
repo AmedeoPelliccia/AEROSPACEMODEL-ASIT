@@ -1,0 +1,41 @@
+output_id: future_standards_watch
+work_package: WP-28-07-03
+title: Future Standards Watch — Hydrogen and Fuel Cell Infrastructure
+owner: STK_SAF
+revision: 0.1.0
+status: draft
+lc_phase: LC03_SAFETY_RELIABILITY
+ata: 28-00-00
+domain: C2-CIRCULAR_CRYOGENIC_CELLS
+created_on: to be set during baseline finalization
+last_updated_on: to be set during baseline finalization
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+links:
+  reqs: []
+  safety:
+    - FUT-001
+    - FUT-002
+    - FUT-004
+  work_package: WP-28-07-03
+  verification:
+    - future_standards_review_gate
+tags:
+  - future_proofing
+  - standards_watch
+  - atex
+  - esd
+  - hydrogen_safety
+  - fuel_cell
+  - regulatory_evolution
+formats:
+  - safety_watch_MD
+  - safety_watch_PDF
+files:
+  - file: 28-00-general/28-00-00-general-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/PACKAGES/SAFETY/FUT-28-00-00-future-standards.md
+    id: FUT-28-00-00-future-standards
+    type: DOCUMENT
+  - file: 28-00-general/28-00-00-general-general/KDB/LM/SSOT/PLM/LC03_SAFETY_RELIABILITY/PACKAGES/SAFETY/FUT-28-00-00-future-standards.pdf
+    id: FUT-28-00-00-future-standards
+    type: DOCUMENT

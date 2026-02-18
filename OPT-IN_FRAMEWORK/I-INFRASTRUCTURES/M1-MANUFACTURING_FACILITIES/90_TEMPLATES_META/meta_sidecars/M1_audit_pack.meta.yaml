@@ -1,0 +1,84 @@
+id: M1-AUDIT-TEMPLATE
+type: AUDIT_PACK
+title: Audit Pack Template for M1 Manufacturing Facilities
+owner: ASIT
+revision: 0.1.0
+status: draft
+lc_phase: LC07_QA_PROCESS
+work_package: M1-TEMPLATE
+ata: 85-00-00
+domain: I-INFRASTRUCTURES/M1
+created_on: to be set during baseline finalization
+last_updated_on: to be set during baseline finalization
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+audit_pack:
+  id: <AUDIT_PACK_ID>
+  title: <Full Audit Pack Title>
+  audit_scope: |
+    <Description of what will be audited>
+  audit_type: internal
+  frequency: <annual | semi-annual | quarterly | triggered>
+  responsible_auditor: <Auditor role or name>
+  findings_expected:
+    - type: conformance
+      description: <Expected conformance finding>
+      severity: info
+    - type: non-conformance
+      description: <Potential non-conformance finding>
+      severity: major
+    - type: observation
+      description: <Observation finding>
+      severity: minor
+  corrective_action_template:
+    fields:
+      - finding_id
+      - description
+      - root_cause
+      - corrective_action
+      - responsible_party
+      - target_date
+      - verification_method
+      - status
+  audit_checklist:
+    - section: <Section name>
+      items:
+        - id: <Item ID>
+          requirement: <What is being checked>
+          evidence: <What evidence is expected>
+          compliant: <yes | no | n/a>
+          notes: <Auditor notes>
+  interfaces:
+    lc_phases:
+      - LC07_QA_PROCESS
+      - LC10_INDUSTRIAL_SUPPLY_CHAIN
+    ata_chapters:
+      - 85-00-00
+    opt_in_domains:
+      - I-INFRASTRUCTURES/M1
+    standards_audited:
+      - <Standard ID 1>
+      - <Standard ID 2>
+links:
+  reqs: []
+  safety: []
+  standards:
+    - <Reference to standard being audited>
+  previous_audits:
+    - <Reference to previous audit if applicable>
+tags:
+  - M1
+  - audit
+  - ATA85
+  - quality
+
+# Usage Instructions:
+# 1. Copy this template to appropriate subdirectory (e.g., 01_QUALITY/controls/QMS_audit_pack.meta.yaml)
+# 2. Replace all <placeholders> with actual values
+# 3. Update audit_type enum: internal | external_third_party | regulatory
+# 4. Define findings_expected based on audit scope
+# 5. Customize corrective_action_template as needed
+# 6. Build audit_checklist with relevant sections and items
+# 7. Update interfaces and links
+# 8. Update id to match format: M1-AUDIT-<CODE> (e.g., M1-AUDIT-QMS-2026-01)

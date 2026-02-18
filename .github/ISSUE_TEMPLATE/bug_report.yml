@@ -1,0 +1,99 @@
+name: "Bug Report"
+description: "Report a defect in an existing infrastructure spec, lifecycle artefact, schema, or codebase component."
+title: "[BUG] <Short description of the defect>"
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Bug Report
+
+        Use this template to report a defect in an existing infrastructure specification,
+        lifecycle artefact, schema, workflow, or codebase component.
+
+        Please provide enough detail to reproduce the issue and assess its impact.
+
+  - type: dropdown
+    id: affected_area
+    attributes:
+      label: "Affected Area"
+      description: "Which area of the repository does this bug affect?"
+      options:
+        - "I-INFRASTRUCTURES / M1 – Manufacturing Facilities"
+        - "I-INFRASTRUCTURES / M2 – Maintenance Environments"
+        - "I-INFRASTRUCTURES / O – Operations & Service Structures"
+        - "T-TECHNOLOGIES – On-Board Systems"
+        - "N-NEURAL_NETWORKS – AI Governance / Digital Thread"
+        - "O-ORGANIZATIONS"
+        - "P-PROGRAMS"
+        - "Lifecycle / WBS"
+        - "Schemas / Validation"
+        - "CI / Workflows"
+        - "Tests"
+        - "Other"
+    validations:
+      required: true
+
+  - type: input
+    id: affected_file
+    attributes:
+      label: "Affected File or Path"
+      description: "Repository path to the file(s) containing the defect."
+      placeholder: "e.g. OPT-IN_FRAMEWORK/I-INFRASTRUCTURES/M1-MANUFACTURING_FACILITIES/00_INDEX.md"
+    validations:
+      required: false
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Bug Description"
+      description: "A clear and concise description of what the bug is."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps_to_reproduce
+    attributes:
+      label: "Steps to Reproduce"
+      description: "Steps to reproduce the behaviour."
+      placeholder: |
+        1. …
+        2. …
+        3. …
+    validations:
+      required: false
+
+  - type: textarea
+    id: expected_behavior
+    attributes:
+      label: "Expected Behaviour"
+      description: "What you expected to happen."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual_behavior
+    attributes:
+      label: "Actual Behaviour"
+      description: "What actually happened (include error messages, incorrect values, etc.)."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: safety_critical
+    attributes:
+      label: "Safety-Critical Impact?"
+      description: "Does this bug affect safety-critical content or systems?"
+      options:
+        - "No — not safety-critical"
+        - "Yes — requires STK_SAF escalation"
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: "Additional Context"
+      description: "Any other context, screenshots, or links that help explain the bug."
+    validations:
+      required: false

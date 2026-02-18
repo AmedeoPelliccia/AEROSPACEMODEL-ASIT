@@ -1,0 +1,365 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://aerospacemodel.com/schemas/m1_standard_record.schema.json",
+  "title": "M1 Standard Record Schema",
+  "description": "JSON Schema for validating .meta.yaml files in M1 Manufacturing Facilities subdomain",
+  "type": "object",
+  "required": [
+    "id",
+    "type",
+    "title",
+    "owner",
+    "revision",
+    "status",
+    "lc_phase",
+    "ata",
+    "domain",
+    "integrity"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^M1-",
+      "description": "Unique identifier starting with M1-"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "STANDARD_RECORD",
+        "AUDIT_PACK",
+        "CONTROL_CHECKLIST",
+        "REGULATION_RECORD"
+      ],
+      "description": "Type of M1 record"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Title of the record"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Owner of the record (e.g., ASIT, STK_QA)"
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version (e.g., 1.0.0)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "review",
+        "approved",
+        "active",
+        "obsolete"
+      ],
+      "description": "Lifecycle status of the record"
+    },
+    "lc_phase": {
+      "type": "string",
+      "pattern": "^LC\\d{2}",
+      "description": "Lifecycle phase (e.g., LC07_QA_PROCESS)"
+    },
+    "work_package": {
+      "type": "string",
+      "description": "Associated work package identifier"
+    },
+    "ata": {
+      "type": "string",
+      "pattern": "^\\d{2}-\\d{2}-\\d{2}$",
+      "description": "ATA chapter code (e.g., 85-00-00)"
+    },
+    "domain": {
+      "type": "string",
+      "description": "OPT-IN domain path (e.g., I-INFRASTRUCTURES/M1)"
+    },
+    "created_on": {
+      "type": "string",
+      "description": "Creation date (ISO 8601 or placeholder)"
+    },
+    "last_updated_on": {
+      "type": "string",
+      "description": "Last update date (ISO 8601 or placeholder)"
+    },
+    "integrity": {
+      "type": "object",
+      "required": [
+        "checksum",
+        "algorithm"
+      ],
+      "properties": {
+        "checksum": {
+          "type": "string",
+          "description": "Checksum value or placeholder"
+        },
+        "algorithm": {
+          "type": "string",
+          "enum": [
+            "sha256",
+            "sha512",
+            "md5"
+          ],
+          "description": "Hashing algorithm"
+        }
+      }
+    },
+    "standard": {
+      "type": "object",
+      "description": "Standard-specific fields (required for STANDARD_RECORD type)",
+      "required": [
+        "id",
+        "full_title",
+        "issuing_body",
+        "norm_type",
+        "scope",
+        "why_it_applies_to_M1"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Standard identifier (e.g., ISO 9001:2015)"
+        },
+        "full_title": {
+          "type": "string",
+          "description": "Full title of the standard"
+        },
+        "issuing_body": {
+          "type": "string",
+          "description": "Organization that issued the standard (e.g., ISO, EASA, FAA)"
+        },
+        "norm_type": {
+          "type": "string",
+          "enum": [
+            "system_management",
+            "regulation",
+            "technical_process",
+            "control"
+          ],
+          "description": "Classification of the standard"
+        },
+        "edition": {
+          "type": "string",
+          "description": "Edition or version of the standard"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the official standard"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Brief description of what the standard covers"
+        },
+        "why_it_applies_to_M1": {
+          "type": "string",
+          "description": "Justification for applicability to M1"
+        },
+        "evidence_expected": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of expected evidence types"
+        },
+        "audit_questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of audit questions for compliance verification"
+        },
+        "interfaces": {
+          "type": "object",
+          "properties": {
+            "lc_phases": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^LC\\d{2}"
+              },
+              "description": "Lifecycle phases where this standard applies"
+            },
+            "ata_chapters": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^\\d{2}-\\d{2}-\\d{2}$"
+              },
+              "description": "ATA chapters interfacing with this standard"
+            },
+            "opt_in_domains": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "OPT-IN domains interfacing with this standard"
+            }
+          }
+        }
+      }
+    },
+    "audit_pack": {
+      "type": "object",
+      "description": "Audit pack specific fields (required for AUDIT_PACK type)",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "audit_scope": {
+          "type": "string"
+        },
+        "audit_type": {
+          "type": "string",
+          "enum": [
+            "internal",
+            "external_third_party",
+            "regulatory"
+          ]
+        },
+        "frequency": {
+          "type": "string"
+        },
+        "responsible_auditor": {
+          "type": "string"
+        },
+        "findings_expected": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "conformance",
+                  "non-conformance",
+                  "observation"
+                ]
+              },
+              "description": {
+                "type": "string"
+              },
+              "severity": {
+                "type": "string",
+                "enum": [
+                  "info",
+                  "minor",
+                  "major",
+                  "critical"
+                ]
+              }
+            }
+          }
+        },
+        "corrective_action_template": {
+          "type": "object"
+        },
+        "audit_checklist": {
+          "type": "array"
+        }
+      }
+    },
+    "links": {
+      "type": "object",
+      "properties": {
+        "reqs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "safety": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "verification": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "work_package": {
+          "type": "string"
+        },
+        "standards": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "previous_audits": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags for categorization and search"
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "formats": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "STANDARD_RECORD"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "standard"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "AUDIT_PACK"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "audit_pack"
+        ]
+      }
+    }
+  ]
+}

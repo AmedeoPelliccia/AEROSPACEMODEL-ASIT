@@ -410,3 +410,55 @@ class TestLifecycleActivationSubdomains:
         for key, subdir in expected.items():
             assert subdir in sd[key]["optin_path"], \
                 f"{key} optin_path must contain {subdir}"
+
+    def test_p_product_definition_has_cross_links(self, lc_data: dict):
+        sd = lc_data["subdomains"]
+        assert "cross_links" in sd["P_PRODUCT_DEFINITION"], \
+            "P_PRODUCT_DEFINITION must have cross_links"
+        links = sd["P_PRODUCT_DEFINITION"]["cross_links"]
+        targets = [lnk["target"] for lnk in links]
+        assert "O_AUTHORITATIVE" in targets
+        assert "N_DIGITAL_THREAD_TRACEABILITY" in targets
+
+    def test_p_service_instruction_has_cross_links(self, lc_data: dict):
+        sd = lc_data["subdomains"]
+        assert "cross_links" in sd["P_SERVICE_INSTRUCTION"], \
+            "P_SERVICE_INSTRUCTION must have cross_links"
+        links = sd["P_SERVICE_INSTRUCTION"]["cross_links"]
+        targets = [lnk["target"] for lnk in links]
+        assert "O_BUSINESS_ENFORCEMENT" in targets
+        assert "I_MAINTENANCE_ENVIRONMENTS" in targets
+
+
+# =============================================================================
+# P-PROGRAMS Cross-Link Content Tests
+# =============================================================================
+
+
+class TestPProgramsCrossLinks:
+    """Tests that P-PROGRAMS README contains cross-domain integration section."""
+
+    @pytest.fixture
+    def readme_text(self) -> str:
+        return (P_PROGRAMS / "README.md").read_text(encoding="utf-8")
+
+    def test_readme_has_cross_domain_section(self, readme_text: str):
+        assert "Cross-Domain Integration" in readme_text
+
+    def test_readme_links_to_o_organizations(self, readme_text: str):
+        assert "O-ORGANIZATIONS" in readme_text
+
+    def test_readme_links_to_t_technologies(self, readme_text: str):
+        assert "T-TECHNOLOGIES" in readme_text
+
+    def test_readme_links_to_i_infrastructures(self, readme_text: str):
+        assert "I-INFRASTRUCTURES" in readme_text
+
+    def test_readme_links_to_n_neural_networks(self, readme_text: str):
+        assert "N-NEURAL_NETWORKS" in readme_text
+
+    def test_readme_related_docs_has_o_organizations_link(self, readme_text: str):
+        assert "../O-ORGANIZATIONS/README.md" in readme_text
+
+    def test_readme_related_docs_has_lc_activation_link(self, readme_text: str):
+        assert "T_SUBDOMAIN_LC_ACTIVATION.yaml" in readme_text

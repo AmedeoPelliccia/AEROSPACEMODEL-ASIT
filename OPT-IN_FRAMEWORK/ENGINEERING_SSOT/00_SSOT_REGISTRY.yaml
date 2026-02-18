@@ -1,0 +1,107 @@
+metadata:
+  program: "AMPEL360 Q100"
+  version: "1.0.0"
+  authority: "ASIT"
+  created: "2026-02-18"
+  description: >
+    Authoritative Engineering Single Source of Truth (SSOT) registry for the
+    AMPEL360 Q100 program. Lists all canonical engineering data sources mapped
+    to ATA chapters, technology domains, lifecycle phases, and baselines.
+
+ssot_entries:
+  - id: "SSOT-Q100-C2-001"
+    title: "LH2 Primary Tank — Cryogenic Storage Design"
+    ata_chapter: "28-11"
+    technology_domain: "C2-CIRCULAR_CRYOGENIC_CELLS"
+    baseline_ref: "BL-ATA28-C2-001"
+    lifecycle_phase: "LC04"
+    status: "approved"
+    special_conditions:
+      - "SC-28-H2-001"
+      - "SC-28-CRYO-002"
+    path: >
+      OPT-IN_FRAMEWORK/T-TECHNOLOGIES_AMEDEOPELLICCIA-ON_BOARD_SYSTEMS/
+      C2-CIRCULAR_CRYOGENIC_CELLS/ATA_28-FUEL/28-11-lh2-primary-tank/
+
+  - id: "SSOT-Q100-C2-002"
+    title: "H2 Leak Detection System — Sensor Architecture"
+    ata_chapter: "28-41"
+    technology_domain: "C2-CIRCULAR_CRYOGENIC_CELLS"
+    baseline_ref: "BL-ATA28-C2-002"
+    lifecycle_phase: "LC04"
+    status: "approved"
+    special_conditions:
+      - "SC-28-H2-001"
+    path: >
+      OPT-IN_FRAMEWORK/T-TECHNOLOGIES_AMEDEOPELLICCIA-ON_BOARD_SYSTEMS/
+      C2-CIRCULAR_CRYOGENIC_CELLS/ATA_28-FUEL/28-41-h2-leak-detection/
+
+  - id: "SSOT-Q100-P-001"
+    title: "Fuel Cell Power Plant — Stack Architecture"
+    ata_chapter: "71-11"
+    technology_domain: "P-PROPULSION"
+    baseline_ref: "BL-ATA71-P-001"
+    lifecycle_phase: "LC04"
+    status: "approved"
+    special_conditions:
+      - "SC-71-FUELCELL-001"
+    path: >
+      OPT-IN_FRAMEWORK/T-TECHNOLOGIES_AMEDEOPELLICCIA-ON_BOARD_SYSTEMS/
+      P-PROPULSION/ATA_71-POWER_PLANT/
+
+  - id: "SSOT-Q100-P-002"
+    title: "Fuel Cell Thermal Management System"
+    ata_chapter: "71-24"
+    technology_domain: "P-PROPULSION"
+    baseline_ref: "BL-ATA71-P-002"
+    lifecycle_phase: "LC04"
+    status: "in_review"
+    special_conditions:
+      - "SC-71-FUELCELL-001"
+    path: >
+      OPT-IN_FRAMEWORK/T-TECHNOLOGIES_AMEDEOPELLICCIA-ON_BOARD_SYSTEMS/
+      P-PROPULSION/ATA_71-POWER_PLANT/
+
+  - id: "SSOT-Q100-I2-001"
+    title: "Predictive Maintenance AI Model — Architecture"
+    ata_chapter: "95-10"
+    technology_domain: "I2-INTELLIGENCE"
+    baseline_ref: "BL-ATA95-I2-001"
+    lifecycle_phase: "LC04"
+    status: "draft"
+    special_conditions: []
+    path: >
+      OPT-IN_FRAMEWORK/T-TECHNOLOGIES_AMEDEOPELLICCIA-ON_BOARD_SYSTEMS/
+      I2-INTELLIGENCE/ATA_95-AI_ML_MODELS/
+
+  - id: "SSOT-Q100-I2-002"
+    title: "Flight Data Analysis AI Model — Training Data Governance"
+    ata_chapter: "95-20"
+    technology_domain: "I2-INTELLIGENCE"
+    baseline_ref: "BL-ATA95-I2-002"
+    lifecycle_phase: "LC03"
+    status: "draft"
+    special_conditions: []
+    path: >
+      OPT-IN_FRAMEWORK/T-TECHNOLOGIES_AMEDEOPELLICCIA-ON_BOARD_SYSTEMS/
+      I2-INTELLIGENCE/ATA_95-AI_ML_MODELS/
+
+custom_data_sheets:
+  description: >
+    Custom Information Data Sheets (CIDS) for novel technology components
+    not fully covered by standard ATA iSpec 2200 chapters.
+  entries:
+    - ds-id: "CIDS-C2-001"
+      title: "LH2 Cryogenic Tank — Custom Information Data Sheet"
+      linked_ssot: "SSOT-Q100-C2-001"
+      status: "approved"
+
+    - ds-id: "CIDS-P-001"
+      title: "Fuel Cell Stack — Custom Information Data Sheet"
+      linked_ssot: "SSOT-Q100-P-001"
+      status: "in_review"
+
+    - ds-id: "CIDS-I2-001"
+      title: "Predictive Maintenance AI Model — Custom Information Data Sheet"
+      linked_ssot: "SSOT-Q100-I2-001"
+      status: "draft"

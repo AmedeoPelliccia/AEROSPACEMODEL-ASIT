@@ -1,0 +1,70 @@
+id: M1-STD-AS9102
+type: STANDARD_RECORD
+title: AS9102 Rev B — First Article Inspection (FAI)
+owner: ASIT
+revision: 1.0.0
+status: active
+lc_phase: LC07_QA_PROCESS
+work_package: M1-QMS-05
+ata: 85-00-00
+domain: I-INFRASTRUCTURES/M1
+created_on: 2026-02-18
+last_updated_on: 2026-02-18
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+standard:
+  id: AS9102B
+  full_title: Aerospace Standard — First Article Inspection Requirement
+  issuing_body: SAE International / IAQG
+  norm_type: technical_process
+  edition: Rev B (2014)
+  url: https://www.sae.org/standards/content/as9102b/
+  scope: |
+    Requirements for first article inspection of new parts or processes, covering
+    Form 1 (Part Number Accountability), Form 2 (Product Accountability), and
+    Form 3 (Characteristic Accountability). Applies to new part introductions,
+    design changes, manufacturing process changes, and production re-starts.
+  why_it_applies_to_M1: |
+    Ensures new parts meet all design and specification requirements before
+    entering production. FAI per AS9102 is required for all new aerospace parts
+    and assemblies in the AMPEL360 Q100 program, including hydrogen storage
+    tank components, fuel cell stack assemblies, and structural elements,
+    confirming that the manufacturing process is capable of producing conforming
+    hardware.
+  evidence_expected:
+    - FAI Reports per AS9102 Form 1 (Part Number Accountability)
+    - FAI Reports per AS9102 Form 2 (Product Accountability)
+    - FAI Reports per AS9102 Form 3 (Characteristic Accountability)
+    - Dimensional Inspection Results
+    - Material and Process Certificates
+    - Functional Test Results
+  audit_questions:
+    - Are FAI reports completed per AS9102 (Form 1/2/3) for all new parts and processes?
+    - Are partial FAIs (delta FAI) documented when design or process changes occur?
+    - Are dimensional inspection results traceable to calibrated equipment?
+    - Are material and special process certificates included in the FAI package?
+    - Is the FAI package reviewed and approved before production release?
+  interfaces:
+    lc_phases:
+      - LC07_QA_PROCESS
+      - LC10_INDUSTRIAL_SUPPLY_CHAIN
+    ata_chapters:
+      - 85-00-00
+    opt_in_domains:
+      - I-INFRASTRUCTURES/M1
+      - T/C2-CIRCULAR_CRYOGENIC_CELLS
+      - T/P-PROPULSION
+links:
+  reqs: []
+  safety: []
+  verification: []
+tags:
+  - M1
+  - manufacturing
+  - ATA85
+  - standard
+  - AS9102
+  - FAI
+  - first-article-inspection
+  - quality

@@ -698,3 +698,411 @@ class TestEndToEndPipeline:
         assert result is not None
         assert result.run_id is not None
         assert result.contract_id == "TEST-CONTRACT-001"
+
+
+# =============================================================================
+# TESTS – Inline regulatory-reference citations
+# =============================================================================
+
+
+class TestRegulatoryReferenceCitations:
+    """Tests for preservation of regulatory references and best practices as
+    inline citations in generated S1000D data modules (issue:
+    'Preserve regulatory references and industry best practices as inline
+    citations').
+    """
+
+    # ------------------------------------------------------------------
+    # Helpers
+    # ------------------------------------------------------------------
+
+    def _make_stage_cfg(self, stage_type=PipelineStageType.TRANSFORM) -> PipelineStageConfig:
+        return PipelineStageConfig(
+            stage_type=stage_type,
+            name="Test",
+            description="Test stage",
+        )
+
+    def _transform_source(self, content: dict, tmp_path: Path) -> str:
+        """Run TransformStage on a single source dict; return XML string."""
+        from aerospacemodel.asigt.engine import ExecutionContext
+
+        stage = TransformStage(self._make_stage_cfg())
+        context = ExecutionContext(
+            contract_id="TEST-CONTRACT",
+            contract_version="1.0",
+            baseline_id="BL-001",
+            authority_reference="TEST",
+            invocation_timestamp=datetime.now(),
+            kdb_root=tmp_path,
+            idb_root=tmp_path / "IDB",
+            output_path=tmp_path / "output",
+            run_archive_path=tmp_path / "runs",
+        )
+        state: dict = {
+            "enriched_sources": [
+                {
+                    "id": "SRC-001",
+                    "type": "requirement",
+                    "metadata": {"ata_chapter": "28"},
+                    "content": content,
+                }
+            ]
+        }
+        stage.execute(context, state)
+        dm_files = list((tmp_path / "output").glob("*.xml"))
+        assert dm_files, "No XML output produced by TransformStage"
+        return dm_files[0].read_text(encoding="utf-8")
+
+    # ------------------------------------------------------------------
+    # TransformStage tests
+    # ------------------------------------------------------------------
+
+    def test_regulatory_refs_as_strings_appear_in_xml(self, tmp_path):
+        """String regulatory refs appear as externalPubCode elements in XML."""
+        xml = self._transform_source(
+            {
+                "title": "LH2 Tank General",
+                "description": "Cryogenic hydrogen tank.",
+                "regulatory_refs": ["EASA CS-25", "ARP4761", "DO-160"],
+            },
+            tmp_path,
+        )
+        assert "<externalPubCode>EASA CS-25</externalPubCode>" in xml
+        assert "<externalPubCode>ARP4761</externalPubCode>" in xml
+        assert "<externalPubCode>DO-160</externalPubCode>" in xml
+
+    def test_regulatory_refs_as_dicts_include_title(self, tmp_path):
+        """Dict regulatory refs preserve both code and title."""
+        xml = self._transform_source(
+            {
+                "title": "Fuel System",
+                "description": "Fuel system overview.",
+                "regulatory_refs": [
+                    {"standard": "DO-178C", "title": "Software Considerations in Airborne Systems"},
+                ],
+            },
+            tmp_path,
+        )
+        assert "<externalPubCode>DO-178C</externalPubCode>" in xml
+        assert "<externalPubTitle>Software Considerations in Airborne Systems</externalPubTitle>" in xml
+
+    def test_best_practices_appear_in_xml(self, tmp_path):
+        """Best-practice entries are emitted alongside regulatory refs."""
+        xml = self._transform_source(
+            {
+                "title": "Maintenance Procedure",
+                "description": "Step-by-step maintenance.",
+                "best_practices": ["SAE ARP4754A"],
+            },
+            tmp_path,
+        )
+        assert "<externalPubCode>SAE ARP4754A</externalPubCode>" in xml
+
+    def test_inline_citations_section_in_content(self, tmp_path):
+        """The description block contains a levelled-para for inline citations."""
+        xml = self._transform_source(
+            {
+                "title": "System Description",
+                "description": "Overview.",
+                "regulatory_refs": ["S1000D 5.0"],
+                "best_practices": ["ARP4761"],
+            },
+            tmp_path,
+        )
+        assert "Regulatory References and Industry Best Practices" in xml
+        assert "[S1000D 5.0]" in xml
+        assert "[ARP4761]" in xml
+
+    def test_no_refs_produces_no_citations_section(self, tmp_path):
+        """No regulatory_refs → no citations section emitted."""
+        xml = self._transform_source(
+            {"title": "Basic DM", "description": "No refs here."},
+            tmp_path,
+        )
+        assert "Regulatory References" not in xml
+        assert "externalPubRef" not in xml
+
+    def test_standards_field_alias(self, tmp_path):
+        """The 'standards' field is treated as a supplement/alias for 'regulatory_refs'."""
+        xml = self._transform_source(
+            {
+                "title": "Standards Check",
+                "description": ".",
+                "standards": ["ISO 14687-2"],
+            },
+            tmp_path,
+        )
+        assert "<externalPubCode>ISO 14687-2</externalPubCode>" in xml
+
+    def test_both_regulatory_refs_and_standards_merged(self, tmp_path):
+        """When both 'regulatory_refs' and 'standards' are present both are emitted."""
+        xml = self._transform_source(
+            {
+                "title": "Merged Fields",
+                "description": ".",
+                "regulatory_refs": ["CS-25"],
+                "standards": ["ISO 14687-2"],
+            },
+            tmp_path,
+        )
+        assert "<externalPubCode>CS-25</externalPubCode>" in xml
+        assert "<externalPubCode>ISO 14687-2</externalPubCode>" in xml
+
+    def test_empty_regulatory_refs_does_not_suppress_standards(self, tmp_path):
+        """An explicit empty regulatory_refs list does not suppress the 'standards' field."""
+        xml = self._transform_source(
+            {
+                "title": "Empty Reg Refs",
+                "description": ".",
+                "regulatory_refs": [],
+                "standards": ["ARP4754A"],
+            },
+            tmp_path,
+        )
+        assert "<externalPubCode>ARP4754A</externalPubCode>" in xml
+
+    def test_xml_special_characters_escaped_in_refs(self, tmp_path):
+        """Ref entries containing XML special characters are properly escaped."""
+        xml = self._transform_source(
+            {
+                "title": "Special Chars",
+                "description": ".",
+                "regulatory_refs": [
+                    {"standard": "CS-25 Amendment 27", "title": "Applicability: <All> & More"},
+                ],
+            },
+            tmp_path,
+        )
+        assert "<externalPubCode>CS-25 Amendment 27</externalPubCode>" in xml
+
+    def test_empty_string_ref_skipped(self, tmp_path):
+        """Ref entries that resolve to an empty code are silently skipped."""
+        xml = self._transform_source(
+            {
+                "title": "Empty Ref",
+                "description": ".",
+                "regulatory_refs": ["", "ARP4761"],
+            },
+            tmp_path,
+        )
+        assert xml.count("<externalPubRef>") == 1
+        assert "<externalPubCode>ARP4761</externalPubCode>" in xml
+
+    def test_dict_ref_with_unknown_keys_skipped(self, tmp_path):
+        """Dict entries without a recognisable code key are silently skipped."""
+        xml = self._transform_source(
+            {
+                "title": "Unknown Keys",
+                "description": ".",
+                "regulatory_refs": [
+                    {"revision": "C", "year": 2020},   # no standard/code/name key
+                    "DO-178C",                          # valid entry
+                ],
+            },
+            tmp_path,
+        )
+        assert xml.count("<externalPubRef>") == 1
+        assert "<externalPubCode>DO-178C</externalPubCode>" in xml
+
+    def test_non_string_non_dict_ref_skipped(self, tmp_path):
+        """Non-string, non-dict entries in the refs list are silently skipped."""
+        xml = self._transform_source(
+            {
+                "title": "Invalid Type Ref",
+                "description": ".",
+                "regulatory_refs": [42, None, "CS-25"],
+            },
+            tmp_path,
+        )
+        assert xml.count("<externalPubRef>") == 1
+        assert "<externalPubCode>CS-25</externalPubCode>" in xml
+
+    # ------------------------------------------------------------------
+    # ValidateEnrichStage tests
+    # ------------------------------------------------------------------
+
+    def test_enrich_merges_regulatory_refs_and_standards(self):
+        """_enrich_content merges 'regulatory_refs' and 'standards' into enrichment."""
+        stage = ValidateEnrichStage(
+            self._make_stage_cfg(PipelineStageType.VALIDATE_ENRICH)
+        )
+        sources = [
+            {
+                "id": "SRC-001",
+                "type": "requirement",
+                "content": {
+                    "title": "T",
+                    "regulatory_refs": ["EASA CS-25"],
+                    "standards": ["ARP4761"],
+                },
+            }
+        ]
+        enriched = stage._enrich_content(sources)
+        assert "EASA CS-25" in enriched[0]["enrichment"]["regulatory_refs"]
+        assert "ARP4761" in enriched[0]["enrichment"]["regulatory_refs"]
+
+    def test_enrich_preserves_best_practices(self):
+        """_enrich_content forwards best_practices into the enrichment dict."""
+        stage = ValidateEnrichStage(
+            self._make_stage_cfg(PipelineStageType.VALIDATE_ENRICH)
+        )
+        sources = [
+            {
+                "id": "SRC-002",
+                "type": "task",
+                "content": {
+                    "title": "T",
+                    "best_practices": ["SAE ARP4754A"],
+                },
+            }
+        ]
+        enriched = stage._enrich_content(sources)
+        assert enriched[0]["enrichment"]["best_practices"] == ["SAE ARP4754A"]
+
+    def test_enrich_empty_refs_produces_empty_lists(self):
+        """When no refs present the enrichment lists are empty (not absent)."""
+        stage = ValidateEnrichStage(
+            self._make_stage_cfg(PipelineStageType.VALIDATE_ENRICH)
+        )
+        sources = [{"id": "SRC-003", "type": "requirement", "content": {"title": "X"}}]
+        enriched = stage._enrich_content(sources)
+        assert enriched[0]["enrichment"]["regulatory_refs"] == []
+        assert enriched[0]["enrichment"]["best_practices"] == []
+
+    # ------------------------------------------------------------------
+    # DescriptiveDMGenerator tests
+    # ------------------------------------------------------------------
+
+    def test_descriptive_generator_refs_in_dm_status(self, tmp_path):
+        """DescriptiveDMGenerator emits refs in dmStatus for regulatory_refs."""
+        from aerospacemodel.asigt.generators import (
+            DescriptiveDMGenerator,
+            GeneratorConfig,
+        )
+        from aerospacemodel.asigt.engine import ArtifactType, SourceArtifact
+
+        config = GeneratorConfig(
+            model_ident_code="AERO",
+            organization_name="Test Org",
+            organization_cage="00000",
+        )
+        gen = DescriptiveDMGenerator(config)
+
+        src_path = tmp_path / "req.yaml"
+        src_path.write_text("title: Fuel Tank\n")
+
+        source = SourceArtifact(
+            id="REQ-001",
+            path=src_path,
+            artifact_type=ArtifactType.REQUIREMENT,
+            content={
+                "title": "LH2 Tank",
+                "ata_chapter": "28",
+                "regulatory_refs": ["EASA CS-25", "ARP4761"],
+                "best_practices": [
+                    {"standard": "DO-160", "title": "Environmental Conditions"}
+                ],
+            },
+        )
+
+        result = gen.generate(source)
+
+        assert result.success, f"Generator failed: {result.errors}"
+        assert "<externalPubCode>EASA CS-25</externalPubCode>" in result.xml_content
+        assert "<externalPubCode>ARP4761</externalPubCode>" in result.xml_content
+        assert "<externalPubCode>DO-160</externalPubCode>" in result.xml_content
+        assert "<externalPubTitle>Environmental Conditions</externalPubTitle>" in result.xml_content
+
+    def test_descriptive_generator_inline_citations_in_content(self, tmp_path):
+        """DescriptiveDMGenerator adds inline citations levelledPara to content."""
+        from aerospacemodel.asigt.generators import (
+            DescriptiveDMGenerator,
+            GeneratorConfig,
+        )
+        from aerospacemodel.asigt.engine import ArtifactType, SourceArtifact
+
+        config = GeneratorConfig(model_ident_code="AERO", organization_name="Test Org", organization_cage="00000")
+        gen = DescriptiveDMGenerator(config)
+
+        src_path = tmp_path / "req2.yaml"
+        src_path.write_text("title: Test\n")
+
+        source = SourceArtifact(
+            id="REQ-002",
+            path=src_path,
+            artifact_type=ArtifactType.REQUIREMENT,
+            content={
+                "title": "System Overview",
+                "ata_chapter": "28",
+                "description": "Overview text.",
+                "regulatory_refs": ["S1000D 5.0"],
+            },
+        )
+
+        result = gen.generate(source)
+        assert result.success
+        assert "Regulatory References and Industry Best Practices" in result.xml_content
+        assert "[S1000D 5.0]" in result.xml_content
+
+    def test_descriptive_generator_no_refs_no_citations_section(self, tmp_path):
+        """DescriptiveDMGenerator does not emit citations section when no refs."""
+        from aerospacemodel.asigt.generators import (
+            DescriptiveDMGenerator,
+            GeneratorConfig,
+        )
+        from aerospacemodel.asigt.engine import ArtifactType, SourceArtifact
+
+        config = GeneratorConfig(model_ident_code="AERO", organization_name="Test Org", organization_cage="00000")
+        gen = DescriptiveDMGenerator(config)
+
+        src_path = tmp_path / "req3.yaml"
+        src_path.write_text("title: No refs\n")
+
+        source = SourceArtifact(
+            id="REQ-003",
+            path=src_path,
+            artifact_type=ArtifactType.REQUIREMENT,
+            content={"title": "No Refs DM", "ata_chapter": "28"},
+        )
+
+        result = gen.generate(source)
+        assert result.success
+        assert "Regulatory References" not in result.xml_content
+        assert "externalPubRef" not in result.xml_content
+
+    # ------------------------------------------------------------------
+    # ProceduralDMGenerator tests
+    # ------------------------------------------------------------------
+
+    def test_procedural_generator_refs_in_dm_status(self, tmp_path):
+        """ProceduralDMGenerator emits refs in dmStatus for regulatory_refs."""
+        from aerospacemodel.asigt.generators import (
+            ProceduralDMGenerator,
+            GeneratorConfig,
+        )
+        from aerospacemodel.asigt.engine import ArtifactType, SourceArtifact
+
+        config = GeneratorConfig(model_ident_code="AERO", organization_name="Test Org", organization_cage="00000")
+        gen = ProceduralDMGenerator(config)
+
+        src_path = tmp_path / "task.yaml"
+        src_path.write_text("title: Maintenance Task\n")
+
+        source = SourceArtifact(
+            id="TASK-001",
+            path=src_path,
+            artifact_type=ArtifactType.TASK,
+            content={
+                "task_title": "LH2 Tank Inspection",
+                "task_type": "inspection",
+                "ata_chapter": "28",
+                "regulatory_refs": ["ARP4761"],
+                "best_practices": ["ISO 14687-2"],
+            },
+        )
+
+        result = gen.generate(source)
+        assert result.success, f"Generator failed: {result.errors}"
+        assert "<externalPubCode>ARP4761</externalPubCode>" in result.xml_content
+        assert "<externalPubCode>ISO 14687-2</externalPubCode>" in result.xml_content

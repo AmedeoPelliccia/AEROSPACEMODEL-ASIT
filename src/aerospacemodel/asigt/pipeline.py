@@ -408,10 +408,27 @@ class ValidateEnrichStage:
         for source in sources:
             # Add enrichment data
             enriched_source = source.copy()
+            content = source.get("content", {})
+
+            # Extract and preserve regulatory references and best practices
+            reg_refs_raw = content.get("regulatory_refs")
+            standards_raw = content.get("standards")
+
+            combined_reg_refs: List[Any] = []
+            if reg_refs_raw is not None:
+                combined_reg_refs.extend(list(reg_refs_raw))
+            if standards_raw is not None:
+                combined_reg_refs.extend(list(standards_raw))
+
+            reg_refs = combined_reg_refs
+            best_practices = list(content.get("best_practices") or [])
+
             enriched_source["enrichment"] = {
                 "timestamp": datetime.now().isoformat(),
                 "cross_references": [],
-                "applicability": "ALL"
+                "applicability": "ALL",
+                "regulatory_refs": reg_refs,
+                "best_practices": best_practices,
             }
             enriched.append(enriched_source)
         
@@ -554,12 +571,99 @@ class TransformStage:
     def _generate_dm_xml(self, artifact: OutputArtifact, source: Dict[str, Any]) -> None:
         """Generate S1000D XML for data module."""
         from xml.sax.saxutils import escape
-        
+
         # Simplified XML generation
         content = source.get("content", {})
         title = escape(content.get("title", "Untitled"))
         description = escape(content.get("description", ""))
-        
+
+        # Collect regulatory references from the enrichment dict when available (set by
+        # ValidateEnrichStage); otherwise fall back to raw content.  Both 'regulatory_refs'
+        # and 'standards' are merged so neither is silently ignored when both are present.
+        enrichment = source.get("enrichment", {})
+        if enrichment.get("regulatory_refs") is not None:
+            reg_refs: list = list(enrichment["regulatory_refs"])
+        else:
+            reg_refs_raw = content.get("regulatory_refs")
+            standards_raw = content.get("standards")
+            if reg_refs_raw is not None:
+                reg_refs = list(reg_refs_raw) + list(standards_raw or [])
+            else:
+                reg_refs = list(standards_raw or [])
+
+        if enrichment.get("best_practices") is not None:
+            best_practices: list = list(enrichment["best_practices"])
+        else:
+            best_practices = list(content.get("best_practices") or [])
+
+        all_citations = reg_refs + best_practices
+
+        def _parse(entry: Any):
+            """Return (code, title) from a string or dict ref entry.
+
+            Key lookup uses explicit None and empty-string checks so that a
+            key present with a falsy value does not mask a later key that
+            carries a real value.
+            """
+            if isinstance(entry, str):
+                return entry, ""
+            if isinstance(entry, dict):
+                code = ""
+                for key in ("standard", "code", "name"):
+                    val = entry.get(key)
+                    if val is not None and val != "":
+                        code = str(val)
+                        break
+                title = ""
+                for key in ("title", "description"):
+                    val = entry.get(key)
+                    if val is not None and val != "":
+                        title = str(val)
+                        break
+                return code, title
+            return "", ""
+
+        # Build refs XML block for dmStatus (single loop via shared _parse helper)
+        refs_xml = ""
+        if all_citations:
+            ref_lines = []
+            for entry in all_citations:
+                code, pub_title = _parse(entry)
+                if not code:
+                    continue
+                title_elem = (
+                    f"\n          <externalPubTitle>{escape(pub_title)}</externalPubTitle>"
+                    if pub_title else ""
+                )
+                ref_lines.append(
+                    f"      <externalPubRef>\n"
+                    f"        <externalPubRefIdent>\n"
+                    f"          <externalPubCode>{escape(code)}</externalPubCode>"
+                    f"{title_elem}\n"
+                    f"        </externalPubRefIdent>\n"
+                    f"      </externalPubRef>"
+                )
+            if ref_lines:
+                refs_xml = "\n    <refs>\n" + "\n".join(ref_lines) + "\n    </refs>"
+
+        # Build inline citations content block (reuses _parse helper, no duplication)
+        citations_xml = ""
+        if all_citations:
+            citation_lines = []
+            for entry in all_citations:
+                code, pub_title = _parse(entry)
+                if not code:
+                    continue
+                text = f"[{escape(code)}] {escape(pub_title)}" if pub_title else f"[{escape(code)}]"
+                citation_lines.append(f"      <para>{text}</para>")
+            if citation_lines:
+                citations_xml = (
+                    "\n      <levelledPara>\n"
+                    "        <title>Regulatory References and Industry Best Practices</title>\n"
+                    + "\n".join(citation_lines)
+                    + "\n      </levelledPara>"
+                )
+
         xml_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <dmodule xmlns="http://www.s1000d.org/S1000D_5-0">
   <identAndStatusSection>
@@ -577,15 +681,17 @@ class TransformStage:
         </dmTitle>
       </dmAddressItems>
     </dmAddress>
+    <dmStatus issueType="new">{refs_xml}
+    </dmStatus>
   </identAndStatusSection>
   <content>
     <description>
-      <para>{description}</para>
+      <para>{description}</para>{citations_xml}
     </description>
   </content>
 </dmodule>
 """
-        
+
         # Write XML to file
         with open(artifact.path, "w", encoding="utf-8") as f:
             f.write(xml_content)
