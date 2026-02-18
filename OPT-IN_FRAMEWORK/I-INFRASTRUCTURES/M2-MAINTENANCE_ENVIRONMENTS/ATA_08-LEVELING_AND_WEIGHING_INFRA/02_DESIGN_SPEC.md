@@ -148,4 +148,4 @@ The weighing bay for H₂ aircraft requires ATEX/IECEx zone classification:
 - [ATA 08I Requirements](01_REQUIREMENTS.md)
 - [ATA 08I Equipment Catalog](03_EQUIPMENT.md)
 - [ATA 08I Procedures](04_PROCEDURES.md)
-- [ATA 28 H₂ Cryogenic Instructions](../../../../../.github/instructions/ata28_h2_cryogenic.instructions.md)
+- [ATA 28 H₂ Cryogenic Instructions](../../../../.github/instructions/ata28_h2_cryogenic.instructions.md)
