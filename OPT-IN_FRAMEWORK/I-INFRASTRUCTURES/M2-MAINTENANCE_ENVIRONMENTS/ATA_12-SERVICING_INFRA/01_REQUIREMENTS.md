@@ -121,4 +121,4 @@ For AMPEL360 Q100 cryogenic hydrogen fueling:
 - [ATA 12I README](README.md)
 - [ATA 12I Design Specifications](02_DESIGN_SPEC.md)
 - [ATA 12I Safety Risks](05_SAFETY_RISKS.md)
-- [ATA 28 H₂ Cryogenic Instructions](../../../../../.github/instructions/ata28_h2_cryogenic.instructions.md)
+- [ATA 28 H₂ Cryogenic Instructions](../../../../.github/instructions/ata28_h2_cryogenic.instructions.md)
