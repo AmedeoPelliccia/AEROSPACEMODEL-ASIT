@@ -569,7 +569,10 @@ class TransformStage:
         description = escape(content.get("description", ""))
 
         # Collect regulatory references and best practices for inline citations
-        reg_refs: list = list(content.get("regulatory_refs") or content.get("standards") or [])
+        reg_refs_value = content.get("regulatory_refs")
+        if reg_refs_value is None:
+            reg_refs_value = content.get("standards")
+        reg_refs: list = list(reg_refs_value or [])
         best_practices: list = list(content.get("best_practices") or [])
         all_citations = reg_refs + best_practices
 
