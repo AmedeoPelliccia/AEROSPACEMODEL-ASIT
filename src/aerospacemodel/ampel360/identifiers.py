@@ -87,8 +87,11 @@ class ArtifactID:
         if not re.match(r'^[A-Z0-9\-]+$', self.artifact_type):
             raise ValueError(f"Invalid artifact type: {self.artifact_type}")
         
-        # Sequence validation
+        # Sequence validation (001-999)
         if not re.match(r'^\d{3}$', self.sequence):
+            raise ValueError(f"Invalid sequence: {self.sequence}. Must be 001-999")
+        seq_int = int(self.sequence)
+        if not 1 <= seq_int <= 999:
             raise ValueError(f"Invalid sequence: {self.sequence}. Must be 001-999")
     
     def to_compact(self) -> str:
