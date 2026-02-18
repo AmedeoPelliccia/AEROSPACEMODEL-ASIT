@@ -26,7 +26,7 @@ body:
       options:
         - "M1 – Manufacturing Facilities (ATA 85)"
         - "M2 – Maintenance Environments (ATA 08I / 10I / 12I)"
-        - "O – Operations & Service Structures (ATA 03I / H2 GSE)"
+        - "O – Operations & Service Structures (ATA 03I / ATA IN H2 GSE)"
     validations:
       required: true
 
