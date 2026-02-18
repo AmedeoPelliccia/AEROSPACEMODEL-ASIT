@@ -92,7 +92,7 @@ potential impact on H₂/fuel cell infrastructure requirements:
 
 | Technology | Maturity | Potential Impact |
 |------------|----------|-----------------|
-| Embedded bonding resistance sensors | TRL 5 | Continuous in-flight bond integrity monitoring; early warning of bond degradation. Architecture provision included in ICD-28-41-00 |
+| Embedded bonding resistance sensors | TRL 5 | Continuous in-flight bond integrity monitoring; early warning of bond degradation. Architecture provision to be captured in bonding monitoring ICD (TBD) |
 | Structural health monitoring (SHM) integration | TRL 5–6 | CFRP composite bond integrity correlated with SHM strain data; may reduce maintenance inspection frequency |
 
 ### 3.3 Hydrogen Storage Evolution
