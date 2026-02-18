@@ -15,7 +15,7 @@ body:
         All proposals must comply with the **CoDevOps principles** (see [CONTRIBUTING.md](../../CONTRIBUTING.md))
         and must satisfy the **BREX governance rules** applicable to the target subdomain.
 
-        > **Note:** Safety-critical content (SAFETY-002 / SAFETY-FC-001 / SAFETY-H2-001) will
+        > **Note:** Safety-critical content (SAFETY-002) will
         > be escalated to **STK_SAF** before merge and requires a 72-hour review window.
 
   - type: dropdown
