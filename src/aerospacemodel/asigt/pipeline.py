@@ -599,17 +599,27 @@ class TransformStage:
         all_citations = reg_refs + best_practices
 
         def _parse(entry: Any):
-            """Return (code, title) from a string or dict ref entry."""
+            """Return (code, title) from a string or dict ref entry.
+
+            Key lookup uses explicit None and empty-string checks so that a
+            key present with a falsy value does not mask a later key that
+            carries a real value.
+            """
             if isinstance(entry, str):
                 return entry, ""
             if isinstance(entry, dict):
-                code = (
-                    entry.get("standard")
-                    or entry.get("code")
-                    or entry.get("name")
-                    or ""
-                )
-                title = entry.get("title") or entry.get("description") or ""
+                code = ""
+                for key in ("standard", "code", "name"):
+                    val = entry.get(key)
+                    if val is not None and val != "":
+                        code = str(val)
+                        break
+                title = ""
+                for key in ("title", "description"):
+                    val = entry.get(key)
+                    if val is not None and val != "":
+                        title = str(val)
+                        break
                 return code, title
             return "", ""
 

@@ -545,25 +545,36 @@ class BaseGenerator(ABC):
         """Parse a ref entry into a (code, title) tuple.
 
         Accepts either a plain string (returned as the code with an empty
-        title) or a dict whose code is read from the first present key among
-        ``standard``, ``code``, and ``name``, and whose title comes from
-        ``title`` or ``description``.  Returns ``('', '')`` for any other type.
+        title) or a dict whose code is read from the first *present and
+        non-empty* key among ``standard``, ``code``, and ``name``, and whose
+        title comes from the first *present and non-empty* key among ``title``
+        and ``description``.  Returns ``('', '')`` for any other type.
+
+        Key lookup uses explicit ``None`` and empty-string checks so that a
+        key whose value is ``None`` or ``""`` is treated as absent rather than
+        masking a later key that carries a real value.
 
         .. note::
-            ElementTree automatically escapes special characters when
-            serialising text content, so callers need not pre-escape the
-            returned strings before passing them to :meth:`create_sub_element`.
+            ElementTree automatically escapes special characters (``&``, ``<``,
+            ``>``, etc.) when serialising text content, so callers need not
+            pre-escape the returned strings before passing them to
+            :meth:`create_sub_element`.
         """
         if isinstance(entry, str):
             return entry, ""
         if isinstance(entry, dict):
-            code = (
-                entry.get("standard")
-                or entry.get("code")
-                or entry.get("name")
-                or ""
-            )
-            title = entry.get("title") or entry.get("description") or ""
+            code = ""
+            for key in ("standard", "code", "name"):
+                val = entry.get(key)
+                if val is not None and val != "":
+                    code = str(val)
+                    break
+            title = ""
+            for key in ("title", "description"):
+                val = entry.get(key)
+                if val is not None and val != "":
+                    title = str(val)
+                    break
             return code, title
         return "", ""
 
@@ -664,6 +675,7 @@ class BaseGenerator(ABC):
                 continue
             ext_pub_ref = self.create_sub_element(refs_elem, "externalPubRef")
             ext_pub_ref_ident = self.create_sub_element(ext_pub_ref, "externalPubRefIdent")
+            # ElementTree automatically escapes XML special characters in text content.
             self.create_sub_element(ext_pub_ref_ident, "externalPubCode", text=code)
             if title:
                 self.create_sub_element(ext_pub_ref_ident, "externalPubTitle", text=title)
