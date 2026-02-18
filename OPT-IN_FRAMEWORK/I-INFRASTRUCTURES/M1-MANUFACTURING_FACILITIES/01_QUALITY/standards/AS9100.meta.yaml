@@ -1,0 +1,68 @@
+id: M1-STD-AS9100
+type: STANDARD_RECORD
+title: AS9100 Rev D — Aerospace Quality Management System
+owner: ASIT
+revision: 1.0.0
+status: active
+lc_phase: LC07_QA_PROCESS
+work_package: M1-QMS-02
+ata: 85-00-00
+domain: I-INFRASTRUCTURES/M1
+created_on: 2026-02-18
+last_updated_on: 2026-02-18
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+standard:
+  id: AS9100D
+  full_title: Quality Management Systems — Requirements for Aviation, Space, and Defense Organizations
+  issuing_body: SAE International / IAQG
+  norm_type: system_management
+  edition: Rev D (2016)
+  url: https://www.sae.org/standards/content/as9100d/
+  scope: |
+    Aerospace-specific quality requirements including configuration management,
+    risk management, first article inspection, product/process monitoring, and
+    all ISO 9001:2015 requirements with aviation/space/defense augmentations.
+  why_it_applies_to_M1: |
+    Mandatory for aerospace production organizations. Extends ISO 9001:2015 with
+    requirements specific to aerospace manufacturing including operational risk
+    management, configuration management, key characteristics, and first article
+    inspection applicable to AMPEL360 Q100 production.
+  evidence_expected:
+    - AS9100 Certification (third-party)
+    - Process FMEA
+    - Configuration Management Plan
+    - Risk Management Records
+    - Key Characteristics Control Plan
+    - First Article Inspection Plan
+  audit_questions:
+    - Does the organization hold a current AS9100 Rev D certification from an IAQG-accredited body?
+    - Is an operational risk management process implemented and documented?
+    - Are key characteristics identified and controlled for critical parts?
+    - Is configuration management applied to all design and production deliverables?
+    - Are process FMEAs maintained and reviewed for all manufacturing processes?
+  interfaces:
+    lc_phases:
+      - LC07_QA_PROCESS
+      - LC10_INDUSTRIAL_SUPPLY_CHAIN
+      - LC12_MRO_CONTINUED_AIRWORTHINESS
+    ata_chapters:
+      - 85-00-00
+    opt_in_domains:
+      - I-INFRASTRUCTURES/M1
+      - T/C2-CIRCULAR_CRYOGENIC_CELLS
+      - T/P-PROPULSION
+links:
+  reqs: []
+  safety: []
+  verification: []
+tags:
+  - M1
+  - manufacturing
+  - ATA85
+  - standard
+  - AS9100
+  - aerospace
+  - QMS
+  - quality

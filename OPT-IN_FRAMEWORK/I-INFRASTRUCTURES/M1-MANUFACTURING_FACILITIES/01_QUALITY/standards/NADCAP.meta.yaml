@@ -1,0 +1,70 @@
+id: M1-STD-NADCAP
+type: STANDARD_RECORD
+title: NADCAP — Special Process Accreditation
+owner: ASIT
+revision: 1.0.0
+status: active
+lc_phase: LC07_QA_PROCESS
+work_package: M1-QMS-04
+ata: 85-00-00
+domain: I-INFRASTRUCTURES/M1
+created_on: 2026-02-18
+last_updated_on: 2026-02-18
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+standard:
+  id: NADCAP
+  full_title: National Aerospace and Defense Contractors Accreditation Program — Special Process Accreditation
+  issuing_body: Performance Review Institute (PRI) / SAE International
+  norm_type: technical_process
+  edition: Current (ongoing accreditation cycle)
+  url: https://www.pri-network.org/nadcap
+  scope: |
+    Special process qualification and accreditation covering welding, heat treatment,
+    non-destructive testing (NDT), surface treatment, composites processing,
+    chemical processing, and other critical manufacturing processes for aerospace
+    and defense applications.
+  why_it_applies_to_M1: |
+    Required for critical manufacturing processes on hydrogen storage tanks,
+    fuel cell stacks, and structural components. NADCAP accreditation ensures
+    that special processes meet the highest aerospace quality standards and are
+    performed by qualified personnel with approved procedures, which is essential
+    for safety-critical components in the AMPEL360 Q100 aircraft.
+  evidence_expected:
+    - NADCAP Accreditation Certificates (per process category)
+    - Process Qualification Records
+    - Approved Process Specifications
+    - Qualified Personnel Records
+    - Equipment Calibration and Qualification Records
+  audit_questions:
+    - Are all applicable special processes (welding, NDT, heat treatment) NADCAP accredited?
+    - Are NADCAP accreditation certificates current and within validity period?
+    - Are process qualification records maintained for each NADCAP-accredited process?
+    - Are personnel performing special processes qualified and certified per applicable standards?
+    - Are process audits conducted per NADCAP audit criteria (AC series)?
+  interfaces:
+    lc_phases:
+      - LC07_QA_PROCESS
+      - LC10_INDUSTRIAL_SUPPLY_CHAIN
+    ata_chapters:
+      - 85-00-00
+    opt_in_domains:
+      - I-INFRASTRUCTURES/M1
+      - T/C2-CIRCULAR_CRYOGENIC_CELLS
+      - T/P-PROPULSION
+links:
+  reqs: []
+  safety: []
+  verification: []
+tags:
+  - M1
+  - manufacturing
+  - ATA85
+  - standard
+  - NADCAP
+  - special-process
+  - welding
+  - NDT
+  - heat-treatment
+  - quality

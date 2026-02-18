@@ -1,0 +1,70 @@
+id: M1-STD-AS9120
+type: STANDARD_RECORD
+title: AS9120 Rev B — Aerospace and Defense Distributors Quality Management
+owner: ASIT
+revision: 1.0.0
+status: active
+lc_phase: LC10_INDUSTRIAL_SUPPLY_CHAIN
+work_package: M1-QMS-03
+ata: 85-00-00
+domain: I-INFRASTRUCTURES/M1
+created_on: 2026-02-18
+last_updated_on: 2026-02-18
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+standard:
+  id: AS9120B
+  full_title: Quality Management Systems — Requirements for Aviation, Space, and Defense Distributors
+  issuing_body: SAE International / IAQG
+  norm_type: system_management
+  edition: Rev B (2016)
+  url: https://www.sae.org/standards/content/as9120b/
+  scope: |
+    Quality management requirements for distributors and suppliers of aerospace
+    parts, materials, and assemblies. Addresses traceability, storage, handling,
+    counterfeit part prevention, and supplier qualification for the aerospace
+    supply chain.
+  why_it_applies_to_M1: |
+    Supply chain and vendor qualification requirements for M1 manufacturing.
+    Ensures that all purchased materials, parts, and assemblies meet aerospace
+    quality standards and are fully traceable, preventing counterfeit or
+    unapproved parts from entering the production of hydrogen storage tanks,
+    fuel cell stacks, and structural components.
+  evidence_expected:
+    - Approved Supplier List (ASL)
+    - Supplier Audit Reports
+    - Supplier Qualification Records
+    - Counterfeit Part Prevention Plan
+    - Material Traceability Records
+  audit_questions:
+    - Is an Approved Supplier List (ASL) maintained and regularly reviewed?
+    - Are supplier audits conducted at defined intervals with documented findings?
+    - Is a counterfeit part prevention plan in place and implemented?
+    - Are receiving inspection records maintained for all incoming aerospace parts?
+    - Is material traceability maintained from receipt through final assembly?
+  interfaces:
+    lc_phases:
+      - LC10_INDUSTRIAL_SUPPLY_CHAIN
+      - LC07_QA_PROCESS
+      - LC12_MRO_CONTINUED_AIRWORTHINESS
+    ata_chapters:
+      - 85-00-00
+    opt_in_domains:
+      - I-INFRASTRUCTURES/M1
+      - T/C2-CIRCULAR_CRYOGENIC_CELLS
+      - T/P-PROPULSION
+links:
+  reqs: []
+  safety: []
+  verification: []
+tags:
+  - M1
+  - manufacturing
+  - ATA85
+  - standard
+  - AS9120
+  - aerospace
+  - supply-chain
+  - distributors
+  - quality

@@ -1,0 +1,71 @@
+id: M1-STD-ISO10007
+type: STANDARD_RECORD
+title: ISO 10007 — Configuration Management for Products and Services
+owner: ASIT
+revision: 1.0.0
+status: active
+lc_phase: LC07_QA_PROCESS
+work_package: M1-QMS-06
+ata: 85-00-00
+domain: I-INFRASTRUCTURES/M1
+created_on: 2026-02-18
+last_updated_on: 2026-02-18
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+standard:
+  id: ISO 10007:2017
+  full_title: Quality Management — Guidelines for Configuration Management
+  issuing_body: ISO
+  norm_type: system_management
+  edition: "2017"
+  url: https://www.iso.org/standard/70400.html
+  scope: |
+    Configuration management guidelines for technical products and services,
+    covering configuration identification, configuration control, configuration
+    status accounting, and configuration audit to maintain product integrity
+    throughout the product lifecycle.
+  why_it_applies_to_M1: |
+    Essential for controlling engineering changes and maintaining product
+    traceability throughout the AMPEL360 Q100 manufacturing lifecycle. Ensures
+    that the as-built configuration of safety-critical components matches the
+    approved design baseline, and that all Engineering Change Requests (ECR)
+    and Engineering Change Orders (ECO) are processed in a controlled manner.
+  evidence_expected:
+    - Configuration Management Plan
+    - Engineering Change Records (ECR/ECO)
+    - Configuration Status Accounting Records
+    - Configuration Audit Reports
+    - Baseline Configuration Documentation
+  audit_questions:
+    - Is a Configuration Management Plan documented and implemented?
+    - Are Engineering Change Requests (ECR) and Engineering Change Orders (ECO) controlled through a formal process?
+    - Is configuration status accounting performed to track the current approved configuration?
+    - Are configuration audits (functional and physical) conducted before delivery milestones?
+    - Is product traceability maintained from design baseline through as-built configuration?
+  interfaces:
+    lc_phases:
+      - LC07_QA_PROCESS
+      - LC10_INDUSTRIAL_SUPPLY_CHAIN
+      - LC12_MRO_CONTINUED_AIRWORTHINESS
+    ata_chapters:
+      - 85-00-00
+    opt_in_domains:
+      - I-INFRASTRUCTURES/M1
+      - T/C2-CIRCULAR_CRYOGENIC_CELLS
+      - T/P-PROPULSION
+links:
+  reqs: []
+  safety: []
+  verification: []
+tags:
+  - M1
+  - manufacturing
+  - ATA85
+  - standard
+  - ISO10007
+  - configuration-management
+  - ECR
+  - ECO
+  - traceability
+  - quality

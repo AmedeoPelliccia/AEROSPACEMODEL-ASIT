@@ -1,0 +1,65 @@
+id: M1-STD-ISO9001
+type: STANDARD_RECORD
+title: ISO 9001:2015 — Quality Management Systems
+owner: ASIT
+revision: 1.0.0
+status: active
+lc_phase: LC07_QA_PROCESS
+work_package: M1-QMS-01
+ata: 85-00-00
+domain: I-INFRASTRUCTURES/M1
+created_on: 2026-02-18
+last_updated_on: 2026-02-18
+integrity:
+  checksum: to be generated upon baseline finalization
+  algorithm: sha256
+standard:
+  id: ISO 9001:2015
+  full_title: Quality Management Systems — Requirements
+  issuing_body: ISO
+  norm_type: system_management
+  edition: "2015"
+  url: https://www.iso.org/standard/62085.html
+  scope: |
+    General QMS framework for all manufacturing operations covering context of the
+    organization, leadership, planning, support, operation, performance evaluation,
+    and continual improvement.
+  why_it_applies_to_M1: |
+    Foundation for process control, document management, and continuous improvement
+    across all M1 manufacturing operations. Provides the baseline QMS structure upon
+    which AS9100 Rev D aerospace-specific requirements are built.
+  evidence_expected:
+    - QMS Manual
+    - Procedure Documents
+    - Internal Audit Records
+    - Management Review Records
+    - Corrective Action Records
+  audit_questions:
+    - Is a documented QMS Manual in place covering all ISO 9001:2015 clauses?
+    - Are internal audits conducted at planned intervals with recorded results?
+    - Are management reviews performed and documented?
+    - Is there a process for identifying and addressing non-conformances?
+    - Are corrective actions tracked to verified closure?
+  interfaces:
+    lc_phases:
+      - LC07_QA_PROCESS
+      - LC10_INDUSTRIAL_SUPPLY_CHAIN
+      - LC12_MRO_CONTINUED_AIRWORTHINESS
+    ata_chapters:
+      - 85-00-00
+    opt_in_domains:
+      - I-INFRASTRUCTURES/M1
+      - T/C2-CIRCULAR_CRYOGENIC_CELLS
+      - T/P-PROPULSION
+links:
+  reqs: []
+  safety: []
+  verification: []
+tags:
+  - M1
+  - manufacturing
+  - ATA85
+  - standard
+  - ISO9001
+  - QMS
+  - quality
