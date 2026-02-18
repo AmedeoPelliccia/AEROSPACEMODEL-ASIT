@@ -586,6 +586,56 @@ class BaseGenerator(ABC):
         
         return dm_status
     
+    def create_regulatory_refs(
+        self,
+        dm_status: ET.Element,
+        regulatory_refs: List[Any],
+        best_practices: Optional[List[Any]] = None,
+    ) -> Optional[ET.Element]:
+        """
+        Create a ``refs`` element inside *dm_status* for regulatory references
+        and industry best-practice citations.
+
+        Each entry in *regulatory_refs* may be either a plain string
+        (treated as the publication code) or a dict with optional keys
+        ``standard`` / ``code`` and ``title``.
+
+        Args:
+            dm_status: The ``dmStatus`` parent element.
+            regulatory_refs: Regulatory references to emit.
+            best_practices: Optional additional best-practice references.
+
+        Returns:
+            The created ``refs`` element, or ``None`` if no refs were added.
+        """
+        all_refs: List[Any] = list(regulatory_refs or [])
+        all_refs.extend(best_practices or [])
+
+        if not all_refs:
+            return None
+
+        refs_elem = self.create_sub_element(dm_status, "refs")
+
+        for ref in all_refs:
+            if isinstance(ref, str):
+                code, title = ref, ""
+            elif isinstance(ref, dict):
+                code = ref.get("standard") or ref.get("code") or ref.get("name", "")
+                title = ref.get("title") or ref.get("description", "")
+            else:
+                continue
+
+            if not code:
+                continue
+
+            ext_pub_ref = self.create_sub_element(refs_elem, "externalPubRef")
+            ext_pub_ref_ident = self.create_sub_element(ext_pub_ref, "externalPubRefIdent")
+            self.create_sub_element(ext_pub_ref_ident, "externalPubCode", text=code)
+            if title:
+                self.create_sub_element(ext_pub_ref_ident, "externalPubTitle", text=title)
+
+        return refs_elem
+
     def create_trace_link(
         self,
         source: SourceArtifact,
@@ -663,8 +713,14 @@ class DescriptiveDMGenerator(BaseGenerator):
             # Ident and status section
             ident_status = self.create_sub_element(dmodule, "identAndStatusSection")
             self.create_dm_address(ident_status, metadata)
-            self.create_dm_status(ident_status, metadata)
-            
+            dm_status = self.create_dm_status(ident_status, metadata)
+
+            # Preserve regulatory references and best practices as inline citations
+            regulatory_refs = content.get("regulatory_refs") or content.get("standards") or []
+            best_practices = content.get("best_practices") or []
+            if regulatory_refs or best_practices:
+                self.create_regulatory_refs(dm_status, regulatory_refs, best_practices)
+
             # Content section
             content_elem = self.create_sub_element(dmodule, "content")
             description = self.create_sub_element(content_elem, "description")
@@ -798,6 +854,27 @@ class DescriptiveDMGenerator(BaseGenerator):
             self.create_sub_element(location, "title", text="Location and Access")
             self.create_sub_element(location, "para", text=content["location_access"])
 
+        # Regulatory references and industry best practices – inline citations
+        reg_refs: List[Any] = list(content.get("regulatory_refs") or content.get("standards") or [])
+        best_practices: List[Any] = list(content.get("best_practices") or [])
+        all_citations = reg_refs + best_practices
+        if all_citations:
+            citations_para = self.create_sub_element(description, "levelledPara")
+            self.create_sub_element(citations_para, "title",
+                                    text="Regulatory References and Industry Best Practices")
+            for entry in all_citations:
+                if isinstance(entry, str):
+                    code, title = entry, ""
+                elif isinstance(entry, dict):
+                    code = entry.get("standard") or entry.get("code") or entry.get("name", "")
+                    title = entry.get("title") or entry.get("description", "")
+                else:
+                    continue
+                if not code:
+                    continue
+                citation_text = f"[{code}]" if not title else f"[{code}] {title}"
+                self.create_sub_element(citations_para, "para", text=citation_text)
+
 
 # =============================================================================
 # DATA MODULE GENERATOR - PROCEDURAL
@@ -866,8 +943,14 @@ class ProceduralDMGenerator(BaseGenerator):
             # Ident and status section
             ident_status = self.create_sub_element(dmodule, "identAndStatusSection")
             self.create_dm_address(ident_status, metadata)
-            self.create_dm_status(ident_status, metadata)
-            
+            dm_status = self.create_dm_status(ident_status, metadata)
+
+            # Preserve regulatory references and best practices as inline citations
+            regulatory_refs = content.get("regulatory_refs") or content.get("standards") or []
+            best_practices = content.get("best_practices") or []
+            if regulatory_refs or best_practices:
+                self.create_regulatory_refs(dm_status, regulatory_refs, best_practices)
+
             # Content section
             content_elem = self.create_sub_element(dmodule, "content")
             procedure = self.create_sub_element(content_elem, "procedure")

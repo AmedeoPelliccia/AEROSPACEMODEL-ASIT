@@ -408,10 +408,18 @@ class ValidateEnrichStage:
         for source in sources:
             # Add enrichment data
             enriched_source = source.copy()
+            content = source.get("content", {})
+
+            # Extract and preserve regulatory references and best practices
+            reg_refs = list(content.get("regulatory_refs") or content.get("standards") or [])
+            best_practices = list(content.get("best_practices") or [])
+
             enriched_source["enrichment"] = {
                 "timestamp": datetime.now().isoformat(),
                 "cross_references": [],
-                "applicability": "ALL"
+                "applicability": "ALL",
+                "regulatory_refs": reg_refs,
+                "best_practices": best_practices,
             }
             enriched.append(enriched_source)
         
@@ -554,12 +562,70 @@ class TransformStage:
     def _generate_dm_xml(self, artifact: OutputArtifact, source: Dict[str, Any]) -> None:
         """Generate S1000D XML for data module."""
         from xml.sax.saxutils import escape
-        
+
         # Simplified XML generation
         content = source.get("content", {})
         title = escape(content.get("title", "Untitled"))
         description = escape(content.get("description", ""))
-        
+
+        # Collect regulatory references and best practices for inline citations
+        reg_refs: list = list(content.get("regulatory_refs") or content.get("standards") or [])
+        best_practices: list = list(content.get("best_practices") or [])
+        all_citations = reg_refs + best_practices
+
+        # Build refs XML block for dmStatus
+        refs_xml = ""
+        if all_citations:
+            ref_lines = []
+            for entry in all_citations:
+                if isinstance(entry, str):
+                    code, pub_title = entry, ""
+                elif isinstance(entry, dict):
+                    code = entry.get("standard") or entry.get("code") or entry.get("name", "")
+                    pub_title = entry.get("title") or entry.get("description", "")
+                else:
+                    continue
+                if not code:
+                    continue
+                title_elem = (
+                    f"\n          <externalPubTitle>{escape(pub_title)}</externalPubTitle>"
+                    if pub_title else ""
+                )
+                ref_lines.append(
+                    f"      <externalPubRef>\n"
+                    f"        <externalPubRefIdent>\n"
+                    f"          <externalPubCode>{escape(code)}</externalPubCode>"
+                    f"{title_elem}\n"
+                    f"        </externalPubRefIdent>\n"
+                    f"      </externalPubRef>"
+                )
+            if ref_lines:
+                refs_xml = "\n    <refs>\n" + "\n".join(ref_lines) + "\n    </refs>"
+
+        # Build inline citations content block
+        citations_xml = ""
+        if all_citations:
+            citation_lines = []
+            for entry in all_citations:
+                if isinstance(entry, str):
+                    code, pub_title = entry, ""
+                elif isinstance(entry, dict):
+                    code = entry.get("standard") or entry.get("code") or entry.get("name", "")
+                    pub_title = entry.get("title") or entry.get("description", "")
+                else:
+                    continue
+                if not code:
+                    continue
+                text = f"[{escape(code)}] {escape(pub_title)}" if pub_title else f"[{escape(code)}]"
+                citation_lines.append(f"      <para>{text}</para>")
+            if citation_lines:
+                citations_xml = (
+                    "\n      <levelledPara>\n"
+                    "        <title>Regulatory References and Industry Best Practices</title>\n"
+                    + "\n".join(citation_lines)
+                    + "\n      </levelledPara>"
+                )
+
         xml_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <dmodule xmlns="http://www.s1000d.org/S1000D_5-0">
   <identAndStatusSection>
@@ -577,15 +643,17 @@ class TransformStage:
         </dmTitle>
       </dmAddressItems>
     </dmAddress>
+    <dmStatus issueType="new">{refs_xml}
+    </dmStatus>
   </identAndStatusSection>
   <content>
     <description>
-      <para>{description}</para>
+      <para>{description}</para>{citations_xml}
     </description>
   </content>
 </dmodule>
 """
-        
+
         # Write XML to file
         with open(artifact.path, "w", encoding="utf-8") as f:
             f.write(xml_content)
