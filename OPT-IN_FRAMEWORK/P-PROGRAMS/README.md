@@ -65,7 +65,7 @@ Standard lifecycle profile applies to this domain:
 Program-level service procedures must comply with the organizational maintenance policy (ATA 01) and airworthiness limitations (ATA 04/05) defined in O-ORGANIZATIONS. Time limits (ATA 05) constrain servicing intervals in ATA 12; airworthiness limitations constrain product configuration in ATA 06/08/11.
 
 ### P-PROGRAMS → T-TECHNOLOGIES
-Service instructions (ATA 07 Lifting, ATA 09 Towing, ATA 10 Parking, ATA 12 Servicing) directly interact with T-TECHNOLOGIES on-board systems. Servicing procedures reference fluid/gas types and access points defined in the corresponding technology subdomains (e.g., C2-CIRCULAR_CRYOGENIC_CELLS for hydrogen servicing, E2-ENERGY for electrical ground power, M-MECHANICS for hydraulic servicing).
+Service instructions (ATA 07 Lifting, ATA 09 Towing, ATA 10 Parking, ATA 12 Servicing) depend on on-board systems and servicing interfaces documented in the T-TECHNOLOGIES domain. Detailed servicing procedures should be authored with reference to the relevant T-TECHNOLOGIES system- and technology-level documentation (for example, hydrogen storage and distribution systems, electrical power systems, and hydraulic systems).
 
 ### P-PROGRAMS → I-INFRASTRUCTURES
 Servicing procedures (ATA 12) and storage operations (ATA 10) are performed using ground support equipment and infrastructure documented in I-INFRASTRUCTURES. Specifically:
