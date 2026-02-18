@@ -254,8 +254,8 @@ to avoid costly redesign:
 
 5. **Digital continuity checks:** Provisions for in-flight bonding resistance monitoring
    (via embedded resistance sensors at key bond points) are reserved in the system
-   architecture for future enablement. The mounting provisions are included in the 28-41
-   controller interface specification (ICD-28-41-00-C2-CELL).
+   architecture for future enablement. The mounting provisions will be defined in a future
+   28-41 controller interface specification (ICD-28-41-00-C2-CELL, TBD).
 
 ---
 
