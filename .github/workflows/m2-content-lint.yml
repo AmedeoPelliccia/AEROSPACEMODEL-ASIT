@@ -101,10 +101,19 @@ jobs:
 
       - name: Check links in M2 markdown files
         run: |
-          find OPT-IN_FRAMEWORK/I-INFRASTRUCTURES/M2-MAINTENANCE_ENVIRONMENTS \
-            -name "*.md" | sort | while read -r file; do
+          set -euo pipefail
+
+          status=0
+
+          while IFS= read -r file; do
             echo "Checking: $file"
-            markdown-link-check "$file" \
+            if ! markdown-link-check "$file" \
               --config .github/markdown-link-check.json \
-              --quiet
-          done
+              --quiet; then
+              echo "Link check failed for: $file"
+              status=1
+            fi
+          done < <(find OPT-IN_FRAMEWORK/I-INFRASTRUCTURES/M2-MAINTENANCE_ENVIRONMENTS \
+            -name "*.md" | sort)
+
+          exit "$status"
