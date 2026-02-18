@@ -951,7 +951,11 @@ class ProceduralDMGenerator(BaseGenerator):
             dm_status = self.create_dm_status(ident_status, metadata)
 
             # Preserve regulatory references and best practices as inline citations
-            regulatory_refs = content.get("regulatory_refs") or content.get("standards") or []
+            regulatory_refs = content.get("regulatory_refs")
+            if regulatory_refs is None:
+                regulatory_refs = content.get("standards")
+            if regulatory_refs is None:
+                regulatory_refs = []
             best_practices = content.get("best_practices") or []
             if regulatory_refs or best_practices:
                 refs_element = self.create_regulatory_refs(dm_status, regulatory_refs, best_practices)
