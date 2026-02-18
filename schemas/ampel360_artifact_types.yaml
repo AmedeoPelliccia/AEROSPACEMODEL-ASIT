@@ -514,16 +514,6 @@ statistics:
   safety_critical_types: ["SAF", "HAZ"]
   baseline_producing: ["REQ", "REQ-TRC", "ICD", "CMP-I", "DES", "DWG", "CFG", "IFC", "IND", "SUP", "QPR"]
   
-  precedence_distribution:
-    L1: 2  # GOV, CBA
-    L2: 28  # Most domain-level types
-    L3: 3  # CFG, CDL, OCF
-    L4: 2  # DATA, BREX
-    L5: 7  # MDL, MSR-E, RSR-E, OSR-E, DM, PM, DML, ICN
-    L6: 13  # Analysis, test, QA types
-    L7: 6  # SAF, HAZ, RPR, QRY, MSR, RSR, OSR
-    L8: 4  # RLN, SBL, AOG, EEL
-
 # =============================================================================
 # End of Artifact Type Registry
 # =============================================================================
