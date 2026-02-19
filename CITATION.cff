@@ -1,0 +1,69 @@
+cff-version: 1.2.0
+message: >
+  If you use or reference AQUA-V concepts, terminology, or architectural
+  patterns from this repository, please cite as follows.
+type: software
+title: "AEROSPACEMODEL: European-governed digital continuity infrastructure
+  for deterministic, traceable aerospace lifecycle transformations"
+abstract: >
+  AEROSPACEMODEL provides the ASIT/ASIGT governance framework and the AQUA-V
+  (Artificial Quantum Unified Architectures Venture) conceptual architecture
+  for integrating quantum-assisted computation into safety-critical aerospace
+  product development and operations. Key contributions include the Deterministic
+  Governance Tuple, the Hybrid Discrete-Continuous Encoding Layer, the
+  Certification-Bound Quantum Pipeline, and the Operational Evidence Ledger —
+  all governed by BREX decision rules and aligned with EASA, GAIA-X, and the
+  EU AI Act.
+authors:
+  - family-names: Pelliccia
+    given-names: Amedeo
+    alias: AmedeoPelliccia
+    orcid: ""
+    affiliation: "AEROSPACEMODEL / ASIT"
+version: "2.0.0"
+date-released: "2026-02-19"
+license: CC0-1.0
+repository-code: "https://github.com/AmedeoPelliccia/AEROSPACEMODEL"
+url: "https://github.com/AmedeoPelliccia/AEROSPACEMODEL"
+keywords:
+  - quantum computing
+  - aerospace
+  - digital twin
+  - certification
+  - QUBO
+  - deterministic reproducibility
+  - EU AI Act
+  - GAIA-X
+  - EASA
+  - S1000D
+  - AQUA-V
+  - QAPD
+  - QAOS
+preferred-citation:
+  type: generic
+  title: "AQUA-V v1.0: Foundational Architecture for Quantum-Assisted
+    Aerospace Product Development and Operations"
+  authors:
+    - family-names: Pelliccia
+      given-names: Amedeo
+  year: 2026
+  url: "https://github.com/AmedeoPelliccia/AEROSPACEMODEL/blob/main/AQUA-V-IP/AQUA_V_FOUNDATIONAL_PAPER_v1.0.md"
+  notes: >
+    Cite the foundational paper above when referencing AQUA-V concepts,
+    the Deterministic Governance Tuple, the QAPD/QAOS architecture, or
+    the Operational Evidence Ledger.
+references:
+  - type: generic
+    title: "QAOS: Quantum Assisted Operation Services implementation"
+    authors:
+      - family-names: Pelliccia
+        given-names: Amedeo
+    url: "https://github.com/AmedeoPelliccia/GAIA-AIR/blob/main/QAOS.py"
+    year: 2025
+  - type: generic
+    title: "AQUA-V System Requirements Specification v1.0"
+    authors:
+      - family-names: Pelliccia
+        given-names: Amedeo
+    url: "https://github.com/AmedeoPelliccia/A-Q-U-A_V"
+    year: 2025

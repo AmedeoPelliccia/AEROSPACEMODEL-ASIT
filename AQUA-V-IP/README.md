@@ -3,6 +3,28 @@
 **AQUA-V** = QAPD (Quantum Accelerated Product Development) + QAOS (Quantum Assisted Operation Services)  
 = **Artificial Quantum Unified Architectures Venture**
 
+> **Canonical reference:** [`AQUA_V_FOUNDATIONAL_PAPER_v1.0.md`](AQUA_V_FOUNDATIONAL_PAPER_v1.0.md) —
+> the definitive architecture paper establishing the DGT, HDCEL, CBQP, and OEL concepts.
+> See also [`/CITATION.cff`](../CITATION.cff) for machine-readable citation metadata.
+
+---
+
+## How to Cite AQUA-V
+
+```bibtex
+@techreport{pelliccia2026aquav,
+  author  = {Pelliccia, Amedeo},
+  title   = {{AQUA-V} v1.0: Foundational Architecture for
+             Quantum-Assisted Aerospace Product Development and Operations},
+  year    = {2026},
+  version = {1.0.0},
+  url     = {https://github.com/AmedeoPelliccia/AEROSPACEMODEL/blob/main/AQUA-V-IP/AQUA_V_FOUNDATIONAL_PAPER_v1.0.md}
+}
+```
+
+For plain-text and APA style, see Section 9 of the
+[Foundational Paper](AQUA_V_FOUNDATIONAL_PAPER_v1.0.md).
+
 ---
 
 ## Portfolio Overview
@@ -105,8 +127,10 @@ The portfolio novelty is grounded in **four pillars** that distinguish AQUA-V fr
 
 ## Repository Cross-References
 
-| Repository | Relevance |
-|-----------|-----------|
+| Document / Repository | Relevance |
+|---|---|
+| [`AQUA_V_FOUNDATIONAL_PAPER_v1.0.md`](AQUA_V_FOUNDATIONAL_PAPER_v1.0.md) | **Canonical architecture paper** — defines DGT, HDCEL, CBQP, OEL |
+| [`/CITATION.cff`](../CITATION.cff) | Machine-readable citation metadata (GitHub / Zenodo) |
 | `AmedeoPelliccia/GAIA-AIR` | QAOS.py implementation; workload classes QW1–QW4; master UI |
 | `AmedeoPelliccia/A-Q-U-A_V` | SyRS v1.0, PRD v6.0 — system architecture documents |
 | `AmedeoPelliccia/AMPEL360-BWB-Q` | CQEA framework; ontology.jsonld; structural parametrics |
