@@ -43,9 +43,7 @@ addition to standard CCB approval. This applies to:
 
 ## Baseline Modifications
 
-All modifications to established baselines require an ECR/ECO cycle
-through the change control process. See [CHANGE_CONTROL/](CHANGE_CONTROL/).
+All modifications to established baselines require an ECR/ECO cycle through the change control process defined in [GOVERNANCE_POLICY.md](GOVERNANCE_POLICY.md).
 
 ## Register
-
 See [BASELINE_REGISTER.csv](BASELINE_REGISTER.csv) for the current baseline status.
