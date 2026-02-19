@@ -1,0 +1,353 @@
+# TERMS_MAP.yaml
+# Maps glossary terms → canonical object / policy / owner / LC phase
+# Reference: docs/LOGIC_GLOSSARY.md
+# Version: v0.1.0
+# Status: DRAFT
+
+metadata:
+  document_id: "AEROSPACEMODEL-TERMS-MAP-001"
+  version: "v0.1.0"
+  status: "DRAFT"
+  glossary_ref: "docs/LOGIC_GLOSSARY.md"
+  scope: "EPICDM → MPOSS-EU → Meta-ATR → AIM"
+
+terms:
+
+  # === 1) Core Logical Primitives ===
+
+  - term: "Canonical Object"
+    section: "core_logical_primitives"
+    canonical_objects:
+      - "ATR_VECTOR"
+      - "SERVICE_ORDER"
+      - "DT_STATE_UPDATE"
+      - "LEDGER_ENTRY"
+      - "AIM"
+    policy: "Schema versioning and conformance testing"
+    owner: "EPICDM"
+    lc_phases: ["LC01", "LC02", "LC04"]
+
+  - term: "Contract"
+    section: "core_logical_primitives"
+    canonical_objects: []
+    policy: "Transformation Contract governance"
+    owner: "ASIT"
+    lc_phases: ["LC02", "LC04", "LC06"]
+
+  - term: "Invariant"
+    section: "core_logical_primitives"
+    canonical_objects: []
+    policy: "Hard constraint enforcement"
+    owner: "ASIT"
+    lc_phases: ["LC02", "LC04", "LC06"]
+
+  - term: "Admissibility"
+    section: "core_logical_primitives"
+    canonical_objects: []
+    policy: "ACCEPT | DEGRADE | REJECT decision framework"
+    owner: "EPICDM"
+    lc_phases: ["LC04", "LC06", "LC08"]
+
+  - term: "Idempotence"
+    section: "core_logical_primitives"
+    canonical_objects: []
+    policy: "Event deduplication via unique event_id"
+    owner: "EPICDM"
+    lc_phases: ["LC04", "LC06", "LC08"]
+
+  - term: "Determinism at the Boundary"
+    section: "core_logical_primitives"
+    canonical_objects: []
+    policy: "Same inputs + same policy version → same output"
+    owner: "ASIT"
+    lc_phases: ["LC04", "LC06"]
+
+  - term: "Evidence Pointer"
+    section: "core_logical_primitives"
+    canonical_objects:
+      - "LEDGER_ENTRY"
+    policy: "Hash-addressed evidence references"
+    owner: "EPICDM"
+    lc_phases: ["LC06", "LC08", "LC10"]
+
+  - term: "Hash Chain / Ledger"
+    section: "core_logical_primitives"
+    canonical_objects:
+      - "LEDGER_ENTRY"
+    policy: "Tamper-evident signed entry sequences"
+    owner: "EPICDM"
+    lc_phases: ["LC06", "LC08", "LC10"]
+
+  # === 2) Governance and Authority ===
+
+  - term: "Authority Set"
+    section: "governance_and_authority"
+    canonical_objects:
+      - "AUTHORITY_SET"
+    policy: "Perimeter-based approval governance"
+    owner: "EPICDM"
+    lc_phases: ["LC01", "LC02"]
+
+  - term: "Decision Rights"
+    section: "governance_and_authority"
+    canonical_objects: []
+    policy: "RACI + signing policies"
+    owner: "EPICDM"
+    lc_phases: ["LC01", "LC02"]
+
+  - term: "Seal Layer"
+    section: "governance_and_authority"
+    canonical_objects: []
+    policy: "Baseline promotion constraint"
+    owner: "ASIT"
+    lc_phases: ["LC06", "LC08"]
+
+  - term: "Baseline"
+    section: "governance_and_authority"
+    canonical_objects:
+      - "AIM"
+    policy: "Immutable reference configuration with controlled deltas"
+    owner: "EPICDM"
+    lc_phases: ["LC06", "LC08", "LC10"]
+
+  - term: "Delta Promotion"
+    section: "governance_and_authority"
+    canonical_objects: []
+    policy: "Controlled baseline transitions with rationale and evidence"
+    owner: "EPICDM"
+    lc_phases: ["LC08", "LC10"]
+
+  # === 3) Trajectory and Operations ===
+
+  - term: "Enabled Vector"
+    section: "trajectory_and_operations"
+    canonical_objects:
+      - "ATR_VECTOR"
+    policy: "Capability-gated trajectory degrees of freedom"
+    owner: "MPOSS-EU"
+    lc_phases: ["LC08", "LC10"]
+
+  - term: "Trajectory Intent"
+    section: "trajectory_and_operations"
+    canonical_objects:
+      - "ATR_VECTOR"
+    policy: "4D constraint specification, separated from control laws"
+    owner: "MPOSS-EU"
+    lc_phases: ["LC04", "LC08"]
+
+  - term: "Overlay"
+    section: "trajectory_and_operations"
+    canonical_objects: []
+    policy: "Assurance-state-gated capability modules"
+    owner: "MPOSS-EU"
+    lc_phases: ["LC04", "LC06", "LC08"]
+
+  - term: "Fallback Vector"
+    section: "trajectory_and_operations"
+    canonical_objects:
+      - "ATR_VECTOR"
+    policy: "Mandatory pre-approved safe trajectory alternative"
+    owner: "MPOSS-EU"
+    lc_phases: ["LC04", "LC06", "LC08"]
+
+  - term: "Service Order"
+    section: "trajectory_and_operations"
+    canonical_objects:
+      - "SERVICE_ORDER"
+      - "GSE_SERVICE_ORDER"
+    policy: "Deterministic ground operations work packages"
+    owner: "MPOSS-EU"
+    lc_phases: ["LC08", "LC10", "LC12"]
+
+  - term: "Turnaround Orchestration"
+    section: "trajectory_and_operations"
+    canonical_objects:
+      - "SERVICE_ORDER"
+    policy: "Resource-constrained servicing scheduling"
+    owner: "MPOSS-EU"
+    lc_phases: ["LC08", "LC10"]
+
+  # === 4) Digital Twin and Data Plane ===
+
+  - term: "Digital Twin State Update"
+    section: "digital_twin_and_data_plane"
+    canonical_objects:
+      - "DT_STATE_UPDATE"
+    policy: "Bounded, versioned twin changes with provenance"
+    owner: "EPICDM"
+    lc_phases: ["LC04", "LC06", "LC08", "LC10"]
+
+  - term: "Validity Envelope"
+    section: "digital_twin_and_data_plane"
+    canonical_objects:
+      - "DT_STATE_UPDATE"
+    policy: "Bounded trust region for model outputs"
+    owner: "EPICDM"
+    lc_phases: ["LC04", "LC06"]
+
+  - term: "Replayable Pipeline"
+    section: "digital_twin_and_data_plane"
+    canonical_objects: []
+    policy: "Classical transcript replay for decision reproducibility"
+    owner: "EPICDM"
+    lc_phases: ["LC06", "LC08"]
+
+  - term: "Provenance"
+    section: "digital_twin_and_data_plane"
+    canonical_objects: []
+    policy: "Source → transform → output → decision traceability"
+    owner: "EPICDM"
+    lc_phases: ["LC04", "LC06", "LC08", "LC10"]
+
+  - term: "Conformance Testing"
+    section: "digital_twin_and_data_plane"
+    canonical_objects: []
+    policy: "Automated schema and policy matching"
+    owner: "QSCI"
+    lc_phases: ["LC06"]
+
+  # === 5) Quantum Enablement ===
+
+  - term: "No-Cloning Constraint"
+    section: "quantum_enablement"
+    canonical_objects: []
+    policy: "Store experiment specs and outcomes, not quantum state"
+    owner: "QSCI"
+    lc_phases: ["LC02", "LC04"]
+
+  - term: "QES"
+    section: "quantum_enablement"
+    canonical_objects:
+      - "QES"
+    policy: "Classical versioned experiment specification"
+    owner: "QSCI"
+    lc_phases: ["LC02", "LC04", "LC06"]
+
+  - term: "QoQ"
+    section: "quantum_enablement"
+    canonical_objects:
+      - "QOQ"
+    policy: "Measured outputs with uncertainty bounds"
+    owner: "QSCI"
+    lc_phases: ["LC06", "LC08"]
+
+  - term: "Dynamic Error Budgeting"
+    section: "quantum_enablement"
+    canonical_objects: []
+    policy: "Criticality-based error level allocation"
+    owner: "QSCI"
+    lc_phases: ["LC04", "LC06"]
+
+  - term: "Assurance State"
+    section: "quantum_enablement"
+    canonical_objects: []
+    policy: "QoQ-derived discrete overlay gating"
+    owner: "QSCI"
+    lc_phases: ["LC06", "LC08"]
+
+  - term: "Crypto Agility"
+    section: "quantum_enablement"
+    canonical_objects: []
+    policy: "Policy-governed cryptographic mechanism switching"
+    owner: "QSCI"
+    lc_phases: ["LC04", "LC06"]
+
+  # === 6) Infrastructure and Interoperability ===
+
+  - term: "Common Data Model"
+    section: "infrastructure_and_interoperability"
+    canonical_objects:
+      - "CDM_REGISTRY"
+    policy: "Standardized cross-domain schema and semantics"
+    owner: "EPICDM"
+    lc_phases: ["LC02", "LC04"]
+
+  - term: "Interoperability Profile"
+    section: "infrastructure_and_interoperability"
+    canonical_objects: []
+    policy: "Use-case-constrained standard subsets"
+    owner: "EPICDM"
+    lc_phases: ["LC02", "LC04"]
+
+  - term: "Green Compute Profile"
+    section: "infrastructure_and_interoperability"
+    canonical_objects: []
+    policy: "Measurable sustainability KPIs for compute"
+    owner: "EPICDM"
+    lc_phases: ["LC04", "LC08"]
+
+  - term: "Privacy by Design"
+    section: "infrastructure_and_interoperability"
+    canonical_objects: []
+    policy: "GDPR-aligned policy-as-code"
+    owner: "EPICDM"
+    lc_phases: ["LC02", "LC04"]
+
+  # === 7) AIM and Best-To-Date ===
+
+  - term: "Aircraft Identity Model"
+    section: "aim_and_best_to_date"
+    canonical_objects:
+      - "AIM"
+    policy: "Versioned master aircraft identity package"
+    owner: "EPICDM"
+    lc_phases: ["LC01", "LC02", "LC04", "LC06", "LC08", "LC10"]
+
+  - term: "Generation Record"
+    section: "aim_and_best_to_date"
+    canonical_objects:
+      - "GR"
+    policy: "Design generation reproducibility record"
+    owner: "EPICDM"
+    lc_phases: ["LC04", "LC06"]
+
+  - term: "Best-To-Date Scorecard"
+    section: "aim_and_best_to_date"
+    canonical_objects: []
+    policy: "Baselined KPI ranking method"
+    owner: "EPICDM"
+    lc_phases: ["LC04", "LC06", "LC08"]
+
+  - term: "Pareto Frontier"
+    section: "aim_and_best_to_date"
+    canonical_objects: []
+    policy: "Non-dominated candidate set before weighting"
+    owner: "EPICDM"
+    lc_phases: ["LC04", "LC06"]
+
+  # === 8) Technology Enablers ===
+
+  - term: "SWIM / FF-ICE / TBO"
+    section: "technology_enablers"
+    canonical_objects: []
+    policy: "ATM information exchange substrate"
+    owner: "MPOSS-EU"
+    lc_phases: ["LC04", "LC08"]
+
+  - term: "FPGA / GPU / Edge Compute"
+    section: "technology_enablers"
+    canonical_objects: []
+    policy: "Low-latency ops-critical acceleration"
+    owner: "EPICDM"
+    lc_phases: ["LC04", "LC08"]
+
+  - term: "QRNG"
+    section: "technology_enablers"
+    canonical_objects: []
+    policy: "Quantum entropy with health tests"
+    owner: "QSCI"
+    lc_phases: ["LC04", "LC06"]
+
+  - term: "QKD"
+    section: "technology_enablers"
+    canonical_objects: []
+    policy: "Optional secure channel overlay with assurance gating"
+    owner: "QSCI"
+    lc_phases: ["LC04", "LC06", "LC08"]
+
+  - term: "QNAV"
+    section: "technology_enablers"
+    canonical_objects: []
+    policy: "GNSS-denied navigation with integrity metrics"
+    owner: "QSCI"
+    lc_phases: ["LC04", "LC06", "LC08"]

@@ -586,6 +586,9 @@ AEROSPACEMODEL serves as the **transformation and intelligence engine** for the 
 | 20 | **Revolution Without Disruption** | Governed integration, not replacement, of certified tools |
 | 21 | **GenKISS** | General Knowledge and Information Standard Systems — deterministic aerospace project structure following "Keep It Super Simple" governance principles |
 
+> **Full glossary:** [Logic Glossary of Enabling Concepts and Technologies](docs/LOGIC_GLOSSARY.md) — acronyms, core logical primitives, governance, trajectory/operations, digital twin, quantum enablement, infrastructure, and AIM concepts.  
+> **Terms map:** [TERMS_MAP.yaml](docs/TERMS_MAP.yaml) — term → canonical object / policy / owner / LC phase.
+
 ---
 
 ## Contributing
