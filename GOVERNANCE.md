@@ -15,6 +15,7 @@ PR workflows, and governance code.
 |----------|-------|----------|
 | Digital Constitution | Foundational axiom, articles, limits | [`Model_Digital_Constitution.md`](Model_Digital_Constitution.md) |
 | **Human-Centric Digital Systems Charter** | **Re-founding framework for digital ecosystems** | [`Governance/HUMAN_CENTRIC_DIGITAL_SYSTEMS_CHARTER_v1.0.md`](Governance/HUMAN_CENTRIC_DIGITAL_SYSTEMS_CHARTER_v1.0.md) |
+| **Domain Bifurcation & Boundary Rules Charter** | **Canonical boundary rules for aircraftmodel.eu / aerospacemodel.com domain separation** | [`Governance/GOV-CHARTER-SPLIT-001.md`](Governance/GOV-CHARTER-SPLIT-001.md) |
 | Contributing Guide | Contribution process, CoDevOps model | [`CONTRIBUTING.md`](CONTRIBUTING.md) |
 | Master BREX Authority | BREX decision rules | [`ASIT/GOVERNANCE/master_brex_authority.yaml`](ASIT/GOVERNANCE/master_brex_authority.yaml) |
 | Contract Schema | Contract structure | [`ASIT/CONTRACTS/CONTRACT_SCHEMA.yaml`](ASIT/CONTRACTS/CONTRACT_SCHEMA.yaml) |

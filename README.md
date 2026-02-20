@@ -1,6 +1,6 @@
 <p align="center">
   <strong>AEROSPACEMODEL</strong><br/>
-  <em>European-governed digital continuity infrastructure for deterministic, traceable aerospace lifecycle transformations.</em>
+  <em>Strategic &amp; Sovereign Technology Platform — Space-Quantum Sovereign Infrastructure · ideale.eu Enterprise</em>
 </p>
 
 <p align="center">
@@ -19,6 +19,7 @@
 ## Table of Contents
 
 - [Overview](#overview)
+- [Domain Architecture & Governance Charter](#domain-architecture--governance-charter)
 - [Why AEROSPACEMODEL](#why-aerospacemodel)
 - [Core Architecture — ASIT + ASIGT](#core-architecture--asit--asigt)
 - [Architecture at a Glance](#architecture-at-a-glance)
@@ -56,6 +57,25 @@
 The framework is centred on **Top-Level Instructions (TLI)** as the foundation for control, governance, and lifecycle orchestration. TLIs are domain-licensed, context-specific decision boundaries that define authorization scopes and deterministic behaviour envelopes. Inference is applied *only* at formally defined **non-inference boundaries**, which trigger mandatory **Human-in-the-Loop (HITL)** escalation.
 
 > **Author:** Amedeo Pelliccia
+
+---
+
+## Domain Architecture & Governance Charter
+
+Per **[GOV-CHARTER-SPLIT-001 v1.1](Governance/GOV-CHARTER-SPLIT-001.md)** — *Domain Bifurcation & Boundary Rules* — the ideale.eu Enterprise digital presence is bifurcated into two strategically distinct and strictly separated domains:
+
+| Domain | Strategic Vertical | Scale | Primary Mandate | Ontology |
+|--------|--------------------|-------|-----------------|----------|
+| **[aircraftmodel.eu](https://aircraftmodel.eu)** | Aviation Decarbonization Systems | Industrial | AMPEL360 Q100 (BWB H₂ Hy-E) aircraft design, LH₂ infrastructure, ATA system breakdowns, certification strategy, supply chain, S1000D technical publications | PRODUCT |
+| **[aerospacemodel.com](https://aerospacemodel.com)** | Space-Quantum Sovereign Infrastructure | Civilizational | Orbital governance, GAIA constellation, quantum-classical bridge architectures, QKD/QSS systems, sovereign coordination models, planetary-scale doctrine | SOVEREIGN |
+
+> **Governing Principle (GOV-CHARTER-SPLIT-001 §1.1):** Industrial execution and civilizational-scale strategy are complementary but must never be conflated. The aircraft is a product. The sovereign infrastructure is a doctrine.
+
+This repository (`aerospacemodel.com`) operates under the **SOVEREIGN** ontology and addresses space-quantum sovereign infrastructure, meta-frameworks, and civilizational-scale coordination. Aviation-industrial content — ATA chapter breakdowns, aircraft certification artifacts, supply chain documentation — belongs exclusively to `aircraftmodel.eu`.
+
+The charter enforces a **content sovereignty firewall** (§3.1 CR-01 through CR-05), a **visual identity firewall** (§3.3), and a **machine enforcement protocol** (§9) with automated keyword scanning integrated into CI/CD pipelines.
+
+> 📖 Full charter: [`Governance/GOV-CHARTER-SPLIT-001.md`](Governance/GOV-CHARTER-SPLIT-001.md)
 
 ---
 
@@ -287,6 +307,8 @@ The **[OPT-IN_FRAMEWORK](OPT-IN_FRAMEWORK/)** provides the canonical ATA iSpec 2
 ```text
 Model Digital Constitution (Foundational)
         ↓
+Governance Charter — Domain Bifurcation (GOV-CHARTER-SPLIT-001 v1.1)
+        ↓
 Human-Centric Digital Systems Charter v1.0 (Re-founding)
         ↓
 EASA/ESA AI Governance Standard v1.0 (Aviation-Specific)
@@ -299,6 +321,7 @@ Technical Controls & Roadmaps (Implementation)
 | Document | Status | Location | Key Contribution |
 |----------|--------|----------|------------------|
 | [Digital Constitution](Model_Digital_Constitution.md) | ✅ Active | Root | Foundational principles: human labor founds, capital finances, technology serves |
+| [Domain Bifurcation Charter](Governance/GOV-CHARTER-SPLIT-001.md) | ✅ Active | `Governance/` | GOV-CHARTER-SPLIT-001 v1.1: canonical boundary rules, content sovereignty firewall, ontological separation, machine enforcement |
 | [HCDS Charter v1.0](Governance/HUMAN_CENTRIC_DIGITAL_SYSTEMS_CHARTER_v1.0.md) | ✅ Active | `Governance/` | 8 articles (Purpose Constraint, Inference Boundary, Contextual Ads, etc.) + 6 KPIs |
 | [EASA/ESA AI Governance](Governance/EASA_ESA_AI_GOVERNANCE_STANDARD_v1.0.md) | 📝 Draft | `Governance/` | Aviation AI governance aligned with EASA Roadmap 2.0 |
 | [EAARF Charter](Governance/EAARF_CHARTER_DRAFT.md) | 📝 Draft | `Governance/` | European Aerospace AI Research Forum charter |
