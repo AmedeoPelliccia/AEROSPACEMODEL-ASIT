@@ -537,16 +537,24 @@ Special Conditions are formally registered for novel hydrogen and fuel-cell tech
 
 ## Manufacturing Technology Layers (MTL)
 
-The **Meta Transformation Layer (MTL)** is AEROSPACEMODEL's engineering tokenisation framework — an extended concept from the Methods Token Library — providing a machine-processable vocabulary of atomic engineering subjects, process methods, and standard procedures that bridges certified knowledge with AI-executable instructions.
+**MTL** is a three-tier deterministic stack extending the original Methods Token Library concept:
 
-**MTL Layers:**
-- **MTK tokens** — subject-level engineering entities (e.g., cryogenic tank wall segments, material grades)
-- **MTP tokens** — process and scaling methods (e.g., thermal gradient analysis, leak-rate computation)
-- **STP records** — standard procedures derived from MTK + MTP tokens, directly linked to AI training data
+| Tier | Name | Role |
+|------|------|------|
+| **MTL₁** | Methods Token Library | Execution layer — tokenised procedural knowledge (atomic subjects, process methods, standard procedures) |
+| **MTL₂** | Meta Transformation Layer | Abstraction layer — cross-domain semantic transformation operator (Φ) converting procedural tokens into trainable knowledge, executable automation, and cross-industry transferable semantics |
+| **MTL₃** | Model Teknia Ledger | Persistence layer — immutable, hash-linked recording of token evolution, transformation lineage, and authority provenance |
+
+**MTL₁ token structure** (canonical): each token carries `intent`, `input_state`, `output_state`, `constraints`, and `verification` evidence — deterministic, lifecycle-traceable, and domain-bound (e.g., ATA 28-11).
+
+**MTL₂ transformation** applies a governed operator `T_m = Φ(T_p, context, constraints)` enabling aerospace → robotics transfer, maintenance → certification mapping, and procedural → autonomous execution transformation.
+
+**MTL₃ ledger** records every transformation as `Hash_current = H(TT + Hash_prev)`, ensuring tamper detection, full traceability, historical reconstruction, and deterministic replay.
 
 The MTL enforces version-locked traceability: every AI model trained on MTL tokens is bound to the exact MTL version, and any library update triggers an automatic HOLD until revalidation.
 
-> 📖 See [`OPT-IN_FRAMEWORK/.../KDB/DEV/mtl/`](OPT-IN_FRAMEWORK/T-TECHNOLOGIES_AMEDEOPELLICCIA-ON_BOARD_SYSTEMS/C2-CIRCULAR_CRYOGENIC_CELLS/ATA_28-FUEL/28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/DEV/mtl/) for the reference MTL-28-11-00 implementation.
+> 📖 Canonical standard: [`ASIT/STANDARDS/MTL_META/`](ASIT/STANDARDS/MTL_META/) — `MTL-META-CORE v1.0.0`  
+> 📖 Reference implementation: [`OPT-IN_FRAMEWORK/.../KDB/DEV/mtl/`](OPT-IN_FRAMEWORK/T-TECHNOLOGIES_AMEDEOPELLICCIA-ON_BOARD_SYSTEMS/C2-CIRCULAR_CRYOGENIC_CELLS/ATA_28-FUEL/28-11-lh2-primary-tank/28-11-00-lh2-primary-tank-general/KDB/DEV/mtl/) (MTL-28-11-00)
 
 ---
 
