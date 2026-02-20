@@ -1,7 +1,7 @@
 # =============================================================================
 # UNIFIED TEKNIA TOKEN SYSTEM (UTTS) — Modification Track Lookup Standard
 # Standard ID: N-STD-UTTS-01
-# Version: 0.1.0
+# Version: 0.2.0 (corrected)
 # =============================================================================
 #
 # PURPOSE:
@@ -11,7 +11,7 @@
 #   knowledge graph.
 #
 # SCOPE:
-#   Applies to all MTL₁/MTL₂/MTL₃ token modifications governed by ASIT across
+#   Applies to all MTL1/MTL2/MTL3 token modifications governed by ASIT across
 #   any ATA chapter, lifecycle phase, or domain profile.
 #
 # COMPLIANCE:
@@ -27,7 +27,7 @@
 metadata:
   standard_id: "N-STD-UTTS-01"
   title: "Unified Teknia Token System — Modification Track Lookup"
-  version: "0.1.0"
+  version: "0.2.0"
   status: "DRAFT"
   classification: "Governance Standard"
 
@@ -35,11 +35,11 @@ metadata:
   effective_date: "2026-02-20"
 
   author: "ASIT Configuration Management"
-  approved_by: ""
-  approval_reference: ""
+  approved_by: null
+  approval_reference: null
 
   parent_brex: "ASIT-BREX-MASTER-001"
-  brex_rule_set: "N-STD-UTTS-01-BREX-001"
+  brex_rule_set: "N-STD-UTTS-01-BREX-001" # see BREX profile corrected to v0.2.0
   related_standard: "MTL-META-CORE v1.0.0"
 
   ata_domain: "96"
@@ -86,20 +86,20 @@ mtl_tiers:
     UTTS spans all three tiers of the MTL deterministic stack.
     Every tier produces and consumes modification events tracked by UTTS.
   tiers:
-    - tier: "MTL₁"
+    - tier: "MTL1"
       name: "Methods Token Library"
       role: "Execution layer — tokenised procedural knowledge"
       utts_role: "Source of modification events at the procedural level"
 
-    - tier: "MTL₂"
+    - tier: "MTL2"
       name: "Meta Transformation Layer"
       role: "Abstraction layer — cross-domain semantic transformation operator (Φ)"
-      utts_role: "Records transformation lineage: T_m = Φ(T_p, context, constraints)"
+      utts_role: "Records transformation lineage: Tm = Φ(Tp, context, constraints)"
 
-    - tier: "MTL₃"
+    - tier: "MTL3"
       name: "Model Teknia Ledger"
       role: "Persistence layer — immutable, hash-linked recording"
-      utts_role: "Stores the ordered track: Hash_current = H(TT + Hash_prev)"
+      utts_role: "Stores ordered track anchors: Hash_current = H(canonical_payload + Hash_prev)"
 
 # -----------------------------------------------------------------------------
 # FORMAL MODEL
@@ -130,9 +130,11 @@ formal_model:
       - Cryptographically anchored (SHA3-512 hash chain)
       - Deterministically replayable
 
-  hash_chain: "Hash_current = H(token_data + Hash_previous)"
-  transformation_operator: "T_m = Φ(T_p, context, constraints)"
-  state_formula: "Tₙ = T₀ ⊕ ΣΔᵢ"
+  hash_algorithm: "SHA3-512"
+  canonicalization: "Canonical JSON (RFC 8785-style) or equivalent stable canonical form"
+  hash_chain: "Hash_current = H(canonical_token_data + Hash_previous)"
+  transformation_operator: "Tm = Φ(Tp, context, constraints)"
+  state_formula: "Tn = T0 ⊕ ΣΔi"
 
 # -----------------------------------------------------------------------------
 # OBJECT MODEL
@@ -190,6 +192,31 @@ object_model:
       justification_ref:
         - "CS-25.963"
         - "SC-LH2-02"
+
+  ledger_entry_object:
+    description: "MTL3 ledger entry schema (hash-linked, append-only)"
+    required_fields:
+      - "entry_id"
+      - "timestamp_utc"
+      - "event_type"
+      - "token_id"
+      - "token_version"
+      - "actor"
+      - "payload_hash"
+      - "previous_hash"
+      - "authority_signature"
+    event_types:
+      - "TOKEN_CREATE"
+      - "TOKEN_UPDATE"
+      - "TOKEN_PROMOTE"
+      - "TOKEN_DEPRECATE"
+      - "TOKEN_RETIRE"
+      - "TRANSFORM_PHI"
+      - "GATE_PASS"
+      - "GATE_FAIL"
+      - "BASELINE_FREEZE"
+      - "AUTHORITY_SIGN"
+    hash_algorithm: "SHA3-512"
 
 # -----------------------------------------------------------------------------
 # LOOKUP DIMENSIONS
@@ -268,30 +295,30 @@ hash_chain_integrity:
 # -----------------------------------------------------------------------------
 # GOVERNANCE RULES (inline subset; full ruleset in BREX)
 # -----------------------------------------------------------------------------
-governance_rules:
-  - id: "UTTS-GOV-001"
+governance_rules_inline:
+  - id: "UTTS-GOV-INLINE-001"
     name: "Hash Continuity"
-    statement: "Every modification event must chain from the previous hash"
+    statement: "Every modification event must chain from the previous hash (SHA3-512)"
     enforcement: "block"
 
-  - id: "UTTS-GOV-002"
+  - id: "UTTS-GOV-INLINE-002"
     name: "Lifecycle Consistency"
     statement: "LC phase regression requires explicit ECR/ECO authorization"
     enforcement: "block"
 
-  - id: "UTTS-GOV-003"
+  - id: "UTTS-GOV-INLINE-003"
     name: "Regulatory Anchoring"
     statement: "Every technical change (constraint_update, parameter_revision) must reference at least one regulation or SC"
     enforcement: "block"
 
-  - id: "UTTS-GOV-004"
-    name: "Authority Signature"
+  - id: "UTTS-GOV-INLINE-004"
+    name: "Authority Node"
     statement: "Every modification event must carry an ASIT-recognized authority node"
     enforcement: "block"
 
-  - id: "UTTS-GOV-005"
+  - id: "UTTS-GOV-INLINE-005"
     name: "Impact Scope Declaration"
-    statement: "Every modification event must declare impact_scope (may be empty list for isolated changes)"
+    statement: "Every modification event must declare impact_scope (empty list permitted for isolated changes)"
     enforcement: "block"
 
 # -----------------------------------------------------------------------------
@@ -321,7 +348,7 @@ tiers:
     ledger_entry_schema:
       required_fields:
         - "entry_id"
-        - "timestamp"
+        - "timestamp_utc"
         - "event_type"
         - "token_id"
         - "token_version"
@@ -419,7 +446,7 @@ summary:
   total_lookup_dimensions: 5
   total_change_types: 6
   total_trace_graph_properties: 4
-  total_governance_rules: 5
+  total_governance_rules_inline: 5
   total_governance_policies: 4
   total_invariants: 5
   total_decision_states: 4
