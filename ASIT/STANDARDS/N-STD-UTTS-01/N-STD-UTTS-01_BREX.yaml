@@ -44,17 +44,10 @@ metadata:
 # -----------------------------------------------------------------------------
 structure_rules:
   - id: "UTTS-STRUCT-001"
-    condition: "Every modification event MUST have a mod_id"
+    condition: "Every modification event MUST have a mod_id and it MUST follow pattern MOD-NNNNNN"
     enforcement: "block"
     pattern: "^MOD-[0-9]{6}$"
     message: "Modification event missing mod_id or wrong format (must be MOD-NNNNNN)"
-
-  - id: "UTTS-STRUCT-002"
-    condition: "mod_id MUST follow pattern MOD-NNNNNN"
-    enforcement: "block"
-    pattern: "^MOD-[0-9]{6}$"
-    message: "mod_id does not match required pattern MOD-NNNNNN"
-
   - id: "UTTS-STRUCT-003"
     condition: "change_type MUST be from the approved taxonomy"
     enforcement: "block"
