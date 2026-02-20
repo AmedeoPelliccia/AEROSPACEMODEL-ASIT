@@ -18,6 +18,12 @@ The "plumbing" of digital traceability — identifiers, DPP mechanics, and ledge
 |-----|-----------|-------------|
 | 96 | `D-DIGITAL_THREAD_TRACEABILITY/ATA_96-TRACEABILITY_DPP_LEDGER/` | Digital Product Passport, traceability, and ledger systems |
 
+### UTTS — Unified Teknia Token System
+
+Standard [`N-STD-UTTS-01`](../../ASIT/STANDARDS/N-STD-UTTS-01/README.md) defines
+the MTL₁/MTL₂/MTL₃ deterministic ledger stack for token transformation and
+immutable recording co-located with ATA 96 DPP infrastructure.
+
 ## A — AI Governance & Assurance
 
 The "policy" layer — governance complement to ATA 95/97 technical content in T/I2.
