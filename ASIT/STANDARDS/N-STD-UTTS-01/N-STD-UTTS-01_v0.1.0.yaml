@@ -1,5 +1,25 @@
-
-
+# =============================================================================
+# UNIFIED TEKNIA TOKEN SYSTEM (UTTS) — Modification Track Lookup Standard
+# Standard ID: N-STD-UTTS-01
+# Version: 0.1.0
+# =============================================================================
+#
+# PURPOSE:
+#   Define UTTS as a Modification Track Lookup: a deterministic, queryable
+#   lineage engine that cryptographically anchors, lifecycle-indexes, and
+#   bidirectionally navigates every tokenized modification in the AEROSPACEMODEL
+#   knowledge graph.
+#
+# SCOPE:
+#   Applies to all MTL₁/MTL₂/MTL₃ token modifications governed by ASIT across
+#   any ATA chapter, lifecycle phase, or domain profile.
+#
+# COMPLIANCE:
+#   S1000D Issue 5.0 (structural alignment)
+#   DO-178C / ARP4754A / ARP4761 (safety domains)
+#   EU AI Act (AI-specific risk categories)
+#
+# =============================================================================
 
 # -----------------------------------------------------------------------------
 # METADATA
@@ -10,10 +30,6 @@ metadata:
   version: "0.1.0"
   status: "DRAFT"
   classification: "Governance Standard"
-  title: "Unified Teknia Token System (UTTS) — MTL₁/MTL₂/MTL₃ Deterministic Ledger Stack"
-  version: "0.1.0"
-  status: "DRAFT"
-  classification: "Infrastructure Standard"
 
   created_date: "2026-02-20"
   effective_date: "2026-02-20"
@@ -25,6 +41,9 @@ metadata:
   parent_brex: "ASIT-BREX-MASTER-001"
   brex_rule_set: "N-STD-UTTS-01-BREX-001"
   related_standard: "MTL-META-CORE v1.0.0"
+
+  ata_domain: "96"
+  ata_domain_reserved: "98"
 
   compliance:
     - "S1000D Issue 5.0"
@@ -39,11 +58,6 @@ metadata:
   determinism_level: "strict"
   audit_required: true
   replay_capable: true
-
-  parent_standard: "MTL-META-CORE v1.0.0"
-  ata_domain: "96"          # Canonical operational domain (ATA 96 — Traceability, DPP, Ledger)
-  ata_domain_reserved: "98" # Reserved/future program slot per scope (ATA 98)
-  brex_profile: "AEROSPACEMODEL-PRJ-01"
 
 # -----------------------------------------------------------------------------
 # DEFINITION
@@ -279,82 +293,31 @@ governance_rules:
     name: "Impact Scope Declaration"
     statement: "Every modification event must declare impact_scope (may be empty list for isolated changes)"
     enforcement: "block"
-  The Unified Teknia Token System (UTTS) is a three-tier infrastructure stack
-  co-located with the N-NEURAL_NETWORKS ATA 9x domain:
-
-    MTL₁ — Methods Token Library (procedural tokenization)
-    MTL₂ — Meta Transformation Layer (cross-domain semantic abstraction via Φ)
-    MTL₃ — Model Teknia Ledger (immutable, hash-linked recording and lineage)
-
-  Every digital transformation is ledgered, every token transition is
-  hash-linked, and every lineage chain is verifiable from LC01 through LC14.
 
 # -----------------------------------------------------------------------------
-# TIERS
+# TIERS (id-indexed, compatible with MTL-META-CORE)
 # -----------------------------------------------------------------------------
 tiers:
   - id: "MTL1"
     name: "Methods Token Library"
     purpose: "Procedural tokenization of domain-specific methods and evidence"
-    description: |
-      MTL₁ captures operational knowledge as discrete, versioned tokens.
-      Each token follows the MTL-META-CORE contract (L1–L5 layers) and
-      carries full traceability, governance metadata, and acceptance gates.
-    token_patterns:
-      - "CTX-{DOMAIN}-{SYS}"
-      - "STR-{DOMAIN}-{SYS}-{COMP}"
-      - "PRC-{DOMAIN}-{SYS}-{SEQ}"
-      - "XFM-{DOMAIN}-{SYS}-{CLASS}-{SEQ}"
-      - "SBJ-{DOMAIN}-{SYS}-{CLASS}-{SEQ}"
+    operator: null
     integration: "MTL-META-CORE v1.0.0"
-    lifecycle_phases: ["LC01", "LC02", "LC04", "LC06", "LC07"]
 
   - id: "MTL2"
     name: "Meta Transformation Layer"
     purpose: "Cross-domain semantic abstraction via transformation operator Φ"
-    description: |
-      MTL₂ applies the Φ (Phi) transformation operator to convert tokens
-      between domain profiles, lifecycle phases, and semantic layers.
-      Every Φ application is deterministic, contract-approved, and
-      produces a verifiable transformation record.
     operator: "Φ"
-    operator_contract:
-      inputs:
-        - "source_token_id"
-        - "target_domain_profile"
-        - "transformation_class"
-      outputs:
-        - "target_token_id"
-        - "transformation_record"
-        - "hash_link"
-      constraints:
-        - "Deterministic: same inputs always produce same outputs"
-        - "Contract-approved: requires ASIT transformation contract"
-        - "Traceable: full lineage from source to target preserved"
     transformation_classes:
-      - id: "DOMAIN_XFER"
-        name: "Domain Transfer"
-        description: "Transfer token between domain profiles (e.g., AERO → CERT)"
-      - id: "LC_PROMOTE"
-        name: "Lifecycle Promotion"
-        description: "Promote token across lifecycle phases (e.g., LC04 → LC08)"
-      - id: "LAYER_COMPOSE"
-        name: "Layer Composition"
-        description: "Compose lower-layer tokens into higher-layer procedures"
-      - id: "SEMANTIC_MAP"
-        name: "Semantic Mapping"
-        description: "Map tokens to equivalent representations in external systems"
-    lifecycle_phases: ["LC04", "LC07", "LC08", "LC10", "LC11"]
+      - "DOMAIN_XFER"
+      - "LC_PROMOTE"
+      - "LAYER_COMPOSE"
+      - "SEMANTIC_MAP"
 
   - id: "MTL3"
     name: "Model Teknia Ledger"
     purpose: "Immutable, hash-linked recording and lineage verification"
-    description: |
-      MTL₃ provides an append-only, cryptographically linked ledger that
-      records every token creation, transformation, promotion, and
-      retirement event.  Each ledger entry contains a hash of its
-      content plus the hash of the previous entry, forming an
-      unbreakable chain of evidence for certification and audit.
+    operator: null
     ledger_entry_schema:
       required_fields:
         - "entry_id"
@@ -377,92 +340,7 @@ tiers:
         - "GATE_FAIL"
         - "BASELINE_FREEZE"
         - "AUTHORITY_SIGN"
-      hash_algorithm: "SHA-256"
-      signature_standard: "eIDAS-qualified or ASIT-ROOT"
-    lifecycle_phases: ["LC01", "LC02", "LC03", "LC04", "LC06", "LC07", "LC08", "LC09", "LC10", "LC11", "LC12", "LC13", "LC14"]
-
-# -----------------------------------------------------------------------------
-# LIFECYCLE PHASE MAPPING
-# -----------------------------------------------------------------------------
-lifecycle_mapping:
-  description: |
-    UTTS covers LC01–LC14 with audit-ready hash-linked chain.
-    Each phase maps to specific UTTS operations and evidence requirements.
-  phases:
-    - phase: "LC04"
-      name: "Design Definition"
-      utts_operations: ["Token creation", "Φ domain transfer", "Ledger recording"]
-      evidence: ["Design token library", "Transformation records"]
-    - phase: "LC06"
-      name: "Integration & Test"
-      utts_operations: ["Gate verification", "Ledger integrity check"]
-      evidence: ["Test evidence tokens", "Gate pass/fail records"]
-    - phase: "LC07"
-      name: "QA & Process Compliance"
-      utts_operations: ["Φ validation", "Hash-chain audit", "Process compliance check"]
-      evidence: ["QA audit trail", "Hash-chain integrity report"]
-    - phase: "LC08"
-      name: "Certification"
-      utts_operations: ["Evidence chain assembly", "Authority signature", "Baseline freeze"]
-      evidence: ["EASA Part 21 evidence chain", "Authority signature artifacts"]
-    - phase: "LC09"
-      name: "ESG & Sustainability"
-      utts_operations: ["ESG data tokenization", "DPP integration"]
-      evidence: ["ESG compliance tokens", "DPP data records"]
-    - phase: "LC10"
-      name: "Industrial & Supply Chain"
-      utts_operations: ["Production baseline freeze", "Supply chain token distribution"]
-      evidence: ["PBL ledger snapshot", "Supply chain token lineage"]
-    - phase: "LC11"
-      name: "Operations Customization"
-      utts_operations: ["Operational token instantiation", "Configuration tracking"]
-      evidence: ["Operational token library", "Configuration ledger"]
-    - phase: "LC12"
-      name: "Continued Airworthiness & MRO"
-      utts_operations: ["MRO event recording", "Airworthiness evidence chain"]
-      evidence: ["MRO ledger entries", "Airworthiness continuity chain"]
-    - phase: "LC14"
-      name: "End of Life"
-      utts_operations: ["Retirement recording", "Final ledger snapshot", "DPP closure"]
-      evidence: ["Retirement tokens", "Final hash-chain export"]
-
-# -----------------------------------------------------------------------------
-# DPP INTEGRATION
-# -----------------------------------------------------------------------------
-dpp_integration:
-  description: |
-    UTTS integrates with the existing ATA 96 Digital Product Passport
-    infrastructure to provide immutable evidence chains for DPP data.
-  integration_points:
-    - system: "Digital Product Passport (DPP)"
-      ata_reference: "96"
-      integration_type: "Bidirectional"
-      description: "DPP events are recorded as ledger entries; ledger provides evidence for DPP claims"
-    - system: "TekTok Token System"
-      ata_reference: "96"
-      integration_type: "Extension"
-      description: "UTTS extends TekTok with MTL₂ transformation and MTL₃ ledger capabilities"
-    - system: "NN Governance"
-      ata_reference: "96/A"
-      integration_type: "Evidence Provider"
-      description: "UTTS provides governance evidence chain for AI model lifecycle"
-
-# -----------------------------------------------------------------------------
-# REGULATORY ALIGNMENT
-# -----------------------------------------------------------------------------
-regulatory_alignment:
-  - regulation: "EASA Part 21"
-    alignment: "MTL₃ ledger provides immutable certification evidence chain"
-    evidence_type: "Hash-linked authority-signed ledger entries"
-  - regulation: "EU AI Act"
-    alignment: "UTTS supports risk-based approach with full model lineage traceability"
-    evidence_type: "Transformation lineage report (MTL₁ → MTL₂ → MTL₃)"
-  - regulation: "GAIA-X"
-    alignment: "Data sovereignty via permissioned ledger with ASIT authority signatures"
-    evidence_type: "Authority signature artifacts with eIDAS-qualified signatures"
-  - regulation: "EU Digital Product Passport"
-    alignment: "DPP data integrity backed by MTL₃ hash-chain"
-    evidence_type: "DPP integration evidence with ledger cross-references"
+      hash_algorithm: "SHA3-512"
 
 # -----------------------------------------------------------------------------
 # INVARIANTS
@@ -471,49 +349,47 @@ invariants:
   description: "Global properties that must hold for any UTTS deployment"
   rules:
     - id: "UTTS-INV-001"
-      name: "Append-Only Ledger"
-      statement: "MTL₃ ledger entries are append-only; no deletion or modification"
+      name: "Append-Only Track"
+      statement: "Modification track entries are append-only; no deletion or modification"
     - id: "UTTS-INV-002"
       name: "Hash-Chain Integrity"
-      statement: "Every ledger entry contains SHA-256 hash of previous entry"
+      statement: "Every modification event chains from the previous hash (SHA3-512)"
     - id: "UTTS-INV-003"
       name: "Deterministic Transformation"
-      statement: "Φ operator produces identical output for identical input"
+      statement: "Φ operator produces identical output for identical inputs"
     - id: "UTTS-INV-004"
       name: "Authority Signature Required"
-      statement: "Baseline freeze and certification entries require ASIT authority signature"
+      statement: "BASELINED tokens and certification entries require ASIT authority signature"
     - id: "UTTS-INV-005"
       name: "Full Lineage Traceability"
-      statement: "Every token can trace its lineage from creation through all transformations"
+      statement: "Every token can trace its lineage from creation through all modifications"
 
 # -----------------------------------------------------------------------------
-# GOVERNANCE POLICIES
+# GOVERNANCE (policies, distinct from governance_rules inline subset)
 # -----------------------------------------------------------------------------
 governance:
   policies:
-    - id: "UTTS-GOV-001"
-      name: "Permissioned Ledger Access"
-      statement: "Ledger write access requires ASIT authority signature"
+    - id: "UTTS-POLICY-001"
+      name: "Permissioned Track Write"
+      statement: "Track write access requires ASIT-recognized authority node"
       enforcement: "block"
-    - id: "UTTS-GOV-002"
+    - id: "UTTS-POLICY-002"
       name: "Transformation Contract Required"
       statement: "Every Φ transformation requires an active ASIT-approved contract"
       enforcement: "block"
-    - id: "UTTS-GOV-003"
+    - id: "UTTS-POLICY-003"
       name: "Hash-Chain Continuity"
-      statement: "Ledger entries must maintain unbroken hash-chain from genesis"
+      statement: "Track entries must maintain unbroken hash-chain from genesis"
       enforcement: "block"
-    - id: "UTTS-GOV-004"
+    - id: "UTTS-POLICY-004"
       name: "Certification Evidence Immutability"
-      statement: "Certification-phase ledger entries cannot be altered after authority signature"
+      statement: "Certification-phase entries cannot be altered after authority signature"
       enforcement: "block"
 
 # -----------------------------------------------------------------------------
 # DECISION STATES
 # -----------------------------------------------------------------------------
 decision_states:
-  description: |
-    All UTTS policy and gate evaluations resolve to one deterministic state.
   allowed_states:
     - "ALLOW"
     - "HOLD"
@@ -533,15 +409,6 @@ decision_states:
     - when: "gate_boundary == uncertain"
       then: "HOLD"
     - when: "all_governance_rules_pass == true"
-    - when: "hash_chain_broken == true"
-      then: "REJECT"
-    - when: "authority_signature_missing == true and phase in [LC08, LC10]"
-      then: "REJECT"
-    - when: "transformation_contract_missing == true"
-      then: "REJECT"
-    - when: "safety_relevant_content == true"
-      then: "ESCALATE"
-    - when: "all_integrity_checks_pass == true"
       then: "ALLOW"
 
 # -----------------------------------------------------------------------------
@@ -553,13 +420,7 @@ summary:
   total_change_types: 6
   total_trace_graph_properties: 4
   total_governance_rules: 5
+  total_governance_policies: 4
+  total_invariants: 5
   total_decision_states: 4
   total_decision_transition_rules: 7
-  total_tiers: 3
-  total_invariants: 5
-  total_governance_policies: 4
-  total_lifecycle_phases_covered: 14
-  total_event_types: 10
-  total_transformation_classes: 4
-  total_decision_states: 4
-  total_regulatory_alignments: 4
