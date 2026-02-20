@@ -1,0 +1,326 @@
+# =============================================================================
+# UNIFIED TEKNIA TOKEN SYSTEM (UTTS) — Modification Track Lookup Standard
+# Standard ID: N-STD-UTTS-01
+# Version: 0.1.0
+# =============================================================================
+#
+# PURPOSE:
+#   Define UTTS as a Modification Track Lookup: a deterministic, queryable
+#   lineage engine that cryptographically anchors, lifecycle-indexes, and
+#   bidirectionally navigates every tokenized modification in the AEROSPACEMODEL
+#   knowledge graph.
+#
+# SCOPE:
+#   Applies to all MTL₁/MTL₂/MTL₃ token modifications governed by ASIT across
+#   any ATA chapter, lifecycle phase, or domain profile.
+#
+# COMPLIANCE:
+#   S1000D Issue 5.0 (structural alignment)
+#   DO-178C / ARP4754A / ARP4761 (safety domains)
+#   EU AI Act (AI-specific risk categories)
+#
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# METADATA
+# -----------------------------------------------------------------------------
+metadata:
+  standard_id: "N-STD-UTTS-01"
+  title: "Unified Teknia Token System — Modification Track Lookup"
+  version: "0.1.0"
+  status: "DRAFT"
+  classification: "Governance Standard"
+
+  created_date: "2026-02-20"
+  effective_date: "2026-02-20"
+
+  author: "ASIT Configuration Management"
+  approved_by: ""
+  approval_reference: ""
+
+  parent_brex: "ASIT-BREX-MASTER-001"
+  brex_rule_set: "N-STD-UTTS-01-BREX-001"
+  related_standard: "MTL-META-CORE v1.0.0"
+
+  compliance:
+    - "S1000D Issue 5.0"
+    - "DO-178C"
+    - "ARP4754A"
+    - "ARP4761"
+    - "EU AI Act"
+
+  determinism_level: "strict"
+  audit_required: true
+  replay_capable: true
+
+# -----------------------------------------------------------------------------
+# DEFINITION
+# -----------------------------------------------------------------------------
+definition: |
+  UTTS (Unified Teknia Token System) — Modification Track Lookup is:
+
+    A cryptographically anchored, lifecycle-indexed, bidirectional trace system
+    that enables deterministic reconstruction of any modification path.
+
+  It answers five governance queries for every token mutation:
+    1. What changed?
+    2. Why did it change?
+    3. Under whose authority?
+    4. Under which lifecycle phase?
+    5. What downstream artifacts were impacted?
+
+  UTTS is not a storage ledger. It is a regulatory-grade deterministic
+  reconstruction engine for aerospace knowledge evolution.
+
+# -----------------------------------------------------------------------------
+# MTL TIER INTEGRATION
+# -----------------------------------------------------------------------------
+mtl_tiers:
+  description: |
+    UTTS spans all three tiers of the MTL deterministic stack.
+    Every tier produces and consumes modification events tracked by UTTS.
+  tiers:
+    - tier: "MTL₁"
+      name: "Methods Token Library"
+      role: "Execution layer — tokenised procedural knowledge"
+      utts_role: "Source of modification events at the procedural level"
+
+    - tier: "MTL₂"
+      name: "Meta Transformation Layer"
+      role: "Abstraction layer — cross-domain semantic transformation operator (Φ)"
+      utts_role: "Records transformation lineage: T_m = Φ(T_p, context, constraints)"
+
+    - tier: "MTL₃"
+      name: "Model Teknia Ledger"
+      role: "Persistence layer — immutable, hash-linked recording"
+      utts_role: "Stores the ordered track: Hash_current = H(TT + Hash_prev)"
+
+# -----------------------------------------------------------------------------
+# FORMAL MODEL
+# -----------------------------------------------------------------------------
+formal_model:
+  description: |
+    Let:
+      T₀  = original token
+      Δᵢ  = modification event (ordered, governed)
+      Tₙ  = resulting token state
+      ⊕   = governed transformation operator
+      ΣΔᵢ = ordered modification sequence
+
+    Then:
+      Tₙ = T₀ ⊕ ΣΔᵢ
+
+    UTTS stores the ordered set:
+      Track(Tₙ) = {Δ₁, Δ₂, Δ₃, …, Δₙ}
+
+    System state:
+      S = (Tokens, Modifications, Authorities, Lifecycle)
+
+    UTTS is the function:
+      UTTS : S → Ordered_Trace_Graph
+
+    Where the trace graph is:
+      - Queryable across 5 dimensions
+      - Cryptographically anchored (SHA3-512 hash chain)
+      - Deterministically replayable
+
+  hash_chain: "Hash_current = H(token_data + Hash_previous)"
+  transformation_operator: "T_m = Φ(T_p, context, constraints)"
+  state_formula: "Tₙ = T₀ ⊕ ΣΔᵢ"
+
+# -----------------------------------------------------------------------------
+# OBJECT MODEL
+# -----------------------------------------------------------------------------
+object_model:
+  token_state_object:
+    description: "Current state of a token in the UTTS track"
+    required_fields:
+      - "token_id"
+      - "current_revision"
+      - "current_hash"
+      - "lc_phase"
+      - "status"
+    example:
+      token_id: "MTL-28-11-CRYO-0001"
+      current_revision: "3.2.1"
+      current_hash: "SHA3-512(...)"
+      lc_phase: "LC04"
+      status: "BASELINED"
+
+  modification_event_object:
+    description: "A single governed modification delta recorded in the track"
+    required_fields:
+      - "mod_id"
+      - "parent_token"
+      - "previous_hash"
+      - "new_hash"
+      - "change_type"
+      - "description"
+      - "authority"
+      - "lc_phase"
+      - "timestamp_utc"
+      - "impact_scope"
+      - "justification_ref"
+    change_types:
+      - "constraint_update"
+      - "parameter_revision"
+      - "evidence_addition"
+      - "procedure_amendment"
+      - "regulatory_realignment"
+      - "status_transition"
+    example:
+      mod_id: "MOD-000457"
+      parent_token: "MTL-28-11-CRYO-0001"
+      previous_hash: "SHA3-512(...)"
+      new_hash: "SHA3-512(...)"
+      change_type: "constraint_update"
+      description: "Updated pressure upper bound per CS-25 load envelope analysis"
+      authority: "ASIT-STK_ENG"
+      lc_phase: "LC04"
+      timestamp_utc: "2026-02-20T01:20:00Z"
+      impact_scope:
+        - "FEM_report_28_11_A"
+        - "CM-28-11-CS25"
+      justification_ref:
+        - "CS-25.963"
+        - "SC-LH2-02"
+
+# -----------------------------------------------------------------------------
+# LOOKUP DIMENSIONS
+# -----------------------------------------------------------------------------
+lookup_dimensions:
+  description: |
+    UTTS must allow deterministic queries across five orthogonal dimensions.
+    Every query returns an ordered, cryptographically verifiable trace subset.
+  dimensions:
+    - id: "DIM-01"
+      name: "By Token"
+      query: "Full modification history for a given token_id"
+      example: "Track(MTL-28-11-CRYO-0001) → [Δ₁, Δ₂, …, Δₙ]"
+
+    - id: "DIM-02"
+      name: "By LC Phase"
+      query: "All modifications occurring in a specified lifecycle phase"
+      example: "Query(lc_phase=LC04) → ordered modification set"
+
+    - id: "DIM-03"
+      name: "By Authority"
+      query: "All modifications signed by a specified authority node"
+      example: "Query(authority=STK_ENG) → ordered modification set"
+
+    - id: "DIM-04"
+      name: "By Regulation"
+      query: "All modifications linked to a specified regulation or SC reference"
+      example: "Query(justification_ref=CS-25.981) → ordered modification set"
+
+    - id: "DIM-05"
+      name: "By Impact"
+      query: "All tokens affected downstream by a specified modification event"
+      example: "Query(mod_id=MOD-000457) → impact_scope set"
+
+# -----------------------------------------------------------------------------
+# TRACE GRAPH PROPERTIES
+# -----------------------------------------------------------------------------
+trace_graph:
+  description: |
+    The UTTS trace graph is a Directed Acyclic Graph (DAG) of token state
+    transitions, not a simple linear log.
+  structure: "DAG (Directed Acyclic Graph)"
+  properties:
+    - id: "TG-001"
+      name: "Forward Traceability"
+      description: >
+        Evaluate the blast radius of a change: given a modification Δᵢ at Tₙ,
+        identify all downstream tokens T_{n+1}…T_{n+k} that require re-validation
+    - id: "TG-002"
+      name: "Backward Traceability"
+      description: >
+        Reconstruct the provenance of any current value: recover the authority
+        (who), justification (regulatory reference), and LC phase (when)
+    - id: "TG-003"
+      name: "Branch Management"
+      description: >
+        Support design branching: multiple modification paths from a common
+        ancestor can coexist until CCB selects the canonical branch
+    - id: "TG-004"
+      name: "Deterministic Replay"
+      description: >
+        Given T₀ and Track(Tₙ), the system deterministically reconstructs Tₙ
+
+# -----------------------------------------------------------------------------
+# HASH CHAIN INTEGRITY
+# -----------------------------------------------------------------------------
+hash_chain_integrity:
+  algorithm: "SHA3-512"
+  chain_formula: "Hash(Tᵢ) = H(Tᵢ_data + Hash(Tᵢ₋₁))"
+  properties:
+    - "Tamper detection: any alteration in Δᵢ invalidates the entire chain to Tₙ"
+    - "No modification exists without record"
+    - "No token exists without lineage"
+    - "No authority exists without cryptographic signature"
+
+# -----------------------------------------------------------------------------
+# GOVERNANCE RULES (inline subset; full ruleset in BREX)
+# -----------------------------------------------------------------------------
+governance_rules:
+  - id: "UTTS-GOV-001"
+    name: "Hash Continuity"
+    statement: "Every modification event must chain from the previous hash"
+    enforcement: "block"
+
+  - id: "UTTS-GOV-002"
+    name: "Lifecycle Consistency"
+    statement: "LC phase regression requires explicit ECR/ECO authorization"
+    enforcement: "block"
+
+  - id: "UTTS-GOV-003"
+    name: "Regulatory Anchoring"
+    statement: "Every technical change (constraint_update, parameter_revision) must reference at least one regulation or SC"
+    enforcement: "block"
+
+  - id: "UTTS-GOV-004"
+    name: "Authority Signature"
+    statement: "Every modification event must carry an ASIT-recognized authority node"
+    enforcement: "block"
+
+  - id: "UTTS-GOV-005"
+    name: "Impact Scope Declaration"
+    statement: "Every modification event must declare impact_scope (may be empty list for isolated changes)"
+    enforcement: "block"
+
+# -----------------------------------------------------------------------------
+# DECISION STATES
+# -----------------------------------------------------------------------------
+decision_states:
+  allowed_states:
+    - "ALLOW"
+    - "HOLD"
+    - "REJECT"
+    - "ESCALATE"
+  transition_rules:
+    - when: "hash_continuity_check == false"
+      then: "REJECT"
+    - when: "regulatory_anchor_missing == true"
+      then: "REJECT"
+    - when: "authority_unrecognized == true"
+      then: "REJECT"
+    - when: "lc_regression_without_ecr == true"
+      then: "ESCALATE"
+    - when: "safety_impact_detected == true"
+      then: "ESCALATE"
+    - when: "gate_boundary == uncertain"
+      then: "HOLD"
+    - when: "all_governance_rules_pass == true"
+      then: "ALLOW"
+
+# -----------------------------------------------------------------------------
+# SUMMARY
+# -----------------------------------------------------------------------------
+summary:
+  total_mtl_tiers: 3
+  total_lookup_dimensions: 5
+  total_change_types: 6
+  total_trace_graph_properties: 4
+  total_governance_rules: 5
+  total_decision_states: 4
+  total_decision_transition_rules: 7
