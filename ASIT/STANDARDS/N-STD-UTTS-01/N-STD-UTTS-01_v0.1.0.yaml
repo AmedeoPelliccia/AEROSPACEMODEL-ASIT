@@ -324,7 +324,7 @@ summary:
   total_tiers: 3
   total_invariants: 5
   total_governance_policies: 4
-  total_lifecycle_phases_covered: 9
+  total_lifecycle_phases_covered: 14
   total_event_types: 10
   total_transformation_classes: 4
   total_decision_states: 4
