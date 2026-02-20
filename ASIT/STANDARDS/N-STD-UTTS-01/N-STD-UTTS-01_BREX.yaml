@@ -46,9 +46,9 @@ metadata:
 # -----------------------------------------------------------------------------
 structure_rules:
   - id: "UTTS-STRUCT-001"
-    condition: "All UTTS content MUST be classified under ATA 96 domain"
+    condition: "All UTTS content MUST be classified under ATA 96 or ATA 98 domain"
     enforcement: "block"
-    message: "UTTS content requires ATA 96 domain classification"
+    message: "UTTS content requires ATA 96 or ATA 98 domain classification"
 
   - id: "UTTS-STRUCT-002"
     condition: "Every ledger entry MUST contain all required fields"
