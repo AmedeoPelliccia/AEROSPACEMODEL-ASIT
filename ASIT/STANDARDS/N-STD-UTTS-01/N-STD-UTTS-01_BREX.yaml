@@ -1,7 +1,7 @@
 # =============================================================================
 # UNIFIED TEKNIA TOKEN SYSTEM (UTTS) — BREX Rule Set
 # BREX Profile: N-STD-UTTS-01-BREX-001
-# Version: 0.1.0
+# Version: 0.2.0 (corrected)
 # =============================================================================
 #
 # PURPOSE:
@@ -13,29 +13,24 @@
 #
 # =============================================================================
 
-# -----------------------------------------------------------------------------
-# METADATA
-# -----------------------------------------------------------------------------
 metadata:
   brex_id: "N-STD-UTTS-01-BREX-001"
   title: "Unified Teknia Token System BREX Rule Set"
-  version: "0.1.0"
+  version: "0.2.0"
   status: "DRAFT"
   classification: "Governance Specification"
-
   created_date: "2026-02-20"
   effective_date: "2026-02-20"
-
   parent_authority: "ASIT-BREX-MASTER-001"
-  standard_reference: "N-STD-UTTS-01 v0.1.0"
-
+  standard_reference: "N-STD-UTTS-01 v0.2.0"
   compliance:
     - "S1000D Issue 5.0"
     - "DO-178C"
     - "ARP4754A"
     - "ARP4761"
     - "EU AI Act"
-
+    - "EASA Part 21"
+    - "GAIA-X"
   determinism_level: "strict"
 
 # -----------------------------------------------------------------------------
@@ -49,6 +44,21 @@ structure_rules:
     message: "Modification event missing mod_id or wrong format (must be MOD-NNNNNN)"
 
   - id: "UTTS-STRUCT-002"
+    condition: "Every ledger entry MUST contain all required fields"
+    enforcement: "block"
+    required_fields:
+      - "entry_id"
+      - "timestamp_utc"
+      - "event_type"
+      - "token_id"
+      - "token_version"
+      - "actor"
+      - "payload_hash"
+      - "previous_hash"
+      - "authority_signature"
+    message: "Ledger entry missing required fields"
+
+  - id: "UTTS-STRUCT-003"
     condition: "change_type MUST be from the approved taxonomy"
     enforcement: "block"
     allowed_change_types:
@@ -59,6 +69,22 @@ structure_rules:
       - "regulatory_realignment"
       - "status_transition"
     message: "Unknown change_type — must be from UTTS approved taxonomy"
+
+  - id: "UTTS-STRUCT-004"
+    condition: "event_type MUST be from the approved taxonomy"
+    enforcement: "block"
+    allowed_event_types:
+      - "TOKEN_CREATE"
+      - "TOKEN_UPDATE"
+      - "TOKEN_PROMOTE"
+      - "TOKEN_DEPRECATE"
+      - "TOKEN_RETIRE"
+      - "TRANSFORM_PHI"
+      - "GATE_PASS"
+      - "GATE_FAIL"
+      - "BASELINE_FREEZE"
+      - "AUTHORITY_SIGN"
+    message: "Unknown event type — must be from UTTS taxonomy"
 
 # -----------------------------------------------------------------------------
 # INTEGRITY RULES
@@ -75,14 +101,14 @@ integrity_rules:
     message: "new_hash equals previous_hash — no actual change recorded"
 
   - id: "UTTS-INT-003"
-    condition: "Hash algorithm MUST be SHA3-512"
+    condition: "Hash algorithm MUST be SHA3-512 (system-wide)"
     enforcement: "block"
     allowed_algorithms:
       - "SHA3-512"
     message: "Non-approved hash algorithm — only SHA3-512 is accepted"
 
   - id: "UTTS-INT-004"
-    condition: "Hash chain formula: Hash(Tᵢ) = H(Tᵢ_data + Hash(Tᵢ₋₁)) must be verifiable"
+    condition: "Hash chain formula Hash(Ti)=H(Ti_data + Hash(Ti-1)) MUST be verifiable (H=SHA3-512)"
     enforcement: "block"
     message: "Hash chain integrity violation detected"
 
@@ -101,12 +127,12 @@ governance_rules:
     message: "Cannot regress LC phase without authorized ECR/ECO"
 
   - id: "UTTS-GOV-003"
-    condition: "Technical changes (constraint_update, parameter_revision) MUST reference at least one regulation or SC"
+    condition: "Technical changes (constraint_update, parameter_revision) MUST reference at least one regulation, SC, or MoC anchor"
     enforcement: "block"
     message: "Technical change missing regulatory anchor — orphan engineering not permitted"
 
   - id: "UTTS-GOV-004"
-    condition: "Every modification event MUST declare impact_scope (empty list is acceptable for isolated changes)"
+    condition: "Every modification event MUST declare impact_scope (empty list acceptable for isolated changes)"
     enforcement: "block"
     message: "Modification event missing impact_scope declaration"
 
@@ -114,6 +140,127 @@ governance_rules:
     condition: "BASELINED tokens require CCB approval for any modification"
     enforcement: "require_approval"
     message: "Modification to BASELINED token requires CCB change control"
+
+  - id: "UTTS-GOV-006"
+    condition: "Ledger write access requires ASIT authority signature"
+    enforcement: "block"
+    message: "Unauthorized ledger write attempt"
+
+  - id: "UTTS-GOV-007"
+    condition: "Labour continuity constraint applies to UTTS automation"
+    enforcement: "escalate"
+    escalation_target: "STK_OPS"
+    message: "Labour continuity constraint applies"
+
+# -----------------------------------------------------------------------------
+# LEDGER INTEGRITY RULES
+# -----------------------------------------------------------------------------
+ledger_rules:
+  - id: "UTTS-LEDGER-001"
+    condition: "Hash chain linkage correctness: every ledger entry.previous_hash MUST equal SHA3-512 of the preceding entry canonical representation"
+    enforcement: "block"
+    message: "Hash-chain linkage correctness violation detected"
+
+  - id: "UTTS-LEDGER-002"
+    condition: "Ledger is append-only; no entry may be deleted or modified"
+    enforcement: "block"
+    message: "Append-only constraint violated"
+
+  - id: "UTTS-LEDGER-003"
+    condition: "BASELINE_FREEZE entries require ASIT authority signature"
+    enforcement: "block"
+    message: "Baseline freeze requires authority signature"
+
+  - id: "UTTS-LEDGER-004"
+    condition: "No new ledger entries may modify or supersede certification-phase (LC08) artifacts after an authority signature has been recorded for those artifacts"
+    enforcement: "block"
+    message: "New entries cannot change the state of authority-signed LC08 certification artifacts"
+
+  - id: "UTTS-LEDGER-005"
+    condition: "Ledger append/verify module changes require STK_SAF review"
+    enforcement: "escalate"
+    escalation_target: "STK_SAF"
+    message: "Ledger core module changes require safety review"
+
+  - id: "UTTS-LEDGER-006"
+    condition: "Authority signature validation rule changes require STK_SAF approval"
+    enforcement: "escalate"
+    escalation_target: "STK_SAF"
+    message: "Signature validation changes require safety approval"
+
+  - id: "UTTS-LEDGER-007"
+    condition: "Hash-chain integrity verification logic changes require STK_SAF review"
+    enforcement: "escalate"
+    escalation_target: "STK_SAF"
+    message: "Hash-chain verification changes require safety review"
+
+# -----------------------------------------------------------------------------
+# TRANSFORMATION RULES
+# -----------------------------------------------------------------------------
+transformation_rules:
+  - id: "UTTS-PHI-001"
+    condition: "Every Phi transformation MUST have an active ASIT-approved contract"
+    enforcement: "block"
+    message: "Transformation requires approved contract"
+
+  - id: "UTTS-PHI-002"
+    condition: "Phi operator MUST be deterministic (same inputs -> same outputs)"
+    enforcement: "block"
+    message: "Non-deterministic transformation detected"
+
+  - id: "UTTS-PHI-003"
+    condition: "Every Phi transformation MUST produce a TRANSFORM_PHI ledger entry"
+    enforcement: "block"
+    message: "Transformation must be ledgered"
+
+  - id: "UTTS-PHI-004"
+    condition: "transformation_class MUST be from the approved taxonomy"
+    enforcement: "block"
+    allowed_classes:
+      - "DOMAIN_XFER"
+      - "LC_PROMOTE"
+      - "LAYER_COMPOSE"
+      - "SEMANTIC_MAP"
+    message: "Unknown transformation class"
+
+# -----------------------------------------------------------------------------
+# TRACEABILITY RULES
+# -----------------------------------------------------------------------------
+traceability_rules:
+  - id: "UTTS-TRACE-001"
+    condition: "Every token MUST have a complete lineage chain in the ledger"
+    enforcement: "block"
+    message: "Token lineage incomplete — all transformations must be ledgered"
+
+  - id: "UTTS-TRACE-002"
+    condition: "Certification evidence chains MUST be verifiable end-to-end"
+    enforcement: "block"
+    message: "Certification evidence chain broken"
+
+  - id: "UTTS-TRACE-003"
+    condition: "DPP integration events MUST be cross-referenced in both systems"
+    enforcement: "warn"
+    message: "DPP cross-reference missing"
+
+  - id: "UTTS-TRACE-004"
+    condition: "Every modification event MUST reference parent_token"
+    enforcement: "block"
+    message: "Modification event missing parent_token link"
+
+  - id: "UTTS-TRACE-005"
+    condition: "justification_ref MUST reference at least one regulation, SC, or ECR for change_type in {constraint_update, parameter_revision, regulatory_realignment}"
+    enforcement: "block"
+    message: "Technical modification requires regulatory or change control reference"
+
+  - id: "UTTS-TRACE-006"
+    condition: "impact_scope entries SHOULD be verifiable artifact IDs"
+    enforcement: "warn"
+    message: "Impact scope entries should reference known artifact IDs"
+
+  - id: "UTTS-TRACE-007"
+    condition: "Forward traceability: all downstream impacted artifacts MUST be re-validated after modification"
+    enforcement: "require_approval"
+    message: "Impact scope artifacts require re-validation confirmation"
 
 # -----------------------------------------------------------------------------
 # SAFETY RULES
@@ -132,46 +279,28 @@ safety_rules:
     message: "High-risk AI token modification requires updated conformity assessment"
 
   - id: "UTTS-SAFE-003"
-    condition: "If safety-critical gate fails then decision_state must be HOLD, ESCALATE, or REJECT — never implicit ALLOW"
+    condition: "If a safety-critical gate fails then decision_state MUST be HOLD, ESCALATE, or REJECT (never implicit ALLOW)"
     enforcement: "block"
     message: "Safety gate failure must not resolve to ALLOW"
 
-# -----------------------------------------------------------------------------
-# TRACEABILITY RULES
-# -----------------------------------------------------------------------------
-traceability_rules:
-  - id: "UTTS-TRACE-001"
-    condition: "Every modification event MUST reference parent_token"
-    enforcement: "block"
-    message: "Modification event missing parent_token link"
-
-  - id: "UTTS-TRACE-002"
-    condition: "justification_ref MUST reference at least one regulation, SC, or ECR for change_type in {constraint_update, parameter_revision, regulatory_realignment}"
-    enforcement: "block"
-    message: "Technical modification requires regulatory or change control reference"
-
-  - id: "UTTS-TRACE-003"
-    condition: "impact_scope entries must be verifiable artifact IDs"
-    enforcement: "warn"
-    message: "Impact scope entries should reference known artifact IDs"
-
-  - id: "UTTS-TRACE-004"
-    condition: "Forward traceability: all downstream impacted artifacts must be re-validated after modification"
-    enforcement: "require_approval"
-    message: "Impact scope artifacts require re-validation confirmation"
+  - id: "UTTS-SAFE-004"
+    condition: "Token lineage checks at Gate Group D require STK_SAF sign-off"
+    enforcement: "escalate"
+    escalation_target: "STK_SAF"
+    message: "Gate Group D token lineage check requires safety sign-off"
 
 # -----------------------------------------------------------------------------
 # LIFECYCLE RULES
 # -----------------------------------------------------------------------------
 lifecycle_rules:
   - id: "UTTS-LC-001"
-    condition: "timestamp_utc MUST be present and in ISO 8601 format"
+    condition: "timestamp_utc MUST be present and in ISO 8601 UTC format"
     enforcement: "block"
     pattern: "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
     message: "Modification timestamp missing or not in UTC ISO 8601 format"
 
   - id: "UTTS-LC-002"
-    condition: "lc_phase MUST be a valid ASIT lifecycle phase (LC01–LC14)"
+    condition: "lc_phase MUST be a valid ASIT lifecycle phase (LC01-LC14)"
     enforcement: "block"
     allowed_phases:
       - "LC01"
@@ -204,6 +333,21 @@ lifecycle_rules:
         to: "DEV"
     message: "Invalid status transition — not in approved state machine"
 
+  - id: "UTTS-LC-004"
+    condition: "Token promotion requires all acceptance gates passing in ledger"
+    enforcement: "block"
+    message: "Cannot promote token with failing gates"
+
+  - id: "UTTS-LC-005"
+    condition: "Baseline freeze requires prior ledger integrity verification"
+    enforcement: "block"
+    message: "Hash-chain must be verified before baseline freeze"
+
+  - id: "UTTS-LC-006"
+    condition: "End-of-life (LC14) requires final ledger snapshot and DPP closure entry"
+    enforcement: "block"
+    message: "LC14 requires final ledger snapshot and DPP closure entry"
+
 # -----------------------------------------------------------------------------
 # QUERY RULES
 # -----------------------------------------------------------------------------
@@ -234,12 +378,16 @@ query_rules:
 # -----------------------------------------------------------------------------
 escalation_procedures:
   safety_content:
-    trigger: "UTTS-SAFE-001 or UTTS-SAFE-002"
+    trigger_rules:
+      - "UTTS-SAFE-001"
+      - "UTTS-SAFE-002"
+      - "UTTS-SAFE-004"
     escalation_target: "STK_SAF"
     timeout: "72 hours"
 
   baseline_modification:
-    trigger: "UTTS-GOV-005"
+    trigger_rules:
+      - "UTTS-GOV-005"
     escalation_target: "CCB"
     required_approval:
       - "ECR submission"
@@ -250,13 +398,14 @@ escalation_procedures:
   undefined_condition:
     trigger: "No matching BREX rule"
     escalation_target: "STK_CM"
-    action: "HALT and wait for rule definition"
+    action: "HALT until rule definition"
+    timeout: "72 hours"
 
 # -----------------------------------------------------------------------------
 # AUDIT LOG
 # -----------------------------------------------------------------------------
 audit_requirements:
-  format: "{timestamp} | RULE {rule_id} | {rule_name} | {status} | {context}"
+  format: "{timestamp_utc} | RULE {rule_id} | {rule_name} | {status} | {context}"
   required_entries:
     - "Hash chain integrity check"
     - "Authority validation"
@@ -264,16 +413,23 @@ audit_requirements:
     - "LC phase validation"
     - "Impact scope declaration"
     - "Safety impact assessment (if applicable)"
+    - "Ledger entry validation"
+    - "Transformation contract validation"
+    - "Authority signature verification"
+    - "Token lineage verification"
+    - "DPP integration cross-reference check"
   retention: "7 years minimum (certification)"
 
 # -----------------------------------------------------------------------------
-# SUMMARY
+# SUMMARY (corrected, non-duplicated)
 # -----------------------------------------------------------------------------
 summary:
-  total_structure_rules: 2
+  total_structure_rules: 4
   total_integrity_rules: 4
-  total_governance_rules: 5
-  total_safety_rules: 3
-  total_traceability_rules: 4
-  total_lifecycle_rules: 3
+  total_governance_rules: 7
+  total_ledger_rules: 7
+  total_transformation_rules: 4
+  total_traceability_rules: 7
+  total_safety_rules: 4
+  total_lifecycle_rules: 6
   total_query_rules: 3
