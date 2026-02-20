@@ -121,9 +121,6 @@ governance_rules:
     condition: "BASELINED tokens require CCB approval for any modification"
     enforcement: "require_approval"
     message: "Modification to BASELINED token requires CCB change control"
-    condition: "All UTTS content MUST be classified under ATA 96 or ATA 98 domain"
-    enforcement: "block"
-    message: "UTTS content requires ATA 96 or ATA 98 domain classification"
 
   - id: "UTTS-STRUCT-002"
     condition: "Every ledger entry MUST contain all required fields"
