@@ -537,7 +537,7 @@ Special Conditions are formally registered for novel hydrogen and fuel-cell tech
 
 ## Manufacturing Technology Layers (MTL)
 
-The **Method Token Library (MTL)** is AEROSPACEMODEL's engineering tokenisation framework — a machine-processable vocabulary of atomic engineering subjects, process methods, and standard procedures that bridges certified knowledge with AI-executable instructions.
+The **Meta Transformation Layer (MTL)** is AEROSPACEMODEL's engineering tokenisation framework — an extended concept from the Methods Token Library — providing a machine-processable vocabulary of atomic engineering subjects, process methods, and standard procedures that bridges certified knowledge with AI-executable instructions.
 
 **MTL Layers:**
 - **MTK tokens** — subject-level engineering entities (e.g., cryogenic tank wall segments, material grades)
