@@ -39,6 +39,7 @@ The N-NEURAL_NETWORKS domain is organized into three subdomains that separate di
 - Immutable audit trails
 - Regulatory compliance tracking
 - ESG data collection and reporting
+- **Unified Teknia Token System (UTTS)** — MTL₁/MTL₂/MTL₃ deterministic ledger stack ([N-STD-UTTS-01](../../ASIT/STANDARDS/N-STD-UTTS-01/README.md))
 
 **Key Functions:**
 - Birth certificate for aircraft and major components
@@ -159,6 +160,8 @@ DPP and traceability systems span the entire lifecycle:
 - [I2-INTELLIGENCE Subdomain](../T-TECHNOLOGIES_AMEDEOPELLICCIA-ON_BOARD_SYSTEMS/I2-INTELLIGENCE/)
 - [ATA 95 AI/ML Instructions](../../.github/instructions/ata95_ai_ml.instructions.md)
 - [Lifecycle Phase Registry](../../lifecycle/LC_PHASE_REGISTRY.yaml)
+- [UTTS Standard (N-STD-UTTS-01)](../../ASIT/STANDARDS/N-STD-UTTS-01/README.md)
+- [MTL Meta Standard](../../ASIT/STANDARDS/MTL_META/README.md)
 
 ---
 
