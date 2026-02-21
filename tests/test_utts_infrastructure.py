@@ -68,7 +68,7 @@ class TestStandardMetadata:
         assert data["metadata"]["standard_id"] == "N-STD-UTTS-01"
 
     def test_version(self, data):
-        assert data["metadata"]["version"] == "0.1.0"
+        assert data["metadata"]["version"] == "0.2.0"
 
     def test_status(self, data):
         assert data["metadata"]["status"] in ("DRAFT", "REVIEW", "APPROVED", "ACTIVE")
@@ -116,7 +116,7 @@ class TestStandardDefinition:
 # =========================================================================
 
 
-EXPECTED_TIERS = ["MTL₁", "MTL₂", "MTL₃"]
+EXPECTED_TIERS = ["MTL1", "MTL2", "MTL3"]
 
 
 class TestMTLTiers:
@@ -146,15 +146,15 @@ class TestMTLTiers:
             assert "utts_role" in tier
 
     def test_mtl1_is_methods_token_library(self, data):
-        mtl1 = [t for t in data["mtl_tiers"]["tiers"] if t["tier"] == "MTL₁"][0]
+        mtl1 = [t for t in data["mtl_tiers"]["tiers"] if t["tier"] == "MTL1"][0]
         assert "Methods Token Library" in mtl1["name"]
 
     def test_mtl2_is_meta_transformation_layer(self, data):
-        mtl2 = [t for t in data["mtl_tiers"]["tiers"] if t["tier"] == "MTL₂"][0]
+        mtl2 = [t for t in data["mtl_tiers"]["tiers"] if t["tier"] == "MTL2"][0]
         assert "Meta Transformation Layer" in mtl2["name"]
 
     def test_mtl3_is_model_teknia_ledger(self, data):
-        mtl3 = [t for t in data["mtl_tiers"]["tiers"] if t["tier"] == "MTL₃"][0]
+        mtl3 = [t for t in data["mtl_tiers"]["tiers"] if t["tier"] == "MTL3"][0]
         assert "Teknia Ledger" in mtl3["name"]
 
 
@@ -251,6 +251,26 @@ class TestObjectModel:
 
     def test_six_change_types(self, data):
         assert len(data["object_model"]["modification_event_object"]["change_types"]) == 6
+
+    def test_has_ledger_entry_object(self, data):
+        assert "ledger_entry_object" in data["object_model"]
+
+    def test_ledger_entry_required_fields(self, data):
+        required = data["object_model"]["ledger_entry_object"]["required_fields"]
+        for f in ("entry_id", "timestamp_utc", "event_type", "token_id",
+                  "token_version", "actor", "payload_hash", "previous_hash",
+                  "authority_signature"):
+            assert f in required, f"ledger_entry_object missing required field: {f}"
+
+    def test_ledger_entry_event_types(self, data):
+        events = data["object_model"]["ledger_entry_object"]["event_types"]
+        for et in ("TOKEN_CREATE", "TOKEN_UPDATE", "TOKEN_PROMOTE",
+                   "TOKEN_DEPRECATE", "TOKEN_RETIRE", "TRANSFORM_PHI",
+                   "GATE_PASS", "GATE_FAIL", "BASELINE_FREEZE", "AUTHORITY_SIGN"):
+            assert et in events, f"ledger_entry_object missing event type: {et}"
+
+    def test_ledger_entry_hash_algorithm(self, data):
+        assert data["object_model"]["ledger_entry_object"]["hash_algorithm"] == "SHA3-512"
 
 
 # =========================================================================
@@ -372,15 +392,15 @@ class TestGovernanceRules:
             return yaml.safe_load(f)
 
     def test_has_governance_rules(self, data):
-        assert "governance_rules" in data
+        assert "governance_rules_inline" in data
 
     def test_five_governance_rules(self, data):
-        assert len(data["governance_rules"]) == 5
+        assert len(data["governance_rules_inline"]) == 5
 
     def test_governance_rule_ids(self, data):
-        ids = [r["id"] for r in data["governance_rules"]]
-        for gid in ("UTTS-GOV-001", "UTTS-GOV-002", "UTTS-GOV-003",
-                    "UTTS-GOV-004", "UTTS-GOV-005"):
+        ids = [r["id"] for r in data["governance_rules_inline"]]
+        for gid in ("UTTS-GOV-INLINE-001", "UTTS-GOV-INLINE-002", "UTTS-GOV-INLINE-003",
+                    "UTTS-GOV-INLINE-004", "UTTS-GOV-INLINE-005"):
             assert gid in ids
 
 
@@ -461,7 +481,7 @@ class TestStandardSummary:
         )
 
     def test_total_governance_rules(self, data):
-        assert data["summary"]["total_governance_rules"] == len(data["governance_rules"])
+        assert data["summary"]["total_governance_rules_inline"] == len(data["governance_rules_inline"])
 
     def test_total_decision_states(self, data):
         assert data["summary"]["total_decision_states"] == len(
@@ -799,7 +819,7 @@ class TestUTTSStandardYAML:
         assert std_data["metadata"]["standard_id"] == "N-STD-UTTS-01"
 
     def test_metadata_version(self, std_data: dict):
-        assert std_data["metadata"]["version"] == "0.1.0"
+        assert std_data["metadata"]["version"] == "0.2.0"
 
     def test_metadata_status(self, std_data: dict):
         assert std_data["metadata"]["status"] == "DRAFT"
