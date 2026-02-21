@@ -252,6 +252,26 @@ class TestObjectModel:
     def test_six_change_types(self, data):
         assert len(data["object_model"]["modification_event_object"]["change_types"]) == 6
 
+    def test_has_ledger_entry_object(self, data):
+        assert "ledger_entry_object" in data["object_model"]
+
+    def test_ledger_entry_required_fields(self, data):
+        required = data["object_model"]["ledger_entry_object"]["required_fields"]
+        for f in ("entry_id", "timestamp_utc", "event_type", "token_id",
+                  "token_version", "actor", "payload_hash", "previous_hash",
+                  "authority_signature"):
+            assert f in required, f"ledger_entry_object missing required field: {f}"
+
+    def test_ledger_entry_event_types(self, data):
+        events = data["object_model"]["ledger_entry_object"]["event_types"]
+        for et in ("TOKEN_CREATE", "TOKEN_UPDATE", "TOKEN_PROMOTE",
+                   "TOKEN_DEPRECATE", "TOKEN_RETIRE", "TRANSFORM_PHI",
+                   "GATE_PASS", "GATE_FAIL", "BASELINE_FREEZE", "AUTHORITY_SIGN"):
+            assert et in events, f"ledger_entry_object missing event type: {et}"
+
+    def test_ledger_entry_hash_algorithm(self, data):
+        assert data["object_model"]["ledger_entry_object"]["hash_algorithm"] == "SHA3-512"
+
 
 # =========================================================================
 # Standard YAML — Lookup Dimensions
